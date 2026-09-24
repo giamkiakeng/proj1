@@ -146,10 +146,13 @@ the rule of \cref{tab:five} with lengths $2,\dots,10$ the completion exists
 for $N=8$ and not for $N=12$; the other germs fail already for $N=8$.
 As a sanity check on a genuine solution, fixing the $58$ transitions that
 Mazoyer's rule uses on its half-line up to anti-diagonal $78$ leaves a
-completion problem for the lengths $3,\dots,12$ that Kissat solves in $4$\,s. Conversely, the unsatisfiable core
-returned for such a germ contains $38$ of its $39$ transitions, so that
-learning from the completion problem (a logic-based Benders scheme we
-implemented) does not prune the half-line search effectively.
+completion problem for the lengths $3,\dots,12$ that Kissat solves in $4$\,s.
+Conversely, the unsatisfiable core returned for such a germ (the rule of
+\cref{tab:five} with lengths $2,\dots,10$, completion required for
+$2,\dots,12$) contains $38$ of its $39$ transitions, and shrinking it
+requires solving exactly the hard subproblems; nogoods learned from the
+completion problem, as in a logic-based Benders decomposition, would
+therefore be almost as specific as the germs themselves.
 
 \paragraph{Size of the search} We estimated the size of the natural
 look-ahead search tree---half-line transitions fixed in order of first use,
@@ -157,13 +160,14 @@ anti-diagonal by anti-diagonal, a node being discarded when the full formula
 with the partial table as assumptions is refuted within $3000$ conflicts---
 with Knuth's random-probe estimator. For four states ($\mathrm{MT}_4$ with
 lengths $2,\dots,9$) the mean over $30$ probes is $27$ nodes. For five
-states ($\mathrm{MT}_5(\{2,\dots,12\};78,40)$ with links) three probes gave
+states ($\mathrm{MT}_5(\{2,\dots,12\};78,39)$ with links) three probes gave
 $4.2\cdot10^{11}$, $3.1\cdot10^{17}$ and $8.3\cdot10^{18}$; adding the
 lengths up to $18$ prunes more strongly along some paths but not in general
 (three probes: $2.2\cdot10^{5}$, $4.2\cdot10^{12}$, $1.0\cdot10^{15}$). The estimator has
 a large variance, but the gap of at least ten orders of magnitude is robust
-and explains why the unrestricted five-state formulas with $N\ge12$ that we
-started (up to $N=18$, several CPU-hours each) did not terminate. Clause
+and explains why our runs on the unrestricted five-state formulas with the
+pumping constraints for $N=12$, $14$ and $18$ (up to about $1.5$ CPU-hours
+each) did not terminate. Clause
 learning compresses such trees considerably, and cube-and-conquer
 \cite{HeuleEtAl11} parallelizes them almost linearly, but a complete
 five-state search along these lines is a computation of a much larger scale
