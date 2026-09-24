@@ -58,3 +58,7 @@ All times single core (Intel/AMD cloud vCPU), kissat 4.x (git HEAD 2026-09) unle
 - germdfs cross-checked by an independent Python enumerator (germdfs_check.py, pumping cones from pumping.py):
   identical germ sets for K=12 (2), 13 (28), 14 (244).
 - 2..13 tests on the K<=16 survivors (germlong.py, 900 s): #0 SAT (delta13'), #1 UNKNOWN, #2 #3 #4 UNSAT, #5 SAT, ...
+- Restricted class "germ of delta14 + pre-firing configuration L G^(n-2) B for 4<=n<=N" (src/class_prefire14.py):
+  N=14 SAT (delta14 is in the class); N=15 UNSAT (kissat, about 30 min).  So delta14's mechanism does not
+  extend to length 15.  Unrestricted delta14 germ at 2..15: kissat without links UNKNOWN after 4 h; with links
+  and CaDiCaL still running.  delta14c germ at 2..15: UNKNOWN (2400 s).
