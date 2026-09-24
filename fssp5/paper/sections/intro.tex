@@ -58,15 +58,16 @@ precisely how far the same tools reach for five states.
   (\cref{thm:four}); the statement does not need the left quiescence
   condition $\delta(\ast,\mathsf L,\mathsf L)=\mathsf L$.
 \item \emph{The five-state frontier} (\cref{sec:five}). We exhibit
-  explicit five-state rules that synchronize every line of length at most
-  $13$ in minimal time, satisfy all pumping constraints up to length $40$
-  and never fire on the half-line up to anti-diagonal $78$; one of them ends
-  with a uniform configuration for every length up to $12$
-  (\cref{thm:frontier}). So every refutation of five-state solutions must use
-  lines of length at least~$14$. Their common half-line, however, is excluded
-  by \cref{lem:left} at length $518$ (\cref{cor:germ12}); a third rule for
-  the same lengths has a chaotic half-line that escapes both barriers
-  (\cref{prop:chaotic}). Combining the two
+  explicit five-state rules that satisfy all pumping constraints up to
+  length $40$, never fire on the half-line up to anti-diagonal $78$ and
+  synchronize every line of length at most $13$ in minimal time; one of them
+  ends with a uniform configuration for every length up to $12$
+  (\cref{thm:frontier}). Their common half-line, however, is excluded by
+  \cref{lem:left} at length $518$ (\cref{cor:germ12}). A further rule,
+  $\delta_{14}$, synchronizes every line of length at most $14$; its
+  half-line is chaotic and escapes both barriers (\cref{prop:chaotic}). So
+  every refutation of five-state solutions along these lines must use lines
+  of length at least~$15$. Combining the two
   lemmas with certified solver calls, we classify the half-lines of low
   complexity: every five-state solution uses at least $15$ distinct
   neighbourhoods on its half-line below anti-diagonal $78$

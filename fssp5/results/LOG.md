@@ -52,3 +52,9 @@ All times single core (Intel/AMD cloud vCPU), kissat 4.x (git HEAD 2026-09) unle
 - germext2 (streaming, N=20000): 2 more of the 34 K<=16 survivors refuted (s=3, L=2); 32 remain.
 - fsspdfs -g (germ fixed, DFS over reflected transitions): no answer within 300 s even for N=8.
 - Mirrored lemma (paper Remark 3.7) checked on Mazoyer: stretches <= 7 (n <= 300, n = 6 mod 7).
+- delta14 (results/delta14.txt): lazyk.py 14 200 --germ results/delta13_chaotic.txt, iteration 1 SAT in 1758 s;
+  synchronizes 2..14 (checked by fsspcheck and by an independent Python simulation), fails n=15 (fires at 22 < 28).
+  Same 16-neighbourhood chaotic germ as delta13'.  NEW FRONTIER: N_max(5) >= 14.
+- germdfs cross-checked by an independent Python enumerator (germdfs_check.py, pumping cones from pumping.py):
+  identical germ sets for K=12 (2), 13 (28), 14 (244).
+- 2..13 tests on the K<=16 survivors (germlong.py, 900 s): #0 SAT (delta13'), #1 UNKNOWN, #2 #3 #4 UNSAT, #5 SAT, ...

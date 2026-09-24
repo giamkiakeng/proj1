@@ -1,0 +1,35 @@
+\begin{table}[p]
+\centering\small
+\begin{tabular}{@{}cc|ccccc@{}}
+\toprule
+left & centre & \multicolumn{5}{c}{right neighbour}\\
+ & & $\ast$ & $\mathsf{L}$ & $\mathsf{G}$ & $\mathsf{A}$ & $\mathsf{B}$\\
+\midrule
+$\ast$ & $\mathsf{L}$ & -- & $\mathsf{F}$ & $\mathsf{F}$ & $\mathsf{L}$ & $\mathsf{G}$\\
+$\mathsf{L}$ & $\mathsf{L}$ & $\mathsf{L}$ & $\mathsf{L}$ & $\mathsf{G}$ & $\mathsf{G}$ & $\mathsf{B}$\\
+$\mathsf{G}$ & $\mathsf{L}$ & $\mathsf{G}$ & $\mathsf{A}$ & $\mathsf{B}$ & $\mathsf{A}$ & $\mathsf{B}$\\
+$\mathsf{A}$ & $\mathsf{L}$ & $\mathsf{G}$ & $\mathsf{B}$ & $\mathsf{G}$ & $\mathsf{G}$ & $\mathsf{G}$\\
+$\mathsf{B}$ & $\mathsf{L}$ & $\mathsf{A}$ & $\mathsf{B}$ & $\mathsf{A}$ & $\mathsf{A}$ & $\mathsf{L}$\\
+\midrule
+$\ast$ & $\mathsf{G}$ & -- & $\mathsf{L}$ & $\mathsf{F}$ & $\mathsf{L}$ & $\mathsf{L}$\\
+$\mathsf{L}$ & $\mathsf{G}$ & $\mathsf{F}$ & $\mathsf{A}$ & $\mathsf{F}$ & $\mathsf{B}$ & $\mathsf{A}$\\
+$\mathsf{G}$ & $\mathsf{G}$ & $\mathsf{B}$ & $\mathsf{B}$ & $\mathsf{F}$ & $\mathsf{G}$ & $\mathsf{F}$\\
+$\mathsf{A}$ & $\mathsf{G}$ & $\mathsf{B}$ & $\mathsf{A}$ & $\mathsf{G}$ & $\mathsf{G}$ & $\mathsf{A}$\\
+$\mathsf{B}$ & $\mathsf{G}$ & $\mathsf{B}$ & $\mathsf{A}$ & $\mathsf{G}$ & $\mathsf{A}$ & $\mathsf{L}$\\
+\midrule
+$\ast$ & $\mathsf{A}$ & -- & $\mathsf{G}$ & $\mathsf{G}$ & $\mathsf{L}$ & $\mathsf{G}$\\
+$\mathsf{L}$ & $\mathsf{A}$ & $\mathsf{A}$ & $\mathsf{B}$ & $\mathsf{G}$ & $\mathsf{B}$ & $\mathsf{A}$\\
+$\mathsf{G}$ & $\mathsf{A}$ & $\mathsf{B}$ & $\mathsf{A}$ & $\mathsf{G}$ & $\mathsf{L}$ & $\mathsf{A}$\\
+$\mathsf{A}$ & $\mathsf{A}$ & $\mathsf{B}$ & $\mathsf{L}$ & $\mathsf{A}$ & $\mathsf{G}$ & $\mathsf{A}$\\
+$\mathsf{B}$ & $\mathsf{A}$ & $\mathsf{L}$ & $\mathsf{A}$ & $\mathsf{A}$ & $\mathsf{G}$ & $\mathsf{A}$\\
+\midrule
+$\ast$ & $\mathsf{B}$ & -- & $\mathsf{G}$ & $\mathsf{G}$ & $\mathsf{G}$ & $\mathsf{G}$\\
+$\mathsf{L}$ & $\mathsf{B}$ & $\mathsf{G}$ & $\mathsf{B}$ & $\mathsf{G}$ & $\mathsf{A}$ & $\mathsf{L}$\\
+$\mathsf{G}$ & $\mathsf{B}$ & $\mathsf{F}$ & $\mathsf{B}$ & $\mathsf{A}$ & $\mathsf{B}$ & $\mathsf{B}$\\
+$\mathsf{A}$ & $\mathsf{B}$ & $\mathsf{G}$ & $\mathsf{B}$ & $\mathsf{B}$ & $\mathsf{G}$ & $\mathsf{B}$\\
+$\mathsf{B}$ & $\mathsf{B}$ & $\mathsf{A}$ & $\mathsf{L}$ & $\mathsf{A}$ & $\mathsf{A}$ & $\mathsf{L}$\\
+\bottomrule
+\end{tabular}
+\caption{The five-state rule $\delta_{14}$ of \cref{prop:chaotic}: entry $\delta(\text{left},\text{centre},\text{right})$. The entries $\delta(\mathsf L,\mathsf L,\mathsf L)=\delta(\mathsf L,\mathsf L,\ast)=\mathsf L$ are the quiescence conditions; ``--'' marks the unused neighbourhoods $(\ast,y,\ast)$. Machine-readable copy: \texttt{results/delta14.txt}.}
+\label{tab:delta14}
+\end{table}

@@ -98,14 +98,14 @@ if __name__ == '__main__':
 
 
 def halflines(out):
-    """Figure 2: half-lines of the two architectures that reach length 13."""
+    """Figure 2: half-lines of the two frontier architectures."""
     d13 = load('../results/delta13.txt')
-    chaos = load('../results/delta13_chaotic.txt')
+    chaos = load('../results/delta14.txt')
     fig, axes = plt.subplots(1, 2, figsize=(7.2, 3.9), gridspec_kw={'wspace': 0.25})
     show(axes[0], half_line(d13, 120, 121),
          r'(a) $\delta_{13}$: periodic behind the speed-$1/3$ boundary', 'LGABF')
     show(axes[1], half_line(chaos, 120, 121),
-         r"(b) $\delta'_{13}$: chaotic half-line", 'LGABF')
+         r"(b) $\delta_{14}$: chaotic half-line", 'LGABF')
     handles = [Patch(facecolor=COLORS[s], edgecolor='#c3c2b7', linewidth=0.5, label=s)
                for s in ['L', 'G', 'A', 'B']]
     fig.legend(handles=handles, loc='lower center', ncol=4, fontsize=7.5, frameon=False,

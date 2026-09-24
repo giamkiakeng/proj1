@@ -7,7 +7,7 @@
 
 \input{sections/delta13}
 
-\input{sections/delta13c}
+\input{sections/delta14}
 
 \section{Reproducibility}\label{app:repro}
 
@@ -96,8 +96,9 @@ gcc -O2 -o germext germext.c && gcc -O2 -o germdfs germdfs.c
 ./germext 5 1300 3 6 < ../results/germs/germ_delta12.txt
                     # CLOSED; REFUTED n=518 s=2 L=1 Y=259
 # Proposition 6.3
-./fsspcheck ../results/delta13_chaotic.txt 2 13   # OK
-./germext 5 10000 3 24 800 < ../results/germs/germ_delta13c.txt
+./fsspcheck ../results/delta14.txt 2 14           # OK
+./fsspcheck ../results/delta14.txt 15 15          # FAIL: fires at time 22
+./germext 5 10000 3 24 800 < ../results/germs/germ_delta14.txt
                     # CLOSED, no refutation
 # Proposition 6.4 (complexity <= 14)
 ./germdfs 5 78 14 40 > germs_K14.txt              # 244 germs
@@ -106,7 +107,7 @@ python3 germcert.py <the 230 refuted germs> 10 k14_n10   # UNSAT, VERIFIED
 ./germext 5 3300 3 12 < germs_K14_surv10.txt      # 14 x REFUTED (s=1)
 \end{verbatim}}
 The files \texttt{results/germs/germ\_delta12.txt} and
-\texttt{germ\_delta13c.txt} contain the two germs in the one-line format of
+\texttt{germ\_delta14.txt} contain the two germs in the one-line format of
 \texttt{germdfs.c}, as printed by \texttt{germcompare.py --germline}; the
 complete pipeline for complexity at most $16$ is \texttt{germpipe.sh}.
 
