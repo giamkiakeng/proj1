@@ -84,6 +84,18 @@ J.~Duprat, Firing squad synchronization problem: a formal proof of {M}azoyer's
   ENS Lyon; archived at \url{https://github.com/rocq-archive/firing-squad}
   (1997).
 
+\bibitem{Minsky67}
+M.~L. Minsky, Computation: Finite and Infinite Machines, Prentice-Hall,
+  Englewood Cliffs, NJ, 1967.
+
+\bibitem{Mazoyer96}
+J.~Mazoyer, On optimal solutions to the firing squad synchronization problem,
+  Theoretical Computer Science 168~(2) (1996) 367--404.
+
+\bibitem{SettleSimon02}
+A.~Settle, J.~Simon, Smaller solutions for the firing squad, Theoretical
+  Computer Science 276~(1--2) (2002) 83--109.
+
 \bibitem{BerthiaumeEtAl04}
 A.~Berthiaume, T.~Bittner, L.~Perkovi{\'c}, A.~Settle, J.~Simon, Bounding the
   firing synchronization problem on a ring, Theoretical Computer Science
@@ -106,10 +118,27 @@ A.~Biere, K.~Fazekas, M.~Fleury, M.~Heisinger, {CaDiCaL}, {Kissat},
   Descriptions, Vol. B-2020-1 of Department of Computer Science Report Series
   B, University of Helsinki, 2020, pp. 51--53.
 
+\bibitem{CaDiCaL2}
+A.~Biere, T.~Faller, K.~Fazekas, M.~Fleury, N.~Froleyks, F.~Pollitt, {CaDiCaL}
+  2.0, in: Computer Aided Verification (CAV 2024), Vol. 14681 of Lecture Notes
+  in Computer Science, Springer, 2024, pp. 133--152.
+
 \bibitem{PySAT18}
 A.~Ignatiev, A.~Morgado, J.~Marques-Silva, {PySAT}: a {P}ython toolkit for
   prototyping with {SAT} oracles, in: Theory and Applications of Satisfiability
   Testing (SAT 2018), Vol. 10929 of Lecture Notes in Computer Science,
   Springer, 2018, pp. 428--437.
+
+\bibitem{WetzlerHeuleHunt14}
+N.~Wetzler, M.~J.~H. Heule, J.~Hunt, Warren~A., {DRAT-trim}: efficient checking
+  and trimming using expressive clausal proofs, in: Theory and Applications of
+  Satisfiability Testing (SAT 2014), Vol. 8561 of Lecture Notes in Computer
+  Science, Springer, 2014, pp. 422--429.
+
+\bibitem{HeuleEtAl11}
+M.~J.~H. Heule, O.~Kullmann, S.~Wieringa, A.~Biere, Cube and conquer: guiding
+  {CDCL} {SAT} solvers by lookaheads, in: Hardware and Software: Verification
+  and Testing (HVC 2011), Vol. 7261 of Lecture Notes in Computer Science,
+  Springer, 2012, pp. 50--65.
 
 \end{thebibliography}

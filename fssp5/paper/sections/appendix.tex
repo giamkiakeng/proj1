@@ -1,0 +1,71 @@
+%% ---------------------------------------------------------------------
+\appendix
+
+\section{The rule of \cref{thm:frontier}}\label{app:delta12}
+
+\input{sections/delta12}
+
+\section{Reproducibility}\label{app:repro}
+
+The directory \texttt{fssp5/} of the accompanying repository contains all
+programs, the rule tables and the logs. The main components are:
+\begin{description}[style=nextline,leftmargin=1.5em,font=\normalfont]
+\item[\texttt{src/fsspcheck.c}] independent brute-force simulator: reads a
+  rule table and checks minimal-time synchronization for a range of lengths
+  (full simulation of every line, no use of the agreement lemma);
+\item[\texttt{src/gencnf.py}] CNF generator for $\mathrm{MT}_k(\mathcal N;M,N')$
+  with the options of \cref{sec:encoding} (return chains, pumping, links,
+  symmetry breaking) and the restricted classes used in the experiments;
+\item[\texttt{src/pumping.py}] computation of the cones of
+  \cref{lem:cone} by breadth-first search and direct verification of
+  $\mathrm{PUMP}(n,n')$ on a given rule;
+\item[\texttt{src/fsspdfs.c}] exhaustive depth-first enumeration of partial
+  rules (\cref{tab:four});
+\item[\texttt{src/mazoyer\_from\_coq.py}] extraction of Mazoyer's rule from
+  the file \texttt{autom.v} of Duprat's Coq development \cite{Duprat97};
+\item[\texttt{src/validate\_mazoyer.py}] soundness test of the encoding;
+\item[\texttt{src/check\_halfline.py}] direct check that a half-line
+  diagram has no firing cell below a given anti-diagonal;
+\item[\texttt{src/fixgerm.py}, \texttt{src/knuth.py},
+  \texttt{src/benders.py}] the experiments of \cref{sec:five}.
+\end{description}
+
+\paragraph{Certificate for \cref{thm:four}}
+{\footnotesize
+\begin{verbatim}
+python3 gencnf.py 4 9 mt4_9.cnf
+cadical --lrat --binary=false mt4_9.cnf mt4_9.lrat  # UNSAT
+lrat-check mt4_9.cnf mt4_9.lrat                     # VERIFIED
+\end{verbatim}}
+SHA-256 digests (each on two lines):
+{\footnotesize
+\begin{verbatim}
+mt4_9.cnf           d18d65480e77505193b8f60362badad5
+                    e71f8f08505f29befbcd3b2b18cdaabf
+mt4_9.lrat          1d511a75ab25587fa4a3476b95ad3f71
+                    33c7375ad96661fd22fa598aec6c8092
+uniformA_2-12.txt   b62abbcac0653a661cd1bbe344dee9db
+                    ba0cddee37448ea16681d436166c3aad
+mazoyer6.txt        4b0717ea7319957c1fdcc887fe09c107
+                    4cf338e8b849cdd32b4307d0083f417e
+\end{verbatim}}
+
+\paragraph{Checking \cref{thm:frontier}}
+{\footnotesize
+\begin{verbatim}
+R=results/uniformA_2-12.txt
+fsspcheck $R 2 12              # OK for all 2 <= n <= 12
+fsspcheck $R 13 13             # FAIL: a cell fires at time 23
+python3 pumping.py $R 40       # 0 violations
+python3 check_halfline.py $R 78  # no firing cell, t+i <= 78
+\end{verbatim}}
+The uniform configuration before firing in (a) is visible with the option
+\texttt{-v} of the checker, which prints the diagrams.
+
+\paragraph{Validation against Mazoyer's solution}
+{\footnotesize
+\begin{verbatim}
+python3 mazoyer_from_coq.py autom.v > mazoyer6.txt
+fsspcheck mazoyer6.txt 3 3000   # OK for all 3 <= n <= 3000
+python3 validate_mazoyer.py 14  # SAT under exactly one renaming
+\end{verbatim}}

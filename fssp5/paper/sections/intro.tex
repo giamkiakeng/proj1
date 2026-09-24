@@ -17,42 +17,59 @@ that no $4$-state minimal-time solution exists. Whether five states suffice
 has remained open since Mazoyer's construction; it is regarded as the
 central open question on state complexity of the FSSP
 \cite{Umeo09,Correa17}. Many six-state minimal-time solutions are known
-today \cite{Clergue18,NguyenMaignan20}, and five-state solutions are known
-for restricted families of lengths or for non-minimal time
+today \cite{Clergue18,NguyenMaignan20}, and solutions with at most five
+states are known for restricted families of lengths, for instance $n=2^k$,
+some of them in non-minimal time
 \cite{UmeoYanagihara07,Yunes08,UmeoKamikawaYunes09}, but no five-state
 minimal-time solution has been found, nor has its existence been refuted.
 
-\paragraph{This paper.}
-We develop tools that apply to minimal-time solutions with any number of
-states and use them to attack the five-state question.
+\paragraph{This paper}
+We do not settle the five-state question. We develop tools that apply to
+minimal-time solutions with any number of states, use them to give a
+certified proof of the four-state lower bound that is produced and checked
+within a minute, and measure
+precisely how far the same tools reach for five states.
 \begin{enumerate}[label=(\roman*)]
-\item \emph{Agreement and reflection.} We make explicit the elementary but
-  useful fact that the line of length $n$ coincides with the half-line below
-  the anti-diagonal $t+i=2n-2$, so that all lines are encoded by a single
-  half-line diagram $C_\infty$ plus one ``reflected triangle'' $R_n$ per
-  length, and that $R_n$ is a function of two anti-diagonals of $C_\infty$
-  only (\cref{sec:prelim,sec:pumping}).
-\item \emph{A pumping lemma.} We prove that in every minimal-time solution
-  the input words of the reflected triangles are pairwise distinct on a cone
-  of length about $n/2$ (\cref{lem:pumping}). This is a constraint on the
-  half-line alone, valid for \emph{all} pairs of lengths, and it implies a
-  \emph{speed-$1/3$ barrier} (\cref{thm:third}): the periodic regime behind
-  the front can never overtake a signal of speed $1/3$ emitted by the
-  general. This gives an a priori explanation of the speed-$1/3$ signal
-  present in all classical constructions.
-\item \emph{A certified SAT framework.} We encode ``there is a $k$-state rule
-  that synchronizes a given set of lengths in minimal time, together with
-  the pumping constraints and further consequences'' into propositional
-  logic (\cref{sec:encoding}). The encoding re-derives the non-existence of
-  four-state minimal-time solutions in less than a minute on a laptop core,
-  and it is validated against Mazoyer's six-state solution extracted from
-  the Coq formalization of Duprat \cite{Duprat97}.
-\item \emph{Five states.} We report the outcome of the search for five-state
-  solutions (\cref{sec:experiments}).
+\item \emph{Agreement and reflection} (\cref{sec:prelim}). The line of
+  length $n$ coincides with the half-line below the anti-diagonal
+  $t+i=2n-2$; hence all lines are described by a single half-line diagram
+  $C_\infty$ plus one \emph{reflected triangle} $R_n$ per length, and $R_n$ is
+  a function of two anti-diagonals of $C_\infty$ only
+  (\cref{lem:agree,lem:determinacy}).
+\item \emph{A pumping lemma and a speed-$1/3$ barrier}
+  (\cref{sec:pumping}). In every minimal-time solution the input words of
+  the reflected triangles of any two lengths $4\le n<n'$ differ on an
+  explicit cone of about $n/2$ cells (\cref{lem:pumping}). This is a
+  constraint on the half-line alone, valid for \emph{all} pairs of lengths.
+  It implies that the non-periodic part of the half-line always reaches the
+  line $i=t/3$ (\cref{thm:third}), an a priori explanation of the speed-$1/3$
+  signal present in the classical constructions.
+\item \emph{A validated encoding and a certified four-state bound}
+  (\cref{sec:encoding,sec:four}). We encode the bounded problem, together
+  with the consequences above, into propositional logic, validate the
+  encoding against Mazoyer's solution extracted mechanically from Duprat's
+  Coq formalization \cite{Duprat97}, and obtain an LRAT certificate, checked
+  in $6$ seconds, that no four-state minimal-time solution exists
+  (\cref{thm:four}); the statement does not need the left quiescence
+  condition $\delta(\ast,\mathsf L,\mathsf L)=\mathsf L$.
+\item \emph{The five-state frontier} (\cref{sec:five}). We exhibit an
+  explicit five-state rule that synchronizes every line of length at most
+  $12$ in minimal time, satisfies all pumping constraints up to length $40$,
+  never fires on the half-line up to anti-diagonal $78$, and even ends with
+  a uniform configuration (\cref{thm:frontier}); so every refutation of
+  five-state solutions must use lines of length at least~$13$. We show that
+  all the difficulty lies in the half-line: once its transitions are fixed,
+  completing the rule is decided in a fraction of a second, whereas
+  random-probe estimates of the natural look-ahead search tree grow from
+  about $27$ nodes for four states to $10^{11}$--$10^{19}$ for five.
 \end{enumerate}
 
-\paragraph{Related work.}
-Surveys of the FSSP are \cite{Mazoyer86,Umeo09}. Beyond Balzer and Sanders,
+\paragraph{Related work}
+Surveys of the FSSP are \cite{Mazoyer86,Umeo09}; a classical textbook
+exposition is \cite{Minsky67}. Mazoyer \cite{Mazoyer96} studied the
+structure of optimal solutions and the information flow they require;
+Settle and Simon \cite{SettleSimon02} obtained small non-minimal-time
+solutions. Beyond Balzer and Sanders,
 lower bounds on the number of states are known for variants: no three-state
 solution and no four-state symmetric minimal-time solution exist for rings
 \cite{BerthiaumeEtAl04}; for further restricted classes see

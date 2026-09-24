@@ -1,22 +1,23 @@
 %% ---------------------------------------------------------------------
 \section{Discussion}\label{sec:discussion}
 
-\paragraph{What the pumping lemma buys.}
+\paragraph{What the pumping lemma buys}
 \Cref{lem:pumping} turns an infinite family of requirements on the
 reflected triangles into constraints on the half-line diagram only. It is
-satisfied by every genuine solution we tested and it eliminates, at
+satisfied by Mazoyer's solution, as it must be, and it eliminates, at
 negligible cost, the whole class of rules whose half-line becomes periodic
 behind the front too early. \Cref{thm:third} shows that the constraint has a
 transparent geometric meaning: in every minimal-time solution the
 non-periodic part of the half-line reaches the line $i=t/3$. For Mazoyer's
-solution every depth-row has period~$3$ and becomes periodic at time
-$T(j)=2j+2$, i.e.\ the periodic zone behind the front is bounded by a
-signal of speed $1/2$, comfortably within the bound.
+solution every depth-row is $3$-periodic from time $2j+1$ or $2j+2$, i.e.\
+the periodic zone behind the front is bounded by a signal of speed $1/2$,
+comfortably within the bound.
 
-\paragraph{Why lucky rules are hard to kill.}
-Any finite set of necessary conditions can be met by rules that are not
-solutions; the question is how many lengths are needed before all of them
-disappear. For four states the answer is $9$ (or $8$ with a long
+\paragraph{Why lucky rules are hard to kill}
+Small sets of necessary conditions are typically met by rules that are not
+solutions; the question is how many lengths are needed before all such rules
+disappear (if no solution exists, some finite set of lengths suffices, since
+there are finitely many rules). For four states the answer is $9$ (or $8$ with a long
 half-line). For five states the rule space is larger by roughly $38$
 orders of magnitude ($5^{94}$ versus $4^{45}$ transition tables), and our
 experiments show partial rules for all lengths up to at least $12$, and for
@@ -24,7 +25,7 @@ any single additional length we tried. Under the pumping constraints the
 surviving rules are no longer random: their half-lines exhibit a speed-$1/3$
 boundary, and the remaining freedom lies in the reflected triangles.
 
-\paragraph{The mirrored construction.}
+\paragraph{The mirrored construction}
 The cone of \cref{lem:cone} ends where the anti-diagonal $t+i=2n-2$ meets
 the line $i=t/3$, and the information that makes the right end fire exactly
 at time $2n-2$ must travel from there to the right end at maximal speed.
