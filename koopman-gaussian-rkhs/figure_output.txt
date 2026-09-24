@@ -1,0 +1,4 @@
+t_1(beta): beta=6.025 -> 0.0526, beta=7 -> 0.3001, beta=8 -> 0.3876, beta=14 -> 0.5366
+  t_1(7) by direct bisection: 0.300056
+  t_1(8) by direct bisection: 0.387611
+wrote fig_admissible_times.pdf / .png
