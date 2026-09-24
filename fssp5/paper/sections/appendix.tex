@@ -37,8 +37,10 @@ programs, the rule tables and the logs. The main components are:
 \item[\texttt{src/germinc.py}, \texttt{src/germcert.py}] completion tests
   of germs (CaDiCaL under assumptions) and a single LRAT certificate for a
   list of refuted germs;
-\item[\texttt{src/germext.c}] extension of the half-line determined by a
-  germ, and the checks of \cref{lem:left} and \cref{lem:pumping} on it;
+\item[\texttt{src/germext.c}, \texttt{src/germext2.c}] extension of the
+  half-line determined by a germ, and the checks of \cref{lem:left} and
+  \cref{lem:pumping} on it (\texttt{germext2.c}: streaming version of the
+  check of \cref{lem:left} for a single long line);
 \item[\texttt{src/germcompare.py}] the neighbourhoods used by the half-line
   of a rule below a given anti-diagonal (\cref{thm:frontier}(c)).
 \end{description}

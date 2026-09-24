@@ -38,6 +38,7 @@ src/germdfs.c            enumeration of half-line germs of bounded complexity
 src/germinc.py           incremental completion test of germs (CaDiCaL via PySAT)
 src/germcert.py          one LRAT certificate for a whole list of refuted germs
 src/germext.c            extends germ half-lines; left-border lemma and pumping checks
+src/germext2.c           streaming left-border check on one very long line
 src/germcompare.py       half-line neighbourhoods of rules below an anti-diagonal
 src/germpipe.sh          the classification pipeline
 src/germlong.py, germband.py, equiv.py, reflsym.py   further (inconclusive) experiments

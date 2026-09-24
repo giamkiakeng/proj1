@@ -260,15 +260,17 @@ The same pipeline, run on the $9{,}787$ germs of complexity at most $16$
 ($1.5\cdot10^9$ nodes), shows how the two kinds of arguments share the
 work (\cref{tab:germs}). The completion test for the lengths $2,\dots,10$
 refutes $8{,}824$ germs (one LRAT proof of $2.0$\,GB, found in $556$\,s and
-checked in $51$\,s). Of the $963$ survivors, $929$ are refuted by
+checked in $51$\,s). Of the $963$ survivors, $931$ are refuted by
 \cref{lem:left} or \cref{lem:pumping} applied to their half-lines, each of
 which is determined by the germ far enough for the lemma to apply (we
-simulate up to anti-diagonal $10^4$). Used alone, the half-line arguments
+simulate up to anti-diagonal $10^4$, and for two germs the input
+anti-diagonals of the line of length $20{,}000$). Used alone, the half-line arguments
 refute $8{,}263$ of the $9{,}787$ germs, without any SAT call. Among the
-$34$ germs that pass both filters are germs whose half-lines contain
-self-similar, Sierpi\'nski-like regions, on which \cref{lem:left} has no
-grip, and germs whose periodic regions start too far from the border for
-the bound of the lemma to be reached within our simulation range.
+$32$ germs that pass both filters (one of which is not determined beyond
+anti-diagonal $94$) are germs with chaotic or self-similar half-lines, on
+which \cref{lem:left} has no grip, and germs whose periodic regions start
+too far from the border for the bound of the lemma to be reached within our
+simulation range. One of them is the germ of $\delta'_{13}$.
 
 \begin{table}[t]
 \centering\small
@@ -279,8 +281,8 @@ complexity bound $c_{78}\le$ & $14$ & $16$\\
 search nodes of \texttt{germdfs.c} & $1.0\cdot10^{8}$ & $1.5\cdot10^{9}$\\
 germs (non-firing, front $\ne\mathsf L$, $\mathrm{PUMP}$ to $40$) & $244$ & $9{,}787$\\
 refuted by the completion test for $2,\dots,10$ (LRAT) & $230$ & $8{,}824$\\
-then refuted by \cref{lem:left} or \cref{lem:pumping} & $14$ & $929$\\
-remaining & $0$ & $34$\\
+then refuted by \cref{lem:left} or \cref{lem:pumping} & $14$ & $931$\\
+remaining & $0$ & $32$\\
 \midrule
 refuted by \cref{lem:left} or \cref{lem:pumping} alone & $218$ & ${\ge}\,8{,}263$\\
 \bottomrule
