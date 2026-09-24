@@ -1,0 +1,5 @@
+cnf/
+*.cnf
+src/fsspcheck
+src/fsspdfs
+src/__pycache__/

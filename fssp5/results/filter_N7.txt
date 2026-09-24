@@ -1,0 +1,6 @@
+# filter k=5 N0=7 minf=None tinf=0: 5 restricted entries (0s)
+* G L L G A
+L L * L
+L L L L
+G L * L G A B
+G L L G A B
