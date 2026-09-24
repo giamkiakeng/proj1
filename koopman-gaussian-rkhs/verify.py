@@ -131,7 +131,7 @@ for t in (0.1, 1.0, 6.0):
 report("A P_C + P_C A^T + N = 0", np.abs(A @ P + P @ A.T + 4 * B @ B.T - (A @ C @ C + C @ C @ A.T)).max(), 1e-9)
 
 # ---------------------------------------------------------------------------
-print("4. Theorem 4.2 and Proposition 3.2 on kernel sections vs. Proposition 4.1 of [PSWPN]")
+print("4. Theorem 4.2 and Proposition 3.3 on kernel sections vs. Proposition 4.1 of [PSWPN]")
 
 
 def ip_bumps(Cp, Cpp, y, yp):
@@ -159,7 +159,7 @@ for t in (0.2, 0.9):
     G_src = np.array([[np.exp(-(zi - zj) @ np.linalg.solve(C @ C, zi - zj)) for zj in Z] for zi in Z])
     report(f"t={t}: max|<K k_zi, K k_zj>_Ctil - tautil k^C(zi,zj)|  (Theorem 4.2)",
            np.abs(G_img - tautil * G_src).max(), 1e-10)
-    # ||K^t k^C_z||_C^2 : Fourier-side formula (Proposition 3.2 of paper.tex) vs [PSWPN]-based value
+    # ||K^t k^C_z||_C^2 : Fourier-side formula (Proposition 3.3 of paper.tex) vs [PSWPN]-based value
     four = np.exp(-t * np.trace(A)) * np.linalg.det(C) / np.sqrt(np.linalg.det(2 * C @ C + 4 * S - E @ C @ C @ E.T))
     z = Z[0]
     paper = tau ** 2 * ip_bumps(Ct, C, Einv @ z, Einv @ z)

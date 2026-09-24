@@ -23,7 +23,7 @@
   [PASS] t=1.0: max|D_t - (P - e^At P e^A^Tt)|: 1.776e-14 (tol 1e-09)
   [PASS] t=6.0: max|D_t - (P - e^At P e^A^Tt)|: 2.309e-14 (tol 1e-09)
   [PASS] A P_C + P_C A^T + N = 0: 1.776e-14 (tol 1e-09)
-4. Theorem 4.2 and Proposition 3.2 on kernel sections vs. Proposition 4.1 of [PSWPN]
+4. Theorem 4.2 and Proposition 3.3 on kernel sections vs. Proposition 4.1 of [PSWPN]
   [PASS] t=0.2: max|<K k_zi, K k_zj>_Ctil - tautil k^C(zi,zj)|  (Theorem 4.2): 1.110e-16 (tol 1e-10)
   [PASS] t=0.2: |Fourier formula - paper-based value| for ||K^t k_z||_C^2: 0.000e+00 (tol 1e-10)
   [PASS] t=0.9: max|<K k_zi, K k_zj>_Ctil - tautil k^C(zi,zj)|  (Theorem 4.2): 3.747e-14 (tol 1e-10)
