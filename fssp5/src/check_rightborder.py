@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+"""check_rightborder.py -- periodic stretches of the diagonals t-i = n-3, n-4 read from
+the right end (Remark 3.7 of the paper) for a rule synchronizing lines in minimal time.
+usage: check_rightborder.py rulefile k NMAX"""
 import sys
 rule, k, NMAX = sys.argv[1], int(sys.argv[2]), int(sys.argv[3])
 tab = {}

@@ -65,13 +65,15 @@ line such as $n=20$, but they violate the pumping lemma massively (155 of the
 pairs $4\le n<n'\le40$ for the rule shown). Rules of the second kind have a
 chaotic half-line which, without the half-line constraints, typically fires
 at some point. Once the half-line is extended and
-the pumping constraints are imposed, the solver is forced to produce
-half-lines with a genuine slow boundary: in the
+the pumping constraints are imposed, the half-lines produced by the solver
+change character: in the
 models we examined in detail---\cref{fig:diagrams}(c) and the rules of
 \cref{thm:frontier}, whose common half-line consists of a front of $\mathsf G$'s, a
 solid wake of $\mathsf G$'s and a region $\mathsf{A}\,\mathsf{L}\,\mathsf{A}\,\mathsf{L}\cdots$
 behind a boundary of speed exactly $1/3$---a region delimited by a line of
-slope $1/3$ appears, as predicted by \cref{thm:third}.
+slope $1/3$ appears, as predicted by \cref{thm:third}. Chaotic half-lines
+that never fire satisfy the pumping constraints as well; one of them is
+discussed after \cref{cor:germ12}.
 
 \begin{table}[t]
 \centering\small

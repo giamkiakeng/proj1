@@ -47,3 +47,8 @@ All times single core (Intel/AMD cloud vCPU), kissat 4.x (git HEAD 2026-09) unle
   2..10 + {20} SAT; + {30}, {40} UNKNOWN (300 s).  Band tests (germband.py, h=4): UNKNOWN (300 s).
 - lazyk_germ (delta12 germ, lengths 2..14, links): stopped after ~63 min without answer
   (architecture refuted by the lemma anyway).
+- delta13' (results/delta13_chaotic.txt): first germ of K16_surv34 (chaotic half-line, complexity 16);
+  completion for 2..12 in 2.4 s, for 2..13 in 442 s (rerun 485 s), fails n=14; 2..14 UNKNOWN (600 s).
+- germext2 (streaming, N=20000): 2 more of the 34 K<=16 survivors refuted (s=3, L=2); 32 remain.
+- fsspdfs -g (germ fixed, DFS over reflected transitions): no answer within 300 s even for N=8.
+- Mirrored lemma (paper Remark 3.7) checked on Mazoyer: stretches <= 7 (n <= 300, n = 6 mod 7).

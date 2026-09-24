@@ -1,8 +1,8 @@
 # Five-state minimal-time firing squads — code, data and manuscript
 
 This directory accompanies the manuscript
-*Towards five-state minimal-time firing squads: a pumping lemma, a speed-1/3
-barrier, and certified bounds* (`paper/main.tex`, compiled: `paper/fssp5_manuscript.pdf`).
+*Towards five-state minimal-time firing squads: two barriers on the
+half-line and certified bounds* (`paper/main.tex`, compiled: `paper/fssp5_manuscript.pdf`).
 
 **Status of the open problem.** The existence of a five-state minimal-time
 solution to the firing squad synchronization problem is **not settled** by this
