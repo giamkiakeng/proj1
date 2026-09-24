@@ -17,7 +17,7 @@ work. What is established (with proofs or checkable certificates):
 | No 4-state minimal-time solution (without assuming δ(*,L,L)=L) | paper §5, Theorem 5.1 | LRAT certificate, `lrat-check` VERIFIED in 5.7 s |
 | Explicit 5-state rules synchronizing all lengths 2..12 (δ12, uniform pre-firing) and 2..13 (δ13), obeying PUMP up to 40 and never firing on the half-line up to anti-diagonal 78 | paper §6, Theorem 6.1 | `src/fsspcheck`, `src/pumping.py`, `src/check_halfline.py`, `src/germcompare.py` on `results/uniformA_2-12.txt`, `results/delta13.txt` |
 | The common half-line of δ12 and δ13 cannot be completed to a solution (fails at n = 518 by the left-border lemma) | paper §6, Corollary 6.2 | `src/germext.c` |
-| A second 5-state rule δ′13 for all lengths 2..13, with a chaotic half-line of complexity 16 that escapes both barriers | paper §6, Proposition 6.3, Figure 2 | `src/fsspcheck`, `src/germext.c` on `results/delta13_chaotic.txt` |
+| A 5-state rule δ14 for **all lengths 2..14** (fails at 15), with a chaotic half-line of complexity 16 that escapes both barriers (found via δ′13 for 2..13 with the same half-line) | paper §6, Proposition 6.3, Figure 2 | `src/fsspcheck`, `src/germext.c` on `results/delta14.txt` (and `results/delta13_chaotic.txt`) |
 | Every 5-state minimal-time solution uses ≥ 15 distinct neighbourhoods on its half-line below anti-diagonal 78 | paper §6.3, Proposition 6.4, Table 3 | `src/germdfs.c`, `src/germcert.py` (LRAT), `src/germext.c`; digests in `results/germs/CERTIFICATES.txt` |
 | Search-space estimates (Knuth probes): ~27 nodes for 4 states vs 10^11–10^19 for 5 states | paper §6 | `src/knuth.py`, `results/knuth_k5_N12.log` |
 
