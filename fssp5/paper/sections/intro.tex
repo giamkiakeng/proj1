@@ -48,7 +48,9 @@ precisely how far the same tools reach for five states.
   border exactly when it reaches them; hence the input anti-diagonals cannot
   be periodic over long stretches near the left border (\cref{lem:left}),
   and the half-line cannot be periodic in any wedge at the border
-  (\cref{thm:left}).
+  (\cref{thm:left}); in particular it is never eventually regular, i.e.\
+  it cannot consist, from some time on, of finitely many periodic regions
+  separated by signals (\cref{cor:regular}).
 \item \emph{A validated encoding and a certified four-state bound}
   (\cref{sec:encoding,sec:four}). We encode the bounded problem, together
   with the consequences above, into propositional logic, validate the
@@ -71,7 +73,8 @@ precisely how far the same tools reach for five states.
   lemmas with certified solver calls, we classify the half-lines of low
   complexity: every five-state solution uses at least $15$ distinct
   neighbourhoods on its half-line below anti-diagonal $78$
-  (\cref{prop:germs}). The difficulty lies in the half-line: once the
+  (\cref{prop:germs}), and of the $9{,}787$ half-lines with at most $16$
+  neighbourhoods only $16$, none of them eventually regular, survive. The difficulty lies in the half-line: once the
   transitions used on the half-line are fixed, the completion problem is
   usually decided in under a second, whereas random-probe estimates of the
   natural look-ahead search tree grow from about $27$ nodes for four states
