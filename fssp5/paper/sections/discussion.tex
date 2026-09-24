@@ -27,13 +27,31 @@ boundary, and the remaining freedom lies in the reflected triangles.
 
 \paragraph{The mirrored construction}
 The cone of \cref{lem:cone} ends where the anti-diagonal $t+i=2n-2$ meets
-the line $i=t/3$, and the information that makes the right end fire exactly
-at time $2n-2$ must travel from there to the right end at maximal speed.
-Consequently the right half of every reflected triangle has to perform a
-minimal-time synchronization that is \emph{mirrored} and runs on the
+the line $i=t/3$. By \cref{lem:determinacy}, the part of $R_n$ whose cone lies
+in the periodic zone behind the front is the same for all large $n$ of a
+given residue class, and the information that makes the right end fire
+exactly at time $2n-2$ enters $R_n$ near that crossing and travels to the
+right end at maximal speed. Heuristically, the right half of every
+reflected triangle therefore has to behave like a \emph{mirrored}
+minimal-time synchronization, started by the reflection and running on the
 background left behind the front instead of on quiescent cells. A
 five-state solution would have to realize both constructions---the direct
 one on the quiescent background and the mirrored one on the front's
 background---with the same four working states. We regard this tension as
-the structural reason why five states are hard, and we believe that making
-it quantitative is the most promising route to a conceptual proof.
+the structural reason why five states are hard; turning it into a theorem
+(for instance a mirrored version of \cref{thm:third}, for which the missing
+ingredient is a border at the far end of the mirrored problem) is the most
+promising route to a conceptual proof.
+
+\paragraph{Open problems}
+\begin{enumerate}[label=(\arabic*)]
+\item Does a five-state minimal-time solution exist? By
+  \cref{thm:frontier}, a negative answer along the lines of \cref{thm:four}
+  requires lines of length at least $13$.
+\item Is there a necessary condition, in the spirit of \cref{lem:pumping},
+  that constrains the reflected triangles themselves and not only the
+  half-line?
+\item What is the smallest $N$ such that some five-state rule is
+  $\{2,\dots,N\}$-minimal but no five-state rule is
+  $\{2,\dots,N+1\}$-minimal, if such an $N$ exists?
+\end{enumerate}

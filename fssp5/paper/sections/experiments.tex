@@ -65,9 +65,12 @@ line such as $n=20$, but they violate the pumping lemma massively (155 of the
 pairs $4\le n<n'\le40$ for the rule shown). Rules of the second kind have a
 chaotic half-line that eventually fires. Once the half-line is extended and
 the pumping constraints are imposed, the solver is forced to produce
-half-lines with a genuine slow boundary: in every model we inspected a
-region delimited by a line of slope $1/3$ appears (\cref{fig:diagrams}(c)),
-exactly as predicted by \cref{thm:third}.
+half-lines with a genuine slow boundary: in the
+models we examined in detail---\cref{fig:diagrams}(c) and the rule of
+\cref{thm:frontier}, whose half-line consists of a front of $\mathsf G$'s, a
+solid wake of $\mathsf G$'s and a region $\mathsf{A}\,\mathsf{L}\,\mathsf{A}\,\mathsf{L}\cdots$
+behind a boundary of speed exactly $1/3$---a region delimited by a line of
+slope $1/3$ appears, as predicted by \cref{thm:third}.
 
 \begin{table}[t]
 \centering\small
@@ -119,8 +122,10 @@ It does not synchronize the line of length $13$: a cell fires at time $23$.
 
 \begin{proof}
 Each property is a finite computation on the explicit table, carried out by
-direct simulation with the checker and the independent script
-\texttt{pumping.py} (\ref{app:repro}).
+direct simulation: (a) and the failure at $n=13$ with the checker
+\texttt{fsspcheck.c}, (b) with \texttt{check\_halfline.py}, and (c) with
+\texttt{pumping.py}, which recomputes the cones of \cref{lem:cone} by
+breadth-first search (\ref{app:repro}).
 \end{proof}
 
 Consequently, the necessary conditions used in this paper, restricted to
@@ -153,7 +158,9 @@ with the partial table as assumptions is refuted within $3000$ conflicts---
 with Knuth's random-probe estimator. For four states ($\mathrm{MT}_4$ with
 lengths $2,\dots,9$) the mean over $30$ probes is $27$ nodes. For five
 states ($\mathrm{MT}_5(\{2,\dots,12\};78,40)$ with links) three probes gave
-$4.2\cdot10^{11}$, $3.1\cdot10^{17}$ and $8.3\cdot10^{18}$. The estimator has
+$4.2\cdot10^{11}$, $3.1\cdot10^{17}$ and $8.3\cdot10^{18}$; adding the
+lengths up to $18$ prunes more strongly along some paths but not in general
+(three probes: $2.2\cdot10^{5}$, $4.2\cdot10^{12}$, $1.0\cdot10^{15}$). The estimator has
 a large variance, but the gap of at least ten orders of magnitude is robust
 and explains why the unrestricted five-state formulas with $N\ge12$ that we
 started (up to $N=18$, several CPU-hours each) did not terminate. Clause

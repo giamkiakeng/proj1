@@ -58,8 +58,9 @@ precisely how far the same tools reach for five states.
   never fires on the half-line up to anti-diagonal $78$, and even ends with
   a uniform configuration (\cref{thm:frontier}); so every refutation of
   five-state solutions must use lines of length at least~$13$. We show that
-  all the difficulty lies in the half-line: once its transitions are fixed,
-  completing the rule is decided in a fraction of a second, whereas
+  the difficulty lies in the half-line: for the five-state rules we
+  examined, once the transitions used on the half-line are fixed, the
+  completion problem is decided in under a second, whereas
   random-probe estimates of the natural look-ahead search tree grow from
   about $27$ nodes for four states to $10^{11}$--$10^{19}$ for five.
 \end{enumerate}
@@ -77,5 +78,5 @@ solution and no four-state symmetric minimal-time solution exist for rings
 solutions \cite{Clergue18} and to generate families of solutions by local
 simulations \cite{NguyenMaignan20}. SAT solvers have been applied to many
 extremal problems in combinatorics with certified unsatisfiability proofs
-\cite{HeuleKullmannMarek16,Heule18}; to our knowledge this is the first
-SAT-based treatment of the FSSP state-complexity question.
+\cite{HeuleKullmannMarek16,Heule18}; we are not aware of previous SAT-based work on the state
+complexity of the FSSP.
