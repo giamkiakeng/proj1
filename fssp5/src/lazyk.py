@@ -33,7 +33,33 @@ def main():
     ap.add_argument('--log', default='/tmp/claude-0/lazyk.log')
     ap.add_argument('--prefire', type=int, default=None)
     ap.add_argument('--fzper', default=None)
+    ap.add_argument('--germ', default=None, help='rule file whose half-line transitions (up to anti-diagonal M) are fixed')
     a = ap.parse_args()
+    germ_units = []
+    if a.germ:
+        tab = {}
+        for ln in open(a.germ):
+            t = ln.split('#')[0].split()
+            if len(t) == 4:
+                tab[tuple(t[:3])] = t[3]
+        width = a.M + 2
+        cur = ['G'] + ['L'] * (width - 1)
+        used = set()
+        for t in range(a.M):
+            nxt = []
+            for i in range(width):
+                if t + (i + 1) >= a.M:
+                    nxt.append('?')
+                    continue
+                e = (cur[i - 1] if i > 0 else '*', cur[i], cur[i + 1] if i + 1 < width else 'L')
+                if '?' in e:
+                    nxt.append('?')
+                    continue
+                used.add(e)
+                nxt.append(tab[e])
+            cur = nxt
+        CODE = {'*': gencnf.BND, 'L': 0, 'G': 1, 'A': 2, 'B': 3, 'F': 4}
+        germ_units = [(tuple(CODE[x] for x in e), CODE[tab[e]]) for e in used]
     lengths = list(range(2, a.n0 + 1))
     t0 = time.time()
 
@@ -51,6 +77,9 @@ def main():
         E = gencnf.build(5, N, minf=max(a.M, 2 * N - 2), pump=a.pump, links=True,
                          fire_n=sorted(lengths), prefire=a.prefire,
                          fzper=tuple(map(int, a.fzper.split(':'))) if a.fzper else None)
+        for (e, d) in germ_units:
+            if e in E.T:
+                E.add([E.T[e][d]])
         cnf = a.log + '.cnf'
         with open(cnf, 'w') as fh:
             gencnf.write_dimacs(E, fh)

@@ -147,3 +147,119 @@ $j=1$, and from $T(j)=2j+1$ when $j\ge3$ is odd. The theorem also explains the f
 the ``lucky'' partial rules found by the solvers (\cref{sec:five}): their
 half-line diagrams are periodic behind the front far beyond the line
 $i=t/3$.
+
+\subsection{A second barrier, at the left border}
+
+\Cref{lem:pumping} looks at the right end of the line. The left end gives a
+constraint of a different nature, again on the half-line only. Fix $n\ge2$
+and number the anti-diagonals of the line of length $n$ from the input
+anti-diagonals on: for $c\ge-1$ and $1\le i\le n$ with $c\le i$ put
+\[
+v_c(i):=C_n(2n-2+c-i,\;i),
+\]
+the cell of the \emph{chain} $t+i=2n-2+c$ at position $i$. Chains $-1$ and
+$0$ are the input anti-diagonals, on which $v_c(i)=C_\infty(2n-2+c-i,i)$ by
+\cref{lem:agree}; chains $c\ge1$ lie in $R_n$, and chain $1$ is the return
+chain of \cref{lem:return}. The cell $(2n-2+c-i,i)$ has its three
+predecessors on the chains $c-2$, $c-1$ and $c$, so
+\begin{equation}\label{eq:chains}
+v_c(i)=\delta\bigl(v_{c-2}(i-1),\,v_{c-1}(i),\,v_c(i+1)\bigr)\qquad(c\ge1),
+\end{equation}
+where $v_{c-2}(0)$ and $v_c(n+1)$ stand for the border. The line of length
+$n$ is synchronized at time $2n-2$ if and only if $v_i(i)=\mathsf F$ for
+$1\le i\le n$ and $v_c(i)\ne\mathsf F$ for $c<i$. In the skewed coordinates
+$u_c(y):=v_c(y+\lfloor c/2\rfloor)$, \eqref{eq:chains} becomes
+\begin{equation}\label{eq:slices}
+u_c(y)=\delta\bigl(u_{c-2}(y),\,u_{c-1}(y+\varepsilon_c),\,u_c(y+1)\bigr),
+\qquad \varepsilon_c=\begin{cases}1,&c\text{ even},\\0,&c\text{ odd},\end{cases}
+\end{equation}
+with $u_0(y)=C_\infty(2n-2-y,\,y)$ and $u_{-1}(y)=C_\infty(2n-2-y,\,y-1)$,
+and $u_c(y)$ is the cell $y+\lfloor c/2\rfloor$ at time
+$2n-2+\lceil c/2\rceil-y$: it must be $\mathsf F$ if $\lceil c/2\rceil=y$
+and must differ from $\mathsf F$ if $\lceil c/2\rceil<y$. Thus each \emph{slice}
+$(u_1(y),u_2(y),\dots)$ is obtained from the slice $y+1$ by a sequential
+finite-state transducer that reads the components in increasing order and
+whose initial state is determined by the two input cells $u_{-1}(y),u_0(y)$: read from right to left, the reflected triangle is a
+cascade of finite-state transducers, the left-hand counterpart of the
+co-moving description \eqref{eq:comoving} of the half-line.
+
+\begin{lemma}[left border]\label{lem:left}
+Let $\delta$ have $k$ states and synchronize the line of length $n$ at time
+$2n-2$. Let $s\ge1$, $L\ge1$ and $s+L\le Y\le n-s$, and suppose that the
+words
+\begin{align*}
+&y\mapsto C_\infty(2n-2-y,\,y)\qquad(s\le y\le Y)\qquad\text{and}\\
+&y\mapsto C_\infty(2n-3-y,\,y)\qquad(s\le y\le Y-1)
+\end{align*}
+are $L$-periodic. Then $Y-s\le (k-1)^{2s}L$.
+\end{lemma}
+
+\begin{proof}
+For $s\le y\le Y$ let $P_y:=(u_1(y),\dots,u_{2s}(y))$. These are cells
+$y+\lfloor c/2\rfloor\le Y+s\le n$ with $\lceil c/2\rceil\le s\le y$, so
+they are defined, and for $y>s$ none of them is $\mathsf F$. By
+\eqref{eq:slices}, $u_c(y)$ with $1\le c\le 2s$ is computed from components
+of index $<c$ of the same slice, from components of index $\le c$ of slice
+$y+1$, and from $u_{-1}(y),u_0(y)$; hence there is a map $\Theta$,
+depending on $\delta$ only, with
+\[
+P_y=\Theta\bigl(P_{y+1},u_{-1}(y),u_0(y)\bigr)\qquad(s+1\le y\le Y-1).
+\]
+Unfolding \eqref{eq:slices} for even $c$,
+$u_{2j}(y)=\delta(u_{2j-2}(y),u_{2j-1}(y+1),u_{2j}(y+1))$, shows that
+$u_{2s}(y)$ depends only on $u_0(y)$ and $P_{y+1}$: there is a map $E$ with
+$u_{2s}(y)=E(P_{y+1},u_0(y))$ whenever $s\le y\le Y-1$. By hypothesis,
+$u_0$ is $L$-periodic on $[s,Y]$ and $u_{-1}$ on $[s+1,Y]$.
+
+Suppose $Y-s>(k-1)^{2s}L$. The pairs $(P_y,\,y\bmod L)$, $s+1\le y\le Y$,
+take at most $(k-1)^{2s}L$ values, so there are $s+1\le b<a\le Y$ with
+$P_a=P_b$ and $a\equiv b\pmod L$; put $d:=a-b$. By downward induction,
+$P_y=P_{y+d}$ for $s+1\le y\le b$: this holds for $y=b$, and if it holds for
+$y+1\le b$ then
+$P_y=\Theta(P_{y+1},u_{-1}(y),u_0(y))=\Theta(P_{y+1+d},u_{-1}(y+d),u_0(y+d))=P_{y+d}$,
+because $y+d<a\le Y$ and $L\mid d$. In particular $P_{s+1}=P_{s+1+d}$, and
+since also $u_0(s+d)=u_0(s)$,
+\[
+u_{2s}(s+d)=E(P_{s+1+d},u_0(s+d))=E(P_{s+1},u_0(s))=u_{2s}(s)=\mathsf F .
+\]
+But $\lceil 2s/2\rceil=s<s+d$, so $u_{2s}(s+d)$, the cell $2s+d$ at time
+$2n-2-d$, is not $\mathsf F$: a contradiction.
+\end{proof}
+
+In words: a band of $2s$ chains that crosses a long periodic stretch of the
+input anti-diagonals is a finite-state system, so it cannot time the firing
+of the cell $2s$, which it must trigger exactly when it arrives there. The
+border itself is harmless (cell~$1$ fires because the return chain meets
+the border), which is why the lemma starts at $s\ge1$ and pays a factor
+exponential in $s$.
+
+\begin{theorem}[left-border barrier]\label{thm:left}
+Let $\delta$ be a minimal-time solution. There are no $s\ge1$, $\alpha>0$,
+$t_0$ and periods $p,q\ge1$ such that $C_\infty(t+p,i)=C_\infty(t,i)$ and
+$C_\infty(t,i+q)=C_\infty(t,i)$ whenever the cells involved lie in the wedge
+$\Omega:=\{(t,i):\ s\le i\le\alpha t,\ t\ge t_0\}$.
+\end{theorem}
+
+\begin{proof}
+Suppose the contrary and put $L:=pq$. If $(t,i)$ and $(t-L,i+L)$ lie in
+$\Omega$, then so do the intermediate cells $(t-L,i+jq)$ and
+$(t-L+jp,i)$, and $C_\infty(t-L,i+L)=C_\infty(t-L,i)=C_\infty(t,i)$. For
+the anti-diagonals $t+i=2n-2$ and $t+i=2n-3$ this makes the words of
+\cref{lem:left} $L$-periodic on $[s,Y_n]$ for some $Y_n$ with
+$Y_n\ge \tfrac{\alpha}{1+\alpha}\,2n-C$, where $C$ depends on
+$\alpha,L,t_0$ only. For $n$ large, $\min(Y_n,n-s)-s>(k-1)^{2s}L$,
+contradicting \cref{lem:left}.
+\end{proof}
+
+\Cref{thm:third,thm:left} complement each other: the half-line of a
+minimal-time solution has non-periodic structure reaching the line $i=t/3$
+behind the front, and non-periodic structure in every wedge at the left
+border. In the constructions of Waksman and Balzer the latter is the family
+of signals of speeds $1/(2^j-1)$, which accumulate at the border; in
+Mazoyer's solution it is the family of recursive division points. We checked
+\cref{lem:left} mechanically on Mazoyer's rule for $n\le400$, $s\le3$,
+$L\le6$: its periodic stretches near the left border have length at most
+$6$, far below the bound. Unlike \cref{lem:pumping}, \cref{lem:left} is
+only effective for long lines (for five states and $s=2$, $L=1$ it needs a
+stretch of more than $256$ cells), but it applies to any half-line that can
+be computed far enough, which we exploit in \cref{sec:five}.

@@ -66,8 +66,8 @@ pairs $4\le n<n'\le40$ for the rule shown). Rules of the second kind have a
 chaotic half-line that eventually fires. Once the half-line is extended and
 the pumping constraints are imposed, the solver is forced to produce
 half-lines with a genuine slow boundary: in the
-models we examined in detail---\cref{fig:diagrams}(c) and the rule of
-\cref{thm:frontier}, whose half-line consists of a front of $\mathsf G$'s, a
+models we examined in detail---\cref{fig:diagrams}(c) and the rules of
+\cref{thm:frontier}, whose common half-line consists of a front of $\mathsf G$'s, a
 solid wake of $\mathsf G$'s and a region $\mathsf{A}\,\mathsf{L}\,\mathsf{A}\,\mathsf{L}\cdots$
 behind a boundary of speed exactly $1/3$---a region delimited by a line of
 slope $1/3$ appears, as predicted by \cref{thm:third}.
@@ -104,36 +104,151 @@ the checkered region and the diagonal background has slope $1/3$.}
 \label{fig:diagrams}
 \end{figure}
 
-\subsection{A five-state rule for all lengths up to twelve}
+\subsection{Five-state rules for all lengths up to thirteen}
 
 \begin{theorem}\label{thm:frontier}
-The five-state rule $\delta_{12}$ of \cref{tab:delta12} has the following
-properties.
+The five-state rules $\delta_{12}$ and $\delta_{13}$ of
+\cref{tab:delta12,tab:delta13} have the following properties.
 \begin{enumerate}[label=(\alph*)]
-\item It synchronizes the line of length $n$ at time $2n-2$ for every
-  $2\le n\le 12$, and one step before firing all cells are in state
-  $\mathsf A$.
-\item Its half-line diagram contains no firing cell $(t,i)$ with
-  $t+i\le 78$.
-\item It satisfies $\mathrm{PUMP}(n,n')$ for all $4\le n<n'\le 40$.
+\item $\delta_{12}$ synchronizes the line of length $n$ at time $2n-2$ for
+  every $2\le n\le 12$, and one step before firing all cells are in state
+  $\mathsf A$. It does not synchronize the line of length $13$: a cell fires
+  at time $23$.
+\item $\delta_{13}$ synchronizes the line of length $n$ at time $2n-2$ for
+  every $2\le n\le 13$, and one step before firing all cells are in state
+  $\mathsf A$ whenever $4\le n\le 13$. It does not synchronize the line of
+  length $14$: a cell fires at time $21$.
+\item The half-line diagrams of $\delta_{12}$ and $\delta_{13}$ coincide on
+  all cells $(t,i)$ with $t+i\le 78$; these cells use $22$ neighbourhoods
+  besides $(\mathsf L,\mathsf L,\mathsf L)$, on which the two rules agree, and
+  none of them is a firing cell.
+\item Both rules satisfy $\mathrm{PUMP}(n,n')$ for all $4\le n<n'\le 40$.
 \end{enumerate}
-It does not synchronize the line of length $13$: a cell fires at time $23$.
 \end{theorem}
 
 \begin{proof}
-Each property is a finite computation on the explicit table, carried out by
-direct simulation: (a) and the failure at $n=13$ with the checker
-\texttt{fsspcheck.c}, (b) with \texttt{check\_halfline.py}, and (c) with
-\texttt{pumping.py}, which recomputes the cones of \cref{lem:cone} by
-breadth-first search (\ref{app:repro}).
+Each property is a finite computation on the explicit tables, carried out
+by direct simulation: (a), (b) and the failures at $n=13$ and $n=14$ with
+the checker \texttt{fsspcheck.c}, (c) with \texttt{check\_halfline.py},
+and (d) with \texttt{pumping.py}, which recomputes the cones of
+\cref{lem:cone} by breadth-first search (\ref{app:repro}).
 \end{proof}
 
-Consequently, the necessary conditions used in this paper, restricted to
-lengths at most $12$ (even together with the pumping constraints up to $40$
-and the half-line up to anti-diagonal $78$), are satisfiable: a refutation
-of five-state minimal-time solutions along these lines must involve lines of
-length at least $13$, and the requirement ``uniform configuration before
-firing'', satisfied by Mazoyer's solution, does not help below that length.
+The rule $\delta_{12}$ was found by Kissat on
+$\mathrm{MT}_5(\{2,\dots,12\};78,40)$ with links and the uniform pre-firing
+constraint (\cref{tab:five}); $\delta_{13}$ was found by the same solver
+after fixing the $22$ half-line neighbourhoods of $\delta_{12}$ and adding
+the length~$13$, in $108$\,s. The two rules differ in $57$ of the remaining
+entries. Consequently, the necessary conditions used in this paper,
+restricted to lengths at most $13$ (even together with the pumping
+constraints up to $40$ and the half-line up to anti-diagonal $78$), are
+satisfiable: a refutation of five-state minimal-time solutions along these
+lines must involve lines of length at least $14$, and the requirement
+``uniform configuration before firing'', satisfied by Mazoyer's solution,
+does not help below length $12$. The half-line shared by the two rules
+consists of a front of $\mathsf G$'s, a solid wake of $\mathsf G$'s and,
+behind a boundary of speed exactly $1/3$, a region
+$\mathsf{A}\,\mathsf{L}\,\mathsf{A}\,\mathsf{L}\cdots$ that is periodic in
+time and space. By the left-border barrier this architecture cannot be
+completed to a solution:
+
+\begin{corollary}\label{cor:germ12}
+No rule that agrees with $\delta_{12}$ on the $22$ neighbourhoods of
+\cref{thm:frontier}(c) synchronizes the line of length $518$ in minimal
+time. In particular no minimal-time solution has the half-line of
+$\delta_{12}$ and $\delta_{13}$ below anti-diagonal~$78$.
+\end{corollary}
+
+\begin{proof}
+Simulating the half-line with these $22$ neighbourhoods (and
+$(\mathsf L,\mathsf L,\mathsf L)$) only, no other neighbourhood occurs on
+the cells with $t+i\le1034$; hence every such rule has the same diagram
+$C_\infty$ there. On the anti-diagonal $t+i=1034$ the cells $2,\dots,259$
+are all in state $\mathsf A$, and on $t+i=1033$ the cells $2,\dots,258$ are
+all in state $\mathsf L$. \Cref{lem:left} with $k=5$, $n=518$, $s=2$,
+$L=1$ and $Y=259$ would give $257\le4^4=256$.
+\end{proof}
+
+So no choice of the remaining transitions can rescue this architecture.
+The lemma only bites at length $518$, whereas the two rules themselves
+already fail at lengths $13$ and $14$.
+
+\subsection{Half-lines of low complexity}\label{sec:germs}
+
+For a rule $\delta$ and a bound $M$, the \emph{germ} of $\delta$ below $M$
+is the restriction of $\delta$ to the neighbourhoods
+$(C_\infty(t-1,i-1),C_\infty(t-1,i),C_\infty(t-1,i+1))$ of the cells
+$(t,i)$ with $t\ge1$ and $t+i\le M$ of its half-line diagram, and its
+\emph{complexity} $c_M(\delta)$ is the number of these neighbourhoods other
+than $(\mathsf L,\mathsf L,\mathsf L)$. The germ determines $C_\infty$ on
+all cells with $t+i\le M$. The rules of \cref{thm:frontier} have $c_{78}=22$
+and Mazoyer's rule has $c_{78}=57$.
+
+\begin{proposition}\label{prop:germs}
+Every five-state minimal-time solution $\delta$ satisfies $c_{78}(\delta)\ge15$.
+\end{proposition}
+
+\begin{proof}[Proof (computer-assisted)]
+Let $\delta$ be a five-state minimal-time solution with $c_{78}(\delta)\le14$.
+Order the cells of $C_\infty$ by anti-diagonal and, within an anti-diagonal,
+by increasing time; after exchanging the names $\mathsf A$ and $\mathsf B$
+if necessary, $\mathsf A$ occurs before $\mathsf B$ in this order (if at
+all). By \eqref{eq:neverfire}, \cref{lem:return,lem:pumping}, the germ of
+$\delta$ below $78$ produces no firing cell, never produces $\mathsf L$ at
+the front, and satisfies $\mathrm{PUMP}(n,n')$ for $4\le n<n'\le40$. The
+program \texttt{germdfs.c} enumerates all germs with these properties, with
+at most $14$ neighbourhoods besides $(\mathsf L,\mathsf L,\mathsf L)$ and
+with $\mathsf A$ before $\mathsf B$, by a depth-first search over the cells
+in the above order in which the value of a neighbourhood is chosen when it
+first occurs: $1.0\cdot10^8$ nodes, $244$ germs. For $230$ of them the
+formula $\mathrm{MT}_5(\{2,\dots,10\};78,39)$ (without symmetry breaking,
+which the enumeration has already performed) together with the germ is
+unsatisfiable; a single formula in which a selector variable chooses the
+germ is refuted by CaDiCaL in $4$\,s, with an LRAT proof ($11$\,MB) checked
+by \texttt{lrat-check} in under a second. Each of the remaining $14$ germs
+determines $C_\infty$ far beyond anti-diagonal $78$ (no new neighbourhood
+occurs up to anti-diagonal $3300$), and on these extended diagrams
+\cref{lem:left} applies with $s=1$: for each germ there are $n\le163$ and
+$L\le5$ such that the two input anti-diagonals of the line of length $n$ are
+$L$-periodic on $[1,Y]$ with $Y-1>16L$ (for instance $n=28$, $L=1$, $Y=19$).
+Hence no rule containing one of the $244$ germs is a minimal-time solution.
+\end{proof}
+
+The same pipeline, run on the $9{,}787$ germs of complexity at most $16$
+($1.5\cdot10^9$ nodes), shows how the two kinds of arguments share the
+work (\cref{tab:germs}). The completion test for the lengths $2,\dots,10$
+refutes $8{,}824$ germs (one LRAT proof of $2.0$\,GB, found in $556$\,s and
+checked in $51$\,s). Of the $963$ survivors, $929$ are refuted by
+\cref{lem:left} or \cref{lem:pumping} applied to their half-lines, each of
+which is determined by the germ far enough for the lemma to apply (we
+simulate up to anti-diagonal $10^4$). Used alone, the half-line arguments
+refute $8{,}263$ of the $9{,}787$ germs, without any SAT call. Among the
+$34$ germs that pass both filters are germs whose half-lines contain
+self-similar, Sierpi\'nski-like regions, on which \cref{lem:left} has no
+grip, and germs whose periodic regions start too far from the border for
+the bound of the lemma to be reached within our simulation range.
+
+\begin{table}[t]
+\centering\small
+\begin{tabular}{@{}lrr@{}}
+\toprule
+complexity bound $c_{78}\le$ & $14$ & $16$\\
+\midrule
+search nodes of \texttt{germdfs.c} & $1.0\cdot10^{8}$ & $1.5\cdot10^{9}$\\
+germs (non-firing, front $\ne\mathsf L$, $\mathrm{PUMP}$ to $40$) & $244$ & $9{,}787$\\
+refuted by the completion test for $2,\dots,10$ (LRAT) & $230$ & $8{,}824$\\
+then refuted by \cref{lem:left} or \cref{lem:pumping} & $14$ & $929$\\
+remaining & $0$ & $34$\\
+\midrule
+refuted by \cref{lem:left} or \cref{lem:pumping} alone & $218$ & ${\ge}\,8{,}263$\\
+\bottomrule
+\end{tabular}
+\caption{Classification of the half-line germs of low complexity
+(\cref{sec:germs}). The last row applies the half-line arguments to all
+germs, without completion tests (half-lines simulated up to anti-diagonal
+$3300$ for $c_{78}\le14$ and $1300$ for $c_{78}\le16$).}
+\label{tab:germs}
+\end{table}
 
 \subsection{Where the difficulty lies}
 

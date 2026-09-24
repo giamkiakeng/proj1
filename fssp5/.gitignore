@@ -3,3 +3,5 @@ cnf/
 src/fsspcheck
 src/fsspdfs
 src/__pycache__/
+src/germdfs
+src/germext

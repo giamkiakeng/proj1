@@ -52,7 +52,8 @@ def main():
             used.add(e)
             nxt.append(tab[e])
         cur = nxt
-    E = gencnf.build(k, N, minf=M, pump=min(40, M // 2))
+    prefire = int(sys.argv[sys.argv.index('--prefire') + 1]) if '--prefire' in sys.argv else None
+    E = gencnf.build(k, N, minf=M, pump=min(40, M // 2), prefire=prefire)
     for (l, c, r) in used:
         if (CODE[l], CODE[c], CODE[r]) in E.T:
             E.add([E.T[(CODE[l], CODE[c], CODE[r])][CODE[tab[(l, c, r)]]]])
@@ -64,6 +65,18 @@ def main():
     st = [ln for ln in p.stdout.splitlines() if ln.startswith('s ')]
     print("%s: %d half-line transitions fixed; lengths 2..%d: %s (%.1fs)" % (
         os.path.basename(rule), len(used), N, st[0][2:] if st else 'UNKNOWN', time.time() - t0))
+    sys.stdout.flush()
+    if st and st[0].startswith('s SAT'):
+        true = set()
+        for ln in p.stdout.splitlines():
+            if ln.startswith('v '):
+                true.update(int(x) for x in ln[2:].split() if int(x) > 0)
+        out = '/tmp/claude-0/germ_completion_%s_%d.txt' % (os.path.basename(rule).split('.')[0], N)
+        with open(out, 'w') as fh:
+            gencnf.decode(E, true, fh)
+        r = subprocess.run([os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fsspcheck'),
+                            out, '2', '300'], capture_output=True, text=True)
+        print("   completion saved to %s; check 2..300: %s" % (out, r.stdout.strip()))
     os.remove(cnf)
 
 

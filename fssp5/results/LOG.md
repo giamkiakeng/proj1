@@ -28,3 +28,22 @@ All times single core (Intel/AMD cloud vCPU), kissat 4.x (git HEAD 2026-09) unle
 - Lazy CEGAR + C_inf(78) (no pump): lengths 2..11 satisfiable (iteration 6 at 773.9 s).
 - Structural cubes (front map f(x)=d(x,L,L) on the orbit of G, reflection r(x)=d(x,L,*)!=f(x)):
   201 cubes; on MT(5,2..12)+C_inf(78)+PUMP(40) with 30k-conflict budget about 40% are refuted instantly.
+
+## Session 2 (continued)
+- delta13 (results/delta13.txt): lazyk.py 13 200 --germ uniformA_2-12.txt, iteration 1 SAT in 107.9 s;
+  synchronizes 2..13, fails n=14 (fires at 21 < 26); same 22 half-line neighbourhoods as delta12
+  below anti-diagonal 78; PUMP to 40; uniform pre-firing A for 4 <= n <= 13.
+- Left-border lemma (paper Lemma 3.5): proved; checked on Mazoyer (stretches <= 6, n <= 400).
+  delta12/delta13 germ: CLOSED to anti-diagonal 1300 and refuted at n=518 (s=2, L=1, Y=259).
+- Germ classification (germdfs, anti-diagonal 78, PUMP to 40):
+  K<=14: 244 germs; 230 refuted at N=10 (one LRAT, 4.4 s / 0.6 s); 14 refuted by the
+         left-border lemma with s=1 (n <= 163).  => c_78 >= 15 for every 5-state solution.
+  K<=16: 9,787 germs; 8,824 refuted at N=10 (one LRAT, 2.0 GB, 556 s / 51 s);
+         of the 963 survivors 929 refuted by the lemmas on extended half-lines (1300/3300/10000);
+         34 left (results/germs/K16_surv34.txt), completion tests at N=16 running.
+  Half-line arguments alone: K<=14 218/244, K<=16 >= 8,263/9,787.
+- Equivariant classes (equiv.py, N=10, 120 s): sigma=(A B) UNSAT in 0.7 s; (G A), (G A B)-type and
+  others UNKNOWN at 120 s (scan stopped).  Long-line tests of the delta12 germ (germlong.py):
+  2..10 + {20} SAT; + {30}, {40} UNKNOWN (300 s).  Band tests (germband.py, h=4): UNKNOWN (300 s).
+- lazyk_germ (delta12 germ, lengths 2..14, links): stopped after ~63 min without answer
+  (architecture refuted by the lemma anyway).

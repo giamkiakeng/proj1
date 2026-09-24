@@ -36,14 +36,19 @@ precisely how far the same tools reach for five states.
   $C_\infty$ plus one \emph{reflected triangle} $R_n$ per length, and $R_n$ is
   a function of two anti-diagonals of $C_\infty$ only
   (\cref{lem:agree,lem:determinacy}).
-\item \emph{A pumping lemma and a speed-$1/3$ barrier}
-  (\cref{sec:pumping}). In every minimal-time solution the input words of
-  the reflected triangles of any two lengths $4\le n<n'$ differ on an
-  explicit cone of about $n/2$ cells (\cref{lem:pumping}). This is a
-  constraint on the half-line alone, valid for \emph{all} pairs of lengths.
-  It implies that the non-periodic part of the half-line always reaches the
-  line $i=t/3$ (\cref{thm:third}), an a priori explanation of the speed-$1/3$
-  signal present in the classical constructions.
+\item \emph{Two barriers} (\cref{sec:pumping}). In every minimal-time
+  solution the input words of the reflected triangles of any two lengths
+  $4\le n<n'$ differ on an explicit cone of about $n/2$ cells
+  (\cref{lem:pumping}). This is a constraint on the half-line alone, valid
+  for \emph{all} pairs of lengths. It implies that the non-periodic part of
+  the half-line always reaches the line $i=t/3$ (\cref{thm:third}), an a
+  priori explanation of the speed-$1/3$ signal present in the classical
+  constructions. At the other end, the first chains of the reflected
+  triangle form a finite-state system that must fire the cells near the left
+  border exactly when it reaches them; hence the input anti-diagonals cannot
+  be periodic over long stretches near the left border (\cref{lem:left}),
+  and the half-line cannot be periodic in any wedge at the border
+  (\cref{thm:left}).
 \item \emph{A validated encoding and a certified four-state bound}
   (\cref{sec:encoding,sec:four}). We encode the bounded problem, together
   with the consequences above, into propositional logic, validate the
@@ -52,17 +57,22 @@ precisely how far the same tools reach for five states.
   in $6$ seconds, that no four-state minimal-time solution exists
   (\cref{thm:four}); the statement does not need the left quiescence
   condition $\delta(\ast,\mathsf L,\mathsf L)=\mathsf L$.
-\item \emph{The five-state frontier} (\cref{sec:five}). We exhibit an
-  explicit five-state rule that synchronizes every line of length at most
-  $12$ in minimal time, satisfies all pumping constraints up to length $40$,
-  never fires on the half-line up to anti-diagonal $78$, and even ends with
-  a uniform configuration (\cref{thm:frontier}); so every refutation of
-  five-state solutions must use lines of length at least~$13$. We show that
-  the difficulty lies in the half-line: for the five-state rules we
-  examined, once the transitions used on the half-line are fixed, the
-  completion problem is decided in under a second, whereas
-  random-probe estimates of the natural look-ahead search tree grow from
-  about $27$ nodes for four states to $10^{11}$--$10^{19}$ for five.
+\item \emph{The five-state frontier} (\cref{sec:five}). We exhibit
+  explicit five-state rules that synchronize every line of length at most
+  $13$ in minimal time, satisfy all pumping constraints up to length $40$
+  and never fire on the half-line up to anti-diagonal $78$; one of them ends
+  with a uniform configuration for every length up to $12$
+  (\cref{thm:frontier}). So every refutation of five-state solutions must use
+  lines of length at least~$14$. Their common half-line, however, is excluded
+  by \cref{lem:left} at length $518$ (\cref{cor:germ12}). Combining the two
+  lemmas with certified solver calls, we classify the half-lines of low
+  complexity: every five-state solution uses at least $15$ distinct
+  neighbourhoods on its half-line below anti-diagonal $78$
+  (\cref{prop:germs}). The difficulty lies in the half-line: once the
+  transitions used on the half-line are fixed, the completion problem is
+  usually decided in under a second, whereas random-probe estimates of the
+  natural look-ahead search tree grow from about $27$ nodes for four states
+  to $10^{11}$--$10^{19}$ for five.
 \end{enumerate}
 
 \paragraph{Related work}

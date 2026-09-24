@@ -1,9 +1,11 @@
 %% ---------------------------------------------------------------------
 \appendix
 
-\section{The rule of \cref{thm:frontier}}\label{app:delta12}
+\section{The rules of \cref{thm:frontier}}\label{app:delta12}
 
 \input{sections/delta12}
+
+\input{sections/delta13}
 
 \section{Reproducibility}\label{app:repro}
 
@@ -27,8 +29,19 @@ programs, the rule tables and the logs. The main components are:
 \item[\texttt{src/check\_halfline.py}] direct check that a half-line
   diagram has no firing cell below a given anti-diagonal;
 \item[\texttt{src/fixgerm.py}, \texttt{src/knuth.py},
-  \texttt{src/benders.py}] the experiments of \cref{sec:five}.
+  \texttt{src/benders.py}] the experiments of \cref{sec:five};
+\item[\texttt{src/germdfs.c}] enumeration of the half-line germs of
+  bounded complexity (\cref{prop:germs});
+\item[\texttt{src/germinc.py}, \texttt{src/germcert.py}] completion tests
+  of germs (CaDiCaL under assumptions) and a single LRAT certificate for a
+  list of refuted germs;
+\item[\texttt{src/germext.c}] extension of the half-line determined by a
+  germ, and the checks of \cref{lem:left} and \cref{lem:pumping} on it;
+\item[\texttt{src/germcompare.py}] the neighbourhoods used by the half-line
+  of a rule below a given anti-diagonal (\cref{thm:frontier}(c)).
 \end{description}
+The digests of the germ lists and certificates are listed in
+\texttt{results/germs/CERTIFICATES.txt}.
 
 \paragraph{Certificate for \cref{thm:four}}
 {\footnotesize
@@ -46,6 +59,8 @@ mt4_9.lrat          1d511a75ab25587fa4a3476b95ad3f71
                     33c7375ad96661fd22fa598aec6c8092
 uniformA_2-12.txt   b62abbcac0653a661cd1bbe344dee9db
                     ba0cddee37448ea16681d436166c3aad
+delta13.txt         99dbe526792323b2f77786bcb3dee4fb
+                    ee624e2efac5dc8a52c02cb8fb45b891
 mazoyer6.txt        4b0717ea7319957c1fdcc887fe09c107
                     4cf338e8b849cdd32b4307d0083f417e
 \end{verbatim}}
@@ -58,9 +73,15 @@ fsspcheck $R 2 12              # OK for all 2 <= n <= 12
 fsspcheck $R 13 13             # FAIL: a cell fires at time 23
 python3 pumping.py $R 40       # 0 violations
 python3 check_halfline.py $R 78  # no firing cell, t+i <= 78
+S=results/delta13.txt
+fsspcheck $S 2 13              # OK for all 2 <= n <= 13
+fsspcheck $S 14 14             # FAIL: a cell fires at time 21
+python3 pumping.py $S 40       # 0 violations
+python3 check_halfline.py $S 78  # no firing cell, t+i <= 78
+python3 germcompare.py $R $S 78  # identical, 22 besides (L,L,L)
 \end{verbatim}}
-The uniform configuration before firing in (a) is visible with the option
-\texttt{-v} of the checker, which prints the diagrams.
+The uniform configurations before firing in (a) and (b) are visible with
+the option \texttt{-v} of the checker, which prints the diagrams.
 
 \paragraph{Validation against Mazoyer's solution}
 {\footnotesize

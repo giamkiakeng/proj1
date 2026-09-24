@@ -277,6 +277,8 @@ INPUT /usr/share/texmf/tex/latex/lm/t1lmtt.fd
 INPUT /usr/share/texmf/tex/latex/lm/t1lmtt.fd
 INPUT /usr/share/texmf/tex/latex/lm/t1lmtt.fd
 INPUT /usr/share/texmf/fonts/tfm/public/lm/ec-lmtt10.tfm
+INPUT /usr/share/texmf/fonts/tfm/public/lm/ec-lmri8.tfm
+INPUT /usr/share/texmf/fonts/tfm/public/lm/ec-lmri7.tfm
 INPUT ./sections/encoding.tex
 INPUT ./sections/encoding.tex
 INPUT ./sections/encoding.tex
@@ -331,6 +333,11 @@ INPUT ./sections/delta12.tex
 INPUT sections/delta12.tex
 INPUT /usr/share/texmf/fonts/tfm/public/lm/ec-lmr5.tfm
 INPUT /usr/share/texmf/fonts/tfm/public/lm/ec-lmtt9.tfm
+INPUT ./sections/delta13.tex
+INPUT ./sections/delta13.tex
+INPUT ./sections/delta13.tex
+INPUT ./sections/delta13.tex
+INPUT sections/delta13.tex
 INPUT main.aux
 INPUT ./main.out
 INPUT ./main.out
