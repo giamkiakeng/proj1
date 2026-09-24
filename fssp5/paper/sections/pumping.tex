@@ -251,6 +251,28 @@ $\alpha,L,t_0$ only. For $n$ large, $\min(Y_n,n-s)-s>(k-1)^{2s}L$,
 contradicting \cref{lem:left}.
 \end{proof}
 
+\begin{remark}[the right end]\label{rem:right}
+The proof of \cref{lem:left} uses neither \cref{lem:agree} nor the position
+of the chains inside $R_n$: it only uses the recurrence \eqref{eq:chains}
+for $c\ge1$, the firing condition ($v_c(i)=\mathsf F$ if and only if $c=i$)
+and the periodicity of the two chains $c=-1,0$. It therefore applies
+verbatim to the mirror image of the line, i.e.\ to the rule
+$\delta^\ast(a,b,c):=\delta(c,b,a)$ and the cells $i^\ast:=n+1-i$, whose
+chains $c$ are the diagonals $t-i=n-3+c$ of the line of length $n$. Hence,
+if $\delta$ synchronizes the line of length $n$ at time $2n-2$, the words
+\begin{align*}
+&y\mapsto C_n(2n-2-y,\,n+1-y)\qquad(s\le y\le Y),\\
+&y\mapsto C_n(2n-3-y,\,n+1-y)\qquad(s\le y\le Y-1),
+\end{align*}
+read along the diagonals $t-i=n-3$ and $t-i=n-4$ from the right end, are
+not $L$-periodic when $Y-s>(k-1)^{2s}L$ and $Y\le n-s$. For $y\le n/2$
+these cells lie in $R_n$: seen from the right end, the reflected triangles
+cannot be periodic over long stretches either. Unlike \cref{lem:left},
+this is a constraint on the reflected part of the rule, not on the
+half-line. (On Mazoyer's rule, for the lengths $n\le300$ with $n\equiv6
+\pmod 7$, $s\le2$ and $L\le6$, these stretches have length at most $7$.)
+\end{remark}
+
 \Cref{thm:third,thm:left} complement each other: the half-line of a
 minimal-time solution has non-periodic structure reaching the line $i=t/3$
 behind the front, and non-periodic structure in every wedge at the left
