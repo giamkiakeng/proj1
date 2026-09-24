@@ -7,7 +7,7 @@
 \allowdisplaybreaks[1]
 \raggedbottom
 \setlength{\emergencystretch}{1.5em}
-\hyphenation{Aron-szajn Orn-stein Uhlen-beck Mat-ern}
+\hyphenation{Aron-szajn Orn-stein Uhlen-beck}
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{proposition}[theorem]{Proposition}
@@ -39,6 +39,8 @@ stochastic differential equations: a necessary and sufficient condition}
 % \author{First Last}
 % \address{Institution, Address}
 % \email{name@example.org}
+% Before submission, also activate and adapt the AI-use statement before the bibliography
+% (see "Use of AI tools" below); most journals require such a statement.
 
 \subjclass[2020]{Primary 46E22, 47D07; Secondary 60H10, 47B33, 42B10}
 \keywords{Koopman operator, reproducing kernel Hilbert space, Gaussian kernel, Ornstein--Uhlenbeck process,
@@ -46,16 +48,16 @@ Lyapunov inequality, kernel extended dynamic mode decomposition}
 
 \begin{abstract}
 Philipp, Schaller, Worthmann, Peitz and N\"uske showed that the reproducing kernel Hilbert space $H_C$ of the
-Gaussian kernel $\exp(-\|C^{-1}(x-y)\|^2)$ is invariant under the Koopman semigroup of the linear stochastic
+Gaussian kernel $\exp(-(x-y)^\tp C^{-2}(x-y))$ is invariant under the Koopman semigroup of the linear stochastic
 differential equation $\mathrm dX_t=AX_t\,\mathrm dt+B\,\mathrm dW_t$, with $A$ Hurwitz and $(A,B)$ controllable,
 whenever $\frac12(AC^2+C^2A^\tp)\le BB^\tp$. They asked whether this condition is also necessary. We show that it is not,
 and we identify the exact condition: $H_C$ is invariant under every Koopman operator $K^t$, $t\ge0$, if and only if
 $\frac12(AC^2+C^2A^\tp)\le 2BB^\tp$. For a single time $t$ we prove that $K^t$ maps $H_C$ isomorphically onto the
 Gaussian RKHS with matrix $\bigl(e^{-At}(C^2+4\Sigma(t))e^{-A^\tp t}\bigr)^{1/2}$, where $\Sigma(t)$ is the conditional
 covariance of $X_t$ given $X_0$. Consequently $K^tH_C\subset H_C$ holds if and only if
-$e^{At}C^2e^{A^\tp t}\le C^2+4\Sigma(t)$, and then $\|K^t\|=e^{-t\Tr A/2}$. For Hurwitz $A$ the criterion says
-that the ellipsoid of $C^2+4\Sigma$, where $\Sigma$ is the stationary covariance, is forward invariant under
-$\dot x=Ax$. The proofs rest on a Fourier description of Gaussian RKHSs, in which $K^t$ becomes a weighted
+$e^{At}C^2e^{A^\tp t}\le C^2+4\Sigma(t)$, and then $\|K^t\|=e^{-t\Tr A/2}$. For Hurwitz $A$, invariance for all
+$t\ge0$ holds if and only if the ellipsoid of $C^2+4\Sigma$, where $\Sigma$ is the stationary covariance, is forward
+invariant under $\dot x=Ax$. The proofs rest on a Fourier description of Gaussian RKHSs, in which $K^t$ becomes a weighted
 composition operator.
 \end{abstract}
 
@@ -65,14 +67,14 @@ composition operator.
 \section{Introduction}\label{sec:intro}
 %======================================================================
 
-The Koopman operator, introduced in \cite{Koopman} for deterministic systems, acts on observables $f$ of a
-stochastic dynamical system by
+The Koopman operator was introduced in \cite{Koopman} for deterministic systems. For a stochastic dynamical
+system $(X_t)_{t\ge0}$ it acts on observables $f$ by
 \[
 (K^tf)(x)=\mathbb E[f(X_t)\,|\,X_0=x].
 \]
 It is linear even when the dynamics are not, and it can be approximated from data, for instance by extended dynamic mode decomposition (EDMD) \cite{WilliamsEDMD} and its kernel-based
 variants \cite{Klus,WilliamsKernel}; see \cite{Mauroy} for an overview. As pointed out in \cite{PSWPN}, the derivation
-of error bounds for kernel-based approximations of Koopman operators \cite{Koehne,Kostic,PhilippACHA} benefits greatly
+of error bounds for kernel-based approximations of Koopman operators \cite{Hertel,Koehne,Kostic,PhilippACHA} benefits greatly
 from the reproducing kernel Hilbert space (RKHS) of the kernel being invariant under the Koopman operator. This raises
 the question of which kernels and which systems are compatible in this sense.
 
@@ -84,9 +86,9 @@ differential equation
 where $A\in\R^{d\times d}$, $B\in\R^{d\times m}$ and $W$ is an $m$-dimensional Brownian motion, together with the
 Gaussian kernel
 \[
-k^C(x,y)=\exp\bigl(-(x-y)^\tp C^{-2}(x-y)\bigr)=\exp\bigl(-\|C^{-1}(x-y)\|^2\bigr),\quad x,y\in\R^d ,
+k^C(x,y)=\exp\bigl(-(x-y)^\tp C^{-2}(x-y)\bigr)=\exp\bigl(-|C^{-1}(x-y)|^2\bigr),\quad x,y\in\R^d ,
 \]
-with $C\in\R^{d\times d}$ symmetric positive definite. Let $H_C$ be the RKHS of $k^C$ on $\R^d$, with norm
+with $C\in\R^{d\times d}$ symmetric positive definite. Let $H_C$ be the (real) RKHS of $k^C$ on $\R^d$, with norm
 $\|\cdot\|_C$, and let
 \begin{equation}\label{eq:Sigmat}
 \Sigma(t):=\int_0^te^{As}BB^\tp e^{A^\tp s}\dd s\qquad(t\ge0)
@@ -122,8 +124,8 @@ $t\in(0,\varepsilon)$.
 \end{enumerate}
 \end{theorem}
 
-Here $K^tf$ is defined pointwise by $(K^tf)(x)=\mathbb E[f(X_t)\,|\,X_0=x]$, which makes sense for the bounded
-continuous functions in $H_C$. Under the standing assumptions of \cite{PSWPN} this agrees with their definition on
+Here $K^tf$ is defined pointwise by $(K^tf)(x)=\mathbb E[f(X_t)\,|\,X_0=x]$, which makes sense because every
+function in $H_C$ is bounded and continuous (Section~\ref{sec:koopman}). Under the standing assumptions of \cite{PSWPN} this agrees with their definition on
 $L^2(\mu)$, $\mu$ the stationary distribution (Remark~\ref{rem:L2mu}).
 
 \begin{corollary}[Answer to the question of \cite{PSWPN}]\label{cor:answer}
@@ -137,8 +139,8 @@ condition \eqref{eq:23} for the matrix $C/\sqrt2$ in place of $C$.
 \end{corollary}
 
 \subsection*{Idea of the proof}
-Gaussian RKHSs are weighted $L^2$-spaces in Fourier variables: $f\in H_C$ if and only if
-$\int|\hatf f(\xi)|^2e^{\frac14\xi^\tp C^2\xi}\dd\xi<\infty$ (Lemma~\ref{lem:fourier}). In Fourier variables, $K^t$
+Gaussian RKHSs are weighted $L^2$-spaces in Fourier variables: a continuous real-valued $f\in L^2(\R^d)$ belongs
+to $H_C$ if and only if $\int|\hatf f(\xi)|^2e^{\frac14\xi^\tp C^2\xi}\dd\xi<\infty$ (Lemma~\ref{lem:fourier}). In Fourier variables, $K^t$
 acts by composition with the linear map $e^{-A^\tp t}$, followed by multiplication with the Gaussian
 $\exp(-\frac12\xi^\tp e^{-At}\Sigma(t)e^{-A^\tp t}\xi)$ and the constant $e^{-t\Tr A}$ (Lemma~\ref{lem:Kt}). Invariance therefore amounts to comparing two Gaussian weights, i.e.\ two quadratic forms.
 This comparison gives \eqref{eq:critA}, and differentiating \eqref{eq:critA} at $t=0$ gives \eqref{eq:23sharp}.
@@ -147,14 +149,14 @@ This comparison gives \eqref{eq:critA}, and differentiating \eqref{eq:critA} at 
 The proof in \cite{PSWPN} tracks kernel sections. The function $k^C_z=k^C(z,\cdot)$ is a Gaussian bump with
 ``covariance'' $\frac12C^2$, and averaging over the transition law adds $\Sigma(t)$ to it. This gives
 $K^tk^C_z=\tau_t\,k^{C_t}_{e^{-At}z}$ with $C_t:=\bigl(e^{-At}(C^2+2\Sigma(t))e^{-A^\tp t}\bigr)^{1/2}$ and a constant
-$\tau_t>0$ \cite[Proposition~4.1]{PSWPN}. Consequently $K^t$ maps $H_C$ into $H_{C_t}$, and \eqref{eq:23} is
-equivalent to $H_{C_t}\subset H_C$ for all $t\ge0$. Membership in $H_C$, however, is decided by $|\hatf f|^2$. In
+$\tau_t>0$, and consequently $K^t$ maps $H_C$ into $H_{C_t}$ \cite[Proposition~4.1 and its proof]{PSWPN}. Moreover,
+\eqref{eq:23} is equivalent to $H_{C_t}\subset H_C$ for all $t\ge0$ (see the proof of \cite[Theorem~2.1]{PSWPN}). Membership in $H_C$, however, is decided by $|\hatf f|^2$. In
 $|\hatf f|^2$ the Gaussian factor produced by the averaging appears \emph{squared}. As a result, the range of $K^t$
 is the space $H_{\Ct}$ with $\Ct^{\,2}=e^{-At}(C^2+4\Sigma(t))e^{-A^\tp t}$ (Theorem~\ref{thm:range}), which is strictly
 smaller than $H_{C_t}$ when $t>0$ and $B\ne0$. Invariance is equivalent to $H_{\Ct}\subset H_C$, which replaces $2\Sigma(t)$ by
-$4\Sigma(t)$ and $BB^\tp$ by $2BB^\tp$. Finite kernel expansions cannot see the difference
-(Remark~\ref{rem:sections}). The functions that $K^t$ maps out of $H_C$ have Fourier transforms that decay as
-slowly as membership in $H_C$ permits, within a cone of directions (Lemma~\ref{lem:multiplier}).
+$4\Sigma(t)$ and $BB^\tp$ by $2BB^\tp$. For small $t$, finite kernel expansions cannot detect non-invariance
+(Remark~\ref{rem:sections}). The witnesses of non-invariance constructed below have Fourier transforms that decay,
+within a cone of directions, as slowly as membership in $H_C$ permits (Lemma~\ref{lem:multiplier}).
 
 \subsection*{Stable drift}
 If $A$ is Hurwitz, then $\Sigma:=\lim_{t\to\infty}\Sigma(t)$ exists and $A\Sigma+\Sigma A^\tp=-BB^\tp$. In this case
@@ -339,7 +341,8 @@ Hence, for bounded Borel functions $f$,
 \begin{equation}\label{eq:Ktconv}
 (K^tf)(x)=\int_{\R^d}f(e^{At}x+y)\,\gamma_t(\mathrm dy),\qquad x\in\R^d .
 \end{equation}
-Every $f\in H_C$ is bounded and continuous, since $|f(x)|=|\ip f{k^C_x}_C|\le\|f\|_C\,k^C(x,x)^{1/2}=\|f\|_C$.
+Every $f\in H_C$ is continuous by Lemma~\ref{lem:fourier}(b), and bounded, since
+$|f(x)|=|\ip f{k^C_x}_C|\le\|f\|_C\,k^C(x,x)^{1/2}=\|f\|_C$.
 
 \begin{remark}[Two readings of $K^tH_C\subset H_C$]\label{rem:L2mu}
 Under the standing assumptions of \cite{PSWPN}, $K^t$ is considered as an operator on $L^2(\mu)$, where
@@ -512,7 +515,8 @@ Corollary~\ref{cor:inclusion} gives $H_{\Ct}\subset H_{C_t}$. If also $H_{C_t}\s
 i.e.\ $-2e^{-At}\Sigma(t)e^{-A^\tp t}\ge0$, which forces $\Sigma(t)=0$. If $B\neq0$ and $t>0$, then $\Sigma(t)\ne0$, since
 the continuous positive semidefinite integrand in \eqref{eq:Sigmat} equals $BB^\tp\ne0$ at $s=0$.
 
-For the last assertion, let $f_x(t):=\ip{C_t^2x}x$ as in the proof of \cite[Theorem~2.1]{PSWPN}. There it is shown that
+For the last assertion, let $f_x(t):=\ip{C_t^2x}x$ as in the proof of \cite[Theorem~2.1]{PSWPN}. Since $\Sigma(0)=0$
+and $\dot\Sigma(0)=BB^\tp$, differentiating $C_t^2=e^{-At}(C^2+2\Sigma(t))e^{-A^\tp t}$ at $t=0$ gives
 $\dot f_x(0)=\ip{(2BB^\tp-(AC^2+C^2A^\tp))x}x$. For the matrices of Corollary~\ref{cor:answer}, \eqref{eq:23} fails, so
 $\dot f_x(0)<0$ for some $x$. Then $f_x(t)<f_x(0)=|Cx|^2$ for $t\in(0,\varepsilon)$ and some $\varepsilon>0$, i.e.\
 $C_t^2\ge C^2$ fails, and Corollary~\ref{cor:inclusion} gives $H_{C_t}\not\subset H_C$. Invariance for all $t$ follows
@@ -629,7 +633,8 @@ exist because $\|e^{At}\|\to0$ as $t\to\infty$. The final dichotomy is Theorem~\
 \end{proof}
 
 \begin{remark}
-Since $A\Sigma+\Sigma A^\tp=-BB^\tp\le0$, the ellipsoid of $\Sigma$ is always forward invariant. By
+Since $A\Sigma+\Sigma A^\tp=-BB^\tp\le0$, the ellipsoid of $\Sigma$ is forward invariant whenever $\Sigma>0$
+(e.g.\ if $(A,B)$ is controllable). By
 Theorem~\ref{thm:D}, $H_C$ is Koopman invariant precisely when the ellipsoid of $\Sigma+\frac14C^2$ is still forward
 invariant; condition \eqref{eq:23} requires this for $\Sigma+\frac12C^2$. Theorem~\ref{thm:D}(c) also shows that, for
 Hurwitz $A$, \emph{every} Gaussian RKHS is invariant under $K^t$ for all sufficiently large $t$, even when invariance
@@ -750,12 +755,18 @@ and $(2\pi)^{-d}\pi^d2^d=1$.
 \end{proof}
 
 \begin{remark}[Why kernel expansions cannot detect non-invariance]\label{rem:sections}
-By \cite[Proposition~4.1]{PSWPN}, $K^tk^C_z=\tau_t\,k^{C_t}_{e^{-At}z}$. By Lemma~\ref{lem:bumps}, $K^tk^C_z\in H_C$ if
-and only if $2C_t^2-C^2>0$. Now $2C_t^2-C^2=e^{-At}(C^2+D_t)e^{-A^\tp t}$ and $D_t\to0$ as $t\downarrow0$. Hence, for all
-sufficiently small $t$, $K^t$ maps $\operatorname{span}\{k^C_z:z\in\R^d\}$ into $H_C$ \emph{regardless} of the sign of
-$D_t$. Non-invariance is witnessed only by elements of $H_C$ whose Fourier transforms decay as slowly as membership in
-$H_C$ permits within a cone of directions (Lemma~\ref{lem:multiplier}). Such functions are not finite kernel
-expansions. This explains why the necessary condition
+By \eqref{eq:KtFT} and \eqref{eq:kernelFT},
+\[
+\hatf{K^tk^C_z}(\xi)=e^{-t\Tr A}\kappa_C\,e^{-i\xi\cdot e^{-At}z}\,w_{C_t}(\xi)^{-1},\qquad\xi\in\R^d ,
+\]
+and since $\det C_t=e^{-t\Tr A}\det(C^2+2\Sigma(t))^{1/2}$, this means $K^tk^C_z=\tau_t\,k^{C_t}_{e^{-At}z}$, as in the
+proof of \cite[Proposition~4.1]{PSWPN}. By Lemma~\ref{lem:bumps}, $K^tk^C_z\in H_C$ if and only if $2C_t^2-C^2>0$. Now
+$2C_t^2-C^2=e^{-At}(C^2+D_t)e^{-A^\tp t}$ and $D_t\to0$ as $t\downarrow0$. Hence, for all sufficiently small $t$, $K^t$
+maps $\operatorname{span}\{k^C_z:z\in\R^d\}$ into $H_C$ \emph{regardless} of the sign of $D_t$. Indeed, a finite kernel
+expansion $f$ satisfies $|\hatf f|^2w_C\le c\,w_C^{-1}$ for some $c\ge0$ by \eqref{eq:kernelFT}, so the right-hand side
+of \eqref{eq:normid} is finite whenever $C^2+D_t>0$. Witnesses of non-invariance must therefore have Fourier
+transforms that decay more slowly; those of Lemma~\ref{lem:multiplier} decay, within a cone of directions, as slowly as
+membership in $H_C$ permits. This explains why the necessary condition
 $\operatorname{span}\{k^{C_t}_x:x\in\R^d\}\subset H_C$ noted in \cite[Remark~4.2]{PSWPN} is too weak to decide the
 question.
 \end{remark}
@@ -774,7 +785,8 @@ Theorem~\ref{thm:range} states that
 \[
 \ip{K^tk^C_z}{K^tk^C_{z'}}_{\Ct}=\taut\,k^C(z,z'),\qquad z,z'\in\R^d .
 \]
-This identity also follows directly from \cite[Proposition~4.1]{PSWPN} and Lemma~\ref{lem:bumps}, because
+This identity also follows directly from $K^tk^C_z=\tau_t\,k^{C_t}_{e^{-At}z}$ (Remark~\ref{rem:sections}) and
+Lemma~\ref{lem:bumps}, because
 $2C_t^2-\Ct^{\,2}=e^{-At}C^2e^{-A^\tp t}$.
 \end{remark}
 
@@ -782,7 +794,8 @@ $2C_t^2-\Ct^{\,2}=e^{-At}C^2e^{-A^\tp t}$.
 For $B=0$ we have $\Sigma(t)=0$ and $K^tf=f\circ e^{At}$. The proof of Theorem~\ref{thm:fixed} works verbatim with $e^{At}$
 replaced by an arbitrary invertible matrix $E$. It shows that the composition operator $f\mapsto f\circ E$ maps $H_C$
 into itself if and only if $EC^2E^\tp\le C^2$, i.e.\ $\|C^{-1}EC\|\le1$, and that its norm is then $|\det E|^{-1/2}$.
-For the Fock space of entire functions, bounded composition operators were characterized in
+Ikeda, Ishikawa and Sawano \cite{IIS} proved that on a large class of RKHSs of analytic positive definite functions
+only affine maps induce bounded composition operators. For the Fock space of entire functions, bounded composition operators were characterized in
 \cite{CarswellMacCluerSchuster}; there, too, the symbol must be an affine map whose linear part is a contraction.
 \end{remark}
 
@@ -835,9 +848,11 @@ $\bigl((2\pi)^{-d}\int|\hatf f|^2(1+|\xi|^2)^s\bigr)^{1/2}$. Since
 $\bigl(1+|e^{A^\tp t}\eta|^2\bigr)/\bigl(1+|\eta|^2\bigr)\le\max\{1,\|e^{At}\|^2\}$ and
 $\exp(-\eta^\tp\Sigma(t)\eta)\le1$, we get $\sup m_t\le\max\{1,\|e^{At}\|^2\}^s<\infty$. By
 Proposition~\ref{prop:general}, $H^s(\R^d)$ is invariant under every $K^t$, for \emph{all} $A$ and $B$, and
-$\|K^t\|\le e^{-t\Tr A/2}\max\{1,\|e^{At}\|\}^{s}$. The restriction \eqref{eq:23sharp} is therefore a feature of
-Gaussian kernels: their spectral density is itself Gaussian, so the comparison of $\hatf\varphi$ with its dilation
-$\hatf\varphi\circ e^{A^\tp t}$ in $m_t$ is governed by a quadratic form.
+$\|K^t\|\le e^{-t\Tr A/2}\max\{1,\|e^{At}\|\}^{s}$. The restriction \eqref{eq:23sharp} therefore comes from the
+Gaussian decay of the spectral density: for the Gaussian kernel the ratio $\hatf\varphi/(\hatf\varphi\circ e^{A^\tp t})$
+in $m_t$ is the exponential of a quadratic form, which competes with the Gaussian factor
+$\exp(-\eta^\tp\Sigma(t)\eta)$. Koopman invariance of the native spaces of Wendland kernels, which are norm-equivalent to
+Sobolev spaces, is proved in \cite{Koehne}; stochastic dynamics are treated in \cite{Hertel}.
 \end{example}
 
 \begin{remark}[Outlook]
@@ -853,29 +868,35 @@ analogous characterization of Koopman-invariant Gaussian RKHSs in that generalit
 \section{Numerical checks}\label{app:numerics}
 %======================================================================
 
-The identities above were also checked in floating-point arithmetic with two Python scripts (NumPy/SciPy,
-fixed random seed), which are provided as supplementary material. No proof in this paper depends on these
-checks. The covariance $\Sigma(t)$ was computed with Van Loan's block-exponential formula \cite{VanLoan} on steps of
-length at most $0.25$, combined with the recursion $\Sigma(s+h)=\Sigma(h)+e^{Ah}\Sigma(s)e^{A^\tp h}$. The one-step
-formula cancels catastrophically for large $t$.
+The identities above were also checked with three Python scripts, which are provided as supplementary material:
+two in floating-point arithmetic (NumPy, SciPy and Matplotlib; random test data from a fixed seed) and one in exact
+arithmetic (SymPy). No proof in this paper depends on these checks. Matrix errors are measured in the entrywise
+norm $|M|_{\max}:=\max_{i,j}|M_{ij}|$. The covariance $\Sigma(t)$ was computed with Van Loan's block-exponential
+formula \cite{VanLoan} on steps of length at most $0.25$, combined with the recursion
+$\Sigma(s+h)=\Sigma(h)+e^{Ah}\Sigma(s)e^{A^\tp h}$. The one-step formula cancels catastrophically for large $t$.
 \begin{enumerate}
-\item $\Sigma(t)$ agrees with adaptive quadrature to a relative error of at most $2.7\times10^{-13}$ (random
-$A\in\R^{3\times3}$, $B\in\R^{3\times2}$, $t\in\{0.3,1.7,4\}$).
-\item Identity \eqref{eq:Dint} holds to a relative error of at most $5.2\times10^{-13}$ for three random triples $(A,B,C)$
-with $A$ \emph{not} Hurwitz (spectral abscissae $1.645$, $1.556$, $2.043$) and $t\in\{0.05,0.8,2.5\}$. Moreover
-$\|t^{-1}D_t-\Lambda_C\|/\max\{1,\|\Lambda_C\|\}\le3.7\times10^{-6}$ at $t=10^{-6}$, consistent with the $O(t)$ remainder.
+\item $\Sigma(t)$ agrees with its value $\Sigma_{\mathrm q}(t)$ from adaptive quadrature:
+$|\Sigma(t)-\Sigma_{\mathrm q}(t)|_{\max}\le2.7\times10^{-13}\,|\Sigma_{\mathrm q}(t)|_{\max}$ (random $A\in\R^{3\times3}$,
+$B\in\R^{3\times2}$, $t\in\{0.3,1.7,4\}$).
+\item Let $R_t$ be the right-hand side of \eqref{eq:Dint}, computed by adaptive quadrature. Then
+$|D_t-R_t|_{\max}\le5.2\times10^{-13}\max\{1,|R_t|_{\max}\}$ for three random triples $(A,B,C)$ with $A$ \emph{not}
+Hurwitz (spectral abscissae $1.645$, $1.556$, $2.043$) and $t\in\{0.05,0.8,2.5\}$. Moreover
+$|t^{-1}D_t-\Lambda_C|_{\max}\le3.7\times10^{-6}\max\{1,|\Lambda_C|_{\max}\}$ at $t=10^{-6}$, consistent with the $O(t)$
+remainder.
 \item Theorem~\ref{thm:D}(a),(b) for a random Hurwitz $A\in\R^{3\times3}$ and $B\in\R^{3\times1}$: the entries of
 $D_t-(P_C-e^{At}P_Ce^{A^\tp t})$ are at most $2.4\times10^{-14}$ in modulus for $t\in\{0.1,1,6\}$, and those of
 $AP_C+P_CA^\tp+\Lambda_C$ at most $1.8\times10^{-14}$.
-\item Theorem~\ref{thm:range} on kernel sections (random $2\times2$ data, $t\in\{0.2,0.9\}$): the Gram matrix
-$\bigl(\ip{K^tk^C_{z_i}}{K^tk^C_{z_j}}_{\Ct}\bigr)_{i,j\le4}$, computed from \cite[Proposition~4.1]{PSWPN} and
-Lemma~\ref{lem:bumps}, agrees with $\taut\,(k^C(z_i,z_j))_{i,j}$ to within $3.8\times10^{-14}$. The value
+\item Theorem~\ref{thm:range} on kernel sections, for random $2\times2$ data and $t\in\{0.2,0.9\}$. We compute the
+Gram matrix $\bigl(\ip{K^tk^C_{z_i}}{K^tk^C_{z_j}}_{\Ct}\bigr)_{i,j\le4}$ from Lemma~\ref{lem:bumps} and the formula
+$K^tk^C_z=\tau_t\,k^{C_t}_{e^{-At}z}$ of \cite[proof of Proposition~4.1]{PSWPN}. Its entries differ from those of
+$\taut\,(k^C(z_i,z_j))_{i,j}$ by at most $3.8\times10^{-14}$. The value
 $\|K^tk^C_z\|_C^2=e^{-t\Tr A}\det C\,\det(2C^2+4\Sigma(t)-e^{At}C^2e^{A^\tp t})^{-1/2}$, obtained from
-\eqref{eq:normid}, agrees with the value implied by \cite[Proposition~4.1]{PSWPN} to a relative error of
+\eqref{eq:normid}, agrees with the value given by that formula and Lemma~\ref{lem:bumps} to a relative error of
 $1.1\times10^{-13}$.
-\item Monte Carlo check of \cite[Proposition~4.1]{PSWPN} for Example~\ref{ex:beta} with $\beta=5$ and $t=0.4$, using
-$2\times10^6$ exact Gaussian samples of $Z_t$: $0.436373\pm2.2\times10^{-4}$ against the closed form $0.436051$, a
-deviation of $1.45$ standard errors.
+\item Monte Carlo check of the formula $(K^tk^C_z)(x)=\tau_t\,k^{C_t}_{e^{-At}z}(x)$ for Example~\ref{ex:beta} with
+$\beta=5$, $t=0.4$, $x=(0.3,-0.2)^\tp$ and $z=(0.5,0.4)^\tp$, using $2\times10^6$ exact Gaussian samples of $Z_t$:
+$0.436373\pm2.2\times10^{-4}$ (one standard error) against the closed form $0.436051$, a deviation of $1.45$ standard
+errors.
 \item Example~\ref{ex:beta} for $\beta\in\{4,5,6,7,8\}$: \eqref{eq:23} holds only for $\beta=4$, and
 \eqref{eq:23sharp} exactly for $\beta\le6$. On $4200$ grid points in $(0,12]$, $D_t$ has no negative eigenvalue for
 $\beta\le6$. For $\beta=7$ and $\beta=8$ the grid points with indefinite $D_t$ form an initial segment ending at $0.298$
@@ -896,11 +917,26 @@ relative error of $3.2\times10^{-14}$.
 $B\in\R^{2\times1}$, $s=1.3$ and $t\in\{0.5,2\}$, the bound $m_t(\eta)\le\max\{1,\|e^{At}\|^2\}^s$ holds at
 $8.04\times10^4$ points $\eta$ with $10^{-3}\le|\eta|\le10^{6}$.
 \end{enumerate}
-In total the script for items 1--6 and 8--10 performs $38$ automated checks, all of which pass.
+In total the script for items 1--6 and 8--10 performs $38$ automated checks, all of which pass. The exact-arithmetic
+script confirms the closed forms in Examples~\ref{ex:beta} and~\ref{ex:scalar} (the stationary covariance in
+Example~\ref{ex:scalar} is $\Sigma=\bigl(\begin{smallmatrix}5&4\\4&4\end{smallmatrix}\bigr)$), the constants in
+\eqref{eq:gauss}--\eqref{eq:normC} and Lemma~\ref{lem:bumps}, the bound $\lambda_{\min}(P_C)/\lambda_{\max}(P_C)\ge10^{-2}$
+for $\beta\le14$ used in Example~\ref{ex:beta}, and Theorem~\ref{thm:range} for $d=1$ and $f=k^C_z$. It performs $52$
+checks, all of which pass.
+
+% ---------------------------------------------------------------------------------------------
+% Use of AI tools. Most publishers require this statement (SIAM: Editorial Policy on Artificial
+% Intelligence; Elsevier: a separate declaration before the references). Uncomment it, add the
+% tool version and dates your journal asks for, and make sure that the last sentence is true.
+% \subsection*{Use of AI tools}
+% The results, proofs, text, numerical scripts and figure of this paper were developed with
+% substantial assistance from the AI assistant Claude (Anthropic), under the direction of the author,
+% who checked every argument and takes full responsibility for the content.
+% ---------------------------------------------------------------------------------------------
 
 \subsection*{Data availability}
-No data were generated or analyzed. The scripts used for Appendix~\ref{app:numerics} and Figure~\ref{fig:times} are
-provided as supplementary material.
+No external data were used. The scripts that produce the numbers in Appendix~\ref{app:numerics} and
+Figure~\ref{fig:times} are provided as supplementary material.
 
 \begin{thebibliography}{99}
 
@@ -911,13 +947,23 @@ N.~Aronszajn, \emph{Theory of reproducing kernels}, Trans.\ Amer.\ Math.\ Soc.\ 
 B.~J.~Carswell, B.~D.~MacCluer, and A.~Schuster, \emph{Composition operators on the Fock space}, Acta Sci.\ Math.\
 (Szeged) \textbf{69} (2003), 871--887.
 
+\bibitem{Hertel}
+M.~Hertel, F.~M.~Philipp, M.~Schaller, and K.~Worthmann, \emph{Koopman for stochastic dynamics: error bounds for kernel
+extended dynamic mode decomposition (kernel EDMD)}, SIAM J.\ Appl.\ Dyn.\ Syst.\ \textbf{25} (2026), no.~3, 2044--2083;
+arXiv:2512.20247.
+
+\bibitem{IIS}
+M.~Ikeda, I.~Ishikawa, and Y.~Sawano, \emph{Boundedness of composition operators on reproducing kernel Hilbert spaces
+with analytic positive definite functions}, J.\ Math.\ Anal.\ Appl.\ \textbf{511} (2022), no.~1, Paper No.~126048.
+
 \bibitem{Klus}
 S.~Klus, I.~Schuster, and K.~Muandet, \emph{Eigendecompositions of transfer operators in reproducing kernel Hilbert
 spaces}, J.\ Nonlinear Sci.\ \textbf{30} (2020), 283--315.
 
 \bibitem{Koehne}
-F.~K\"ohne, F.~Philipp, M.~Schaller, A.~Schiela, and K.~Worthmann, \emph{$L^\infty$-error bounds for approximations of
-the Koopman operator by kernel extended dynamic mode decomposition}, preprint, arXiv:2403.18809 (2024).
+F.~K\"ohne, F.~M.~Philipp, M.~Schaller, A.~Schiela, and K.~Worthmann, \emph{$L^\infty$-error bounds for approximations
+of the Koopman operator by kernel extended dynamic mode decomposition}, SIAM J.\ Appl.\ Dyn.\ Syst.\ \textbf{24} (2025),
+501--529.
 
 \bibitem{Koopman}
 B.~O.~Koopman, \emph{Hamiltonian systems and transformation in Hilbert space}, Proc.\ Natl.\ Acad.\ Sci.\ USA
@@ -929,8 +975,8 @@ operator regression in reproducing kernel Hilbert spaces}, Advances in Neural In
 \textbf{35} (2022), 4017--4031.
 
 \bibitem{Mauroy}
-A.~Mauroy, I.~Mezi\'c, and Y.~Susuki (eds.), \emph{The Koopman Operator in Systems and Control}, Lecture Notes in
-Control and Information Sciences, Springer, Cham, 2020.
+A.~Mauroy, I.~Mezi\'c, and Y.~Susuki (eds.), \emph{The Koopman Operator in Systems and Control: Concepts,
+Methodologies, and Applications}, Lecture Notes in Control and Information Sciences, vol.~484, Springer, Cham, 2020.
 
 \bibitem{PaulsenRaghupathi}
 V.~I.~Paulsen and M.~Raghupathi, \emph{An Introduction to the Theory of Reproducing Kernel Hilbert Spaces}, Cambridge
@@ -943,7 +989,8 @@ the Koopman operator}, Appl.\ Comput.\ Harmon.\ Anal.\ \textbf{71} (2024), 10165
 \bibitem{PSWPN}
 F.~Philipp, M.~Schaller, K.~Worthmann, S.~Peitz, and F.~N\"uske, \emph{Invariance of Gaussian RKHSs under Koopman
 operators of stochastic differential equations with constant matrix coefficients}, Proc.\ Appl.\ Math.\ Mech.\
-(PAMM) \textbf{25} (2025), no.~1, e202400127; arXiv:2405.14429.
+(PAMM) \textbf{25} (2025), no.~1, e202400127; arXiv:2405.14429. Numbered statements of this paper are cited as in
+arXiv:2405.14429v1.
 
 \bibitem{SHS}
 I.~Steinwart, D.~Hush, and C.~Scovel, \emph{An explicit description of the reproducing kernel Hilbert spaces of
