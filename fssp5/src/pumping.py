@@ -50,6 +50,32 @@ def cone(n):
     return frozenset(need)
 
 
+@functools.lru_cache(maxsize=None)
+def cone_max(n, tau, kk):
+    """largest input position kk' in the dependency cone of the relative cell
+    (tau,kk) of R_n, or None if the left border kk=n is reached"""
+    best = -1
+    seen = set()
+    stack = [(tau, kk)]
+    while stack:
+        t1, k1 = stack.pop()
+        if (t1, k1) in seen:
+            continue
+        seen.add((t1, k1))
+        for dk in (1, 0, -1):
+            k2, t2 = k1 + dk, t1 - 1
+            if k2 == -1:
+                continue
+            if k2 >= n:
+                return None
+            d = t2 - k2
+            if d >= 0:
+                stack.append((t2, k2))
+            else:
+                best = max(best, k2)
+    return best
+
+
 def input_cell(n, kk, d):
     """absolute (t,i) of the input cell at relative position kk on
     anti-diagonal 2n-2 (d=-1) or 2n-3 (d=-2)"""

@@ -150,8 +150,76 @@ def add_pumping(E, vinf, Npump, nlo=4):
     return npairs
 
 
+def add_links(E, vinf, Rall):
+    """Determinacy links between reflected triangles of encoded lengths
+    n < n': if the input words agree on positions 0..p, every relative cell
+    whose dependency cone lies in 0..p has the same value in R_n and R_n'
+    (and a firing cell of R_n forces a contradiction: pumping)."""
+    import pumping
+    ns = sorted(Rall)
+
+    def eqvar(x, y):
+        if isinstance(x, int) and isinstance(y, int):
+            return True if x == y else False
+        if isinstance(x, int):
+            x, y = y, x
+        e = E.new()
+        if isinstance(y, int):
+            E.add([-e, x[y]])
+            E.add([e, -x[y]])
+            return e
+        for st in E.W:
+            E.add([-x[st], -y[st], e])
+            E.add([-e, -x[st], y[st]])
+        return e
+
+    for a, n in enumerate(ns):
+        for n2 in ns[a + 1:]:
+            # prefix-equality chain EQ(p) <-> EQ(p-1) & eq(lower p) & eq(upper p)
+            EQ = []
+            prev = True
+            for p in range(0, n):
+                parts = [prev]
+                for d in (-2, -1):
+                    parts.append(eqvar(vinf(*pumping.input_cell(n, p, d)),
+                                       vinf(*pumping.input_cell(n2, p, d))))
+                if any(q is False for q in parts):
+                    cur = False
+                else:
+                    lits = [q for q in parts if q is not True]
+                    if not lits:
+                        cur = True
+                    else:
+                        cur = E.new()
+                        for q in lits:
+                            E.add([-cur, q])
+                        E.add([cur] + [-q for q in lits])
+                EQ.append(cur)
+                prev = cur
+            R1, R2 = Rall[n], Rall[n2]
+            for tau in range(0, n):
+                for kk in range(0, tau + 1):
+                    p = pumping.cone_max(n, tau, kk)
+                    if p is None:
+                        continue
+                    cond = EQ[p]
+                    if cond is False:
+                        continue
+                    pre = [] if cond is True else [-cond]
+                    t1, i1 = n - 1 + tau, n - kk
+                    t2, i2 = n2 - 1 + tau, n2 - kk
+                    if tau == n - 1:
+                        # R_n fires here, R_n' must not (tau < n'-1)
+                        E.add(pre)
+                        continue
+                    x, y = R1[(t1, i1)], R2[(t2, i2)]
+                    for st in E.W:
+                        E.add(pre + [-x[st], y[st]])
+                        E.add(pre + [-y[st], x[st]])
+
+
 def build(k, N, diff=True, symbreak=True, leftq=False, rev=False, fire_n=None,
-          minf=None, tinf=0, npart=None, hpart=None, pump=None, band=None):
+          minf=None, tinf=0, npart=None, hpart=None, pump=None, band=None, links=False):
     """minf: anti-diagonal bound of C_inf (default 2N-2); tinf: C_inf also
     contains every cell with t <= tinf.  npart: lengths N < n <= npart for
     which the reflected triangle is added (non-firing only) up to time
@@ -182,8 +250,10 @@ def build(k, N, diff=True, symbreak=True, leftq=False, rev=False, fire_n=None,
                      inf[(t, i)], rev)
 
     ns = range(2, N + 1) if fire_n is None else fire_n
+    Rall = {}
     for n in ns:
         R = {}
+        Rall[n] = R
 
         def val(t, j, n=n, R=R):
             if j == 0 or j == n + 1:
@@ -237,6 +307,9 @@ def build(k, N, diff=True, symbreak=True, leftq=False, rev=False, fire_n=None,
     if pump:
         assert 2 * pump - 2 <= M1, "C_inf too small for the pumping constraints"
         add_pumping(E, vinf, pump)
+
+    if links:
+        add_links(E, vinf, Rall)
 
     if band:
         # band = (h, Nb): for lengths N < n <= Nb, the first h anti-diagonal
@@ -355,11 +428,13 @@ def main():
     ap.add_argument('--hpart', type=int, default=None)
     ap.add_argument('--pump', type=int, default=None)
     ap.add_argument('--band', default=None, help='h:Nb')
+    ap.add_argument('--links', action='store_true')
     a = ap.parse_args()
     E = build(a.k, a.N, diff=not a.nodiff, symbreak=not a.nosym,
               leftq=a.leftq, rev=a.rev, fire_n=parse_lengths(a.lengths) if a.lengths else range(a.nmin, a.N + 1),
               minf=a.minf, tinf=a.tinf, npart=a.npart, hpart=a.hpart, pump=a.pump,
-              band=tuple(map(int, a.band.split(':'))) if a.band else None)
+              band=tuple(map(int, a.band.split(':'))) if a.band else None,
+              links=a.links)
     with open(a.out, 'w') as fh:
         write_dimacs(E, fh)
     sys.stderr.write("k=%d N=%d vars=%d clauses=%d\n" % (a.k, a.N, E.nv,

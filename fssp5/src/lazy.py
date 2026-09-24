@@ -9,7 +9,7 @@ length and continue (learned clauses are kept).  Terminates with UNSAT (for
 the accumulated set of lengths -- which already proves that no rule works
 for all lengths) or with a rule that passes every length up to NMAX.
 
-usage: lazy.py k n0 NMAX [--solver cd19] [--log file]
+usage: lazy.py k n0 NMAX [--solver cd19] [--log file] [--pump N']
 """
 import os
 import subprocess
@@ -116,13 +116,16 @@ def main():
     log = sys.argv[sys.argv.index('--log') + 1] if '--log' in sys.argv else None
     M = 2 * NMAX - 2
     E = IncEnc(k, M)
+    if '--pump' in sys.argv:
+        npump = int(sys.argv[sys.argv.index('--pump') + 1])
+        gencnf.add_pumping(E, E.vinf, npump)
     for n in range(2, n0 + 1):
         E.add_length(n)
     s = Solver(name=name, bootstrap_with=E.clauses)
     done = len(E.clauses)
     it = 0
     t0 = time.time()
-    rule = '/tmp/claude-0/lazy_rule_k%d.txt' % k
+    rule = (log or '/tmp/claude-0/lazy') + '.rule_k%d.txt' % k
 
     def say(msg):
         line = "[%7.1fs] %s" % (time.time() - t0, msg)

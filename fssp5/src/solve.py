@@ -40,12 +40,14 @@ def main():
     ap.add_argument('--hpart', type=int, default=None)
     ap.add_argument('--pump', type=int, default=None)
     ap.add_argument('--band', default=None, help='h:Nb')
+    ap.add_argument('--links', action='store_true')
     a = ap.parse_args()
     t0 = time.time()
     E = gencnf.build(a.k, a.N, diff=not a.nodiff, symbreak=not a.nosym,
                      leftq=a.leftq, rev=a.rev, fire_n=parse_lengths(a.lengths) if a.lengths else range(a.nmin, a.N + 1),
                      minf=a.minf, tinf=a.tinf, npart=a.npart, hpart=a.hpart, pump=a.pump,
-                     band=tuple(map(int, a.band.split(':'))) if a.band else None)
+                     band=tuple(map(int, a.band.split(':'))) if a.band else None,
+                     links=a.links)
     cnf = a.cnf or '/tmp/claude-0/mt_k%d_N%d.cnf' % (a.k, a.N)
     os.makedirs(os.path.dirname(cnf), exist_ok=True)
     with open(cnf, 'w') as fh:
