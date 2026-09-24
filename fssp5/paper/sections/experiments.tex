@@ -200,9 +200,15 @@ Direct simulation with the programs \texttt{fsspcheck.c},
 \texttt{germcompare.py}, \texttt{germext.c} and \texttt{pumping.py}.
 \end{proof}
 
-The half-line of $\delta_{14}$ (\cref{fig:halflines}(b)) is chaotic: it
-has non-periodic structure everywhere, so it passes both barriers of
-\cref{sec:pumping} trivially, and the only arguments that apply to it are
+The half-line of $\delta_{14}$ (\cref{fig:halflines}(b)) is chaotic. In
+the computed range, from time $3$ on, cell~$1$ takes only the values
+$\mathsf L,\mathsf G$, cell~$2$ only $\mathsf L,\mathsf A$, and all other
+cells only $\mathsf L,\mathsf B$; on the latter the germ is the elementary
+cellular automaton \emph{rule $22$} (a cell becomes $\mathsf B$ if and only
+if exactly one cell of its neighbourhood is $\mathsf B$), a classical
+example of chaotic behaviour, driven at its left end by the two border
+columns. The half-line has non-periodic structure everywhere, so it passes
+both barriers of \cref{sec:pumping} trivially, and the only arguments that apply to it are
 completion tests for longer lines, which are expensive. Consequently, the
 necessary conditions used in this paper, restricted to lengths at most $14$
 (together with the pumping constraints up to $40$ and the half-line up to
