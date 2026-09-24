@@ -4,6 +4,10 @@
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 
 \numberwithin{equation}{section}
+\allowdisplaybreaks[1]
+\raggedbottom
+\setlength{\emergencystretch}{1.5em}
+\hyphenation{Aron-szajn Orn-stein Uhlen-beck Mat-ern}
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{proposition}[theorem]{Proposition}
@@ -27,8 +31,9 @@
 
 \begin{document}
 
-\title[Koopman invariance of Gaussian RKHSs]{Koopman invariance of Gaussian RKHSs for linear stochastic
-differential equations: a necessary and sufficient condition}
+% $\text{s}$ keeps the plural "s" lowercase: amsart upper-cases titles and running heads except for math.
+\title[Koopman invariance of Gaussian RKHS$\text{s}$]{Koopman invariance of Gaussian RKHS$\text{s}$ for linear
+stochastic differential equations: a necessary and sufficient condition}
 
 % Author data to be completed by the submitting author:
 % \author{First Last}
@@ -61,11 +66,13 @@ composition operator.
 %======================================================================
 
 The Koopman operator, introduced in \cite{Koopman} for deterministic systems, acts on observables $f$ of a
-stochastic dynamical system by $(K^tf)(x)=\mathbb E[f(X_t)\,|\,X_0=x]$. It is linear even when the dynamics are not,
-and it can be approximated
-from data, for instance by extended dynamic mode decomposition (EDMD) \cite{WilliamsEDMD} and its kernel-based
-variants \cite{WilliamsKernel,Klus}; see \cite{Mauroy} for an overview. As pointed out in \cite{PSWPN}, the derivation
-of error bounds for kernel-based approximations of Koopman operators \cite{Kostic,PhilippACHA,Koehne} benefits greatly
+stochastic dynamical system by
+\[
+(K^tf)(x)=\mathbb E[f(X_t)\,|\,X_0=x].
+\]
+It is linear even when the dynamics are not, and it can be approximated from data, for instance by extended dynamic mode decomposition (EDMD) \cite{WilliamsEDMD} and its kernel-based
+variants \cite{Klus,WilliamsKernel}; see \cite{Mauroy} for an overview. As pointed out in \cite{PSWPN}, the derivation
+of error bounds for kernel-based approximations of Koopman operators \cite{Koehne,Kostic,PhilippACHA} benefits greatly
 from the reproducing kernel Hilbert space (RKHS) of the kernel being invariant under the Koopman operator. This raises
 the question of which kernels and which systems are compatible in this sense.
 
@@ -77,7 +84,7 @@ differential equation
 where $A\in\R^{d\times d}$, $B\in\R^{d\times m}$ and $W$ is an $m$-dimensional Brownian motion, together with the
 Gaussian kernel
 \[
-k^C(x,y)=\exp\bigl(-(x-y)^\tp C^{-2}(x-y)\bigr)=\exp\bigl(-\|C^{-1}(x-y)\|^2\bigr),\qquad x,y\in\R^d ,
+k^C(x,y)=\exp\bigl(-(x-y)^\tp C^{-2}(x-y)\bigr)=\exp\bigl(-\|C^{-1}(x-y)\|^2\bigr),\quad x,y\in\R^d ,
 \]
 with $C\in\R^{d\times d}$ symmetric positive definite. Let $H_C$ be the RKHS of $k^C$ on $\R^d$, with norm
 $\|\cdot\|_C$, and let
@@ -158,8 +165,8 @@ every $C$, invariance holds for all sufficiently large $t$. Figure~\ref{fig:time
 a family of examples.
 
 \subsection*{Beyond Gaussian kernels}
-The Fourier approach applies to every translation-invariant kernel with a positive integrable spectral density
-(Proposition~\ref{prop:general}). For instance, Sobolev (Mat\'ern) RKHSs are invariant for all $A$ and $B$
+The same Fourier argument works for every translation-invariant kernel whose spectral density is positive and
+integrable (Proposition~\ref{prop:general}). For instance, Sobolev (Mat\'ern) RKHSs are invariant for all $A$ and $B$
 (Example~\ref{ex:sobolev}). A Lyapunov-type restriction thus appears because the spectral density of a Gaussian kernel is
 itself Gaussian.
 
@@ -193,10 +200,10 @@ which reduces to $\int_\R e^{-px^2-i\xi x}\dd x=\sqrt{\pi/p}\,e^{-\xi^2/(4p)}$ a
 
 For symmetric positive definite $C$ we define
 \begin{equation}\label{eq:wC}
-w_C(\xi):=\exp\bigl(\tfrac14\xi^\tp C^2\xi\bigr),\qquad \kappa_C:=\pi^{d/2}\det C,\qquad
-\FC{C}:=\Bigl\{F:\R^d\to\mathbb C\ \text{measurable and Hermitian}:\ \int|F|^2w_C\dd\xi<\infty\Bigr\}.
+w_C(\xi):=\exp\bigl(\tfrac14\xi^\tp C^2\xi\bigr)\quad(\xi\in\R^d),\qquad \kappa_C:=\pi^{d/2}\det C ,
 \end{equation}
-By \eqref{eq:gauss} with $P=C^{-2}$, followed by a translation,
+and we let $\FC{C}$ be the set of all measurable Hermitian functions $F\colon\R^d\to\mathbb C$ with
+$\int|F|^2w_C\dd\xi<\infty$. By \eqref{eq:gauss} with $P=C^{-2}$, followed by a translation,
 \begin{equation}\label{eq:kernelFT}
 \hatf{k^C_y}(\xi)=\kappa_C\,e^{-i\xi\cdot y}\,w_C(\xi)^{-1},\qquad y,\xi\in\R^d ,
 \end{equation}
@@ -209,7 +216,9 @@ and by \eqref{eq:gauss} with $\xi=0$ and $P=\frac14C^2$,
 Let $C\in\R^{d\times d}$ be symmetric positive definite.
 \begin{enumerate}
 \item[(a)] Every $F\in\FC{C}$ belongs to $L^1(\R^d)\cap L^2(\R^d)$, and
-$\|F\|_{L^1}\le\bigl((4\pi)^{d/2}/\det C\bigr)^{1/2}\bigl(\int|F|^2w_C\bigr)^{1/2}$.
+\[
+\|F\|_{L^1}\le\Bigl(\frac{(4\pi)^{d/2}}{\det C}\Bigr)^{1/2}\Bigl(\int|F|^2w_C\dd\xi\Bigr)^{1/2}.
+\]
 \item[(b)] $H_C=\{f\in C(\R^d)\cap L^2(\R^d)\ \text{real-valued}:\ \hatf f\in\FC{C}\}$, and for $f,g\in H_C$
 \begin{equation}\label{eq:normC}
 \ip fg_C=(2\pi)^{-d}\kappa_C^{-1}\int_{\R^d}\hatf f(\xi)\,\overline{\hatf g(\xi)}\,w_C(\xi)\dd\xi .
@@ -220,8 +229,11 @@ $\|F\|_{L^1}\le\bigl((4\pi)^{d/2}/\det C\bigr)^{1/2}\bigl(\int|F|^2w_C\bigr)^{1/
 
 \begin{proof}
 (a) By the Cauchy--Schwarz inequality and \eqref{eq:intw},
-$\int|F|=\int|F|w_C^{1/2}\,w_C^{-1/2}\le(\int|F|^2w_C)^{1/2}(\int w_C^{-1})^{1/2}$. Since $w_C\ge1$, also
-$\int|F|^2\le\int|F|^2w_C$.
+\[
+\int|F|\dd\xi=\int|F|w_C^{1/2}\,w_C^{-1/2}\dd\xi
+\le\Bigl(\int|F|^2w_C\dd\xi\Bigr)^{1/2}\Bigl(\int w_C^{-1}\dd\xi\Bigr)^{1/2}.
+\]
+Since $w_C\ge1$, also $\int|F|^2\dd\xi\le\int|F|^2w_C\dd\xi$.
 
 (b) Let $\mathcal H$ be the set on the right-hand side, equipped with the form $\ip fg_{\mathcal H}$ defined by the
 right-hand side of \eqref{eq:normC}.
@@ -246,10 +258,11 @@ $\int|\hatf{k^C_y}|^2w_C=\kappa_C^2\int w_C^{-1}<\infty$. Since $k^C_y$ is real,
 belongs to $\mathcal H$.
 
 \emph{Reproducing property.} For $f\in\mathcal H$ and $y\in\R^d$, \eqref{eq:kernelFT} and \eqref{eq:inversion} give
-\[
-\ip f{k^C_y}_{\mathcal H}=(2\pi)^{-d}\kappa_C^{-1}\int\hatf f(\xi)\,\kappa_C e^{i\xi\cdot y}w_C(\xi)^{-1}w_C(\xi)\dd\xi
-=(2\pi)^{-d}\int\hatf f(\xi)e^{i\xi\cdot y}\dd\xi=f(y).
-\]
+\begin{align*}
+\ip f{k^C_y}_{\mathcal H}
+&=(2\pi)^{-d}\kappa_C^{-1}\int\hatf f(\xi)\,\kappa_C e^{i\xi\cdot y}w_C(\xi)^{-1}w_C(\xi)\dd\xi\\
+&=(2\pi)^{-d}\int\hatf f(\xi)e^{i\xi\cdot y}\dd\xi=f(y).
+\end{align*}
 
 \emph{Identification with $H_C$.} This is the uniqueness part of the Moore--Aronszajn theorem
 \cite{Aronszajn,PaulsenRaghupathi}; we include the short argument. Let $H_0:=\operatorname{span}\{k^C_y:y\in\R^d\}$. If
@@ -293,10 +306,11 @@ Since $\Gamma=-\Gamma$ and $w_C$ is even, $F_S$ is real and even, hence Hermitia
 $\int|F_S|^2w_C=\int_\Gamma(1+|\xi|^2)^{-d}\dd\xi\le\int_{\R^d}(1+|\xi|^2)^{-d}\dd\xi<\infty$, because the radial
 integrand $r^{d-1}(1+r^2)^{-d}$ is $O(r^{-d-1})$ as $r\to\infty$. So $F_S\in\FC{C}$. In polar coordinates, with $|U|>0$
 the surface measure of $U$ (the counting measure if $d=1$),
-\[
-\int|F_S|^2w_C\,e^{\frac14\xi^\tp S\xi}\dd\xi\ \ge\ \int_\Gamma(1+|\xi|^2)^{-d}e^{\lambda|\xi|^2/8}\dd\xi
-=|U|\int_0^\infty r^{d-1}(1+r^2)^{-d}e^{\lambda r^2/8}\dd r=+\infty. \qedhere
-\]
+\begin{align*}
+\int|F_S|^2w_C\,e^{\frac14\xi^\tp S\xi}\dd\xi
+&\ge\int_\Gamma(1+|\xi|^2)^{-d}e^{\lambda|\xi|^2/8}\dd\xi\\
+&=|U|\int_0^\infty r^{d-1}(1+r^2)^{-d}e^{\lambda r^2/8}\dd r=+\infty. \qedhere
+\end{align*}
 \end{proof}
 
 As a first application we obtain a short proof of the inclusion criterion \cite[Proposition~3.3]{PSWPN}.
@@ -371,17 +385,20 @@ Thus \eqref{eq:critA} reads $D_t\ge0$, \eqref{eq:23sharp} reads $\Lambda_C\ge0$,
 $2BB^\tp-(AC^2+C^2A^\tp)\ge0$.
 
 \begin{proposition}[Norm identity]\label{prop:norm}
-For $f\in H_C$ and $t\ge0$,
+For $f\in H_C$ and $t\ge0$ the following identity holds in $[0,\infty]$:
 \begin{equation}\label{eq:normid}
 \int_{\R^d}\bigl|\hatf{K^tf}(\xi)\bigr|^2w_C(\xi)\dd\xi
-=e^{-t\Tr A}\int_{\R^d}|\hatf f(\eta)|^2\,w_C(\eta)\,\exp\bigl(-\tfrac14\eta^\tp D_t\eta\bigr)\dd\eta\ \in[0,\infty].
+=e^{-t\Tr A}\int_{\R^d}|\hatf f(\eta)|^2\,w_C(\eta)\,e^{-\frac14\eta^\tp D_t\eta}\dd\eta .
 \end{equation}
 \end{proposition}
 
 \begin{proof}
 By \eqref{eq:KtFT}, the left-hand side equals
-$e^{-2t\Tr A}\int|\hatf f(e^{-A^\tp t}\xi)|^2\exp\bigl(-(e^{-A^\tp t}\xi)^\tp\Sigma(t)(e^{-A^\tp t}\xi)+\frac14\xi^\tp C^2\xi\bigr)\dd\xi$.
-The substitution $\xi=e^{A^\tp t}\eta$, $\mathrm d\xi=e^{t\Tr A}\mathrm d\eta$, turns it into
+\[
+e^{-2t\Tr A}\int\bigl|\hatf f(e^{-A^\tp t}\xi)\bigr|^2
+\exp\bigl(-\xi^\tp e^{-At}\Sigma(t)e^{-A^\tp t}\xi+\tfrac14\xi^\tp C^2\xi\bigr)\dd\xi .
+\]
+The substitution $\xi=e^{A^\tp t}\eta$, $\mathrm d\xi=e^{t\Tr A}\mathrm d\eta$, turns this into
 \[
 e^{-t\Tr A}\int|\hatf f(\eta)|^2\exp\Bigl(-\eta^\tp\Sigma(t)\eta+\tfrac14\eta^\tp e^{At}C^2e^{A^\tp t}\eta\Bigr)\dd\eta ,
 \]
@@ -410,16 +427,17 @@ Let $f\in H_C$. By Lemma~\ref{lem:Kt}, $K^tf$ is real, continuous and in $L^2$. 
 $K^tf\in H_C$ if and only if the left-hand side of \eqref{eq:normid} is finite, and then $\|K^tf\|_C^2$ equals
 $(2\pi)^{-d}\kappa_C^{-1}$ times that quantity.
 
-\emph{Sufficiency in (a), and the upper bound in (b).} If $D_t\ge0$, then $\exp(-\frac14\eta^\tp D_t\eta)\le1$. By
-\eqref{eq:normid} and \eqref{eq:normC}, $K^tf\in H_C$ and $\|K^tf\|_C^2\le e^{-t\Tr A}\|f\|_C^2$.
+\emph{Sufficiency in (a) and the upper bound in (b).} If $D_t\ge0$, then the factor $e^{-\frac14\eta^\tp D_t\eta}$ in
+\eqref{eq:normid} is at most $1$. Hence $K^tf\in H_C$ and, by \eqref{eq:normC}, $\|K^tf\|_C^2\le e^{-t\Tr A}\|f\|_C^2$.
 
 \emph{Lower bound in (b).} For $\varepsilon>0$ the indicator $F_\varepsilon:=\mathbf 1_{\{|\eta|<\varepsilon\}}$ is real,
 even and belongs to $\FC{C}$, so $f_\varepsilon:=F_\varepsilon^\vee\in H_C\setminus\{0\}$ by Lemma~\ref{lem:fourier}(c).
 Since $\eta^\tp D_t\eta\le\|D_t\|\varepsilon^2$ for $|\eta|<\varepsilon$, \eqref{eq:normid} and \eqref{eq:normC} give
-\[
-\|K^tf_\varepsilon\|_C^2=e^{-t\Tr A}(2\pi)^{-d}\kappa_C^{-1}\int_{|\eta|<\varepsilon}w_C(\eta)e^{-\frac14\eta^\tp D_t\eta}\dd\eta
-\ \ge\ e^{-t\Tr A}e^{-\frac14\varepsilon^2\|D_t\|}\,\|f_\varepsilon\|_C^2 .
-\]
+\begin{align*}
+\|K^tf_\varepsilon\|_C^2
+&=e^{-t\Tr A}(2\pi)^{-d}\kappa_C^{-1}\int_{|\eta|<\varepsilon}w_C(\eta)e^{-\frac14\eta^\tp D_t\eta}\dd\eta\\
+&\ge e^{-t\Tr A}e^{-\frac14\varepsilon^2\|D_t\|}\,\|f_\varepsilon\|_C^2 .
+\end{align*}
 Letting $\varepsilon\downarrow0$ gives $\|K^t\|^2\ge e^{-t\Tr A}$.
 
 \emph{Necessity in (a), and (c).} Suppose that $D_t\ge0$ fails. Lemma~\ref{lem:multiplier} with $S:=-D_t$ yields a real,
@@ -442,11 +460,12 @@ Then $K^t$ maps $H_C$ bijectively onto $H_{\Ct}$, and $\|K^tf\|_{\Ct}^2=\taut\,\
 \begin{proof}
 Let $f\in H_C$ and $g:=K^tf$, which is real, continuous and in $L^2$ by Lemma~\ref{lem:Kt}. By \eqref{eq:KtFT} and
 the substitution $\xi=e^{A^\tp t}\eta$, exactly as in the proof of Proposition~\ref{prop:norm},
-\[
-\int|\hatf g(\xi)|^2w_{\Ct}(\xi)\dd\xi=e^{-t\Tr A}\int|\hatf f(\eta)|^2
-\exp\Bigl(-\eta^\tp\Sigma(t)\eta+\tfrac14\eta^\tp e^{At}\Ct^{\,2}e^{A^\tp t}\eta\Bigr)\dd\eta
-=e^{-t\Tr A}\int|\hatf f|^2w_C\dd\eta ,
-\]
+\begin{align*}
+\int|\hatf g(\xi)|^2w_{\Ct}(\xi)\dd\xi
+&=e^{-t\Tr A}\int|\hatf f(\eta)|^2
+e^{-\eta^\tp\Sigma(t)\eta+\frac14\eta^\tp e^{At}\Ct^{\,2}e^{A^\tp t}\eta}\dd\eta\\
+&=e^{-t\Tr A}\int|\hatf f(\eta)|^2w_C(\eta)\dd\eta ,
+\end{align*}
 because $e^{At}\Ct^{\,2}e^{A^\tp t}=C^2+4\Sigma(t)$. Thus $g\in H_{\Ct}$ by Lemma~\ref{lem:fourier}(b), applied with
 $\Ct$ in place of $C$. Since $\det\Ct=e^{-t\Tr A}\det(C^2+4\Sigma(t))^{1/2}$, \eqref{eq:normC} gives
 \[
@@ -456,16 +475,21 @@ $\Ct$ in place of $C$. Since $\det\Ct=e^{-t\Tr A}\det(C^2+4\Sigma(t))^{1/2}$, \e
 In particular, $K^t$ is injective on $H_C$.
 
 For surjectivity, let $g\in H_{\Ct}$ and define
-$F(\eta):=e^{t\Tr A}\,\hatf g(e^{A^\tp t}\eta)\exp\bigl(\frac12\eta^\tp\Sigma(t)\eta\bigr)$. Then $F$ is Hermitian. With
-$\eta=e^{-A^\tp t}\xi$, $\mathrm d\eta=e^{-t\Tr A}\mathrm d\xi$ and
-$\eta^\tp\Sigma(t)\eta+\frac14\eta^\tp C^2\eta=\frac14\xi^\tp\Ct^{\,2}\xi$ we get
 \[
-\int|F|^2w_C\dd\eta=e^{2t\Tr A}\int|\hatf g(e^{A^\tp t}\eta)|^2e^{\eta^\tp\Sigma(t)\eta+\frac14\eta^\tp C^2\eta}\dd\eta
-=e^{t\Tr A}\int|\hatf g|^2w_{\Ct}\dd\xi<\infty .
+F(\eta):=e^{t\Tr A}\,\hatf g(e^{A^\tp t}\eta)\exp\bigl(\tfrac12\eta^\tp\Sigma(t)\eta\bigr),\qquad\eta\in\R^d .
 \]
+Then $F$ is Hermitian. With $\eta=e^{-A^\tp t}\xi$, $\mathrm d\eta=e^{-t\Tr A}\mathrm d\xi$ and
+$\eta^\tp\Sigma(t)\eta+\frac14\eta^\tp C^2\eta=\frac14\xi^\tp\Ct^{\,2}\xi$ we get
+\begin{align*}
+\int|F(\eta)|^2w_C(\eta)\dd\eta
+&=e^{2t\Tr A}\int|\hatf g(e^{A^\tp t}\eta)|^2e^{\eta^\tp\Sigma(t)\eta+\frac14\eta^\tp C^2\eta}\dd\eta\\
+&=e^{t\Tr A}\int|\hatf g(\xi)|^2w_{\Ct}(\xi)\dd\xi<\infty .
+\end{align*}
 Hence $F\in\FC{C}$, and $f:=F^\vee\in H_C$ by Lemma~\ref{lem:fourier}(c). By \eqref{eq:KtFT},
-$\hatf{K^tf}(\xi)=e^{-t\Tr A}F(e^{-A^\tp t}\xi)\exp(-\frac12\xi^\tp e^{-At}\Sigma(t)e^{-A^\tp t}\xi)=\hatf g(\xi)$. Since
-$K^tf$ and $g$ are continuous $L^2$-functions with the same Fourier transform, $K^tf=g$.
+\[
+\hatf{K^tf}(\xi)=e^{-t\Tr A}F(e^{-A^\tp t}\xi)\exp\bigl(-\tfrac12\xi^\tp e^{-At}\Sigma(t)e^{-A^\tp t}\xi\bigr)=\hatf g(\xi).
+\]
+Since $K^tf$ and $g$ are continuous $L^2$-functions with the same Fourier transform, $K^tf=g$.
 \end{proof}
 
 \begin{corollary}[On {\cite[Remark~4.2]{PSWPN}}]\label{cor:remark42}
@@ -561,18 +585,17 @@ Theorem~\ref{thm:main}.
 %======================================================================
 
 \begin{theorem}\label{thm:D}
-Let $A$ be Hurwitz (controllability is not needed), let $\Sigma:=\int_0^\infty e^{As}BB^\tp e^{A^\tp s}\dd s$, and
-let
-\[
-P_C:=C^2+4\Sigma>0,\qquad |x|_{P_C}:=\bigl(x^\tp P_C^{-1}x\bigr)^{1/2},\qquad
-\mathcal E_C:=\{x\in\R^d:\ |x|_{P_C}\le1\}.
-\]
+Let $A$ be Hurwitz (controllability is not needed), and let $\Sigma:=\int_0^\infty e^{As}BB^\tp e^{A^\tp s}\dd s$.
+Put $P_C:=C^2+4\Sigma$, which is positive definite, and let $\mathcal E_C:=\{x\in\R^d:\ |x|_{P_C}\le1\}$ be the unit
+ball of the norm $|x|_{P_C}:=(x^\tp P_C^{-1}x)^{1/2}$.
 \begin{enumerate}
 \item[(a)] $D_t=P_C-e^{At}P_Ce^{A^\tp t}$ for all $t\ge0$. Consequently, for each $t\ge0$,
-\[
-K^tH_C\subset H_C\iff e^{At}P_Ce^{A^\tp t}\le P_C\iff |e^{At}x|_{P_C}\le|x|_{P_C}\ \ \forall x\in\R^d
-\iff e^{At}\mathcal E_C\subset\mathcal E_C .
-\]
+\begin{align*}
+K^tH_C\subset H_C
+&\iff e^{At}P_Ce^{A^\tp t}\le P_C\\
+&\iff |e^{At}x|_{P_C}\le|x|_{P_C}\ \text{ for all }x\in\R^d\\
+&\iff e^{At}\mathcal E_C\subset\mathcal E_C .
+\end{align*}
 \item[(b)] $AP_C+P_CA^\tp=-\Lambda_C$. Hence \eqref{eq:23sharp} holds if and only if $AP_C+P_CA^\tp\le0$, i.e.\ if
 and only if $\mathcal E_C$ is forward invariant under $\dot x=Ax$. Likewise, \eqref{eq:23} holds if and only if
 $A(C^2+2\Sigma)+(C^2+2\Sigma)A^\tp\le0$.
@@ -618,32 +641,47 @@ fails for all small $t>0$ (Example~\ref{ex:beta}, $\beta>6$).
 %======================================================================
 
 \begin{example}[A one-parameter family]\label{ex:beta}
-Let $d=m=2$, $B=C=I_2$ and $A=A_\beta:=\begin{pmatrix}-1&\beta\\0&-1\end{pmatrix}$ with $\beta\ge0$. Then $A_\beta$ is
-Hurwitz (double eigenvalue $-1$), and $(A_\beta,B)$ is controllable since $B$ is invertible. The matrix $AC^2+C^2A^\tp=A_\beta+A_\beta^\tp$ has eigenvalues
-$-2\pm\beta$, so
+Let $d=m=2$, $B=C=I_2$, and
 \[
-\eqref{eq:23}\iff\tfrac12(\beta-2)\le1\iff\beta\le4,\qquad
-\eqref{eq:23sharp}\iff\tfrac12(\beta-2)\le2\iff\beta\le6 .
+A=A_\beta:=\begin{pmatrix}-1&\beta\\0&-1\end{pmatrix},\qquad\beta\ge0 .
 \]
+Then $A_\beta$ is Hurwitz (double eigenvalue $-1$), and $(A_\beta,B)$ is controllable since $B$ is invertible. The
+matrix $AC^2+C^2A^\tp=A_\beta+A_\beta^\tp$ has eigenvalues $-2\pm\beta$, so
+\begin{align*}
+\eqref{eq:23}&\iff\tfrac12(\beta-2)\le1\iff\beta\le4,\\
+\eqref{eq:23sharp}&\iff\tfrac12(\beta-2)\le2\iff\beta\le6 .
+\end{align*}
 For $4<\beta\le6$, $H_I$ is therefore invariant under every $K^t$, with $\|K^t\|_{H_I\to H_I}=e^{t}$ (as
 $\Tr A_\beta=-2$), although \eqref{eq:23} fails. For $\beta>6$ there is $\varepsilon>0$ with
 $K^tH_I\not\subset H_I$ for all $t\in(0,\varepsilon)$.
 
-Everything here is explicit. With $E_{12}:=\begin{pmatrix}0&1\\0&0\end{pmatrix}$ we have $A_\beta=-I+\beta E_{12}$ and
-$E_{12}^2=0$, so $e^{A_\beta t}=e^{-t}\begin{pmatrix}1&\beta t\\0&1\end{pmatrix}$ and
-$\Sigma(t)=\int_0^te^{-2s}\begin{pmatrix}1+\beta^2s^2&\beta s\\\beta s&1\end{pmatrix}\dd s$. Using
-$\int_0^te^{-2s}\dd s=\frac{1-e^{-2t}}2$, $\int_0^tse^{-2s}\dd s=\frac{1-e^{-2t}(1+2t)}4$ and
-$\int_0^ts^2e^{-2s}\dd s=\frac{1-e^{-2t}(1+2t+2t^2)}4$, one obtains
+Everything here is explicit. We have $A_\beta=-I+\beta E_{12}$, where $E_{12}$ has the entry $1$ in position $(1,2)$
+and zeros elsewhere. Since $E_{12}^2=0$,
 \[
-D_t=\begin{pmatrix}
-3(1-e^{-2t})+\beta^2\bigl(1-e^{-2t}(1+2t+3t^2)\bigr) & \beta\bigl(1-e^{-2t}(1+3t)\bigr)\\[2pt]
-\beta\bigl(1-e^{-2t}(1+3t)\bigr) & 3(1-e^{-2t})
-\end{pmatrix}
-=t\begin{pmatrix}6&-\beta\\-\beta&6\end{pmatrix}+O(t^2)
+e^{A_\beta t}=e^{-t}\begin{pmatrix}1&\beta t\\0&1\end{pmatrix},\qquad
+\Sigma(t)=\int_0^te^{-2s}\begin{pmatrix}1+\beta^2s^2&\beta s\\\beta s&1\end{pmatrix}\dd s .
 \]
-as $t\downarrow0$, in accordance with \eqref{eq:Dint} and $\Lambda_C=4I-(A_\beta+A_\beta^\tp)$. Furthermore
-$\Sigma=\begin{pmatrix}\frac12+\frac{\beta^2}4&\frac\beta4\\\frac\beta4&\frac12\end{pmatrix}$,
-$P_C=I+4\Sigma=\begin{pmatrix}3+\beta^2&\beta\\\beta&3\end{pmatrix}$, and
+The elementary integrals
+\begin{gather*}
+\int_0^te^{-2s}\dd s=\frac{1-e^{-2t}}2,\qquad\int_0^tse^{-2s}\dd s=\frac{1-e^{-2t}(1+2t)}4,\\
+\int_0^ts^2e^{-2s}\dd s=\frac{1-e^{-2t}(1+2t+2t^2)}4
+\end{gather*}
+give the entries of $D_t=(d_{ij}(t))_{i,j=1}^2$:
+\begin{align*}
+d_{11}(t)&=3(1-e^{-2t})+\beta^2\bigl(1-e^{-2t}(1+2t+3t^2)\bigr),\\
+d_{12}(t)&=d_{21}(t)=\beta\bigl(1-e^{-2t}(1+3t)\bigr),\qquad d_{22}(t)=3(1-e^{-2t}).
+\end{align*}
+In particular, in accordance with \eqref{eq:Dint},
+\[
+D_t=t\,\Lambda_C+O(t^2)\quad\text{as }t\downarrow0,\qquad
+\Lambda_C=4I-(A_\beta+A_\beta^\tp)=\begin{pmatrix}6&-\beta\\-\beta&6\end{pmatrix}.
+\]
+Furthermore,
+\[
+\Sigma=\begin{pmatrix}\frac12+\frac{\beta^2}4&\frac\beta4\\[2pt]\frac\beta4&\frac12\end{pmatrix},\qquad
+P_C=I+4\Sigma=\begin{pmatrix}3+\beta^2&\beta\\\beta&3\end{pmatrix},
+\]
+and
 \[
 A_\beta P_C+P_CA_\beta^\tp=\begin{pmatrix}-6&\beta\\\beta&-6\end{pmatrix},\qquad
 A_\beta(I+2\Sigma)+(I+2\Sigma)A_\beta^\tp=\begin{pmatrix}-4&\beta\\\beta&-4\end{pmatrix},
@@ -673,14 +711,17 @@ Appendix~\ref{app:numerics}).}
 \end{figure}
 
 \begin{example}[Scalar noise]\label{ex:scalar}
-Let $d=2$, $m=1$, $A=\begin{pmatrix}\frac32&-2\\2&-2\end{pmatrix}$, $B=\begin{pmatrix}1\\0\end{pmatrix}$ and $C=I_2$.
-Then $\Tr A=-\frac12$ and $\det A=1$, so the eigenvalues $-\frac14\pm\frac{\sqrt{15}}4i$ have negative real parts and
-$A$ is Hurwitz. Moreover $\det[B,AB]=\det\begin{pmatrix}1&\frac32\\0&2\end{pmatrix}=2\neq0$, so $(A,B)$ is
-controllable. Since $\frac12(A+A^\tp)=\operatorname{diag}(\frac32,-2)$ and $BB^\tp=\operatorname{diag}(1,0)$,
+Let $d=2$, $m=1$, $C=I_2$, and
 \[
-BB^\tp-\tfrac12(A+A^\tp)=\operatorname{diag}\bigl(-\tfrac12,2\bigr)\not\ge0,\qquad
-2BB^\tp-\tfrac12(A+A^\tp)=\operatorname{diag}\bigl(\tfrac12,2\bigr)\ge0 .
+A=\begin{pmatrix}\frac32&-2\\[2pt]2&-2\end{pmatrix},\qquad B=\begin{pmatrix}1\\0\end{pmatrix}.
 \]
+Then $\Tr A=-\frac12$ and $\det A=1$, so the eigenvalues $-\frac14\pm\frac{\sqrt{15}}4i$ have negative real parts and
+$A$ is Hurwitz. Moreover $AB=(\frac32,2)^\tp$, so $\det[B,AB]=2\neq0$ and $(A,B)$ is controllable. Since
+$\frac12(A+A^\tp)=\operatorname{diag}(\frac32,-2)$ and $BB^\tp=\operatorname{diag}(1,0)$, we have
+\begin{align*}
+BB^\tp-\tfrac12(A+A^\tp)&=\operatorname{diag}\bigl(-\tfrac12,2\bigr)\not\ge0,\\
+2BB^\tp-\tfrac12(A+A^\tp)&=\operatorname{diag}\bigl(\tfrac12,2\bigr)\ge0 .
+\end{align*}
 So \eqref{eq:23} fails and \eqref{eq:23sharp} holds, and $H_I$ is invariant under every $K^t$ although the noise is
 one-dimensional.
 \end{example}
@@ -700,10 +741,11 @@ $G:=2C'^2-C''^2$ is positive definite. In that case
 \begin{proof}
 By \eqref{eq:kernelFT}, $|\hatf{k^{C'}_y}|^2w_{C''}=\kappa_{C'}^2\exp(-\frac14\xi^\tp G\xi)$, which is integrable if and
 only if $G>0$. If $G>0$, then \eqref{eq:normC} and \eqref{eq:gauss} with $P=\frac14G$ give
-\[
-\ip{k^{C'}_y}{k^{C'}_{y'}}_{C''}=(2\pi)^{-d}\frac{\kappa_{C'}^2}{\kappa_{C''}}\int e^{-\frac14\xi^\tp G\xi-i\xi\cdot(y-y')}\dd\xi
-=(2\pi)^{-d}\frac{\pi^d(\det C')^2}{\pi^{d/2}\det C''}\,\pi^{d/2}2^d(\det G)^{-1/2}e^{-(y-y')^\tp G^{-1}(y-y')},
-\]
+\begin{align*}
+\ip{k^{C'}_y}{k^{C'}_{y'}}_{C''}
+&=(2\pi)^{-d}\frac{\kappa_{C'}^2}{\kappa_{C''}}\int e^{-\frac14\xi^\tp G\xi-i\xi\cdot(y-y')}\dd\xi\\
+&=(2\pi)^{-d}\frac{\pi^d(\det C')^2}{\pi^{d/2}\det C''}\,\pi^{d/2}2^d(\det G)^{-1/2}e^{-(y-y')^\tp G^{-1}(y-y')},
+\end{align*}
 and $(2\pi)^{-d}\pi^d2^d=1$.
 \end{proof}
 
@@ -721,15 +763,19 @@ question.
 \begin{remark}[Consistency with {\cite[Proposition~4.1]{PSWPN}}]\label{rem:consistency}
 By Corollaries~\ref{cor:remark42} and~\ref{cor:inclusion}, $H_{\Ct}\subset H_{C_t}$ with
 $\|g\|_{C_t}^2\le(\det\Ct/\det C_t)\|g\|_{\Ct}^2$. Together with Theorem~\ref{thm:range} this gives
-\[
-\|K^tf\|_{C_t}^2\le\frac{\det\Ct}{\det C_t}\,\taut\,\|f\|_C^2
-=\frac{\det(C^2+4\Sigma(t))^{1/2}}{\det(C^2+2\Sigma(t))^{1/2}}\cdot\frac{\det C}{\det(C^2+4\Sigma(t))^{1/2}}\,\|f\|_C^2
+\begin{align*}
+\|K^tf\|_{C_t}^2&\le\frac{\det\Ct}{\det C_t}\,\taut\,\|f\|_C^2\\
+&=\frac{\det(C^2+4\Sigma(t))^{1/2}}{\det(C^2+2\Sigma(t))^{1/2}}\cdot\frac{\det C}{\det(C^2+4\Sigma(t))^{1/2}}\,\|f\|_C^2
 =\tau_t\,\|f\|_C^2 ,
-\]
+\end{align*}
 which is exactly the bound of \cite[Proposition~4.1]{PSWPN}. Thus Theorem~\ref{thm:range} refines that proposition,
 and the only loss in the argument of \cite{PSWPN} is the inclusion $H_{\Ct}\subsetneq H_{C_t}$. On kernel sections,
-Theorem~\ref{thm:range} reads $\ip{K^tk^C_z}{K^tk^C_{z'}}_{\Ct}=\taut\,k^C(z,z')$. This also follows directly from
-\cite[Proposition~4.1]{PSWPN} and Lemma~\ref{lem:bumps}, because $2C_t^2-\Ct^{\,2}=e^{-At}C^2e^{-A^\tp t}$.
+Theorem~\ref{thm:range} states that
+\[
+\ip{K^tk^C_z}{K^tk^C_{z'}}_{\Ct}=\taut\,k^C(z,z'),\qquad z,z'\in\R^d .
+\]
+This identity also follows directly from \cite[Proposition~4.1]{PSWPN} and Lemma~\ref{lem:bumps}, because
+$2C_t^2-\Ct^{\,2}=e^{-At}C^2e^{-A^\tp t}$.
 \end{remark}
 
 \begin{remark}[Deterministic linear flows]\label{rem:composition}
@@ -752,22 +798,27 @@ Let $\varphi$ be as above and $t\ge0$, and put
 \[
 m_t(\eta):=\frac{\hatf\varphi(\eta)\,\exp\bigl(-\eta^\tp\Sigma(t)\eta\bigr)}{\hatf\varphi\bigl(e^{A^\tp t}\eta\bigr)},\qquad\eta\in\R^d .
 \]
-Then $K^tH_\varphi\subset H_\varphi$ if and only if $\sup_\eta m_t(\eta)<\infty$, and in this case
-$\|K^t\|_{H_\varphi\to H_\varphi}^2=e^{-t\Tr A}\sup_\eta m_t(\eta)$. For $\varphi(z)=\exp(-z^\tp C^{-2}z)$ one has
-$m_t(\eta)=\exp(-\frac14\eta^\tp D_t\eta)$, and Theorem~\ref{thm:fixed}(a),(b) is recovered.
+Then $K^tH_\varphi\subset H_\varphi$ if and only if $M_t:=\sup_\eta m_t(\eta)$ is finite, and in this case
+\[
+\|K^t\|_{H_\varphi\to H_\varphi}^2=e^{-t\Tr A}M_t .
+\]
+For the Gaussian kernel, i.e.\ for $\varphi(z)=e^{-z^\tp C^{-2}z}$, we have $m_t(\eta)=e^{-\frac14\eta^\tp D_t\eta}$;
+this recovers Theorem~\ref{thm:fixed}(a),(b).
 \end{proposition}
 
 \begin{proof}
 Elements of $H_\varphi$ are bounded, continuous and in $L^2$, so Lemma~\ref{lem:Kt} applies. The computation in the proof
 of Proposition~\ref{prop:norm} gives
-$\|K^tf\|_{H_\varphi}^2=(2\pi)^{-d}e^{-t\Tr A}\int|\hatf f(\eta)|^2m_t(\eta)/\hatf\varphi(\eta)\dd\eta$, whenever the
-right-hand side is finite, and $K^tf\notin H_\varphi$ otherwise. If $M:=\sup m_t<\infty$, then
-$\|K^tf\|_{H_\varphi}^2\le e^{-t\Tr A}M\|f\|_{H_\varphi}^2$. For the reverse inequality, let $\delta>0$ and choose
-$\eta_0$ with $m_t(\eta_0)>M-\delta$. The function $m_t$ is continuous and even, so for small $r>0$ the function
-$f_r:=(\mathbf 1_{\{|\eta-\eta_0|<r\}\cup\{|\eta+\eta_0|<r\}})^\vee\in H_\varphi\setminus\{0\}$ satisfies
-$\|K^tf_r\|^2\ge e^{-t\Tr A}(M-\delta)\|f_r\|^2$.
+\[
+\|K^tf\|_{H_\varphi}^2=(2\pi)^{-d}e^{-t\Tr A}\int|\hatf f(\eta)|^2\,\frac{m_t(\eta)}{\hatf\varphi(\eta)}\dd\eta
+\]
+whenever the right-hand side is finite, and $K^tf\notin H_\varphi$ otherwise. If $M_t<\infty$, then
+$\|K^tf\|_{H_\varphi}^2\le e^{-t\Tr A}M_t\|f\|_{H_\varphi}^2$. For the reverse inequality, let $\delta>0$ and choose
+$\eta_0$ with $m_t(\eta_0)>M_t-\delta$. The function $m_t$ is continuous and even. Hence, for small $r>0$, the
+function $f_r:=(\mathbf 1_{U_r})^\vee$ with $U_r:=\{|\eta-\eta_0|<r\}\cup\{|\eta+\eta_0|<r\}$ belongs to
+$H_\varphi\setminus\{0\}$ and satisfies $\|K^tf_r\|^2\ge e^{-t\Tr A}(M_t-\delta)\|f_r\|^2$.
 
-Suppose now that $\sup m_t=\infty$. For $k\in\mathbb N$ the set $\{m_t>16^k\}$ is open, nonempty and symmetric. Choose a
+Suppose now that $M_t=\infty$. For $k\in\mathbb N$ the set $\{m_t>16^k\}$ is open, nonempty and symmetric. Choose a
 bounded symmetric set $E_k$ of positive measure inside it, put $a_k:=(\int_{E_k}\hatf\varphi^{-1})^{-1/2}$ and
 $F:=\sum_k2^{-k}a_k\mathbf 1_{E_k}$. By Minkowski's inequality, $(\int F^2/\hatf\varphi)^{1/2}\le\sum_k2^{-k}=1$.
 Since $\hatf\varphi\in L^1$, the Cauchy--Schwarz inequality gives $F\in L^1$. Also $F\in L^2$, because $\hatf\varphi$ is
@@ -834,9 +885,10 @@ in Example~\ref{ex:beta} matches the numerically computed $D_t$ to within $2.5\t
 \item Figure~\ref{fig:times}: for $320$ values of $\beta\in(6,14]$ the set $\{t\in(0,40]:D_t\ge0\}$, sampled on
 $2\times10^5$ grid points, is an interval $[t_1(\beta),40]$; $t_1$ was located by bisection on $\det D_t$ and increases
 from $0.053$ at $\beta=6.025$ to $0.537$ at $\beta=14$. For $t\ge40$ the condition of Theorem~\ref{thm:D}(c) holds.
-\item Example~\ref{ex:scalar}: eigenvalues $-0.25\pm0.968i$, $\operatorname{rank}[B,AB]=2$,
-$\lambda_{\max}(\frac12(A+A^\tp)-BB^\tp)=0.5$, $\lambda_{\max}(\frac12(A+A^\tp)-2BB^\tp)=-0.5$, and
-$\lambda_{\min}(D_t)\ge0$ on $3000$ grid points in $(0,10]$.
+\item Example~\ref{ex:scalar}: the matrix $A$ has the eigenvalues $-0.25\pm0.968i$, and the controllability matrix
+$[B,AB]$ has rank $2$. Moreover $\lambda_{\max}\bigl(\frac12(A+A^\tp)-BB^\tp\bigr)=0.5$ and
+$\lambda_{\max}\bigl(\frac12(A+A^\tp)-2BB^\tp\bigr)=-0.5$, and $\lambda_{\min}(D_t)\ge0$ on $3000$ grid points
+in $(0,10]$.
 \item Proposition~\ref{prop:general}, Gaussian case: for random $A\in\R^{3\times3}$, $B\in\R^{3\times2}$ and $C$,
 $t\in\{0.3,1.2\}$, and $1000$ random $\eta$, the quantities $\log m_t(\eta)$ and $-\frac14\eta^\tp D_t\eta$ agree to a
 relative error of $3.2\times10^{-14}$.
