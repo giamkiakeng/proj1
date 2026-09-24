@@ -135,6 +135,12 @@ N.~Wetzler, M.~J.~H. Heule, J.~Hunt, Warren~A., {DRAT-trim}: efficient checking
   Satisfiability Testing (SAT 2014), Vol. 8561 of Lecture Notes in Computer
   Science, Springer, 2014, pp. 422--429.
 
+\bibitem{Wolfram83}
+S.~Wolfram, Statistical mechanics of cellular automata, Reviews of Modern
+  Physics 55~(3) (1983) 601--644.
+\newblock \href {https://doi.org/10.1103/RevModPhys.55.601}
+  {\path{doi:10.1103/RevModPhys.55.601}}.
+
 \bibitem{HeuleEtAl11}
 M.~J.~H. Heule, O.~Kullmann, S.~Wieringa, A.~Biere, Cube and conquer: guiding
   {CDCL} {SAT} solvers by lookaheads, in: Hardware and Software: Verification
