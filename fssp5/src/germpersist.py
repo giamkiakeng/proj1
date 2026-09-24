@@ -119,8 +119,11 @@ def evolve(tab, conf, steps):
     return ''.join(cur)
 
 
+FAR = 100   # the prediction FAR periods later is also compared with a direct simulation
+
+
 def certify(tab, t1, pmax, qmax):
-    rows, open_at = simulate(tab, t1 + 4 * pmax + 1)
+    rows, open_at = simulate(tab, t1 + (FAR + 1) * pmax + 1)
     if open_at is not None:
         return 'OPEN', open_at
     for P in range(1, pmax + 1):
@@ -177,7 +180,7 @@ def certify(tab, t1, pmax, qmax):
                 if build(d1) != ''.join(rows[t]) or build(d2) != ''.join(rows[t + P]):
                     ok = False
                 D = {k: d2[k][2] - d1[k][2] for k in blocks}
-                for mult in (2, 3):
+                for mult in (2, 3, FAR):
                     if ok and t + mult * P < len(rows):
                         pred = build(d1, {k: mult * D[k] for k in blocks})
                         if pred != ''.join(rows[t + mult * P]):
