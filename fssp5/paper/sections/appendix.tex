@@ -103,7 +103,8 @@ gcc -O2 -o germext germext.c && gcc -O2 -o germdfs germdfs.c
 # Proposition 6.4 (complexity <= 14)
 ./germdfs 5 78 14 40 > germs_K14.txt              # 244 germs
 python3 germinc.py germs_K14.txt 10 78            # 230 UNSAT, 14 SAT
-python3 germcert.py <the 230 refuted germs> 10 k14_n10   # UNSAT, VERIFIED
+python3 germcert.py ../results/germs/K14_refuted10.txt 10 k14_n10
+                                                  # UNSAT, VERIFIED
 ./germext 5 3300 3 12 < germs_K14_surv10.txt      # 14 x REFUTED (s=1)
 \end{verbatim}}
 The files \texttt{results/germs/germ\_delta12.txt} and
