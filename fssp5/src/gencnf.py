@@ -219,7 +219,7 @@ def add_links(E, vinf, Rall):
 
 
 def build(k, N, diff=True, symbreak=True, leftq=False, rev=False, fire_n=None,
-          minf=None, tinf=0, npart=None, hpart=None, pump=None, band=None, links=False):
+          minf=None, tinf=0, npart=None, hpart=None, pump=None, band=None, links=False, prefire=None, bulk=False, fzper=None):
     """minf: anti-diagonal bound of C_inf (default 2N-2); tinf: C_inf also
     contains every cell with t <= tinf.  npart: lengths N < n <= npart for
     which the reflected triangle is added (non-firing only) up to time
@@ -248,6 +248,7 @@ def build(k, N, diff=True, symbreak=True, leftq=False, rev=False, fire_n=None,
     for (t, i) in order:
         E.transition(vinf(t - 1, i - 1), vinf(t - 1, i), vinf(t - 1, i + 1),
                      inf[(t, i)], rev)
+    E.inf = inf
 
     ns = range(2, N + 1) if fire_n is None else fire_n
     Rall = {}
@@ -274,6 +275,16 @@ def build(k, N, diff=True, symbreak=True, leftq=False, rev=False, fire_n=None,
         T = 2 * n - 3
         for i in range(1, n + 1):
             E.transition(val(T, i - 1), val(T, i), val(T, i + 1), 'FIRE')
+        if prefire is not None:
+            # restricted class: the configuration one step before firing is uniform
+            # (bulk=True: only the cells 2..n-1 are required to be equal to prefire)
+            for i in (range(2, n) if bulk else range(1, n + 1)):
+                c = val(T, i)
+                if isinstance(c, int):
+                    if c != prefire:
+                        E.add([])
+                else:
+                    E.add([c[prefire]])
         if diff and 2 * n - 1 <= M:
             for i in range(2, n + 1):
                 t = 2 * n - 1 - i
@@ -307,6 +318,19 @@ def build(k, N, diff=True, symbreak=True, leftq=False, rev=False, fire_n=None,
     if pump:
         assert 2 * pump - 2 <= M1, "C_inf too small for the pumping constraints"
         add_pumping(E, vinf, pump)
+
+    if fzper:
+        # restricted class: depth-rows of the co-moving half-line are periodic
+        # with period p from time 2j+c on:  C(t+p, i+p) = C(t, i) whenever the
+        # depth j = t+1-i satisfies t >= 2j+c (both cells encoded)
+        p, c = fzper
+        for (t, i) in list(inf):
+            j = t + 1 - i
+            if t >= 2 * j + c and (t + p, i + p) in inf:
+                x, y = inf[(t, i)], inf[(t + p, i + p)]
+                for st in E.W:
+                    E.add([-x[st], y[st]])
+                    E.add([-y[st], x[st]])
 
     if links:
         add_links(E, vinf, Rall)

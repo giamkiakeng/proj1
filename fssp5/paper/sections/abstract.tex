@@ -1,0 +1,15 @@
+Whether the firing squad synchronization problem admits a minimal-time
+solution with five states has been open since Mazoyer's six-state solution
+of 1987. We develop general tools for minimal-time solutions and apply them
+to this question. First, all lines are encoded by one half-line diagram and
+one reflected triangle per length, and each triangle is a function of two
+anti-diagonals of the half-line. Second, we prove a pumping lemma: in every
+minimal-time solution the inputs of the reflected triangles of any two
+lengths $n<n'$ differ on a cone of about $n/2$ cells. The lemma constrains
+the half-line alone and implies a speed-$1/3$ barrier: the non-periodic part
+of the half-line always reaches the line $i=t/3$. Third, we give a
+propositional encoding of the bounded problem together with these
+constraints, validate it against Mazoyer's solution extracted from a Coq
+formalization, and obtain a certified (LRAT-checked) re-proof of the
+nonexistence of four-state minimal-time solutions in under a minute.
+Finally, we report an extensive search for five-state solutions.

@@ -22,11 +22,10 @@ used before the firing time are in $W$).
 For a cell $c$ with neighbours $c_1,c_2,c_3$ (cells, constants $\mathsf L,
 \mathsf G$, or the border) and for all $(x,y,z)$ in the respective domains
 and $d\in W$ we add
-\[
-\neg X_{c_1,x}\vee\neg X_{c_2,y}\vee\neg X_{c_3,z}\vee\neg T_{(x,y,z),d}\vee X_{c,d},
-\qquad
-\neg X_{c_1,x}\vee\neg X_{c_2,y}\vee\neg X_{c_3,z}\vee\neg T_{(x,y,z),\mathsf F},
-\]
+\begin{align*}
+&\neg X_{c_1,x}\vee\neg X_{c_2,y}\vee\neg X_{c_3,z}\vee\neg T_{(x,y,z),d}\vee X_{c,d},\\
+&\neg X_{c_1,x}\vee\neg X_{c_2,y}\vee\neg X_{c_3,z}\vee\neg T_{(x,y,z),\mathsf F}
+\end{align*}
 (the second clause forbids firing). For a cell that must fire we add instead
 $\neg X_{c_1,x}\vee\neg X_{c_2,y}\vee\neg X_{c_3,z}\vee T_{(x,y,z),\mathsf F}$.
 Literals of constant neighbours are omitted.
@@ -71,7 +70,8 @@ this. For $k=5$ this halves the search space.
 Besides the proofs above, every constraint family was tested against an
 independent ground truth: Mazoyer's six-state solution, extracted
 mechanically from Duprat's Coq formalization \cite{Duprat97}, satisfies
-$\mathrm{MT}_6(\{3,\dots,12\};78,40)$ with all options enabled (the
+the formula $\mathrm{MT}_6(\mathcal N;78,40)$ for
+$\mathcal N=\{3,\dots,12\}$ with all options enabled (the
 formalization does not cover $n=2$), and with symmetry breaking exactly one
 of the $3!$ renamings of its auxiliary states satisfies the formula, as it
 must. Conversely, every model found by the solvers was decoded and
