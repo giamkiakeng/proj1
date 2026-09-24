@@ -42,8 +42,9 @@ programs, the rule tables and the logs. The main components are:
 \item[\texttt{src/germcompare.py}] the neighbourhoods used by the half-line
   of a rule below a given anti-diagonal (\cref{thm:frontier}(c)).
 \end{description}
-The digests of the germ lists and certificates are listed in
-\texttt{results/germs/CERTIFICATES.txt}.
+The directory \texttt{results/germs} contains the germ lists, the logs of
+the classification and, in \texttt{CERTIFICATES.txt}, the digests of the
+certificates.
 
 \paragraph{Certificate for \cref{thm:four}}
 {\footnotesize
@@ -84,6 +85,28 @@ python3 germcompare.py $R $S 78  # identical, 22 besides (L,L,L)
 \end{verbatim}}
 The uniform configurations before firing in (a) and (b) are visible with
 the option \texttt{-v} of the checker, which prints the diagrams.
+
+\paragraph{Checking \cref{cor:germ12,prop:chaotic,prop:germs}}
+{\footnotesize
+\begin{verbatim}
+gcc -O2 -o germext germext.c && gcc -O2 -o germdfs germdfs.c
+# Corollary 6.2: germ of delta12/delta13 (22 neighbourhoods)
+./germext 5 1300 3 6 < ../results/germs/germ_delta12.txt
+                    # CLOSED; REFUTED n=518 s=2 L=1 Y=259
+# Proposition 6.3
+./fsspcheck ../results/delta13_chaotic.txt 2 13   # OK
+./germext 5 10000 3 24 800 < ../results/germs/germ_delta13c.txt
+                    # CLOSED, no refutation
+# Proposition 6.4 (complexity <= 14)
+./germdfs 5 78 14 40 > germs_K14.txt              # 244 germs
+python3 germinc.py germs_K14.txt 10 78            # 230 UNSAT, 14 SAT
+python3 germcert.py <the 230 refuted germs> 10 k14_n10   # UNSAT, VERIFIED
+./germext 5 3300 3 12 < germs_K14_surv10.txt      # 14 x REFUTED (s=1)
+\end{verbatim}}
+The files \texttt{results/germs/germ\_delta12.txt} and
+\texttt{germ\_delta13c.txt} contain the two germs in the one-line format of
+\texttt{germdfs.c}, as printed by \texttt{germcompare.py --germline}; the
+complete pipeline for complexity at most $16$ is \texttt{germpipe.sh}.
 
 \paragraph{Validation against Mazoyer's solution}
 {\footnotesize

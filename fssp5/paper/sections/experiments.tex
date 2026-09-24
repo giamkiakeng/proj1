@@ -63,7 +63,8 @@ occur. Rules of the first kind have a \emph{periodic} half-line behind the
 front (\cref{fig:diagrams}(b)); they can even synchronize an isolated long
 line such as $n=20$, but they violate the pumping lemma massively (155 of the
 pairs $4\le n<n'\le40$ for the rule shown). Rules of the second kind have a
-chaotic half-line that eventually fires. Once the half-line is extended and
+chaotic half-line which, without the half-line constraints, typically fires
+at some point. Once the half-line is extended and
 the pumping constraints are imposed, the solver is forced to produce
 half-lines with a genuine slow boundary: in the
 models we examined in detail---\cref{fig:diagrams}(c) and the rules of
@@ -129,8 +130,8 @@ The five-state rules $\delta_{12}$ and $\delta_{13}$ of
 \begin{proof}
 Each property is a finite computation on the explicit tables, carried out
 by direct simulation: (a), (b) and the failures at $n=13$ and $n=14$ with
-the checker \texttt{fsspcheck.c}, (c) with \texttt{check\_halfline.py},
-and (d) with \texttt{pumping.py}, which recomputes the cones of
+the checker \texttt{fsspcheck.c}, (c) with \texttt{check\_halfline.py}
+and \texttt{germcompare.py}, and (d) with \texttt{pumping.py}, which recomputes the cones of
 \cref{lem:cone} by breadth-first search (\ref{app:repro}).
 \end{proof}
 
@@ -189,8 +190,8 @@ anti-diagonals have no stretch to which \cref{lem:left} applies.
 \end{proposition}
 
 \begin{proof}
-Direct simulation (\texttt{fsspcheck.c}, \texttt{germcompare.py},
-\texttt{germext.c}, \texttt{pumping.py}).
+Direct simulation with the programs \texttt{fsspcheck.c},
+\texttt{germcompare.py}, \texttt{germext.c} and \texttt{pumping.py}.
 \end{proof}
 
 The rule was found by Kissat in $442$\,s after fixing the $16$
@@ -295,13 +296,18 @@ $3300$ for $c_{78}\le14$ and $1300$ for $c_{78}\le16$).}
 
 \paragraph{The half-line determines everything} Take any of the rules found
 above, fix the transitions it uses on the half-line up to anti-diagonal $78$
-(between $39$ and $50$ transitions) and ask whether the remaining transitions
+(between $39$ and $50$ transitions, counting $(\mathsf L,\mathsf L,\mathsf L)$)
+and ask whether the remaining transitions
 can be completed so that all lengths $2,\dots,N$ synchronize. For the
-five-state germs we tried, Kissat decides this in less than one second: for
+five-state germs of \cref{tab:five}, Kissat decides this in less than one second: for
 the rule of \cref{tab:five} with lengths $2,\dots,10$ the completion exists
 for $N=8$ and not for $N=12$; the other germs fail already for $N=8$.
+The chaotic germ of \cref{prop:chaotic} is an exception: its completions
+for $N=12$ and $N=13$ take $2$\,s and $442$\,s, and $N=14$ is undecided
+after $600$\,s.
 As a sanity check on a genuine solution, fixing the $58$ transitions that
-Mazoyer's rule uses on its half-line up to anti-diagonal $78$ leaves a
+Mazoyer's rule uses on its half-line up to anti-diagonal $78$ (that is,
+$c_{78}=57$ and $(\mathsf L,\mathsf L,\mathsf L)$) leaves a
 completion problem for the lengths $3,\dots,12$ that Kissat solves in $4$\,s.
 Conversely, the unsatisfiable core returned for such a germ (the rule of
 \cref{tab:five} with lengths $2,\dots,10$, completion required for

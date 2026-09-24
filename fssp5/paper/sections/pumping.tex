@@ -218,7 +218,7 @@ $P_y=P_{y+d}$ for $s+1\le y\le b$: this holds for $y=b$, and if it holds for
 $y+1\le b$ then
 $P_y=\Theta(P_{y+1},u_{-1}(y),u_0(y))=\Theta(P_{y+1+d},u_{-1}(y+d),u_0(y+d))=P_{y+d}$,
 because $y+d<a\le Y$ and $L\mid d$. In particular $P_{s+1}=P_{s+1+d}$, and
-since also $u_0(s+d)=u_0(s)$,
+since $s+d\le Y-1$ and $u_0(s+d)=u_0(s)$,
 \[
 u_{2s}(s+d)=E(P_{s+1+d},u_0(s+d))=E(P_{s+1},u_0(s))=u_{2s}(s)=\mathsf F .
 \]
@@ -259,7 +259,8 @@ of signals of speeds $1/(2^j-1)$, which accumulate at the border; in
 Mazoyer's solution it is the family of recursive division points. We checked
 \cref{lem:left} mechanically on Mazoyer's rule for $n\le400$, $s\le3$,
 $L\le6$: its periodic stretches near the left border have length at most
-$6$, far below the bound. Unlike \cref{lem:pumping}, \cref{lem:left} is
-only effective for long lines (for five states and $s=2$, $L=1$ it needs a
-stretch of more than $256$ cells), but it applies to any half-line that can
-be computed far enough, which we exploit in \cref{sec:five}.
+$6$, far below the bound. Unlike \cref{lem:pumping}, \cref{lem:left} needs
+long periodic stretches (for five states, more than $16L$ cells when $s=1$
+and more than $256L$ cells when $s=2$), hence long lines, but it applies to
+any half-line that can be computed far enough, which we exploit in
+\cref{sec:five}.

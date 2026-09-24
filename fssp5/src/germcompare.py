@@ -6,6 +6,7 @@ t+i <= M, collects the neighbourhoods used there and reports their number
 (besides (L,L,L)) and whether all rules agree on them.
 
 usage: germcompare.py rule1 [rule2 ...] M
+       germcompare.py --germline rule M     (print the germ in the format of germdfs.c)
 """
 import sys
 
@@ -41,6 +42,11 @@ def germ(tab, M):
 
 
 def main():
+    if sys.argv[1] == '--germline':
+        g = germ(load(sys.argv[2]), int(sys.argv[3]))
+        print('GERM ' + ' '.join('%s%s%s>%s' % (e[0], e[1], e[2], v)
+                                 for e, v in g.items() if e != ('L', 'L', 'L')))
+        return
     rules, M = sys.argv[1:-1], int(sys.argv[-1])
     germs = [germ(load(r), M) for r in rules]
     for r, g in zip(rules, germs):
