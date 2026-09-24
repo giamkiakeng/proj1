@@ -284,7 +284,12 @@ $32$ germs that pass both filters (one of which is not determined beyond
 anti-diagonal $94$) are germs with chaotic or self-similar half-lines, on
 which \cref{lem:left} has no grip, and germs whose periodic regions start
 too far from the border for the bound of the lemma to be reached within our
-simulation range. One of them is the germ of $\delta_{14}$.
+simulation range. The completion test for the lengths $2,\dots,13$ refutes
+$8$ of them (one LRAT proof of $1.4$\,GB, found in $318$\,s and checked in
+$33$\,s); $23$ of the remaining $24$ do have completions for these
+lengths (the last one is undecided after $900$\,s), so they are
+indistinguishable from solutions by all our finite tests up to length $13$.
+One of them is the germ of $\delta_{14}$.
 
 \begin{table}[t]
 \centering\small
@@ -296,7 +301,8 @@ search nodes of \texttt{germdfs.c} & $1.0\cdot10^{8}$ & $1.5\cdot10^{9}$\\
 germs (non-firing, front $\ne\mathsf L$, $\mathrm{PUMP}$ to $40$) & $244$ & $9{,}787$\\
 refuted by the completion test for $2,\dots,10$ (LRAT) & $230$ & $8{,}824$\\
 then refuted by \cref{lem:left} or \cref{lem:pumping} & $14$ & $931$\\
-remaining & $0$ & $32$\\
+then refuted by the completion test for $2,\dots,13$ & -- & $8$\\
+remaining & $0$ & $24$\\
 \midrule
 refuted by \cref{lem:left} or \cref{lem:pumping} alone & $218$ & ${\ge}\,8{,}263$\\
 \bottomrule

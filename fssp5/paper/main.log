@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.9.24)  24 SEP 2026 16:25
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.9.24)  24 SEP 2026 17:16
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -704,7 +704,7 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\new@ifnextchar' on input line 4.
 
 (./sections/delta12.tex) (./sections/delta13.tex) (./sections/delta14.tex)
-[25] [26] [27] [28] [29]) [30] (./main.aux)
+[25] [26] [27] [28] [29]) [30] [31] (./main.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
@@ -713,8 +713,8 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 725FEF4DCED9EEF05DC631BAE2CB0AE5;3304.
  ) 
 Here is how much of TeX's memory you used:
- 16852 strings out of 476106
- 275363 string characters out of 5793933
+ 16853 strings out of 476106
+ 275370 string characters out of 5793933
  1962975 words of memory out of 5000000
  38083 multiletter control sequences out of 15000+600000
  667831 words of font info for 277 fonts, out of 8000000 for 9000
@@ -737,10 +737,10 @@ f/fonts/type1/public/lm/lmss9.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy1
 usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/
 public/lm/lmtt9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
 symbols/msbm10.pfb>
-Output written on main.pdf (30 pages, 559444 bytes).
+Output written on main.pdf (31 pages, 560216 bytes).
 PDF statistics:
- 799 PDF objects out of 1000 (max. 8388607)
- 609 compressed objects within 7 object streams
- 141 named destinations out of 1000 (max. 500000)
+ 804 PDF objects out of 1000 (max. 8388607)
+ 613 compressed objects within 7 object streams
+ 142 named destinations out of 1000 (max. 500000)
  56987 words of extra memory for PDF output out of 61914 (max. 10000000)
 

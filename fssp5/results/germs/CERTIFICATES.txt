@@ -27,3 +27,14 @@ determined by the germ):
   ./germext 5 1300 3 8  < K16 survivors of 2..10    -> K16_s10_ext1300.txt
   ./germext 5 3300 3 12 < remaining 164             -> K16_ext3300.txt
   ./germext 5 10000 3 24 800 < remaining 115        -> K16_ext10000.txt (34 left: K16_surv34.txt)
+  ./germext2 5 20000 4 64 < K16_surv34.txt           -> K16_surv34_ext20000.txt (2 more refuted, s=3, L=2)
+
+complexity <= 16, completion test for the lengths 2..13: the 8 germs of K16_refuted13.txt
+  python3 src/germcert.py results/germs/K16_refuted13.txt 13 k16_n13
+  k16_n13.cnf   sha256 5460485c866a68ed9d451733a15acf814556a7b522e958739328c1a9722d35e5
+  k16_n13.lrat  sha256 60229cdc6cdfdfa2b3a527cd32b5dfa56ebdffb0463be017427008b766618e8d  (1.4 GB)
+  refuted-germ-list sha256 36c80bdd7123238cf19f99770a143e2ff50bfe7dc5681ed28f97d541bac6be3f
+  CaDiCaL: UNSAT in 317.5 s; lrat-check: VERIFIED in 32.8 s
+
+Remaining after all tests (complexity <= 16): 24 germs, K16_remaining24.txt; 23 of them have
+completions for 2..13 (K16_surv34_n13.log), one is undecided after 900 s.
