@@ -33,20 +33,25 @@ The rule \emph{synchronizes the line of length $n$ at time $T$} if
 $C_n(T,i)=\mathsf F$ for all $1\le i\le n$ and $C_n(t,i)\neq\mathsf F$ for all
 $t<T$ and all~$i$.
 
-It is classical \cite{Moore64,Waksman66,Balzer67} that no rule synchronizes a
-line of length $n\ge2$ before time $2n-2$ (see also \cref{lem:return}
-below). A \emph{minimal-time solution} is a rule that synchronizes the line
-of length $n$ at time exactly $2n-2$ for every $n\ge2$. (For $n=1$ one
+It is classical \cite{Moore64,Waksman66,Balzer67} that a rule which
+synchronizes \emph{every} line cannot synchronize the line of length $n\ge2$
+before time $2n-2$ (see \cref{rem:lowerbound}). A \emph{minimal-time
+solution} is a rule that synchronizes the line of length $n$ at time exactly
+$2n-2$ for every $n\ge2$. (For $n=1$ one
 usually asks $\delta(\ast,\mathsf G,\ast)=\mathsf F$; this transition is
 used by no other line and is irrelevant here.) A \emph{$k$-state solution} is
 one with $|S|=k$.
 
 More generally, for a set $\mathcal N\subseteq\{2,3,\dots\}$ of lengths, a
 rule is \emph{$\mathcal N$-minimal} if it synchronizes the line of length $n$
-at time $2n-2$ for every $n\in\mathcal N$. Clearly a minimal-time solution
-is $\mathcal N$-minimal for every $\mathcal N$; all our non-existence
-arguments exhibit a finite family of necessary conditions that no $5$-state
-rule satisfies.
+at time $2n-2$ for every $n\in\mathcal N$. A minimal-time solution is
+$\mathcal N$-minimal for every $\mathcal N$. Since there are finitely many
+rules with $k$ states, $k$-state minimal-time solutions do not exist if and
+only if there is a finite $N$ such that no $k$-state rule is
+$\{2,\dots,N\}$-minimal; a non-existence proof may therefore consist of a
+finite family of necessary conditions that no $k$-state rule satisfies.
+This is how we prove the four-state bound (\cref{thm:four}); for five states
+we study how large such a family must be.
 
 \subsection{The half-line and the agreement lemma}
 
@@ -113,6 +118,14 @@ For $i=n$ we get $C_n(n-1,n)=\delta(s_{n-1},\mathsf L,\ast)\neq
 C_\infty(n-1,n)=\delta(s_{n-1},\mathsf L,\mathsf L)=s_n$, which is impossible
 if $s_{n-1}=\mathsf L$ by \eqref{eq:quiescence}.
 \end{proof}
+
+\begin{remark}\label{rem:lowerbound}
+Suppose a rule synchronizes every line, the line of length $n$ at some time
+$T\le 2n-3$. By \cref{lem:agree}, $C_\infty(T,1)=C_n(T,1)=\mathsf F$, hence
+$C_m(T,1)=\mathsf F$ for every $m\ge n$. For $m>T+1$ the cell $m$ is still
+quiescent at time $T$ by \cref{lem:lightcone}, so the line of length $m$
+has a firing cell at time $T$ without firing entirely: a contradiction.
+\end{remark}
 
 Applying \cref{lem:return} to all $n$ shows that in a minimal-time
 solution every cell $i$ leaves $\mathsf L$ exactly at time $i-1$ (the front

@@ -55,11 +55,17 @@ A predecessor step changes $\tau$ by $-1$ and $\kappa$ by at most one, and
 input cells satisfy $\tau'=\kappa'-1$ or $\kappa'-2$. Starting from
 $(n-1,0)$, a path that reaches an input cell at position $\kappa'$ after $s$
 steps satisfies $\kappa'\le s$ and $n-1-s=\kappa'-1$ or $\kappa'-2$; hence
-$2\kappa'\le n+1$ (upper cells: $2\kappa'\le n$). Conversely every such cell
-is reached by the path that first moves left $\kappa'$ times and then stays
-put (the intermediate cells lie in $R_n$). The largest $\kappa'$ reached is
-$\lceil n/2\rceil\le n-1$ for $n\ge 4$, so the left border is never reached;
-the right border only contributes the constant symbol~$\ast$. (The same set
+$2\kappa'\le n+1$ (upper cells: $2\kappa'\le n$). Conversely, the upper cell
+at a position $\kappa'$ with $2\kappa'\le n$ is reached by moving left
+$\kappa'$ times and then staying put, and the lower cell at a position
+$\kappa'\ge1$ with $2\kappa'\le n+1$ by moving left $\kappa'-1$ times,
+staying put down to the cell $(\kappa'-1,\kappa'-1)$ and moving left once
+more; all intermediate cells satisfy $\tau\ge\kappa$ and lie in $R_n$. The
+lower cell at $\kappa'=0$ is a predecessor of no cell of $R_n$. The largest
+position reached is $\lceil n/2\rceil\le n-1$, and a path can reach
+$\kappa=n$ only after $n$ left moves, i.e.\ at a negative time, so the left
+border is never reached; the right border only contributes the constant
+symbol~$\ast$. (The same set
 is also computed mechanically in the accompanying code, file
 \texttt{pumping.py}.)
 \end{proof}

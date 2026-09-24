@@ -138,7 +138,10 @@ above, fix the transitions it uses on the half-line up to anti-diagonal $78$
 can be completed so that all lengths $2,\dots,N$ synchronize. For the
 five-state germs we tried, Kissat decides this in less than one second: for
 the rule of \cref{tab:five} with lengths $2,\dots,10$ the completion exists
-for $N=8$ and not for $N=12$; the other germs fail already for $N=8$. Conversely, the unsatisfiable core
+for $N=8$ and not for $N=12$; the other germs fail already for $N=8$.
+As a sanity check on a genuine solution, fixing the $58$ transitions that
+Mazoyer's rule uses on its half-line up to anti-diagonal $78$ leaves a
+completion problem for the lengths $3,\dots,12$ that Kissat solves in $4$\,s. Conversely, the unsatisfiable core
 returned for such a germ contains $38$ of its $39$ transitions, so that
 learning from the completion problem (a logic-based Benders scheme we
 implemented) does not prune the half-line search effectively.
