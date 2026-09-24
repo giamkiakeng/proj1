@@ -220,9 +220,13 @@ A second rule for all lengths up to fourteen, $\delta_{14}^{\mathrm b}$
 (file \texttt{delta14b.txt}; it fails at $n=15$), was found in $29$\,s on
 another germ of complexity $16$. Its half-line is of the periodic kind: a
 boundary layer of four cells followed by a region that is periodic in time
-and space. \Cref{thm:left} excludes it if this pattern persists forever,
-but with a boundary layer of four cells the bound of \cref{lem:left}
-(with $s=5$) lies far beyond the lengths we can simulate.
+and space. With a boundary layer of four cells the bound of
+\cref{lem:left} (with $s=5$) lies far beyond the lengths we can simulate,
+but the half-line is eventually regular: the certificate described after
+\cref{cor:regular} succeeds with $t_1=600$ and $P=12$ (program
+\texttt{germpersist.py}). Hence, by \cref{cor:regular}, no completion of
+this germ is a minimal-time solution either. The same certificate, with
+$P=6$, re-proves \cref{cor:germ12} without any length bound.
 
 \begin{figure}[t]
 \centering
@@ -295,9 +299,13 @@ too far from the border for the bound of the lemma to be reached within our
 simulation range. The completion test for the lengths $2,\dots,13$ refutes
 $8$ of them (one LRAT proof of $1.4$\,GB, found in $318$\,s and checked in
 $33$\,s); $23$ of the remaining $24$ do have completions for these
-lengths (the last one is undecided after $900$\,s), so they are
-indistinguishable from solutions by all our finite tests up to length $13$.
-One of them is the germ of $\delta_{14}$.
+lengths (the last one is undecided after $900$\,s). Of these $24$, $8$ have
+eventually regular half-lines (certified with periods $P\le48$) and are
+excluded by \cref{cor:regular}, although $7$ of them admit completions for
+all lengths up to $13$. For the last $16$ germs, among them the germ of $\delta_{14}$,
+the certificate fails (periods $P\le48$, block periods at most $24$,
+starting times up to $1500$); the half-lines we inspected are chaotic, and
+none of our half-line arguments applies to them.
 
 \begin{table}[t]
 \centering\small
@@ -310,7 +318,8 @@ germs (non-firing, front $\ne\mathsf L$, $\mathrm{PUMP}$ to $40$) & $244$ & $9{,
 refuted by the completion test for $2,\dots,10$ (LRAT) & $230$ & $8{,}824$\\
 then refuted by \cref{lem:left} or \cref{lem:pumping} & $14$ & $931$\\
 then refuted by the completion test for $2,\dots,13$ & -- & $8$\\
-remaining & $0$ & $24$\\
+then refuted by \cref{cor:regular} (eventually regular) & -- & $8$\\
+remaining (not certified regular) & $0$ & $16$\\
 \midrule
 refuted by \cref{lem:left} or \cref{lem:pumping} alone & $218$ & ${\ge}\,8{,}263$\\
 \bottomrule

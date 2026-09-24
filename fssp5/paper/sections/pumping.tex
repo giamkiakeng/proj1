@@ -251,6 +251,45 @@ $\alpha,L,t_0$ only. For $n$ large, $\min(Y_n,n-s)-s>(k-1)^{2s}L$,
 contradicting \cref{lem:left}.
 \end{proof}
 
+Say that the half-line of a rule is \emph{eventually regular} if there are
+$t_1$, $P\ge1$ and, for each residue $r\in\{0,\dots,P-1\}$, words
+$x_0,y_1,x_1,\dots,y_m,x_m$ over $W$ and integers $a_j\ge0$, $D_j\ge0$
+such that for all $k\ge0$ the configuration $C_\infty(t,1)\cdots
+C_\infty(t,t+1)$ at time $t=t_1+r+kP$ is the word
+\[
+x_0\,y_1^{\,a_1+kD_1}\,x_1\,y_2^{\,a_2+kD_2}\,x_2\cdots y_m^{\,a_m+kD_m}\,x_m ,
+\]
+i.e.\ from some time on the half-line consists of finitely many periodic
+regions separated by finitely many signals of rational speeds.
+
+\begin{corollary}\label{cor:regular}
+The half-line of a minimal-time solution is not eventually regular.
+\end{corollary}
+
+\begin{proof}
+Suppose it is. For each residue $r$, some $D_j$ is positive, because the
+length of the configuration grows by $P$ per period; let $j(r)$ be the
+least such index. The blocks and junctions to the left of $y_{j(r)}$ have
+constant lengths, so the block $y_{j(r)}^{a_{j(r)}+kD_{j(r)}}$ starts at a
+fixed cell $s_r$ and its length grows linearly in $t$, at least like
+$\beta t$ for some $\beta>0$ and $t$ large. Inside it, the state of a cell
+depends only on its distance to $s_r$ modulo $|y_{j(r)}|$, and it is the
+same at the times $t$ and $t+P$. Put $s:=\max_r s_r$, $q:=\prod_r|y_{j(r)}|$
+and $\alpha:=\beta/2$. For $t_0$ large, every cell of the wedge
+$\{(t,i): s\le i\le\alpha t,\ t\ge t_0\}$ lies in the block of index $j(r)$
+of its residue class, so $C_\infty$ is periodic with periods $P$ in time
+and $q$ in space on this wedge, contradicting \cref{thm:left}.
+\end{proof}
+
+\Cref{cor:regular} applies whatever the number of states. It can be used
+on a concrete germ once the regularity of its half-line is certified: if,
+at some time $t$, the configuration decomposes as above with all blocks
+longer than $2P+2|y_j|$, and the configuration $P$ steps later has the same
+decomposition with the exponents increased by $D_j$, then by locality the
+same holds for all larger exponents, hence for all later times. (We check
+the inductive step also directly, by evolving the configurations with one
+or two additional periods in each block.)
+
 \begin{remark}[the right end]\label{rem:right}
 The proof of \cref{lem:left} uses neither \cref{lem:agree} nor the position
 of the chains inside $R_n$: it only uses the recurrence \eqref{eq:chains}

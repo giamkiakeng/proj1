@@ -38,3 +38,9 @@ complexity <= 16, completion test for the lengths 2..13: the 8 germs of K16_refu
 
 Remaining after all tests (complexity <= 16): 24 germs, K16_remaining24.txt; 23 of them have
 completions for 2..13 (K16_surv34_n13.log), one is undecided after 900 s.
+
+Eventual regularity (Corollary 3.7), src/germpersist.py:
+  python3 src/germpersist.py K16_remaining24.txt 600 24 12   -> K16_rem24_persist.txt (7 REGULAR)
+  python3 src/germpersist.py <the 17 others> 1500 48 24      -> K16_rem17_persist.txt (1 more REGULAR)
+  remaining 16 (not certified regular): K16_remaining16.txt
+  delta14b germ: REGULAR P=12 (t1=600); delta12/delta13 germ: REGULAR P=6.
