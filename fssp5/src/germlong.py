@@ -54,7 +54,19 @@ def main():
         st = [x for x in p.stdout.splitlines() if x.startswith('s ')]
         res = st[0][2:] if st else 'UNKNOWN'
         stats[res] = stats.get(res, 0) + 1
-        print("%d %s %.1f %s" % (j, res, time.time() - t0, ln.strip()))
+        extra = ''
+        if res == 'SATISFIABLE':
+            true = set()
+            for x in p.stdout.splitlines():
+                if x.startswith('v '):
+                    true.update(int(y) for y in x[2:].split() if int(y) > 0)
+            rule = '/tmp/claude-0/germlong_%d_%s.txt' % (j, spec.replace(',', '_'))
+            with open(rule, 'w') as fh:
+                gencnf.decode(E, true, fh)
+            r = subprocess.run([os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fsspcheck'),
+                                rule, '2', '300'], capture_output=True, text=True)
+            extra = ' rule=%s check: %s' % (rule, r.stdout.strip())
+        print("%d %s %.1f %s%s" % (j, res, time.time() - t0, ln.strip(), extra))
         sys.stdout.flush()
         os.remove(cnf)
     print("SUMMARY", spec, stats)

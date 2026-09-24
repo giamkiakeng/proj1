@@ -95,3 +95,22 @@ def main(out):
 
 if __name__ == '__main__':
     main(sys.argv[1] if len(sys.argv) > 1 else '../paper/fig_diagrams.pdf')
+
+
+def halflines(out):
+    """Figure 2: half-lines of the two architectures that reach length 13."""
+    d13 = load('../results/delta13.txt')
+    chaos = load('../results/delta13_chaotic.txt')
+    fig, axes = plt.subplots(1, 2, figsize=(7.2, 3.9), gridspec_kw={'wspace': 0.25})
+    show(axes[0], half_line(d13, 120, 121),
+         r'(a) $\delta_{13}$: periodic behind the speed-$1/3$ boundary', 'LGABF')
+    show(axes[1], half_line(chaos, 120, 121),
+         r"(b) $\delta'_{13}$: chaotic half-line", 'LGABF')
+    handles = [Patch(facecolor=COLORS[s], edgecolor='#c3c2b7', linewidth=0.5, label=s)
+               for s in ['L', 'G', 'A', 'B']]
+    fig.legend(handles=handles, loc='lower center', ncol=4, fontsize=7.5, frameon=False,
+               bbox_to_anchor=(0.5, -0.01), handlelength=1.2, columnspacing=1.4,
+               labelcolor=INK)
+    fig.savefig(out, bbox_inches='tight', dpi=300)
+    fig.savefig(out.replace('.pdf', '.png'), bbox_inches='tight', dpi=160)
+    print('wrote', out)
