@@ -1,0 +1,80 @@
+%% ---------------------------------------------------------------------
+\section{Propositional encoding}\label{sec:encoding}
+
+Fix $k$ (the number of states), write $W=\{\mathsf L,\mathsf G,a_1,\dots,a_{k-3}\}$
+and let $\mathcal N$ be a finite set of lengths. We build a CNF formula
+$\mathrm{MT}_k(\mathcal N;M,N')$ that is satisfiable whenever a $k$-state
+minimal-time solution exists. All constraint families below are either the
+definition of $\mathcal N$-minimality or consequences of
+\cref{lem:agree,lem:return,lem:determinacy,lem:pumping} and
+\eqref{eq:neverfire}; none relies on unproved assumptions about the shape of
+solutions.
+
+\paragraph{Variables}
+For every neighbourhood $e=(x,y,z)\in(W\cup\{\ast\})\times W\times(W\cup\{\ast\})$
+other than $(\ast,y,\ast)$, one-hot variables $T_{e,d}$, $d\in S$, encode
+$\delta(e)=d$; the two quiescence transitions \eqref{eq:quiescence} are fixed
+by unit clauses. For every cell whose state is not a constant, one-hot
+variables $X_{c,s}$, $s\in W$, encode its state (all cells whose state is
+used before the firing time are in $W$).
+
+\paragraph{Transition clauses}
+For a cell $c$ with neighbours $c_1,c_2,c_3$ (cells, constants $\mathsf L,
+\mathsf G$, or the border) and for all $(x,y,z)$ in the respective domains
+and $d\in W$ we add
+\begin{align*}
+&\neg X_{c_1,x}\vee\neg X_{c_2,y}\vee\neg X_{c_3,z}\vee\neg T_{(x,y,z),d}\vee X_{c,d},\\
+&\neg X_{c_1,x}\vee\neg X_{c_2,y}\vee\neg X_{c_3,z}\vee\neg T_{(x,y,z),\mathsf F}
+\end{align*}
+(the second clause forbids firing). For a cell that must fire we add instead
+$\neg X_{c_1,x}\vee\neg X_{c_2,y}\vee\neg X_{c_3,z}\vee T_{(x,y,z),\mathsf F}$.
+Literals of constant neighbours are omitted.
+
+\paragraph{Half-line} The cells $(t,i)$ of $C_\infty$ with $1\le i\le t+1$
+and $t+i\le M$ receive variables and transition clauses; cells with
+$i>t+1$ are the constant $\mathsf L$ (\cref{lem:lightcone}). Every such cell
+is forbidden to fire, by \eqref{eq:neverfire}.
+
+\paragraph{Lines} For every $n\in\mathcal N$ (with $2n-2\le M$) the cells of
+$R_n$ with $t\le 2n-3$ receive variables; their neighbours outside $R_n$ are
+the corresponding half-line cells (\cref{lem:agree}). All of them are
+forbidden to fire and the $n$ cells at time $2n-2$ are required to fire.
+
+\paragraph{Return chains} For $n\in\mathcal N$ with $2n-1\le M$ we add the
+implied constraints $C_n(2n-1-i,i)\ne C_\infty(2n-1-i,i)$ of
+\cref{lem:return} (their derivation only uses \eqref{eq:neverfire} at the
+cell $(2n-2,1)$, which is part of the encoding).
+
+\paragraph{Pumping} For all $4\le n<n'\le N'$ (with $2N'-2\le M$) we add one
+clause stating that $J_n$ and $J_{n'}$ differ on $\mathrm{cone}_n(n-1,0)$,
+introducing an auxiliary ``difference'' variable for every pair of
+non-constant input cells (\cref{lem:pumping}).
+
+\paragraph{Determinacy links} For $n<n'$ in $\mathcal N$ and $p\ge0$ an
+auxiliary variable $E_{n,n'}(p)$ is made equivalent to ``$J_n$ and $J_{n'}$
+coincide on the positions $0,\dots,p$''. For every relative cell
+$(\tau,\kappa)$ of $R_n$ whose dependency cone is right-anchored and contained
+in the positions $0,\dots,p$ we add
+$E_{n,n'}(p)\Rightarrow\bigl(R_n(\tau,\kappa)=R_{n'}(\tau,\kappa)\bigr)$,
+and, for the firing cells $\tau=n-1$, the clause $\neg E_{n,n'}(p)$
+(\cref{lem:determinacy,lem:pumping}). These clauses are implied by the
+others but allow the solver to transfer information between lines.
+
+\paragraph{Symmetry breaking} Permuting the auxiliary states maps
+solutions to solutions. We require that, in the time-major enumeration of
+the encoded half-line cells, the first occurrence of $a_{j}$ precedes the
+first occurrence of $a_{j+1}$; every solution can be renamed to satisfy
+this. For $k=5$ this halves the search space.
+
+\paragraph{Soundness checks}
+Besides the proofs above, every constraint family was tested against an
+independent ground truth: Mazoyer's six-state solution, extracted
+mechanically from Duprat's Coq formalization \cite{Duprat97}, satisfies
+the formula $\mathrm{MT}_6(\mathcal N;78,40)$ for
+$\mathcal N=\{3,\dots,12\}$ with return chains, pumping and links (the
+formalization does not cover $n=2$), and it satisfies
+$\mathrm{MT}_6(\{3,\dots,14\};26)$ with symmetry breaking under exactly one
+of the $3!$ renamings of its auxiliary states, as it must. Conversely, every
+model found by the solvers was decoded and re-simulated by an independent
+brute-force checker (\texttt{fsspcheck.c}), which confirmed minimal-time
+synchronization for all encoded lengths.

@@ -1,0 +1,266 @@
+%% ---------------------------------------------------------------------
+\section{Reflected triangles and a pumping lemma}\label{sec:pumping}
+
+\subsection{Relative coordinates}
+
+Fix $n\ge2$. For a cell $(t,i)$ of the line of length $n$ put
+$\tau:=t-(n-1)$ (time elapsed since the front reached the right end) and
+$\kappa:=n-i$ (distance to the right end). Then
+\[
+R_n=\{(\tau,\kappa):\ 0\le\kappa\le\tau\le n-1\},
+\]
+the right border sits at $\kappa=-1$ and the left border at $\kappa=n$.
+A cell $(\tau,\kappa)\in R_n$ is computed from
+$(\tau-1,\kappa+1),(\tau-1,\kappa),(\tau-1,\kappa-1)$; each of these is
+either in $R_n$, or a border, or satisfies $\tau'-\kappa'\in\{-1,-2\}$,
+i.e.\ lies on one of the anti-diagonals $t+i=2n-2$, $t+i=2n-3$, where
+$C_n$ coincides with $C_\infty$ by \cref{lem:agree}. We call
+\[
+J_n(\kappa):=\bigl(C_\infty(n-3+\kappa,\,n-\kappa),\;C_\infty(n-2+\kappa,\,n-\kappa)\bigr),
+\qquad 0\le\kappa\le n-1,
+\]
+the \emph{input word} of $R_n$; its two components are the \emph{lower}
+($t+i=2n-3$) and \emph{upper} ($t+i=2n-2$) input cells.
+
+\begin{lemma}[determinacy]\label{lem:determinacy}
+There is a single partial map $\Psi$, depending on $\delta$ only, such that
+for every $n\ge2$ and every $(\tau,\kappa)\in R_n$,
+$C_n\bigl(n-1+\tau,\,n-\kappa\bigr)$ is obtained by evaluating $\Psi$ at
+$(\tau,\kappa)$ on the input word $J_n$ with borders at $\kappa=-1$ and
+$\kappa=n$. In particular the value only depends on the input cells and
+borders in the backward dependency cone of $(\tau,\kappa)$.
+\end{lemma}
+
+\begin{proof}
+The recurrence in relative coordinates does not mention $n$; only the
+position of the left border does.
+\end{proof}
+
+For $(\tau,\kappa)\in R_n$ let $\mathrm{cone}_n(\tau,\kappa)$ be the set
+of input cells, i.e.\ of pairs consisting of a position $\kappa'$ and one of
+the two anti-diagonals, that are reached from
+$(\tau,\kappa)$ by repeatedly passing to the three predecessors, stopping at
+input cells and borders; say that the cone is \emph{right-anchored} if it
+does not reach the left border $\kappa'=n$.
+
+\begin{lemma}\label{lem:cone}
+For $n\ge4$ the cone of the right end at the firing time,
+$\mathrm{cone}_n(n-1,0)$, is right-anchored and consists of the upper input
+cell at $\kappa'=0$, both input cells at $1\le\kappa'\le\lfloor n/2\rfloor$,
+and, when $n$ is odd, the lower input cell at $\kappa'=(n+1)/2$.
+\end{lemma}
+
+\begin{proof}
+A predecessor step changes $\tau$ by $-1$ and $\kappa$ by at most one, and
+input cells satisfy $\tau'=\kappa'-1$ or $\kappa'-2$. Starting from
+$(n-1,0)$, a path that reaches an input cell at position $\kappa'$ after $s$
+steps satisfies $\kappa'\le s$ and $n-1-s=\kappa'-1$ or $\kappa'-2$; hence
+$2\kappa'\le n+1$ (upper cells: $2\kappa'\le n$). Conversely, the upper cell
+at a position $\kappa'$ with $2\kappa'\le n$ is reached by moving left
+$\kappa'$ times and then staying put, and the lower cell at a position
+$\kappa'\ge1$ with $2\kappa'\le n+1$ by moving left $\kappa'-1$ times,
+staying put down to the cell $(\kappa'-1,\kappa'-1)$ and moving left once
+more; all intermediate cells satisfy $\tau\ge\kappa$ and lie in $R_n$. The
+lower cell at $\kappa'=0$ is a predecessor of no cell of $R_n$. The largest
+position reached is $\lceil n/2\rceil\le n-1$, and a path can reach
+$\kappa=n$ only after $n$ left moves, i.e.\ at a negative time, so the left
+border is never reached; the right border only contributes the constant
+symbol~$\ast$. (The same set
+is also computed mechanically in the accompanying code, file
+\texttt{pumping.py}.)
+\end{proof}
+
+\begin{lemma}[pumping]\label{lem:pumping}
+Let $\delta$ be a minimal-time solution and $4\le n<n'$. Then $J_n$ and
+$J_{n'}$ differ on $\mathrm{cone}_n(n-1,0)$.
+\end{lemma}
+
+\begin{proof}
+Suppose they agree there. By \cref{lem:determinacy,lem:cone} the relative
+cell $(n-1,0)$ of $R_{n'}$ (which belongs to $R_{n'}$ since $n-1\le n'-1$,
+and whose cone is the same set of input positions, far from the left border
+$\kappa=n'>n$) has the same value as the relative cell $(n-1,0)$ of $R_n$,
+namely $C_n(2n-2,n)=\mathsf F$. Thus $C_{n'}(n'+n-2,n')=\mathsf F$ although
+$n'+n-2<2n'-2$, contradicting minimality for $n'$.
+\end{proof}
+
+The point of \cref{lem:pumping} is that it constrains the \emph{half-line
+diagram only}: no reflected triangle has to be computed. It is the source of
+the constraint family $\mathrm{PUMP}(n,n')$ used in \cref{sec:encoding}. As a
+sanity check, we verified mechanically that Mazoyer's six-state solution
+satisfies $\mathrm{PUMP}(n,n')$ for all $4\le n<n'\le120$.
+
+\subsection{Consequence: a speed-$1/3$ barrier}
+
+Write the half-line diagram in the frame of the front:
+$\Phi_t(j):=C_\infty(t,\,t+1-j)$ for $0\le j\le t$ (the cell at
+\emph{depth}~$j$ behind the front at time~$t$). By the recurrence,
+\begin{equation}\label{eq:comoving}
+\Phi_{t+1}(j)=\delta\bigl(\Phi_t(j),\,\Phi_t(j-1),\,\Phi_t(j-2)\bigr)
+\qquad(0\le j\le t),
+\end{equation}
+with $\Phi_t(-1)=\Phi_t(-2)=\mathsf L$: in this frame the half-line is a
+\emph{one-sided} automaton in which information only travels to larger
+depths, at most two depths per step. In particular every depth-row
+$t\mapsto\Phi_t(j)$ is eventually periodic.
+In these coordinates
+$J_n(\kappa)=\bigl(\Phi_{n-3+\kappa}(2\kappa-2),\ \Phi_{n-2+\kappa}(2\kappa-1)\bigr)$.
+
+\begin{theorem}[speed-$1/3$ barrier]\label{thm:third}
+Let $\delta$ be a minimal-time solution. Every depth-row
+$t\mapsto\Phi_t(j)$ is eventually periodic; let $T(j)$ be the time from which
+it is periodic. Then for every $n\ge4$ there is a depth $j\le n$ with
+$T(j)>n+\tfrac{j}{2}-\tfrac52$. Consequently
+$\limsup_{j\to\infty}T(j)/j\ge 3/2$: along infinitely many depth-rows the
+transient part extends at least to the line $i=t/3$ of the original
+coordinates.
+\end{theorem}
+
+\begin{proof}
+Row $0$ satisfies $\Phi_{t+1}(0)=\delta(\Phi_t(0),\mathsf L,\mathsf L)$ and is
+eventually periodic; by \eqref{eq:comoving}, row $j$ is a finite-state system
+driven by the eventually periodic rows $j-1$, $j-2$, hence eventually
+periodic, with some period $P_j$. Fix $n\ge4$ and let $P$ be a common
+multiple of $P_0,\dots,P_{n+1}$. If every input cell of
+$\mathrm{cone}_n(n-1,0)$ were read in the periodic regime of its row, i.e.\
+$n-3+\kappa\ge T(2\kappa-2)$ and $n-2+\kappa\ge T(2\kappa-1)$ for all cone
+positions~$\kappa$, then $J_{n+P}=J_n$ on the cone, contradicting
+\cref{lem:pumping}. Cone positions satisfy $\kappa\le\lceil n/2\rceil$, so
+the violated inequality concerns a depth $j\in\{2\kappa-2,2\kappa-1\}$ with
+$j\le n$ and $T(j)>n-3+\kappa\ge n+\frac{j}{2}-\frac52$.
+If $T(j)\le\alpha j+\beta$ for all $j$ with $\alpha<3/2$, then for $n$ large
+and every $j\le n$ we would have $(\alpha-\tfrac12)j\le(\alpha-\tfrac12)n<
+n-\beta-\tfrac52$, i.e.\ $T(j)\le n+\tfrac j2-\tfrac52$, a contradiction.
+Finally a cell of depth $j$ at time $T(j)$ sits at position $T(j)+1-j$,
+which is at least about $T(j)/3$ when $T(j)\ge 3j/2$.
+\end{proof}
+
+\Cref{thm:third} explains a posteriori why every minimal-time construction
+contains structure reaching the line $i=t/3$, whose crossing with the
+anti-diagonal $t+i=2n-2$ is exactly the far end of
+$\mathrm{cone}_n(n-1,0)$: the speed-$1/3$ signal emitted by the general in
+the constructions of Waksman and Balzer \cite{Waksman66,Balzer67} lies
+exactly on it, and in Mazoyer's solution the periodic zone behind the front
+is bounded by a line of speed $1/2$; indeed we checked that for $1\le j<700$
+the depth-row $j$ is $3$-periodic from time $T(j)=2j+2$ when $j$ is even or
+$j=1$, and from $T(j)=2j+1$ when $j\ge3$ is odd. The theorem also explains the failure of many of
+the ``lucky'' partial rules found by the solvers (\cref{sec:five}): their
+half-line diagrams are periodic behind the front far beyond the line
+$i=t/3$.
+
+\subsection{A second barrier, at the left border}
+
+\Cref{lem:pumping} looks at the right end of the line. The left end gives a
+constraint of a different nature, again on the half-line only. Fix $n\ge2$
+and number the anti-diagonals of the line of length $n$ from the input
+anti-diagonals on: for $c\ge-1$ and $1\le i\le n$ with $c\le i$ put
+\[
+v_c(i):=C_n(2n-2+c-i,\;i),
+\]
+the cell of the \emph{chain} $t+i=2n-2+c$ at position $i$. Chains $-1$ and
+$0$ are the input anti-diagonals, on which $v_c(i)=C_\infty(2n-2+c-i,i)$ by
+\cref{lem:agree}; chains $c\ge1$ lie in $R_n$, and chain $1$ is the return
+chain of \cref{lem:return}. The cell $(2n-2+c-i,i)$ has its three
+predecessors on the chains $c-2$, $c-1$ and $c$, so
+\begin{equation}\label{eq:chains}
+v_c(i)=\delta\bigl(v_{c-2}(i-1),\,v_{c-1}(i),\,v_c(i+1)\bigr)\qquad(c\ge1),
+\end{equation}
+where $v_{c-2}(0)$ and $v_c(n+1)$ stand for the border. The line of length
+$n$ is synchronized at time $2n-2$ if and only if $v_i(i)=\mathsf F$ for
+$1\le i\le n$ and $v_c(i)\ne\mathsf F$ for $c<i$. In the skewed coordinates
+$u_c(y):=v_c(y+\lfloor c/2\rfloor)$, \eqref{eq:chains} becomes
+\begin{equation}\label{eq:slices}
+u_c(y)=\delta\bigl(u_{c-2}(y),\,u_{c-1}(y+\varepsilon_c),\,u_c(y+1)\bigr),
+\qquad \varepsilon_c=\begin{cases}1,&c\text{ even},\\0,&c\text{ odd},\end{cases}
+\end{equation}
+with $u_0(y)=C_\infty(2n-2-y,\,y)$ and $u_{-1}(y)=C_\infty(2n-2-y,\,y-1)$,
+and $u_c(y)$ is the cell $y+\lfloor c/2\rfloor$ at time
+$2n-2+\lceil c/2\rceil-y$: it must be $\mathsf F$ if $\lceil c/2\rceil=y$
+and must differ from $\mathsf F$ if $\lceil c/2\rceil<y$. Thus each \emph{slice}
+$(u_1(y),u_2(y),\dots)$ is obtained from the slice $y+1$ by a sequential
+finite-state transducer that reads the components in increasing order and
+whose initial state is determined by the two input cells $u_{-1}(y),u_0(y)$: read from right to left, the reflected triangle is a
+cascade of finite-state transducers, the left-hand counterpart of the
+co-moving description \eqref{eq:comoving} of the half-line.
+
+\begin{lemma}[left border]\label{lem:left}
+Let $\delta$ have $k$ states and synchronize the line of length $n$ at time
+$2n-2$. Let $s\ge1$, $L\ge1$ and $s+L\le Y\le n-s$, and suppose that the
+words
+\begin{align*}
+&y\mapsto C_\infty(2n-2-y,\,y)\qquad(s\le y\le Y)\qquad\text{and}\\
+&y\mapsto C_\infty(2n-3-y,\,y)\qquad(s\le y\le Y-1)
+\end{align*}
+are $L$-periodic. Then $Y-s\le (k-1)^{2s}L$.
+\end{lemma}
+
+\begin{proof}
+For $s\le y\le Y$ let $P_y:=(u_1(y),\dots,u_{2s}(y))$. These are cells
+$y+\lfloor c/2\rfloor\le Y+s\le n$ with $\lceil c/2\rceil\le s\le y$, so
+they are defined, and for $y>s$ none of them is $\mathsf F$. By
+\eqref{eq:slices}, $u_c(y)$ with $1\le c\le 2s$ is computed from components
+of index $<c$ of the same slice, from components of index $\le c$ of slice
+$y+1$, and from $u_{-1}(y),u_0(y)$; hence there is a map $\Theta$,
+depending on $\delta$ only, with
+\[
+P_y=\Theta\bigl(P_{y+1},u_{-1}(y),u_0(y)\bigr)\qquad(s+1\le y\le Y-1).
+\]
+Unfolding \eqref{eq:slices} for even $c$,
+$u_{2j}(y)=\delta(u_{2j-2}(y),u_{2j-1}(y+1),u_{2j}(y+1))$, shows that
+$u_{2s}(y)$ depends only on $u_0(y)$ and $P_{y+1}$: there is a map $E$ with
+$u_{2s}(y)=E(P_{y+1},u_0(y))$ whenever $s\le y\le Y-1$. By hypothesis,
+$u_0$ is $L$-periodic on $[s,Y]$ and $u_{-1}$ on $[s+1,Y]$.
+
+Suppose $Y-s>(k-1)^{2s}L$. The pairs $(P_y,\,y\bmod L)$, $s+1\le y\le Y$,
+take at most $(k-1)^{2s}L$ values, so there are $s+1\le b<a\le Y$ with
+$P_a=P_b$ and $a\equiv b\pmod L$; put $d:=a-b$. By downward induction,
+$P_y=P_{y+d}$ for $s+1\le y\le b$: this holds for $y=b$, and if it holds for
+$y+1\le b$ then
+$P_y=\Theta(P_{y+1},u_{-1}(y),u_0(y))=\Theta(P_{y+1+d},u_{-1}(y+d),u_0(y+d))=P_{y+d}$,
+because $y+d<a\le Y$ and $L\mid d$. In particular $P_{s+1}=P_{s+1+d}$, and
+since $s+d\le Y-1$ and $u_0(s+d)=u_0(s)$,
+\[
+u_{2s}(s+d)=E(P_{s+1+d},u_0(s+d))=E(P_{s+1},u_0(s))=u_{2s}(s)=\mathsf F .
+\]
+But $\lceil 2s/2\rceil=s<s+d$, so $u_{2s}(s+d)$, the cell $2s+d$ at time
+$2n-2-d$, is not $\mathsf F$: a contradiction.
+\end{proof}
+
+In words: a band of $2s$ chains that crosses a long periodic stretch of the
+input anti-diagonals is a finite-state system, so it cannot time the firing
+of the cell $2s$, which it must trigger exactly when it arrives there. The
+border itself is harmless (cell~$1$ fires because the return chain meets
+the border), which is why the lemma starts at $s\ge1$ and pays a factor
+exponential in $s$.
+
+\begin{theorem}[left-border barrier]\label{thm:left}
+Let $\delta$ be a minimal-time solution. There are no $s\ge1$, $\alpha>0$,
+$t_0$ and periods $p,q\ge1$ such that $C_\infty(t+p,i)=C_\infty(t,i)$ and
+$C_\infty(t,i+q)=C_\infty(t,i)$ whenever the cells involved lie in the wedge
+$\Omega:=\{(t,i):\ s\le i\le\alpha t,\ t\ge t_0\}$.
+\end{theorem}
+
+\begin{proof}
+Suppose the contrary and put $L:=pq$. If $(t,i)$ and $(t-L,i+L)$ lie in
+$\Omega$, then so do the intermediate cells $(t-L,i+jq)$ and
+$(t-L+jp,i)$, and $C_\infty(t-L,i+L)=C_\infty(t-L,i)=C_\infty(t,i)$. For
+the anti-diagonals $t+i=2n-2$ and $t+i=2n-3$ this makes the words of
+\cref{lem:left} $L$-periodic on $[s,Y_n]$ for some $Y_n$ with
+$Y_n\ge \tfrac{\alpha}{1+\alpha}\,2n-C$, where $C$ depends on
+$\alpha,L,t_0$ only. For $n$ large, $\min(Y_n,n-s)-s>(k-1)^{2s}L$,
+contradicting \cref{lem:left}.
+\end{proof}
+
+\Cref{thm:third,thm:left} complement each other: the half-line of a
+minimal-time solution has non-periodic structure reaching the line $i=t/3$
+behind the front, and non-periodic structure in every wedge at the left
+border. In the constructions of Waksman and Balzer the latter is the family
+of signals of speeds $1/(2^j-1)$, which accumulate at the border; in
+Mazoyer's solution it is the family of recursive division points. We checked
+\cref{lem:left} mechanically on Mazoyer's rule for $n\le400$, $s\le3$,
+$L\le6$: its periodic stretches near the left border have length at most
+$6$, far below the bound. Unlike \cref{lem:pumping}, \cref{lem:left} needs
+long periodic stretches (for five states, more than $16L$ cells when $s=1$
+and more than $256L$ cells when $s=2$), hence long lines, but it applies to
+any half-line that can be computed far enough, which we exploit in
+\cref{sec:five}.

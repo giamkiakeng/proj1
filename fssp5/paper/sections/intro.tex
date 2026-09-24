@@ -1,0 +1,92 @@
+%% ---------------------------------------------------------------------
+\section{Introduction}\label{sec:intro}
+
+The firing squad synchronization problem (FSSP), posed by Myhill in 1957
+and popularised by Moore~\cite{Moore64}, asks for a finite automaton that,
+placed in every cell of a line of arbitrary length $n$ and started with all
+cells quiescent except a \emph{general} at one end, drives all cells into a
+common \emph{firing} state for the first time at the same instant. Goto
+\cite{Goto62} and Waksman \cite{Waksman66} showed that this is possible in
+time $2n-2$, which is optimal \cite{Moore64}. Since then the minimum number
+of states of a \emph{minimal-time} solution has been a benchmark question
+in cellular automata theory \cite{Mazoyer86,Umeo09}: Waksman used $16$
+states, Balzer $8$ \cite{Balzer67}, Gerken $7$ \cite{Gerken87} and Mazoyer
+$6$ \cite{Mazoyer87}. On the other side, Balzer \cite{Balzer67} reported,
+and Sanders \cite{Sanders94} confirmed with a corrected exhaustive search,
+that no $4$-state minimal-time solution exists. Whether five states suffice
+has remained open since Mazoyer's construction; it is regarded as the
+central open question on state complexity of the FSSP
+\cite{Umeo09,Correa17}. Many six-state minimal-time solutions are known
+today \cite{Clergue18,NguyenMaignan20}, and solutions with at most five
+states are known for restricted families of lengths, for instance $n=2^k$,
+some of them in non-minimal time
+\cite{UmeoYanagihara07,Yunes08,UmeoKamikawaYunes09}, but no five-state
+minimal-time solution has been found, nor has its existence been refuted.
+
+\paragraph{This paper}
+We do not settle the five-state question. We develop tools that apply to
+minimal-time solutions with any number of states, use them to give a
+certified proof of the four-state lower bound that is produced and checked
+within a minute, and measure
+precisely how far the same tools reach for five states.
+\begin{enumerate}[label=(\roman*)]
+\item \emph{Agreement and reflection} (\cref{sec:prelim}). The line of
+  length $n$ coincides with the half-line below the anti-diagonal
+  $t+i=2n-2$; hence all lines are described by a single half-line diagram
+  $C_\infty$ plus one \emph{reflected triangle} $R_n$ per length, and $R_n$ is
+  a function of two anti-diagonals of $C_\infty$ only
+  (\cref{lem:agree,lem:determinacy}).
+\item \emph{Two barriers} (\cref{sec:pumping}). In every minimal-time
+  solution the input words of the reflected triangles of any two lengths
+  $4\le n<n'$ differ on an explicit cone of about $n/2$ cells
+  (\cref{lem:pumping}). This is a constraint on the half-line alone, valid
+  for \emph{all} pairs of lengths. It implies that the non-periodic part of
+  the half-line always reaches the line $i=t/3$ (\cref{thm:third}), an a
+  priori explanation of the speed-$1/3$ signal present in the classical
+  constructions. At the other end, the first chains of the reflected
+  triangle form a finite-state system that must fire the cells near the left
+  border exactly when it reaches them; hence the input anti-diagonals cannot
+  be periodic over long stretches near the left border (\cref{lem:left}),
+  and the half-line cannot be periodic in any wedge at the border
+  (\cref{thm:left}).
+\item \emph{A validated encoding and a certified four-state bound}
+  (\cref{sec:encoding,sec:four}). We encode the bounded problem, together
+  with the consequences above, into propositional logic, validate the
+  encoding against Mazoyer's solution extracted mechanically from Duprat's
+  Coq formalization \cite{Duprat97}, and obtain an LRAT certificate, checked
+  in $6$ seconds, that no four-state minimal-time solution exists
+  (\cref{thm:four}); the statement does not need the left quiescence
+  condition $\delta(\ast,\mathsf L,\mathsf L)=\mathsf L$.
+\item \emph{The five-state frontier} (\cref{sec:five}). We exhibit
+  explicit five-state rules that synchronize every line of length at most
+  $13$ in minimal time, satisfy all pumping constraints up to length $40$
+  and never fire on the half-line up to anti-diagonal $78$; one of them ends
+  with a uniform configuration for every length up to $12$
+  (\cref{thm:frontier}). So every refutation of five-state solutions must use
+  lines of length at least~$14$. Their common half-line, however, is excluded
+  by \cref{lem:left} at length $518$ (\cref{cor:germ12}). Combining the two
+  lemmas with certified solver calls, we classify the half-lines of low
+  complexity: every five-state solution uses at least $15$ distinct
+  neighbourhoods on its half-line below anti-diagonal $78$
+  (\cref{prop:germs}). The difficulty lies in the half-line: once the
+  transitions used on the half-line are fixed, the completion problem is
+  usually decided in under a second, whereas random-probe estimates of the
+  natural look-ahead search tree grow from about $27$ nodes for four states
+  to $10^{11}$--$10^{19}$ for five.
+\end{enumerate}
+
+\paragraph{Related work}
+Surveys of the FSSP are \cite{Mazoyer86,Umeo09}; a classical textbook
+exposition is \cite{Minsky67}. Mazoyer \cite{Mazoyer96} studied the
+structure of optimal solutions and the information flow they require;
+Settle and Simon \cite{SettleSimon02} obtained small non-minimal-time
+solutions. Beyond Balzer and Sanders,
+lower bounds on the number of states are known for variants: no three-state
+solution and no four-state symmetric minimal-time solution exist for rings
+\cite{BerthiaumeEtAl04}; for further restricted classes see
+\cite{Correa17}. Computer searches have been used to find new
+solutions \cite{Clergue18} and to generate families of solutions by local
+simulations \cite{NguyenMaignan20}. SAT solvers have been applied to many
+extremal problems in combinatorics with certified unsatisfiability proofs
+\cite{HeuleKullmannMarek16,Heule18}; we are not aware of previous SAT-based work on the state
+complexity of the FSSP.

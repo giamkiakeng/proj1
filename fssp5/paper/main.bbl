@@ -1,0 +1,144 @@
+\begin{thebibliography}{10}
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\expandafter\ifx\csname href\endcsname\relax
+  \def\href#1#2{#2} \def\path#1{#1}\fi
+
+\bibitem{Moore64}
+E.~F. Moore, The firing squad synchronization problem, in: E.~F. Moore (Ed.),
+  Sequential Machines: Selected Papers, Addison-Wesley, Reading, MA, 1964, pp.
+  213--214.
+
+\bibitem{Goto62}
+E.~Goto, A minimal time solution of the firing squad problem, Dittoed course
+  notes for Applied Mathematics 298, Harvard University, pp.~52--59 (1962).
+
+\bibitem{Waksman66}
+A.~Waksman, An optimum solution to the firing squad synchronization problem,
+  Information and Control 9~(1) (1966) 66--78.
+
+\bibitem{Mazoyer86}
+J.~Mazoyer, An overview of the firing squad synchronization problem, in:
+  C.~Choffrut (Ed.), Automata Networks, Vol. 316 of Lecture Notes in Computer
+  Science, Springer, 1988, pp. 82--94.
+
+\bibitem{Umeo09}
+H.~Umeo, Firing squad synchronization problem in cellular automata, in: R.~A.
+  Meyers (Ed.), Encyclopedia of Complexity and Systems Science, Springer, 2009,
+  pp. 3537--3574.
+
+\bibitem{Balzer67}
+R.~Balzer, An 8-state minimal time solution to the firing squad synchronization
+  problem, Information and Control 10~(1) (1967) 22--42.
+
+\bibitem{Gerken87}
+H.-D. Gerken, {\"U}ber {S}ynchronisationsprobleme bei {Z}ellularautomaten,
+  Diplomarbeit, Institut f{\"u}r Theoretische Informatik, Technische
+  Universit{\"a}t Braunschweig (1987).
+
+\bibitem{Mazoyer87}
+J.~Mazoyer, A six-state minimal time solution to the firing squad
+  synchronization problem, Theoretical Computer Science 50~(2) (1987) 183--238.
+
+\bibitem{Sanders94}
+P.~Sanders, Massively parallel search for transition-tables of polyautomata,
+  in: Parcella '94: Proceedings of the VI International Workshop on Parallel
+  Processing by Cellular Automata and Arrays, Akademie Verlag, Berlin, 1994,
+  pp. 99--108.
+
+\bibitem{Correa17}
+T.~Correa, B.~Gustavo, L.~Lemos, A.~Settle, An overview of recent solutions to
+  and lower bounds for the firing synchronization problem, arXiv:1701.01045
+  (2017).
+
+\bibitem{Clergue18}
+M.~Clergue, S.~Verel, E.~Formenti, An iterated local search to find many
+  solutions of the 6-states firing squad synchronization problem, Applied Soft
+  Computing 66 (2018) 449--461.
+
+\bibitem{NguyenMaignan20}
+T.~T. Nguyen, L.~Maignan, Exploring millions of 6-state {FSSP} solutions: the
+  formal notion of local {CA} simulation, in: Cellular Automata and Discrete
+  Complex Systems (AUTOMATA 2020), Vol. 12286 of Lecture Notes in Computer
+  Science, Springer, 2020, pp. 1--13.
+
+\bibitem{UmeoYanagihara07}
+H.~Umeo, T.~Yanagihara, A smallest five-state solution to the firing squad
+  synchronization problem, in: Machines, Computations, and Universality (MCU
+  2007), Vol. 4664 of Lecture Notes in Computer Science, Springer, 2007, pp.
+  291--302.
+
+\bibitem{Yunes08}
+J.-B. Yun{\`e}s, A 4-states algebraic solution to linear cellular automata
+  synchronization, Information Processing Letters 107~(2) (2008) 71--75.
+
+\bibitem{UmeoKamikawaYunes09}
+H.~Umeo, N.~Kamikawa, J.-B. Yun{\`e}s, A family of smallest symmetrical
+  four-state firing squad synchronization protocols for ring arrays, Parallel
+  Processing Letters 19~(2) (2009) 299--313.
+
+\bibitem{Duprat97}
+J.~Duprat, Firing squad synchronization problem: a formal proof of {M}azoyer's
+  six-state solution in {C}oq, Coq user contribution \texttt{FiringSquad}, LIP,
+  ENS Lyon; archived at \url{https://github.com/rocq-archive/firing-squad}
+  (1997).
+
+\bibitem{Minsky67}
+M.~L. Minsky, Computation: Finite and Infinite Machines, Prentice-Hall,
+  Englewood Cliffs, NJ, 1967.
+
+\bibitem{Mazoyer96}
+J.~Mazoyer, On optimal solutions to the firing squad synchronization problem,
+  Theoretical Computer Science 168~(2) (1996) 367--404.
+
+\bibitem{SettleSimon02}
+A.~Settle, J.~Simon, Smaller solutions for the firing squad, Theoretical
+  Computer Science 276~(1--2) (2002) 83--109.
+
+\bibitem{BerthiaumeEtAl04}
+A.~Berthiaume, T.~Bittner, L.~Perkovi{\'c}, A.~Settle, J.~Simon, Bounding the
+  firing synchronization problem on a ring, Theoretical Computer Science
+  320~(2--3) (2004) 213--228.
+
+\bibitem{HeuleKullmannMarek16}
+M.~J.~H. Heule, O.~Kullmann, V.~W. Marek, Solving and verifying the {B}oolean
+  {P}ythagorean triples problem via cube-and-conquer, in: Theory and
+  Applications of Satisfiability Testing (SAT 2016), Vol. 9710 of Lecture Notes
+  in Computer Science, Springer, 2016, pp. 228--245.
+
+\bibitem{Heule18}
+M.~J.~H. Heule, Schur number five, in: Proceedings of the Thirty-Second AAAI
+  Conference on Artificial Intelligence (AAAI-18), 2018, pp. 6598--6606.
+
+\bibitem{Kissat20}
+A.~Biere, K.~Fazekas, M.~Fleury, M.~Heisinger, {CaDiCaL}, {Kissat},
+  {Paracooba}, {Plingeling} and {Treengeling} entering the {SAT} {C}ompetition
+  2020, in: Proceedings of SAT Competition 2020: Solver and Benchmark
+  Descriptions, Vol. B-2020-1 of Department of Computer Science Report Series
+  B, University of Helsinki, 2020, pp. 51--53.
+
+\bibitem{CaDiCaL2}
+A.~Biere, T.~Faller, K.~Fazekas, M.~Fleury, N.~Froleyks, F.~Pollitt, {CaDiCaL}
+  2.0, in: Computer Aided Verification (CAV 2024), Vol. 14681 of Lecture Notes
+  in Computer Science, Springer, 2024, pp. 133--152.
+
+\bibitem{PySAT18}
+A.~Ignatiev, A.~Morgado, J.~Marques-Silva, {PySAT}: a {P}ython toolkit for
+  prototyping with {SAT} oracles, in: Theory and Applications of Satisfiability
+  Testing (SAT 2018), Vol. 10929 of Lecture Notes in Computer Science,
+  Springer, 2018, pp. 428--437.
+
+\bibitem{WetzlerHeuleHunt14}
+N.~Wetzler, M.~J.~H. Heule, J.~Hunt, Warren~A., {DRAT-trim}: efficient checking
+  and trimming using expressive clausal proofs, in: Theory and Applications of
+  Satisfiability Testing (SAT 2014), Vol. 8561 of Lecture Notes in Computer
+  Science, Springer, 2014, pp. 422--429.
+
+\bibitem{HeuleEtAl11}
+M.~J.~H. Heule, O.~Kullmann, S.~Wieringa, A.~Biere, Cube and conquer: guiding
+  {CDCL} {SAT} solvers by lookaheads, in: Hardware and Software: Verification
+  and Testing (HVC 2011), Vol. 7261 of Lecture Notes in Computer Science,
+  Springer, 2012, pp. 50--65.
+
+\end{thebibliography}

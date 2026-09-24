@@ -1,0 +1,3 @@
+probe 0: depth 30, pruned, weight 4.18e+11 (64s)
+probe 1: depth 32, pruned, weight 3.08e+17 (149s)
+probe 2: depth 36, pruned, weight 8.31e+18 (252s)

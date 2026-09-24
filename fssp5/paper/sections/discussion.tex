@@ -1,0 +1,84 @@
+%% ---------------------------------------------------------------------
+\section{Discussion}\label{sec:discussion}
+
+\paragraph{What the pumping lemma buys}
+\Cref{lem:pumping} turns an infinite family of requirements on the
+reflected triangles into constraints on the half-line diagram only. It is
+satisfied by Mazoyer's solution, as it must be, and it eliminates, at
+negligible cost, the whole class of rules whose half-line becomes periodic
+behind the front too early. \Cref{thm:third} shows that the constraint has a
+transparent geometric meaning: in every minimal-time solution the
+non-periodic part of the half-line reaches the line $i=t/3$. For Mazoyer's
+solution every depth-row is $3$-periodic from time $2j+1$ or $2j+2$, i.e.\
+the periodic zone behind the front is bounded by a signal of speed $1/2$,
+comfortably within the bound.
+
+\paragraph{Why lucky rules are hard to kill}
+Small sets of necessary conditions are typically met by rules that are not
+solutions; the question is how many lengths are needed before all such rules
+disappear (if no solution exists, some finite set of lengths suffices, since
+there are finitely many rules). For four states the answer is $9$ (or $8$ with a long
+half-line). For five states the rule space is larger by roughly $38$
+orders of magnitude ($5^{94}$ versus $4^{45}$ transition tables), and our
+experiments show rules for all lengths up to at least $13$, and partial
+rules for any single additional length we tried. Under the pumping
+constraints the surviving rules are of two kinds. Either their half-lines
+consist of finitely many periodic regions separated by signals, with a
+boundary of speed $1/3$ (as for $\delta_{12}$ and $\delta_{13}$); such
+half-lines are periodic in a wedge at the left border and are excluded by
+\cref{thm:left}, although only for long lines. Or their half-lines are
+chaotic (as for $\delta'_{13}$); these pass both barriers, and at present
+only completion tests on longer lines can exclude them.
+
+\paragraph{The mirrored construction}
+The cone of \cref{lem:cone} ends where the anti-diagonal $t+i=2n-2$ meets
+the line $i=t/3$. By \cref{lem:determinacy}, the part of $R_n$ whose cone lies
+in the periodic zone behind the front is the same for all large $n$ of a
+given residue class, and the information that makes the right end fire
+exactly at time $2n-2$ enters $R_n$ near that crossing and travels to the
+right end at maximal speed. Heuristically, the right half of every
+reflected triangle therefore has to behave like a \emph{mirrored}
+minimal-time synchronization, started by the reflection and running on the
+background left behind the front instead of on quiescent cells. A
+five-state solution would have to realize both constructions---the direct
+one on the quiescent background and the mirrored one on the front's
+background---with the same four working states. We regard this tension as
+the structural reason why five states are hard; turning it into a theorem
+(for instance a mirrored version of \cref{thm:third}, for which the missing
+ingredient is a border at the far end of the mirrored problem) is the most
+promising route to a conceptual proof.
+
+\paragraph{The left half}
+The same time budget applies on the left. The reflected wave reaches
+cell~$i$ at time $2n-1-i$ and every cell fires at time $2n-2$; information
+created behind the wave cannot overtake it, so the cells to the left of the
+midpoint can only combine what the half-line has stored around them with
+what a bounded number of chains immediately behind the wave bring from the
+right. \Cref{thm:left} turns this into a theorem: the half-line cannot be
+periodic in a wedge at the left border. In the classical constructions the
+required structure is the hierarchy of slow signals whose crossings with
+the wave mark the recursive division points; the common half-line of the
+rules of \cref{thm:frontier} has none, and \cref{cor:germ12} excludes it.
+The bound of \cref{lem:left} is exponential in $s$ and linear in the
+period, so the lemma is weak for short lines; a sharper version, or a
+version for half-lines that are only \emph{eventually} periodic along the
+anti-diagonals, would strengthen the search of \cref{sec:five}
+considerably.
+
+\paragraph{Open problems}
+\begin{enumerate}[label=(\arabic*)]
+\item Does a five-state minimal-time solution exist? By
+  \cref{thm:frontier}, a negative answer along the lines of \cref{thm:four}
+  requires lines of length at least $14$.
+\item Is there a necessary condition, in the spirit of \cref{lem:pumping},
+  that constrains the reflected triangles themselves and not only the
+  half-line?
+\item What is the smallest $N$ such that some five-state rule is
+  $\{2,\dots,N\}$-minimal but no five-state rule is
+  $\{2,\dots,N+1\}$-minimal, if such an $N$ exists? We know $N\ge13$.
+\item Can the bound $(k-1)^{2s}L$ of \cref{lem:left} be replaced by one
+  that is polynomial in $s$, or by one that also covers anti-diagonals that
+  are periodic only up to a bounded number of defects? Either would make the
+  lemma effective for the self-similar half-lines that survive the filters
+  of \cref{sec:germs}.
+\end{enumerate}

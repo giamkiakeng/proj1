@@ -1,0 +1,67 @@
+\documentclass[preprint,11pt]{elsarticle}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage[shortlabels]{enumitem}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage[capitalise,noabbrev]{cleveref}
+\usepackage{microtype}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\journal{Theoretical Computer Science}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Towards five-state minimal-time firing squads:\\
+a pumping lemma, a speed-$1/3$ barrier, and certified bounds}
+
+\author{Anonymous}
+\address{Affiliation withheld for review}
+
+\begin{abstract}
+\input{sections/abstract}
+\end{abstract}
+
+\begin{keyword}
+firing squad synchronization problem \sep cellular automata \sep state
+complexity \sep minimal time \sep SAT solving \sep proof certificates
+\end{keyword}
+
+\end{frontmatter}
+
+\input{sections/intro}
+\input{sections/prelim}
+\input{sections/pumping}
+\input{sections/encoding}
+\input{sections/experiments}
+\input{sections/discussion}
+
+\section*{Data availability}
+All programs, formula generators, rule tables and experiment logs are
+available in the accompanying repository (directory \texttt{fssp5/}). The
+LRAT certificate of \cref{thm:four} ($177$\,MB) is not stored; it is
+regenerated deterministically in under a minute by the commands of
+\ref{app:repro}, and its SHA-256 digest is listed there.
+
+\bibliographystyle{elsarticle-num}
+\bibliography{refs}
+
+\input{sections/appendix}
+
+\end{document}
