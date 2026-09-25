@@ -95,3 +95,15 @@ All times single core (Intel/AMD cloud vCPU), kissat 4.x (git HEAD 2026-09) unle
 - delta14e (results/delta14e.txt): germcegar on the first complexity-17 germ that passes 2..13 finds a rule for
   all lengths 2..14 in 401 s; it fails at 15 by one step (a cell fires at time 27 < 28); uniform pre-firing A^n;
   no firing on the half-line to 78, PUMP to 40 OK.  Germ in results/germs/germ_delta14e.txt (17 neighbourhoods).
+- Cube-and-conquer, state at the end of session 3 (march_cu -d 12; CaDiCaL under assumptions with budgets
+  2e4..2e6 conflicts; Kissat on formula+cube for hard cubes, 300..600 s):
+  germ #16 (labelling of delta14d), lengths 2..15: 3070 cubes, 1376 UNSAT, 375 undecided, 1319 untried;
+  germ of delta14c, lengths 2..15: 2731 cubes, 1898 UNSAT, 14 undecided, 819 untried; no SAT cube; ~10 CPU-h.
+  Kissat on formula+cube is much faster than CaDiCaL under assumptions on hard cubes (cube 338: 20 s vs >2e5
+  conflicts); kissat --sat refuted cube 349 within 600 s where default kissat did not.  Both ends of the cube
+  lists contain hard regions.  Depth-16 cubes (33,739) do not refine the depth-12 tree (10,038 have no parent).
+- Other runs of this session without result: delta14c germ, lengths 2..14 + non-firing partial triangles for
+  15..26 up to relative time 12: UNKNOWN (3 h); uniform pre-firing classes (delta14d: A^n, delta14c: G^n) at 15:
+  stopped after ~2.5 h without answer; germ #16 at 2..15: kissat UNKNOWN (2 h); delta14e germ at 2..15 UNKNOWN (30 min).
+- All five rules for 2..14 (delta14, b, c, d, e) fail at 15 by early firing in the right half (cells 9..15,
+  times 21..27).
