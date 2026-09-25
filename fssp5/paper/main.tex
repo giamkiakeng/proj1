@@ -11,6 +11,7 @@
 \usepackage{xcolor}
 \usepackage[hidelinks]{hyperref}
 \usepackage[capitalise,noabbrev]{cleveref}
+\pdfstringdefDisableCommands{\def\corref#1{}}
 % elsarticle's appendix numbers already read "Appendix A"
 \crefformat{appendix}{#2#1#3}
 \Crefformat{appendix}{#2#1#3}
@@ -50,7 +51,9 @@
 \title{Towards five-state minimal-time firing squads:\\
 two barriers on the half-line and certified bounds}
 
-\author[tjc]{Kia Keng Giam}
+\author[tjc]{Kia Keng Giam\corref{cor1}}
+\ead{giamkiakeng@gmail.com}
+\cortext[cor1]{Corresponding author.}
 \author[hci]{Beichen Sun}
 \author[hci]{Yaoqi Zhao}
 
