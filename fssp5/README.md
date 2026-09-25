@@ -63,6 +63,7 @@ results/germs/           germ lists, classification logs, certificate digests
 paper/                   LaTeX sources, figures, bibliography
 paper/sections/terms.tex glossary of all terms and symbols (Appendix A); notation.tex the one-page summary
 paper/sections/pic_*.tex, tikzdefs.tex   TikZ drawings (Figures 1-5); further.tex Appendix B
+paper/highlights.docx (.txt)   optional highlights for the submission (5 bullets, at most 85 characters each)
 ```
 
 ## Reproducing the main certificates

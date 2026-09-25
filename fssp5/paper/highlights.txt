@@ -1,0 +1,7 @@
+Highlights
+
+- Two necessary conditions on the half-line for minimal-time firing squads
+- A pumping lemma forces non-periodic structure up to the line i = t/3
+- An LRAT-certified proof that no four-state minimal-time solution exists
+- Five-state rules synchronize every line of length at most 14 in minimal time
+- Minimal-time five-state solutions use at least 15 half-line neighbourhoods
