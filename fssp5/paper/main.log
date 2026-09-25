@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.9.24)  25 SEP 2026 04:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.9.24)  25 SEP 2026 06:38
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -998,7 +998,7 @@ Package microtype Info: Loading generic protrusion settings for font family
 /fonts/enc/dvips/lm/lm-mathex.enc}]
 [5] [6] [7] [8]
 LaTeX Font Info:    Trying to load font information for T1+lmss on input line 4
-41.
+46.
  (/usr/share/texmf/tex/latex/lm/t1lmss.fd
 File: t1lmss.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
@@ -1006,48 +1006,48 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `lmss' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-
-Underfull \hbox (badness 10000) in paragraph at lines 500--501
+ [9]
+Underfull \hbox (badness 10000) in paragraph at lines 505--506
 []|\T1/lmr/m/n/10 (+20) Sections []2[]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 502--503
+Underfull \hbox (badness 10000) in paragraph at lines 507--508
 []|\T1/lmr/m/n/10 (+20) Section []2[],
  []
 
 
-Overfull \hbox (0.81763pt too wide) in paragraph at lines 522--523
+Overfull \hbox (0.81763pt too wide) in paragraph at lines 527--528
 []|\T1/lmr/m/n/10 (-20) Corollary []3.7[]| 
  []
 
 
-Overfull \hbox (0.81763pt too wide) in paragraph at lines 523--524
+Overfull \hbox (0.81763pt too wide) in paragraph at lines 528--529
 []|\T1/lmr/m/n/10 (-20) Corollary []3.7[]| 
  []
 
 
-Overfull \hbox (0.81763pt too wide) in paragraph at lines 524--525
+Overfull \hbox (0.81763pt too wide) in paragraph at lines 529--530
 []|\T1/lmr/m/n/10 (-20) Corollary []3.7[]| 
  []
 
-[9]) (./sections/pictures.tex [10] (./sections/pic_squad.tex)
+[10]) (./sections/pictures.tex (./sections/pic_squad.tex)
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <9> on input line 30.
 
-(./sections/pic_moods.tex) [11] (./sections/pic_echo.tex)
-(./sections/pic_hare.tex) [12] [13] (./sections/pic_score.tex
+(./sections/pic_moods.tex) (./sections/pic_echo.tex) [11] [12] [13]
+(./sections/pic_hare.tex) (./sections/pic_score.tex
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <12> on input line 13.
-)
-<fig_squads14.pdf, id=347, 313.99373pt x 323.95003pt>
+) [14]
+<fig_squads14.pdf, id=353, 313.99373pt x 323.95003pt>
 File: fig_squads14.pdf Graphic file (type pdf)
 <use fig_squads14.pdf>
 Package pdftex.def Info: fig_squads14.pdf  used on input line 135.
 (pdftex.def)             Requested size: 230.39978pt x 237.70743pt.
- [14] [15 <./fig_squads14.pdf>]) (./sections/intro.tex [16]) (./sections/prelim
-.tex [17]
-[18] [19]) (./sections/pumping.tex [20] [21]
+ [15] [16 <./fig_squads14.pdf>]) (./sections/intro.tex [17]) (./sections/prelim
+.tex [18] [19]
+[20]) (./sections/pumping.tex [21] [22]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 93.
@@ -1056,28 +1056,28 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 93.
 
-[22] [23] [24] [25]) (./sections/encoding.tex [26] [27])
-(./sections/experiments.tex [28] [29]
-<fig_diagrams.pdf, id=652, 442.88393pt x 257.89348pt>
+[23] [24] [25] [26]) (./sections/encoding.tex [27] [28])
+(./sections/experiments.tex [29] [30]
+<fig_diagrams.pdf, id=656, 442.88393pt x 257.89348pt>
 File: fig_diagrams.pdf Graphic file (type pdf)
 <use fig_diagrams.pdf>
 Package pdftex.def Info: fig_diagrams.pdf  used on input line 101.
 (pdftex.def)             Requested size: 360.0pt x 209.63237pt.
- [30] [31 <./fig_diagrams.pdf>] [32]
-<fig_halflines.pdf, id=756, 453.0493pt x 255.68924pt>
+ [31] [32 <./fig_diagrams.pdf>] [33]
+<fig_halflines.pdf, id=760, 453.0493pt x 255.68924pt>
 File: fig_halflines.pdf Graphic file (type pdf)
 <use fig_halflines.pdf>
 Package pdftex.def Info: fig_halflines.pdf  used on input line 242.
 (pdftex.def)             Requested size: 360.0pt x 203.17833pt.
 
-[33 <./fig_halflines.pdf>] [34] [35]) (./sections/discussion.tex [36] [37])
-[38] (./main.bbl [39] [40] [41]) (./sections/appendix.tex
+[34 <./fig_halflines.pdf>] [35] [36]) (./sections/discussion.tex [37] [38]
+[39]) (./main.bbl [40] [41] [42]) (./sections/appendix.tex
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\new@ifnextchar' on input line 4.
 
 (./sections/delta12.tex) (./sections/delta13.tex) (./sections/delta14.tex)
-[42] [43] [44] [45] [46]) [47] (./main.aux)
+[43] [44] [45] [46] [47]) [48] (./main.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
@@ -1086,11 +1086,11 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 725FEF4DCED9EEF05DC631BAE2CB0AE5;3304.
  ) 
 Here is how much of TeX's memory you used:
- 29814 strings out of 476106
- 565473 string characters out of 5793933
- 2001975 words of memory out of 5000000
+ 29817 strings out of 476106
+ 565504 string characters out of 5793933
+ 2016975 words of memory out of 5000000
  50378 multiletter control sequences out of 15000+600000
- 744319 words of font info for 470 fonts, out of 8000000 for 9000
+ 744417 words of font info for 471 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
  84i,12n,87p,1001b,932s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/ty
@@ -1114,10 +1114,10 @@ lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy9.pfb></usr/share/texm
 f/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt
 9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10
 .pfb>
-Output written on main.pdf (47 pages, 811520 bytes).
+Output written on main.pdf (48 pages, 813520 bytes).
 PDF statistics:
- 1163 PDF objects out of 1200 (max. 8388607)
- 884 compressed objects within 9 object streams
- 185 named destinations out of 1000 (max. 500000)
+ 1168 PDF objects out of 1200 (max. 8388607)
+ 888 compressed objects within 9 object streams
+ 186 named destinations out of 1000 (max. 500000)
  97964 words of extra memory for PDF output out of 106986 (max. 10000000)
 

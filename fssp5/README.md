@@ -21,6 +21,7 @@ work. What is established (with proofs or checkable certificates):
 | A 5-state rule δ14 for **all lengths 2..14** (fails at 15), with a chaotic half-line of complexity 16 that escapes both barriers (found via δ′13 for 2..13 with the same half-line) | paper §6, Proposition 6.3, Figures 6 and 8 | `src/fsspcheck`, `src/germext.c` on `results/delta14.txt` (and `results/delta13_chaotic.txt`) |
 | A second rule δ14b for all lengths 2..14 (fails at 15), on another complexity-16 germ with a periodic half-line | paper §6.2 | `src/fsspcheck` on `results/delta14b.txt` |
 | A third rule δ14c for all lengths 2..14 (fails at 15), chaotic half-line with 15 neighbourhoods | paper §6.3 | `src/fsspcheck` on `results/delta14c.txt` |
+| A fourth rule δ14d for all lengths 2..14 (fails at 15) on the other complexity-15 survivor; its half-line equals that of δ14c up to renaming states (t ≥ 1); both end with uniform pre-firing configurations (Gⁿ, Aⁿ) | paper §6.3 | `src/fsspcheck` on `results/delta14d.txt`; `src/class_prefire.py` for the pre-firing classes |
 | Every 5-state minimal-time solution uses ≥ 15 distinct neighbourhoods on its half-line below anti-diagonal 78 | paper §6.3, Proposition 6.4, Table 4 | `src/germdfs.c`, `src/germcert.py` (LRAT), `src/germext.c`; digests in `results/germs/CERTIFICATES.txt` |
 | Search-space estimates (Knuth probes): ~27 nodes for 4 states vs 10^11–10^19 for 5 states | paper §6 | `src/knuth.py`, `results/knuth_k5_N12.log` |
 

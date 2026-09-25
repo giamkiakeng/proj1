@@ -62,3 +62,26 @@ All times single core (Intel/AMD cloud vCPU), kissat 4.x (git HEAD 2026-09) unle
   N=14 SAT (delta14 is in the class); N=15 UNSAT (kissat, about 30 min).  So delta14's mechanism does not
   extend to length 15.  Unrestricted delta14 germ at 2..15: kissat without links UNKNOWN after 4 h; with links
   and CaDiCaL still running.  delta14c germ at 2..15: UNKNOWN (2400 s).
+
+## Session 3 (after container restart)
+- All background runs of session 2 were killed by a container restart.  Before that, the delta14 germ at
+  lengths 2..15 without links: kissat UNKNOWN after 4 h (log chaos15_nolinks).
+- Paper: glossary of all terms and symbols and an illustrated section (six figures) before the introduction;
+  notation made consistent; four-state free-transition count corrected to 43 (ratio 5^94/4^43 ~ 10^40).
+- The two survivors of complexity exactly 15 (K16_remaining16 #3 = germ of delta14c, and #16) have the same
+  half-line for t >= 1 (checked for t <= 1500) up to the renaming G->A, A->B of delta14c's states:
+  delta14c's half-line uses {L,G,A}, #16's uses {L,A,B} (G only at t = 0).
+- delta14d (results/delta14d.txt): germcegar on #16: 2..13 SAT in 8 s, 2..14 SAT in 376 s; synchronizes
+  2..14 (fsspcheck and an independent Python simulation), fails at n = 15 (a cell fires at t = 22);
+  no firing on the half-line to anti-diagonal 78, PUMP to 40 with 0 violations; germ = #16 (15 neighbourhoods).
+  sha256 22d5bcd83176c0e87b35a53c00db36b78b9a7144d12c1648a8430856e1ad3b2a.
+- Pre-firing configurations (4 <= n <= 14): delta14c G^n, delta14d A^n (uniform), delta14 L G^(n-2) B.
+- Band tests (germband.py) on the delta14 germ, lengths 16..80: h = 2 SAT (0.1 s), h = 4 SAT (0.9 s).
+- Complexity 17 (germdfs 5 78 17 40): 6.08e9 nodes, 53,081 germs of complexity <= 17 (12:2, 13:26, 14:216,
+  15:1,391, 16:8,152 -- identical to the K<=16 run -- and 17:43,294).  Funnel for the 43,294 of complexity 17:
+  germext to anti-diagonal 1300 (s<=3, L<=8, PUMP<=650): 34,613 refuted by the left-border lemma, 637 by
+  pumping, 69 not determined to 1300, 7,975 closed and unrefuted -> 8,044;
+  completion test 2..10 (germinc): 6,834 UNSAT, 1,210 SAT;
+  germext 3300 (L<=12, PUMP<=1650): 492 refuted -> 718;  germext 10^4 (L<=24, PUMP<=800): 411 refuted -> 307;
+  regularity certificate (germpersist t1=600 P<=24 q<=12): 94 regular; (t1=1500 P<=48 q<=24): 26 more -> 187 left
+  (180 not certified, 7 not determined).  Completion test 2..13 on the 187: running.

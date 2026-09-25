@@ -315,11 +315,22 @@ all lengths up to $13$. For the last $16$ germs, among them the germ of $\delta_
 the certificate fails (periods $P\le48$, block periods at most $24$,
 starting times up to $1500$); the half-lines we inspected are chaotic, and
 none of our half-line arguments applies to them. Their completion problems
-become hard at length $14$: besides $\delta_{14}$, a counterexample-guided
-search found a third rule for all lengths up to $14$ on one of them
-($\delta_{14}^{\mathrm c}$, file \texttt{delta14c.txt}, $15$
-neighbourhoods, chaotic half-line; it fails at $n=15$), while for others
-the lengths $2,\dots,14$ are undecided after $40$ minutes.
+become hard at length $14$. Two of the $16$ have complexity exactly $15$,
+and their half-lines coincide on all cells with $t\ge1$ (checked for
+$t\le1500$) after the renaming $\mathsf G\mapsto\mathsf A$,
+$\mathsf A\mapsto\mathsf B$ of the states of the first one: the first
+reuses the state $\mathsf G$ of the general on its half-line and never uses
+$\mathsf B$ there, the second never uses $\mathsf G$ after time $0$. A
+counterexample-guided search completes both of them to rules for all lengths
+up to $14$: $\delta_{14}^{\mathrm c}$ (file \texttt{delta14c.txt}) and
+$\delta_{14}^{\mathrm d}$ (file \texttt{delta14d.txt}, found in $376$\,s);
+both fail at $n=15$ (for $\delta_{14}^{\mathrm d}$ a cell fires at time
+$22$), and both end with a uniform configuration before firing,
+$\mathsf G^n$ and $\mathsf A^n$ respectively, for $4\le n\le14$. Raising
+the bound of \cref{prop:germs} to $16$ therefore amounts to refuting this
+one half-line in its two labellings, and a completion test can only do so
+with lines of length at least $15$. For most of the other survivors the
+lengths $2,\dots,14$ are undecided after $40$ minutes.
 
 \begin{table}[t]
 \centering\small
