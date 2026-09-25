@@ -20,6 +20,20 @@ satisfying the quiescence conditions
 $\mathsf F$ play no role below and are left unspecified; we do \emph{not}
 require $\delta(\ast,\mathsf L,\mathsf L)=\mathsf L$, which only strengthens
 the non-existence statements.)
+\Cref{fig:moods} shows the states of a five-state rule and one step of one
+cell.
+
+\begin{figure}[t]
+\centering
+\input{sections/pic_moods}
+\caption{Left: the five states of a five-state rule, drawn as soldiers.
+Right: one step of one cell. The cell in the middle sees its left neighbour
+in state $\mathsf G$, itself in state $\mathsf L$ and its right neighbour in
+state $\mathsf L$, looks up the entry $\mathsf G\,\mathsf L\,\mathsf L$ of
+the rule and becomes $\mathsf A$. The four entries shown belong to the
+rule $\delta_{14}$ of \cref{tab:delta14}.}
+\label{fig:moods}
+\end{figure}
 
 For $n\ge 1$ the \emph{line of length $n$} is the space-time diagram
 $C_n:\mathbb N\times\{1,\dots,n\}\to S$ defined by
@@ -126,6 +140,25 @@ $C_{n'}(T,1)=\mathsf F$ for every $n'\ge n$. For $n'>T+1$ the cell $n'$ is still
 quiescent at time $T$ by \cref{lem:lightcone}, so the line of length $n'$
 has a firing cell at time $T$ without firing entirely: a contradiction.
 \end{remark}
+
+\Cref{fig:echo} illustrates \cref{lem:agree} and \cref{rem:lowerbound}.
+The right border only acts after the front has reached it at time $n-1$,
+and its influence travels back at speed one; below the anti-diagonal
+$t+i=2n-2$ the line of length $n$ cannot be told apart from any longer
+line, and the first cell learns where the line ends exactly at time
+$2n-2$.
+
+\begin{figure}[t]
+\centering
+\input{sections/pic_echo}
+\caption{Space-time diagrams (time runs downwards, one square per cell and
+time step) of the lines of lengths $6$ and $9$, coloured by what each cell
+can know. On the cells with $t+i\le10$ (light blue, bounded by the dashed
+anti-diagonal) the two diagrams coincide for every rule (\cref{lem:agree});
+the right border acts only in the reflected triangle $R_n$, below the
+return chain. The colours show regions, not states.}
+\label{fig:echo}
+\end{figure}
 
 Applying \cref{lem:return} to all $n$ shows that in a minimal-time
 solution every cell $i$ leaves $\mathsf L$ exactly at time $i-1$ (the front

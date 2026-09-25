@@ -174,7 +174,9 @@ $L=1$ and $Y=259$ would give $257\le4^4=256$.
 
 So no choice of the remaining transitions can rescue this architecture.
 The lemma only bites at length $518$, whereas the two rules themselves
-already fail at lengths $13$ and $14$.
+already fail at lengths $13$ and $14$. The regularity certificate described after
+\cref{cor:regular} (with $P=6$) re-proves \cref{cor:germ12} without any
+length bound.
 
 The frontier is not tied to this architecture, and it is not at
 thirteen. The classification of \cref{sec:germs} below left a few germs of
@@ -225,17 +227,26 @@ anti-diagonal $78$), are satisfiable, and a refutation of five-state
 minimal-time solutions along these lines must involve lines of length at
 least $15$.
 
-A second rule for all lengths up to fourteen, $\delta_{14}^{\mathrm b}$
-(file \texttt{delta14b.txt}; it fails at $n=15$), was found in $29$\,s on
-another germ of complexity $16$. Its half-line is of the periodic kind: a
-boundary layer of four cells followed by a region that is periodic in time
-and space. With a boundary layer of four cells the bound of
-\cref{lem:left} (with $s=5$) lies far beyond the lengths we can simulate,
-but the half-line is eventually regular: the certificate described after
-\cref{cor:regular} succeeds with $t_1=600$ and $P=12$ (program
-\texttt{germpersist.py}). Hence, by \cref{cor:regular}, no completion of
-this germ is a minimal-time solution either. The same certificate, with
-$P=6$, re-proves \cref{cor:germ12} without any length bound.
+\Cref{fig:squads14} shows $\delta_{14}$ at work on the lines of lengths
+$14$ and $15$. Four further rules synchronize every line of length at most
+$14$, on other germs (\cref{app:more14}): $\delta_{14}^{\mathrm b}$, whose
+half-line is eventually regular, so that no completion of its germ is a
+solution (\cref{cor:regular}); $\delta_{14}^{\mathrm c}$ and
+$\delta_{14}^{\mathrm d}$, on the two surviving germs of complexity $15$,
+which share one half-line up to a renaming of the states; and
+$\delta_{14}^{\mathrm e}$, on a germ of complexity $17$. All five fail at
+$n=15$ in the same way: cells in the right half of the line fire one to
+seven steps early (\cref{tab:more14}).
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.64\textwidth]{fig_squads14.pdf}
+\caption{The rule $\delta_{14}$ on the lines of lengths $14$ and $15$
+(time runs downwards, one square per cell and time step, coloured by
+state). (a) All $14$ cells fire at $t=26=2n-2$. (b) The cells $13$, $14$
+and $15$ fire at $t=22$, before the correct firing time $t=28$.}
+\label{fig:squads14}
+\end{figure}
 
 \begin{figure}[t]
 \centering
@@ -291,75 +302,26 @@ $L$-periodic on $[1,Y]$ with $Y-1>16L$ (for instance $n=28$, $L=1$, $Y=19$).
 Hence no rule containing one of the $244$ germs is a minimal-time solution.
 \end{proof}
 
-The same pipeline, run on the $9{,}787$ germs of complexity at most $16$
-($1.5\cdot10^9$ nodes), shows how the two kinds of arguments share the
-work (\cref{tab:germs}). The completion test for the lengths $2,\dots,10$
-refutes $8{,}824$ germs (one LRAT proof of $2.0$\,GB, found in $556$\,s and
-checked in $51$\,s). Of the $963$ survivors, $931$ are refuted by
-\cref{lem:left} or \cref{lem:pumping} applied to their half-lines, each of
-which is determined by the germ far enough for the lemma to apply (we
-simulate up to anti-diagonal $10^4$, and for two germs the input
-anti-diagonals of the line of length $20{,}000$). Used alone, the half-line arguments
-refute $8{,}263$ of the $9{,}787$ germs, without any SAT call. Among the
-$32$ germs that pass both filters (one of which is not determined beyond
-anti-diagonal $94$) are germs with chaotic or self-similar half-lines, on
-which \cref{lem:left} has no grip, and germs whose periodic regions start
-too far from the border for the bound of the lemma to be reached within our
-simulation range. The completion test for the lengths $2,\dots,13$ refutes
-$8$ of them (one LRAT proof of $1.4$\,GB, found in $318$\,s and checked in
-$33$\,s); $23$ of the remaining $24$ do have completions for these
-lengths (the last one is undecided after $900$\,s). Of these $24$, $8$ have
-eventually regular half-lines (certified with periods $P\le48$) and are
-excluded by \cref{cor:regular}, although $7$ of them admit completions for
-all lengths up to $13$. For the last $16$ germs, among them the germ of $\delta_{14}$,
-the certificate fails (periods $P\le48$, block periods at most $24$,
-starting times up to $1500$); the half-lines we inspected are chaotic, and
-none of our half-line arguments applies to them. Their completion problems
-become hard at length $14$. Two of the $16$ have complexity exactly $15$,
-and their half-lines coincide on all cells with $t\ge1$ (checked for
-$t\le1500$) after the renaming $\mathsf G\mapsto\mathsf A$,
-$\mathsf A\mapsto\mathsf B$ of the states of the first one: the first
-reuses the state $\mathsf G$ of the general on its half-line and never uses
-$\mathsf B$ there, the second never uses $\mathsf G$ after time $0$. A
-counterexample-guided search completes both of them to rules for all lengths
-up to $14$: $\delta_{14}^{\mathrm c}$ (file \texttt{delta14c.txt}) and
-$\delta_{14}^{\mathrm d}$ (file \texttt{delta14d.txt}, found in $376$\,s);
-both fail at $n=15$ (for $\delta_{14}^{\mathrm d}$ a cell fires at time
-$22$), and both end with a uniform configuration before firing,
-$\mathsf G^n$ and $\mathsf A^n$ respectively, for $4\le n\le14$. Raising
-the bound of \cref{prop:germs} to $16$ therefore amounts to refuting this
-one half-line in its two labellings, and a completion test can only do so
-with lines of length at least $15$. We split the two completion problems for
-the lengths $2,\dots,15$ into $3{,}070$ and $2{,}731$ cubes with the
-look-ahead solver \textsf{march\_cu} (depth $12$) \cite{HeuleEtAl11} and
-solved the cubes with CaDiCaL under assumptions and, for the hard ones, with
-Kissat on the formula extended by the cube. After about ten CPU-hours,
-$1{,}376$ and $1{,}898$ cubes are refuted and none is satisfiable, but
-$375$ and $14$ cubes resisted the limits we set (up to $2\cdot10^{6}$
-conflicts, or ten minutes of Kissat) and $1{,}319$ and $819$ were not
-attempted: both problems remain undecided. For most of the other survivors the
-lengths $2,\dots,14$ are undecided after $40$ minutes.
-
-The same filters, applied in a different order, reduce the germs of
-complexity exactly $17$ to a few hundred. The enumeration with bound $17$
-visits $6.1\cdot10^{9}$ nodes and returns $53{,}081$ germs; those of
-complexity at most $16$ are exactly the $9{,}787$ germs of
-\cref{tab:germs}, and $43{,}294$ have complexity $17$. On the half-lines
-extended to anti-diagonal $1300$, \cref{lem:left} refutes $34{,}613$ of them
-and \cref{lem:pumping} (lengths up to $650$) another $637$. The completion
-test for the lengths $2,\dots,10$ refutes $6{,}834$ of the remaining
-$8{,}044$ (one LRAT proof of $1.9$\,GB, found in $440$\,s and checked in
-$33$\,s). Extending the half-lines of the $1{,}210$ survivors to
-anti-diagonals $3300$ and $10^4$, the two lemmas refute $903$ more, and the
-regularity certificate excludes $120$ of the rest by \cref{cor:regular}
-(periods $P\le48$, block periods at most $24$). This leaves $187$ germs of
-complexity $17$. We ran the completion test for the lengths $2,\dots,13$
-on $30$ of them only: $11$ are refuted, $6$ are undecided within $10^6$
-conflicts, and $13$ have completions. The first of these extends to a fifth
-rule for all lengths up to $14$, $\delta_{14}^{\mathrm e}$ (file
-\texttt{delta14e.txt}; its half-line is irregular), which ends with a
-uniform configuration $\mathsf A^n$ and fails at $n=15$ by a single step:
-a cell fires at time $27$ instead of $28$.
+The same pipeline, run on the $9{,}787$ germs of complexity at most $16$,
+shows how the two kinds of arguments share the work (\cref{tab:germs},
+details in \cref{app:k16}). The completion test for the lengths
+$2,\dots,10$ refutes $8{,}824$ germs, with one LRAT certificate; the lemmas,
+applied to half-lines extended up to anti-diagonal $10^4$, refute $931$ of
+the survivors; a completion test for the lengths $2,\dots,13$ and
+\cref{cor:regular} refute $8$ more each. Used alone, the half-line
+arguments refute $8{,}263$ of the $9{,}787$ germs, without any SAT call. The
+$16$ germs that remain, among them the germ of $\delta_{14}$, are irregular
+as far as our certificates can tell, and those we inspected are chaotic.
+Two of them have complexity exactly $15$ and share one half-line up to a
+renaming of the states; both extend to rules for all lengths up to $14$
+($\delta_{14}^{\mathrm c}$ and $\delta_{14}^{\mathrm d}$). Raising the bound
+of \cref{prop:germs} to $16$ therefore amounts to refuting this half-line,
+which requires lines of length at least $15$; a cube-and-conquer attack on
+the lengths $2,\dots,15$ refuted thousands of cubes but left the question
+undecided (\cref{app:cube}). For the $43{,}294$ germs of complexity exactly
+$17$ the same filters leave $187$, again with an LRAT certificate for the
+completion test, and one of the survivors yields $\delta_{14}^{\mathrm e}$
+(\cref{app:k17}).
 
 \begin{table}[t]
 \centering\small
@@ -385,45 +347,35 @@ $3300$ for $c_{78}\le14$ and $1300$ for $c_{78}\le16$).}
 \label{tab:germs}
 \end{table}
 
-\subsection{Where the difficulty lies}
+\subsection{Where the difficulty lies}\label{sec:difficulty}
 
-\paragraph{The half-line determines everything} Take any of the rules found
-above, fix the transitions it uses on the half-line up to anti-diagonal $78$
-(between $39$ and $50$ transitions, counting $(\mathsf L,\mathsf L,\mathsf L)$)
-and ask whether the remaining transitions
-can be completed so that all lengths $2,\dots,N$ synchronize. For the
-five-state germs of \cref{tab:five}, Kissat decides this in less than one second: for
-the rule of \cref{tab:five} with lengths $2,\dots,10$ the completion exists
-for $N=8$ and not for $N=12$; the other germs fail already for $N=8$.
-The chaotic germ of \cref{prop:chaotic} is an exception: its completions
-for $N=12$, $13$ and $14$ take $2$\,s, $442$\,s and $1758$\,s (the last
-one with links).
-As a sanity check on a genuine solution, fixing the $58$ transitions that
-Mazoyer's rule uses on its half-line up to anti-diagonal $78$ (that is,
-$c_{78}=57$ and $(\mathsf L,\mathsf L,\mathsf L)$) leaves a
-completion problem for the lengths $3,\dots,12$ that Kissat solves in $4$\,s.
-Conversely, the unsatisfiable core returned for such a germ (the rule of
-\cref{tab:five} with lengths $2,\dots,10$, completion required for
-$2,\dots,12$) contains $38$ of its $39$ transitions, and shrinking it
-requires solving exactly the hard subproblems; nogoods learned from the
-completion problem, as in a logic-based Benders decomposition, would
-therefore be almost as specific as the germs themselves.
+Once a germ is fixed, the half-line is determined and only the reflected
+triangles remain. For the germs of the rules of \cref{tab:five} Kissat
+decides the completion problem in less than one second: for the rule with
+lengths $2,\dots,10$ a completion exists for the lengths up to $8$ and
+not up to $12$, and the other germs fail already for $8$. Fixing the $58$
+transitions that Mazoyer's rule uses on its half-line up to anti-diagonal
+$78$ leaves a completion problem for the lengths $3,\dots,12$ that Kissat
+solves in $4$\,s. The chaotic germs are the exception: the completions of
+the germ of $\delta_{14}$ for the lengths up to $12$, $13$ and $14$ take
+$2$\,s, $442$\,s and $1758$\,s (the last one with links), and for $15$ no
+run has finished (\cref{app:cube}).
 
-\paragraph{Size of the search} We estimated the size of the natural
+To measure the size of the whole search, we estimated the natural
 look-ahead search tree---half-line transitions fixed in order of first use,
-anti-diagonal by anti-diagonal, a node being discarded when the full formula
-with the partial table as assumptions is refuted within $3000$ conflicts---
-with Knuth's random-probe estimator \cite{Knuth75}. For four states ($\mathrm{MT}_4$ with
-lengths $2,\dots,9$) the mean over $30$ probes is $27$ nodes. For five
-states ($\mathrm{MT}_5(\{2,\dots,12\};78,39)$ with links) three probes gave
-$4.2\cdot10^{11}$, $3.1\cdot10^{17}$ and $8.3\cdot10^{18}$; adding the
-lengths up to $18$ prunes more strongly along some paths but not in general
-(three probes: $2.2\cdot10^{5}$, $4.2\cdot10^{12}$, $1.0\cdot10^{15}$). The estimator has
-a large variance, but the gap of at least ten orders of magnitude is robust
-and explains why our runs on the unrestricted five-state formulas with the
-pumping constraints for $N=12$, $14$ and $18$ (up to about $1.5$ CPU-hours
-each) did not terminate. Clause
-learning compresses such trees considerably, and cube-and-conquer
-\cite{HeuleEtAl11} parallelizes them almost linearly, but a complete
-five-state search along these lines is a computation of a much larger scale
-than the ones reported here.
+anti-diagonal by anti-diagonal, a node being discarded when the full
+formula with the partial table as assumptions is refuted within $3000$
+conflicts---with Knuth's random-probe estimator \cite{Knuth75}. For four
+states ($\mathrm{MT}_4$ with lengths $2,\dots,9$) the mean over $30$ probes
+is $27$ nodes. For five states ($\mathrm{MT}_5(\{2,\dots,12\};78,39)$ with
+links) three probes gave $4.2\cdot10^{11}$, $3.1\cdot10^{17}$ and
+$8.3\cdot10^{18}$; adding the lengths up to $18$ prunes more strongly along
+some paths but not in general (three probes: $2.2\cdot10^{5}$,
+$4.2\cdot10^{12}$, $1.0\cdot10^{15}$). The estimator has a large variance,
+but the gap of at least ten orders of magnitude is robust and explains why
+our runs on the unrestricted five-state formulas with the pumping
+constraints for $N=12$, $14$ and $18$ (up to about $1.5$ CPU-hours each)
+did not terminate. Clause learning compresses such trees considerably, and
+cube-and-conquer \cite{HeuleEtAl11} parallelizes them almost linearly, but
+a complete five-state search along these lines is a computation of a much
+larger scale than the ones reported here.

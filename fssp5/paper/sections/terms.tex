@@ -1,18 +1,19 @@
 %% ---------------------------------------------------------------------
-\section*{Terms and notation}\phantomsection\label{sec:terms}
+\section{Glossary of terms and symbols}\label{app:glossary}
 
-This section defines every term and every symbol used in the paper,
-before the problem is stated in \cref{sec:intro}. The entries are grouped
+This appendix defines every term and every symbol used in the paper; the
+most frequent notation is summarised on the page \emph{Notation at a glance}
+before the introduction. The entries are grouped
 by topic and ordered so that each definition uses only notions defined
 before it; a reference in parentheses points to the place where a notion
 is used or treated formally. A few words are used only \emph{descriptively},
 to name what a picture shows (for instance \emph{chaotic}); they are
-collected in one entry of Part~C, carry no formal content, and no
-statement of the paper depends on them. The symbols are summarised in
-\cref{tab:symbols} at the end of the section.
+collected in one entry of \cref{app:gl-geometry}, carry no formal content,
+and no statement of the paper depends on them. The symbols are summarised in
+\cref{tab:symbols} at the end of the appendix.
 
 {\small
-\subsection*{A. General conventions}
+\subsection{General conventions}\label{app:gl-general}
 \begin{description}[style=unboxed,leftmargin=1em,font=\normalfont\bfseries,itemsep=1pt,parsep=0pt,topsep=2pt]
 \item[Integers.] $\mathbb N=\{0,1,2,\dots\}$. For a real number $x$,
   $\lfloor x\rfloor$ and $\lceil x\rceil$ are the largest integer ${}\le x$
@@ -45,22 +46,21 @@ statement of the paper depends on them. The symbols are summarised in
 \item[Typography.] Sans-serif capitals $\mathsf L,\mathsf G,\mathsf
   A,\mathsf B,\mathsf F$ always denote states; the italic $L$ is always a
   period (\cref{lem:left}); the italic $T$ is a time, and $T_{e,d}$ is a
-  propositional variable (Part~F). Program names in typewriter font
+  propositional variable (\cref{app:gl-logic}). Program names in typewriter font
   (\texttt{fsspcheck.c}, \dots) refer to files of the accompanying
   repository, listed in \ref{app:repro}.
 \end{description}
 
-\subsection*{B. The firing squad}
+\subsection{The firing squad}\label{app:gl-squad}
 \begin{description}[style=unboxed,leftmargin=1em,font=\normalfont\bfseries,itemsep=1pt,parsep=0pt,topsep=2pt]
 \item[Cellular automaton (CA).] A row of identical finite automata,
   the \emph{cells}, that change their states simultaneously at every
   tick of a discrete clock, each as a function of its own state and of
   the states of its two nearest neighbours. Here the row is either
   finite (a \emph{line}) or infinite to the right (the \emph{half-line},
-  Part~C).
+  \cref{app:gl-geometry}).
 \item[Cell; position.] The cells of a line are numbered $1,\dots,n$
-  from left to right; the number $i$ of a cell is its \emph{position}. In
-  the pictures of the next section a cell is a soldier.
+  from left to right; the number $i$ of a cell is its \emph{position}. In the figures a cell is drawn as a soldier.
 \item[Time; step.] Time is discrete, $t\in\mathbb N$; one
   \emph{(time) step} updates all cells at once.
 \item[State; state set $S$; number of states $k$.] At every time each
@@ -185,15 +185,15 @@ statement of the paper depends on them. The symbols are summarised in
   length outside $\mathcal N$ (\cref{sec:five}).
 \item[Frontier.] The largest $N$ for which a five-state
   $\{2,\dots,N\}$-minimal rule is known; at present $N=14$.
-\item[Picture vocabulary.] In the section \emph{The firing squad in
-  pictures} a cell is a \emph{soldier}, a line a \emph{squad}, a state a
-  \emph{mood}, a time step a \emph{tick}, the rule table the \emph{rule
-  book}, and the border a \emph{wall}; the \emph{hare} and the
-  \emph{tortoise} are signals of speeds $1$ and $1/3$, and the \emph{echo}
-  is the reflected wave (Part~C).
+\item[Picture vocabulary.] In \cref{fig:squad,fig:moods,fig:echo,fig:hare,fig:scoreboard}
+  a cell is drawn as a \emph{soldier}, a line is a \emph{squad}, a state a
+  \emph{mood}, a time step a \emph{tick}, the rule the \emph{rule book}
+  and the border a \emph{wall}; the \emph{hare} and the \emph{tortoise} are
+  signals of speeds $1$ and $1/3$, and the \emph{echo} is the reflected wave
+  (\cref{app:gl-geometry}).
 \end{description}
 
-\subsection*{C. Geometry of space-time diagrams}
+\subsection{Geometry of space-time diagrams}\label{app:gl-geometry}
 \begin{description}[style=unboxed,leftmargin=1em,font=\normalfont\bfseries,itemsep=1pt,parsep=0pt,topsep=2pt]
 \item[Anti-diagonal; diagonal.] The \emph{anti-diagonal} $t+i=M$
   (``anti-diagonal $M$'') is the set of cells $(t,i)$ with $t+i=M$;
@@ -242,7 +242,7 @@ statement of the paper depends on them. The symbols are summarised in
   $C_\infty$ is its space-time diagram (\cref{sec:prelim}). The
   \emph{half-line conditions} are the constraints on $C_\infty$ alone used
   in this paper: no cell of $C_\infty$ fires, see \eqref{eq:neverfire},
-  and $\mathrm{PUMP}(n,n')$ holds (Part~D).
+  and $\mathrm{PUMP}(n,n')$ holds (\cref{app:gl-barriers}).
 \item[Agreement.] $C_n(t,i)=C_\infty(t,i)$ whenever $t+i\le2n-2$
   (\cref{lem:agree}): below this anti-diagonal the line of length $n$
   cannot distinguish itself from the half-line.
@@ -314,7 +314,7 @@ statement of the paper depends on them. The symbols are summarised in
   that singles out particular cells.
 \end{description}
 
-\subsection*{D. The two barriers}
+\subsection{The two barriers}\label{app:gl-barriers}
 \begin{description}[style=unboxed,leftmargin=1em,font=\normalfont\bfseries,itemsep=1pt,parsep=0pt,topsep=2pt]
 \item[Pumping lemma; $\mathrm{PUMP}(n,n')$.] For a minimal-time solution
   and $4\le n<n'$, the input words $J_n$ and $J_{n'}$ differ somewhere on
@@ -351,7 +351,7 @@ statement of the paper depends on them. The symbols are summarised in
   regular (program \texttt{germpersist.py}).
 \end{description}
 
-\subsection*{E. Germs}
+\subsection{Germs}\label{app:gl-germs}
 \begin{description}[style=unboxed,leftmargin=1em,font=\normalfont\bfseries,itemsep=1pt,parsep=0pt,topsep=2pt]
 \item[Germ; complexity $c_M(\delta)$.] The \emph{germ} of a rule
   $\delta$ below $M$ is the restriction of $\delta$ to the neighbourhoods
@@ -381,7 +381,7 @@ statement of the paper depends on them. The symbols are summarised in
   that none of the tests refutes.
 \end{description}
 
-\subsection*{F. Propositional logic, solvers and certificates}
+\subsection{Propositional logic, solvers and certificates}\label{app:gl-logic}
 \begin{description}[style=unboxed,leftmargin=1em,font=\normalfont\bfseries,itemsep=1pt,parsep=0pt,topsep=2pt]
 \item[Variable; literal; clause; CNF.] A propositional variable takes
   the value true or false; a \emph{literal} is a variable $X$ or its

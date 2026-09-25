@@ -1,0 +1,40 @@
+%% ---------------------------------------------------------------------
+\section*{Notation at a glance}\phantomsection\label{sec:notation}
+
+The table lists the notation that the paper uses throughout; every term
+and symbol, including those that occur only in one proof, is defined in
+the glossary of \cref{app:glossary}. Sans-serif capitals always denote
+states.
+
+\begin{center}\small
+\begin{tabular}{@{}p{0.27\textwidth}p{0.68\textwidth}@{}}
+\toprule
+notation & meaning\\
+\midrule
+$S$, $k=|S|$ & set of states and number of states\\
+$\mathsf L,\mathsf G,\mathsf F$; $\mathsf A,\mathsf B$ & quiescent state, general, firing state; the two
+  auxiliary states when $k=5$\\
+$W=S\setminus\{\mathsf F\}$, $\ast$ & working states; the border\\
+$\delta$ & a rule: $(W\cup\{\ast\})\times W\times(W\cup\{\ast\})\to S$ with
+  $\delta(\mathsf L,\mathsf L,\mathsf L)=\delta(\mathsf L,\mathsf L,\ast)=\mathsf L$\\
+$C_n(t,i)$, $C_\infty(t,i)$ & state of cell $i$ at time $t$ on the line of length $n$, on the
+  half-line (time runs downwards in all figures)\\
+minimal-time solution & a rule that synchronizes the line of length $n$ at time $2n-2$ for every $n\ge2$\\
+$\mathcal N$-minimal & synchronizes the line of length $n$ at time $2n-2$ for every $n\in\mathcal N$\\
+anti-diagonal $M$ & the cells $(t,i)$ with $t+i=M$\\
+front $f_i$ & $C_\infty(i-1,i)$, the edge of the light cone\\
+$R_n$ & reflected triangle: the cells of $C_n$ with $t+i\ge2n-1$, $t\le2n-2$\\
+$J_n$, $\mathrm{cone}_n(\tau,\kappa)$ & input word of $R_n$ (anti-diagonals $2n-3$ and $2n-2$) and
+  the input cells that a cell of $R_n$ depends on\\
+$\mathrm{PUMP}(n,n')$ & the pumping condition of \cref{lem:pumping}\\
+chain $c$, $v_c(i)$ & the anti-diagonal $t+i=2n-2+c$ of the line of length $n$ and its cell $i$\\
+eventually regular & from some time on, finitely many periodic regions separated by signals\\
+germ, $c_M(\delta)$ & the transitions used by $C_\infty$ below anti-diagonal $M$, and their number
+  (without $(\mathsf L,\mathsf L,\mathsf L)$)\\
+$\mathrm{MT}_k(\mathcal N;M,N')$ & the propositional formula of \cref{sec:encoding}\\
+LRAT & the proof format of all certified unsatisfiability claims\\
+$\delta_{12},\dots,\delta_{14}^{\mathrm e}$ & the five-state rules of \cref{sec:five} and
+  \cref{app:further}\\
+\bottomrule
+\end{tabular}
+\end{center}
