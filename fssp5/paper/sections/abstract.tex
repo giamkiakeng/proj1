@@ -9,14 +9,16 @@ states: a pumping lemma, which forces the non-periodic part of the
 half-line to reach the line $i=t/3$ (a speed-$1/3$ barrier), and a
 left-border lemma, which bounds the periodic stretches of the anti-diagonals
 near the left border and hence forbids periodic behaviour in any wedge at
-the border. (iii)~A propositional encoding of the bounded problem,
+the border; in particular the half-line of a minimal-time solution is never
+eventually regular. (iii)~A propositional encoding of the bounded problem,
 validated against Mazoyer's solution extracted from its Coq formalization,
 gives an LRAT-certified proof, checked in six seconds, that no four-state
 minimal-time solution exists, even without the left quiescence condition.
-(iv)~For five states we exhibit explicit rules that synchronize every line
-of length at most $13$ in minimal time and satisfy the half-line conditions
-up to length $40$; the left-border lemma shows that their common half-line
-can never be completed to a solution. Combining both lemmas with certified
+(iv)~For five states we exhibit explicit rules that satisfy the
+half-line conditions up to length $40$ and synchronize every line of length
+at most $13$, and, with a chaotic half-line, every line of length at most
+$14$, in minimal time; the left-border lemma shows that the half-line of the
+first two can never be completed to a solution. Combining both lemmas with certified
 solver calls, we show that every five-state minimal-time solution uses at
 least $15$ distinct neighbourhoods on its half-line below the anti-diagonal
 $t+i=78$. Random-probe estimates of the natural look-ahead search tree give

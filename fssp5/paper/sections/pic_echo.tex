@@ -1,0 +1,45 @@
+\begin{tikzpicture}[scale=1]
+  \def\u{0.36}\def\v{0.24}
+  % two squads: n=6 at offset 0, n=9 at offset 3.1; agreement bound 2*6-2 = 10
+  \foreach \n/\off in {6/0,9/3.1} {%
+    \pgfmathtruncatemacro{\T}{2*\n-2}
+    \foreach \t in {0,...,\T} {%
+      \foreach \i in {1,...,\n} {%
+        \pgfmathtruncatemacro{\s}{\t+\i}
+        \pgfmathtruncatemacro{\lc}{\i-1}
+        \pgfmathtruncatemacro{\rc}{2*\n-1}
+        \ifnum\t<\lc \def\cc{white}\else
+          \ifnum\t=\T \def\cc{stF}\else
+            \ifnum\s=\rc \def\cc{stA}\else
+              \ifnum\s>\rc \def\cc{refl}\else
+                \ifnum\t=\lc \def\cc{stG}\else
+                  \ifnum\s<11 \def\cc{agree}\else\def\cc{white}\fi
+                \fi\fi\fi\fi\fi
+        \filldraw[fill=\cc,draw=ink2!35,line width=0.2pt]
+          (\off+\i*\u-\u,-\t*\v) rectangle (\off+\i*\u,-\t*\v-\v);
+      }}
+    \draw[ink,line width=0.6pt] (\off,0) rectangle (\off+\n*\u,-\T*\v-\v);
+    % the anti-diagonal t+i = 10 | 11
+    \draw[ink,densely dashed,line width=0.8pt] (\off,-11*\v) -- (\off+5.75*\u,-5.25*\v);
+    \node[font=\small,anchor=south] at (\off+\n*\u/2,0.05) {$n=\n$};
+  }
+  % zzz in the quiet land of the long squad
+  \node[font=\sffamily\bfseries\scriptsize,text=ink2] at (3.1+7.2*\u,-1.1*\v) {z z z};
+  % labels
+  \begin{scope}[font=\scriptsize,align=left]
+    \node[anchor=west] (a) at (6.35,-0.4) {\textcolor{stG}{\rule{7pt}{7pt}} front: news moves one cell per tick};
+    \node[anchor=west] at (6.35,-0.95) {\textcolor{stA}{\rule{7pt}{7pt}} echo from the wall (return chain)};
+    \node[anchor=west] at (6.35,-1.5) {\textcolor{agree}{\rule{7pt}{7pt}} identical in both squads};
+    \node[anchor=west] at (6.35,-2.05) {\textcolor{refl}{\rule{7pt}{7pt}} reflected triangle $R_n$};
+    \node[anchor=west] at (6.35,-2.6) {\textcolor{stF}{\rule{7pt}{7pt}} everybody fires: $t=2n-2$};
+    \node[anchor=north west,text width=4.6cm] at (6.3,-3.0) {Up to time $9$ the general (cell $1$)
+      sees exactly the same in both squads. If the squad of $6$ fired
+      earlier than $t=10$, the general of the squad of $9$ would fire too,
+      long before its right end has even woken up. The echo needs $n-1$
+      ticks to reach the wall and $n-1$ ticks to come back: no squad can
+      beat $2n-2$.};
+  \end{scope}
+  \node[font=\scriptsize,anchor=east] at (-0.05,-0.12) {$t=0$};
+  \node[font=\scriptsize,anchor=east] at (-0.05,-10.5*\v) {$t=10$};
+  \node[font=\scriptsize,anchor=east] at (3.05,-16.5*\v) {$t=16$};
+\end{tikzpicture}

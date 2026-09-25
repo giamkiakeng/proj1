@@ -18,16 +18,16 @@ Small sets of necessary conditions are typically met by rules that are not
 solutions; the question is how many lengths are needed before all such rules
 disappear (if no solution exists, some finite set of lengths suffices, since
 there are finitely many rules). For four states the answer is $9$ (or $8$ with a long
-half-line). For five states the rule space is larger by roughly $38$
-orders of magnitude ($5^{94}$ versus $4^{45}$ transition tables), and our
-experiments show rules for all lengths up to at least $13$, and partial
+half-line). For five states the rule space is larger by roughly $40$
+orders of magnitude ($5^{94}$ versus $4^{43}$ transition tables), and our
+experiments show rules for all lengths up to at least $14$, and partial
 rules for any single additional length we tried. Under the pumping
 constraints the surviving rules are of two kinds. Either their half-lines
 consist of finitely many periodic regions separated by signals, with a
 boundary of speed $1/3$ (as for $\delta_{12}$ and $\delta_{13}$); such
 half-lines are periodic in a wedge at the left border and are excluded by
 \cref{thm:left}, although only for long lines. Or their half-lines are
-chaotic (as for $\delta'_{13}$); these pass both barriers, and at present
+chaotic (as for $\delta_{14}$); these pass both barriers, and at present
 only completion tests on longer lines can exclude them.
 
 \paragraph{The mirrored construction}
@@ -43,10 +43,18 @@ background left behind the front instead of on quiescent cells. A
 five-state solution would have to realize both constructions---the direct
 one on the quiescent background and the mirrored one on the front's
 background---with the same four working states. We regard this tension as
-the structural reason why five states are hard; turning it into a theorem
-(for instance a mirrored version of \cref{thm:third}, for which the missing
-ingredient is a border at the far end of the mirrored problem) is the most
-promising route to a conceptual proof.
+the structural reason why five states are hard. \Cref{rem:right} turns one
+half of the heuristic into a statement: seen from the right end, the
+reflected triangles cannot be periodic over long stretches, so the mirrored
+construction needs its own non-periodic structure near the right border. The
+five rules for all lengths up to $14$ found in \cref{sec:five} fail at
+$n=15$ in the same way, which is consistent with this picture: in each of
+them the first cells to fire are in the right half of the line (cells $9$
+to $15$), at times between $21$ and $27$ instead of $28$, and no cell near
+the left border fires early.
+A mirrored version of \cref{thm:third} is still missing (the mirrored
+problem has no border at its far end), and turning the tension into an
+impossibility proof is the most promising route to a conceptual answer.
 
 \paragraph{The left half}
 The same time budget applies on the left. The reflected wave reaches
@@ -65,6 +73,25 @@ version for half-lines that are only \emph{eventually} periodic along the
 anti-diagonals, would strengthen the search of \cref{sec:five}
 considerably.
 
+\paragraph{Chaotic half-lines}
+Half-lines that pass \cref{thm:third,thm:left} can be hierarchical, like
+the half-line of Mazoyer's six-state solution, or chaotic. All five-state
+half-lines that passed every test of \cref{sec:germs} and that we inspected
+are chaotic, like the one of $\delta_{14}$, which is essentially the
+elementary rule $22$. A germ that
+determines its half-line leaves at most $78$ free transitions, i.e.\ about
+$5^{78}\approx2^{181}$ completions, and each additional length imposes of the
+order of $n$ independent-looking conditions on the reflected triangle. If
+these conditions behaved like independent events of bounded probability,
+the completions of a chaotic germ would run out around $n\approx20$; the
+rule $\delta_{14}$ and the completion runs of \cref{sec:germs} are
+consistent with this heuristic, which we have not been able to turn into a
+proof. For the left border the difficulty is concrete: by the proof of
+\cref{lem:left}, the firing of the cell $2s$ depends only on the input
+anti-diagonals at the cells $i\ge s$ and on a band of $2s$ chains; in a
+chaotic medium without markers near the border, such a band has no evident
+way of recognising the cell $2s$.
+
 \paragraph{Open problems}
 \begin{enumerate}[label=(\arabic*)]
 \item Does a five-state minimal-time solution exist? By
@@ -75,7 +102,7 @@ considerably.
   half-line?
 \item What is the smallest $N$ such that some five-state rule is
   $\{2,\dots,N\}$-minimal but no five-state rule is
-  $\{2,\dots,N+1\}$-minimal, if such an $N$ exists? We know $N\ge13$.
+  $\{2,\dots,N+1\}$-minimal, if such an $N$ exists? We know $N\ge14$.
 \item Can the bound $(k-1)^{2s}L$ of \cref{lem:left} be replaced by one
   that is polynomial in $s$, or by one that also covers anti-diagonals that
   are periodic only up to a bounded number of defects? Either would make the

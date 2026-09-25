@@ -98,18 +98,49 @@ if __name__ == '__main__':
 
 
 def halflines(out):
-    """Figure 2: half-lines of the two architectures that reach length 13."""
+    """Figure 2: half-lines of the two frontier architectures."""
     d13 = load('../results/delta13.txt')
-    chaos = load('../results/delta13_chaotic.txt')
+    chaos = load('../results/delta14.txt')
     fig, axes = plt.subplots(1, 2, figsize=(7.2, 3.9), gridspec_kw={'wspace': 0.25})
     show(axes[0], half_line(d13, 120, 121),
          r'(a) $\delta_{13}$: periodic behind the speed-$1/3$ boundary', 'LGABF')
     show(axes[1], half_line(chaos, 120, 121),
-         r"(b) $\delta'_{13}$: chaotic half-line", 'LGABF')
+         r"(b) $\delta_{14}$: chaotic half-line", 'LGABF')
     handles = [Patch(facecolor=COLORS[s], edgecolor='#c3c2b7', linewidth=0.5, label=s)
                for s in ['L', 'G', 'A', 'B']]
     fig.legend(handles=handles, loc='lower center', ncol=4, fontsize=7.5, frameon=False,
                bbox_to_anchor=(0.5, -0.01), handlelength=1.2, columnspacing=1.4,
+               labelcolor=INK)
+    fig.savefig(out, bbox_inches='tight', dpi=300)
+    fig.savefig(out.replace('.pdf', '.png'), bbox_inches='tight', dpi=160)
+    print('wrote', out)
+
+
+def squads14(out):
+    """Figure for the picture section: delta14 synchronizes n=14 but not n=15."""
+    tab = load('../results/delta14.txt')
+    fig, axes = plt.subplots(1, 2, figsize=(4.9, 4.4), gridspec_kw={'wspace': 0.3})
+    r14 = line_diagram(tab, 14)
+    r15 = line_diagram(tab, 15)
+    show(axes[0], r14, r'(a) $\delta_{14}$, $n=14$', 'LGABF')
+    show(axes[1], r15, r'(b) $\delta_{14}$, $n=15$', 'LGABF')
+    for ax, rows in ((axes[0], r14), (axes[1], r15)):
+        n = len(rows[0])
+        ax.set_ylim(28.6, -0.5)
+        ax.set_xlim(-0.5, n - 0.5)
+        ax.set_yticks([0, 10, 20, len(rows) - 1])
+        ax.set_xticks([0, n - 1])
+        ax.set_xticklabels(['1', str(n)])
+    axes[0].text(6.5, 27.7, 'all 14 fire at $t=26=2n-2$', ha='center', va='center', fontsize=6.5, color=INK)
+    fired = [i for i, s in enumerate(r15[-1]) if s == 'F']
+    axes[1].axhline(28, color=INK2, lw=0.6, ls=(0, (3, 2)))
+    axes[1].text(7.0, 25.2, 'cells %d-%d fire at $t=%d$:\nsix ticks too early' % (fired[0] + 1, fired[-1] + 1, len(r15) - 1),
+                 ha='center', va='center', fontsize=6.5, color=INK)
+    axes[1].text(7.0, 27.55, 'correct firing time $t=28$', ha='center', va='center', fontsize=6.0, color=INK2)
+    handles = [Patch(facecolor=COLORS[s], edgecolor='#c3c2b7', linewidth=0.5, label=s)
+               for s in ['L', 'G', 'A', 'B', 'F']]
+    fig.legend(handles=handles, loc='upper center', ncol=5, fontsize=7.5, frameon=False,
+               bbox_to_anchor=(0.5, 1.02), handlelength=1.2, columnspacing=1.4,
                labelcolor=INK)
     fig.savefig(out, bbox_inches='tight', dpi=300)
     fig.savefig(out.replace('.pdf', '.png'), bbox_inches='tight', dpi=160)

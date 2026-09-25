@@ -18,7 +18,7 @@ has remained open since Mazoyer's construction; it is regarded as the
 central open question on state complexity of the FSSP
 \cite{Umeo09,Correa17}. Many six-state minimal-time solutions are known
 today \cite{Clergue18,NguyenMaignan20}, and solutions with at most five
-states are known for restricted families of lengths, for instance $n=2^k$,
+states are known for restricted families of lengths, for instance the powers of two,
 some of them in non-minimal time
 \cite{UmeoYanagihara07,Yunes08,UmeoKamikawaYunes09}, but no five-state
 minimal-time solution has been found, nor has its existence been refuted.
@@ -48,7 +48,9 @@ precisely how far the same tools reach for five states.
   border exactly when it reaches them; hence the input anti-diagonals cannot
   be periodic over long stretches near the left border (\cref{lem:left}),
   and the half-line cannot be periodic in any wedge at the border
-  (\cref{thm:left}).
+  (\cref{thm:left}); in particular it is never eventually regular, i.e.\
+  it cannot consist, from some time on, of finitely many periodic regions
+  separated by signals (\cref{cor:regular}).
 \item \emph{A validated encoding and a certified four-state bound}
   (\cref{sec:encoding,sec:four}). We encode the bounded problem, together
   with the consequences above, into propositional logic, validate the
@@ -58,17 +60,25 @@ precisely how far the same tools reach for five states.
   (\cref{thm:four}); the statement does not need the left quiescence
   condition $\delta(\ast,\mathsf L,\mathsf L)=\mathsf L$.
 \item \emph{The five-state frontier} (\cref{sec:five}). We exhibit
-  explicit five-state rules that synchronize every line of length at most
-  $13$ in minimal time, satisfy all pumping constraints up to length $40$
-  and never fire on the half-line up to anti-diagonal $78$; one of them ends
-  with a uniform configuration for every length up to $12$
-  (\cref{thm:frontier}). So every refutation of five-state solutions must use
-  lines of length at least~$14$. Their common half-line, however, is excluded
-  by \cref{lem:left} at length $518$ (\cref{cor:germ12}). Combining the two
+  explicit five-state rules that satisfy all pumping constraints up to
+  length $40$, never fire on the half-line up to anti-diagonal $78$ and
+  synchronize every line of length at most $13$ in minimal time; one of them
+  ends with a uniform configuration for every length up to $12$
+  (\cref{thm:frontier}). Their common half-line, however, is excluded by
+  \cref{lem:left} at length $518$ (\cref{cor:germ12}). A further rule,
+  $\delta_{14}$, synchronizes every line of length at most $14$; its
+  half-line is chaotic and escapes both barriers (\cref{prop:chaotic}). So
+  every refutation of five-state solutions along these lines must use lines
+  of length at least~$15$. Combining the two
   lemmas with certified solver calls, we classify the half-lines of low
   complexity: every five-state solution uses at least $15$ distinct
   neighbourhoods on its half-line below anti-diagonal $78$
-  (\cref{prop:germs}). The difficulty lies in the half-line: once the
+  (\cref{prop:germs}), and of the $9{,}787$ half-lines with at most $16$
+  neighbourhoods only $16$ survive, all of them irregular as far as our
+  certificates can tell. The two survivors of complexity $15$ share one
+  half-line up to a renaming of the states, and both extend to rules for
+  all lengths up to $14$; raising the bound to $16$ thus requires lines of
+  length at least $15$. The difficulty lies in the half-line: once the
   transitions used on the half-line are fixed, the completion problem is
   usually decided in under a second, whereas random-probe estimates of the
   natural look-ahead search tree grow from about $27$ nodes for four states

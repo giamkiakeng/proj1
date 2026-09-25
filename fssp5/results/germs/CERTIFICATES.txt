@@ -5,14 +5,14 @@ Completion test for the lengths 2..10 (half-line to anti-diagonal 78, pumping pa
 no symmetry breaking), one formula per germ list with selector variables (src/germcert.py).
 The LRAT files are regenerated deterministically by the command below (CaDiCaL 3.0.1).
 
-complexity <= 14: 230 germs (germs_K14.txt minus the 14 germs of germs_K14_surv10.txt)
+complexity <= 14: 230 germs (germs_K14.txt minus the 14 germs of germs_K14_surv10.txt) = K14_refuted10.txt
   python3 src/germcert.py <refuted-germ-list> 10 k14_n10
   k14_n10.cnf   sha256 4f9306a87efd10912cc37de2e674f833bdbf3ac413fd722732b9608ce909c097
   k14_n10.lrat  sha256 b2324436d2d14efa3e61296eb6dd5776bbe6bf84b0562f5972665db932eddea8  (11 MB)
   refuted-germ-list sha256 13a0ec36dd9db0e594376c87245c2db985e88af7b4abe5212d34e8c2333cead8
   CaDiCaL: UNSAT in 4.4 s; lrat-check: VERIFIED in 0.6 s
 
-complexity <= 16: 8,824 germs (lines of K16_n10.log with verdict UNSATISFIABLE)
+complexity <= 16: 8,824 germs (lines of K16_n10.log with verdict UNSATISFIABLE) = K16_refuted10.txt
   cert16_10.cnf  sha256 c6dde8abecf7c3e5b4ce497a0a2be53ecc22a630e763553b5c85ca117c91dd1b
   cert16_10.lrat sha256 e8ca32b1f09fcdbdf514fbee3b8627789a0be19c381823ab30f05b38092cfa6a  (2.0 GB)
   refuted-germ-list sha256 a6cddfeedf9dd741852f4a2d44569edff84d69efdbe9f2975caab67c2a833ba9
@@ -27,3 +27,28 @@ determined by the germ):
   ./germext 5 1300 3 8  < K16 survivors of 2..10    -> K16_s10_ext1300.txt
   ./germext 5 3300 3 12 < remaining 164             -> K16_ext3300.txt
   ./germext 5 10000 3 24 800 < remaining 115        -> K16_ext10000.txt (34 left: K16_surv34.txt)
+  ./germext2 5 20000 4 64 < K16_surv34.txt           -> K16_surv34_ext20000.txt (2 more refuted, s=3, L=2)
+
+complexity <= 16, completion test for the lengths 2..13: the 8 germs of K16_refuted13.txt
+  python3 src/germcert.py results/germs/K16_refuted13.txt 13 k16_n13
+  k16_n13.cnf   sha256 5460485c866a68ed9d451733a15acf814556a7b522e958739328c1a9722d35e5
+  k16_n13.lrat  sha256 60229cdc6cdfdfa2b3a527cd32b5dfa56ebdffb0463be017427008b766618e8d  (1.4 GB)
+  refuted-germ-list sha256 36c80bdd7123238cf19f99770a143e2ff50bfe7dc5681ed28f97d541bac6be3f
+  CaDiCaL: UNSAT in 317.5 s; lrat-check: VERIFIED in 32.8 s
+
+Remaining after all tests (complexity <= 16): 24 germs, K16_remaining24.txt; 23 of them have
+completions for 2..13 (K16_surv34_n13.log), one is undecided after 900 s.
+
+Eventual regularity (Corollary 3.7), src/germpersist.py:
+  python3 src/germpersist.py K16_remaining24.txt 600 24 12   -> K16_rem24_persist.txt (7 REGULAR)
+  python3 src/germpersist.py <the 17 others> 1500 48 24      -> K16_rem17_persist.txt (1 more REGULAR)
+  remaining 16 (not certified regular): K16_remaining16.txt
+  delta14b germ: REGULAR P=12 (t1=600); delta12/delta13 germ: REGULAR P=6.
+
+Complexity 17 (germs_K17.txt = germdfs 5 78 17 40 output, 53,081 germs; gzip-compressed in the repository):
+  sha256(germs_K17.txt, uncompressed)   b545f6e0e186c52683ecc685261f7a0f699c80fd678e9742b87e0980a384db38
+  6,834 germs of complexity 17 refuted by the completion test for 2..10 (K17_refuted10.txt, uncompressed):
+  sha256(K17_refuted10.txt)             af88915cf1241728a3e426a66da87ead4704bf0d1e810282494590119028806c
+  germcert.py K17_refuted10.txt 10 cert17_10 78: CaDiCaL UNSAT 439.5 s, LRAT 1.86 GB, lrat-check VERIFIED 33.2 s
+  sha256(cert17_10.cnf)                 fad099e60b6abe33f5fd9886f8de03ad61c85f149ca06ec06398309ee548fe77
+  sha256(cert17_10.lrat)                b29a38a4886660416d0a5b365b8a23064a1345617b6f8ce41277b945b43c7e21

@@ -1,0 +1,536 @@
+%% ---------------------------------------------------------------------
+\section*{Terms and notation}\phantomsection\label{sec:terms}
+
+This section defines every term and every symbol used in the paper,
+before the problem is stated in \cref{sec:intro}. The entries are grouped
+by topic and ordered so that each definition uses only notions defined
+before it; a reference in parentheses points to the place where a notion
+is used or treated formally. A few words are used only \emph{descriptively},
+to name what a picture shows (for instance \emph{chaotic}); they are
+collected in one entry of Part~C, carry no formal content, and no
+statement of the paper depends on them. The symbols are summarised in
+\cref{tab:symbols} at the end of the section.
+
+{\small
+\subsection*{A. General conventions}
+\begin{description}[style=unboxed,leftmargin=1em,font=\normalfont\bfseries,itemsep=1pt,parsep=0pt,topsep=2pt]
+\item[Integers.] $\mathbb N=\{0,1,2,\dots\}$. For a real number $x$,
+  $\lfloor x\rfloor$ and $\lceil x\rceil$ are the largest integer ${}\le x$
+  and the smallest integer ${}\ge x$. For integers, $L\mid h$ means that
+  $L$ divides $h$, $a\equiv b\pmod L$ means $L\mid a-b$, and $y\bmod L$
+  is the remainder of $y$ in $\{0,\dots,L-1\}$. The limit superior of a
+  sequence is written $\limsup$. ``For $n$ large'' means ``for every $n$
+  from some value on''.
+\item[Sets and maps.] $|X|$ is the number of elements of a finite set
+  $X$, $X\times Y$ the Cartesian product and $X\setminus Y$ the
+  difference. A \emph{partial map} is a map defined on a subset of its
+  nominal domain.
+\item[Words.] A \emph{word} over an alphabet $X$ is a finite sequence of
+  elements (\emph{letters}) of $X$, written without separators; $|w|$ is
+  the \emph{length} of the word $w$, words are multiplied by
+  concatenation, and $w^a$ is the concatenation of $a\ge0$ copies of $w$.
+  A word written as a map $w:I\to X$ on an interval $I$ of integers is
+  \emph{$L$-periodic}, for an integer $L\ge1$ called a \emph{period}, if
+  $w(y+L)=w(y)$ whenever $y$ and $y+L$ belong to $I$; a \emph{periodic
+  stretch} of a word is an interval on which it is $L$-periodic for a
+  given $L$. A \emph{defect} of $w$ with respect to $L$ is a position $y$
+  with $w(y+L)\neq w(y)$; $w$ is $L$-periodic up to $d$ defects if it has at
+  most $d$ of them.
+\item[Eventually periodic.] A sequence $(x_t)_{t\ge0}$ is
+  \emph{eventually periodic} if there are $\theta\ge0$ and $P\ge1$ such
+  that $x_{t+P}=x_t$ for all $t\ge\theta$; $P$ is a period, the least
+  such $\theta$ is the \emph{transient}, the terms before it form the
+  \emph{transient part} and the terms from $\theta$ on the \emph{periodic
+  regime}.
+\item[Typography.] Sans-serif capitals $\mathsf L,\mathsf G,\mathsf
+  A,\mathsf B,\mathsf F$ always denote states; the italic $L$ is always a
+  period (\cref{lem:left}); the italic $T$ is a time, and $T_{e,d}$ is a
+  propositional variable (Part~F). Program names in typewriter font
+  (\texttt{fsspcheck.c}, \dots) refer to files of the accompanying
+  repository, listed in \ref{app:repro}.
+\end{description}
+
+\subsection*{B. The firing squad}
+\begin{description}[style=unboxed,leftmargin=1em,font=\normalfont\bfseries,itemsep=1pt,parsep=0pt,topsep=2pt]
+\item[Cellular automaton (CA).] A row of identical finite automata,
+  the \emph{cells}, that change their states simultaneously at every
+  tick of a discrete clock, each as a function of its own state and of
+  the states of its two nearest neighbours. Here the row is either
+  finite (a \emph{line}) or infinite to the right (the \emph{half-line},
+  Part~C).
+\item[Cell; position.] The cells of a line are numbered $1,\dots,n$
+  from left to right; the number $i$ of a cell is its \emph{position}. In
+  the pictures of the next section a cell is a soldier.
+\item[Time; step.] Time is discrete, $t\in\mathbb N$; one
+  \emph{(time) step} updates all cells at once.
+\item[State; state set $S$; number of states $k$.] At every time each
+  cell is in one \emph{state} of a finite set $S$, and $k:=|S|$. A rule or
+  solution is \emph{$k$-state} if $|S|=k$. The \emph{state complexity} of
+  the problem is the least $k$ for which a solution of the required kind
+  exists.
+\item[Quiescent state $\mathsf L$.] The initial state of every cell
+  except cell~$1$: a soldier waiting for orders. By the quiescence
+  conditions below, a quiescent cell stays quiescent as long as its
+  neighbours are quiescent (or its right neighbour is the border).
+\item[General $\mathsf G$.] The initial state of cell~$1$, which starts
+  the synchronization. After time $0$ the rules of this paper also use
+  $\mathsf G$ as an ordinary working state.
+\item[Firing state $\mathsf F$.] The target state, which all cells must
+  enter at the same time.
+\item[Working states $W$.] $W:=S\setminus\{\mathsf F\}$, the states used
+  before firing.
+\item[Auxiliary states.] The working states other than $\mathsf L$ and
+  $\mathsf G$. For $k=5$ they are $\mathsf A$ and $\mathsf B$, so that
+  $S=\{\mathsf L,\mathsf G,\mathsf A,\mathsf B,\mathsf F\}$ and
+  $W=\{\mathsf L,\mathsf G,\mathsf A,\mathsf B\}$; for $k=4$ the only
+  auxiliary state is $\mathsf A$; for general $k$ they are $\mathsf
+  A_1,\dots,\mathsf A_{k-3}$ (\cref{sec:encoding}).
+\item[Border $\ast$.] A symbol not in $S$: cell $1$ sees it as its left
+  neighbour and cell $n$ as its right neighbour.
+\item[Neighbourhood.] The triple $e=(x,y,z)$ of the states of the left
+  neighbour, of the cell itself and of the right neighbour; $x$ and $z$
+  may be $\ast$. In files and figures a neighbourhood is also written as
+  a word, and ``$xyz{>}d$'' stands for the transition $\delta(x,y,z)=d$.
+\item[Rule $\delta$; transition; rule table.] A \emph{rule} (local
+  transition function) is a map
+  $\delta:(W\cup\{\ast\})\times W\times(W\cup\{\ast\})\to S$ satisfying
+  the quiescence conditions; it gives the next state of a cell as a
+  function of its neighbourhood (\cref{sec:prelim}). A \emph{transition} is
+  one value $\delta(e)=d$, and the \emph{rule table} lists all of them
+  (\cref{tab:delta12,tab:delta13,tab:delta14}). Transitions from
+  $\mathsf F$ or with $\mathsf F$ in the neighbourhood are irrelevant and
+  left unspecified; the neighbourhoods $(\ast,y,\ast)$ occur only in the
+  line of length~$1$ and are not counted. The \emph{free transitions} are
+  the remaining ones minus the two fixed by the quiescence conditions:
+  $5\cdot4\cdot5-4-2=94$ for five states and $4\cdot3\cdot4-3-2=43$ for
+  four states. A \emph{partial rule} is defined on some of the
+  neighbourhoods only, typically on those it actually uses.
+\item[Quiescence conditions.] $\delta(\mathsf L,\mathsf L,\mathsf
+  L)=\delta(\mathsf L,\mathsf L,\ast)=\mathsf L$, see
+  \eqref{eq:quiescence}. The \emph{left quiescence condition}
+  $\delta(\ast,\mathsf L,\mathsf L)=\mathsf L$, often assumed in the
+  literature, is \emph{not} assumed in this paper.
+\item[Line of length $n$.] The cells $1,\dots,n$ with the border on both
+  sides, started at time $0$ in the \emph{initial configuration}
+  $\mathsf G\,\mathsf L^{n-1}$.
+\item[Configuration.] The word of the states of all cells at one time,
+  read from left to right.
+\item[Space-time diagram.] The map $(t,i)\mapsto{}$state of cell $i$ at
+  time $t$: $C_n$ for the line of length $n$, $C_\infty$ for the
+  half-line (\cref{sec:prelim}). A pair $(t,i)$ is also called a
+  \emph{cell} of the diagram. In all figures time runs downwards, so that
+  row $t$ is the configuration at time $t$.
+\item[Synchronize; fire; firing time; fail.] A cell \emph{fires} when
+  it enters $\mathsf F$. A rule \emph{synchronizes the line of length $n$
+  at time $T$} if all $n$ cells are in $\mathsf F$ at time $T$ and no cell
+  is in $\mathsf F$ earlier; $T$ is the \emph{firing time} and the
+  configuration $\mathsf F^n$ at time $T$ the \emph{firing row}. A rule
+  \emph{fails} at length $n$ if it does not synchronize the line of length
+  $n$ at time $2n-2$ (in our examples, because some cell fires too
+  early).
+\item[Firing squad synchronization problem (FSSP).] Find a rule that
+  synchronizes every line of length $n\ge2$; such a rule is a
+  \emph{solution}. (The line of length $1$ only needs
+  $\delta(\ast,\mathsf G,\ast)=\mathsf F$.)
+\item[Minimal time; minimal-time solution.] No solution synchronizes
+  the line of length $n\ge2$ before time $2n-2$ (\cref{rem:lowerbound}),
+  which is therefore the \emph{minimal} (optimal) time. A
+  \emph{minimal-time solution} synchronizes the line of length $n$ at
+  time exactly $2n-2$ for every $n\ge2$; a \emph{non-minimal-time}
+  solution needs more time for some $n$.
+\item[$\mathcal N$-minimal.] For a set $\mathcal N\subseteq\{2,3,\dots\}$
+  of lengths, a rule is \emph{$\mathcal N$-minimal} if it synchronizes the
+  line of length $n$ at time $2n-2$ for every $n\in\mathcal N$; for
+  instance $\{2,\dots,N\}$-minimal; this property is
+  \emph{$\mathcal N$-minimality}. The \emph{bounded problem} asks for
+  an $\mathcal N$-minimal rule with $\mathcal N$ finite.
+\item[Restricted families of lengths.] A solution for a family of
+  lengths (for instance the powers of two) synchronizes only the lines
+  whose lengths belong to the family, possibly not in minimal time.
+\item[Ring; symmetric rule.] In the \emph{ring} variant of the problem
+  the cells form a cycle and there is no border. A rule is
+  \emph{symmetric} if $\delta(x,y,z)=\delta(z,y,x)$ for all
+  neighbourhoods.
+\item[Mirror image.] The mirror image of a rule $\delta$ is
+  $\bar\delta(x_1,x_2,x_3):=\delta(x_3,x_2,x_1)$; it acts on the line
+  reflected by $i\mapsto\bar\imath:=n+1-i$ (\cref{rem:right}).
+\item[Renaming; labelling.] A \emph{renaming} is a bijection $\pi$ of the
+  states; applied to a rule or a diagram it replaces every state $x$ by
+  $\pi(x)$. Two diagrams coincide up to renaming if one is the image of the
+  other; the images of one diagram under different renamings are its
+  \emph{labellings}.
+\item[Pre-firing configuration.] The configuration at time $2n-3$, one
+  step before firing; it is \emph{uniform} if all cells are in the same
+  state (for instance $\mathsf A^n$).
+\item[Elementary cellular automaton; rule~$22$.] An elementary CA has
+  the two states $0,1$ and the neighbourhoods of three cells; a rule
+  $\varphi$ is identified by its \emph{Wolfram number}
+  $\sum_{x,y,z\in\{0,1\}}\varphi(x,y,z)\,2^{4x+2y+z}$ \cite{Wolfram83}.
+  Rule~$22$ sets a cell to $1$ if and only if exactly one of the three
+  cells of its neighbourhood is~$1$.
+\item[Local CA simulation.] A formal notion of Nguyen and Maignan
+  \cite{NguyenMaignan20} under which one cellular automaton simulates
+  another; they use it to generate families of six-state solutions.
+\item[Mazoyer's solution.] The six-state minimal-time solution of
+  \cite{Mazoyer87}. We use the rule table extracted mechanically from
+  Duprat's formalization of its correctness proof in the proof assistant
+  Coq \cite{Duprat97}.
+\item[The rules $\delta_{12}$, $\delta_{13}$, $\delta_{14}$,
+  $\delta_{14}^{\mathrm b}$, $\delta_{14}^{\mathrm c}$.] Explicit five-state
+  rules found in this work (\cref{sec:five}). The index is the largest $N$
+  for which the rule is $\{2,\dots,N\}$-minimal ($12$, $13$, and $14$ for
+  the last three); each of them fails at length $N+1$.
+\item[Lucky rule.] A rule returned by a solver for a finite set
+  $\mathcal N$ of lengths that is $\mathcal N$-minimal but fails at some
+  length outside $\mathcal N$ (\cref{sec:five}).
+\item[Frontier.] The largest $N$ for which a five-state
+  $\{2,\dots,N\}$-minimal rule is known; at present $N=14$.
+\item[Picture vocabulary.] In the section \emph{The firing squad in
+  pictures} a cell is a \emph{soldier}, a line a \emph{squad}, a state a
+  \emph{mood}, a time step a \emph{tick}, the rule table the \emph{rule
+  book}, and the border a \emph{wall}; the \emph{hare} and the
+  \emph{tortoise} are signals of speeds $1$ and $1/3$, and the \emph{echo}
+  is the reflected wave (Part~C).
+\end{description}
+
+\subsection*{C. Geometry of space-time diagrams}
+\begin{description}[style=unboxed,leftmargin=1em,font=\normalfont\bfseries,itemsep=1pt,parsep=0pt,topsep=2pt]
+\item[Anti-diagonal; diagonal.] The \emph{anti-diagonal} $t+i=M$
+  (``anti-diagonal $M$'') is the set of cells $(t,i)$ with $t+i=M$;
+  ``below the anti-diagonal $M$'' means $t+i\le M$. A \emph{diagonal} is a
+  set of cells with $t-i$ constant.
+\item[Predecessors; locality.] The \emph{predecessors} of a cell $(t,i)$
+  with $t\ge1$ are $(t-1,i-1)$, $(t-1,i)$ and $(t-1,i+1)$; its state is
+  $\delta$ of their states. Hence (\emph{locality}) the state of a cell at
+  time $t+P$ depends only on the cells within distance $P$ of it at time
+  $t$.
+\item[Backward dependency cone.] The set of cells reached from a given
+  cell by repeatedly passing to predecessors; only these can influence its
+  state.
+\item[Light cone.] The cells $(t,i)$ with $t\ge i-1$. Every cell outside
+  it is quiescent (\cref{lem:lightcone}): information travels at most one
+  cell per step.
+\item[Signal; speed.] A \emph{signal} is a recognisable pattern that
+  moves through a diagram along a straight line. Its \emph{speed} is the
+  number of cells it moves per step: speed $1$ is the maximal speed, speed
+  $1/3$ means one cell every three steps, and a \emph{rational speed} is a
+  speed in $\mathbb Q$. A signal is \emph{emitted} where it starts and
+  \emph{reflected} when it bounces off a border.
+\item[Front.] The cells $(i-1,i)$, $i\ge1$, on the edge of the light cone;
+  $f_i:=C_\infty(i-1,i)$ is the state of the front at cell $i$
+  (\cref{lem:return}). In a minimal-time solution every cell $i$ leaves
+  $\mathsf L$ exactly at time $i-1$: the front moves at speed one.
+\item[Wake.] The cells immediately behind the front.
+\item[Region; background; boundary.] A \emph{region} is a set of cells
+  of a diagram, usually delimited by signals, its \emph{boundaries}; the
+  \emph{background} is the pattern that fills a region, for instance the
+  quiescent background ahead of the front.
+\item[Doubly periodic; periodic region; checkered region.] A region is
+  \emph{doubly periodic}, or \emph{periodic in time and space}, with
+  periods $p,q\ge1$ if $C(t+p,i)=C(t,i)$ and $C(t,i+q)=C(t,i)$ whenever the
+  cells involved lie in it; a \emph{periodic region} (or zone) is a doubly
+  periodic one, and a \emph{checkered} region is one in which two states
+  alternate in both directions, like $\mathsf A\,\mathsf L\,\mathsf
+  A\,\mathsf L\cdots$.
+\item[Wedge.] A set $\Omega=\{(t,i):\ s\le i\le\alpha t,\ t\ge t_0\}$ with
+  $s\ge1$ and $\alpha>0$ (\cref{thm:left}): an unbounded angular region at
+  the left border.
+\item[Boundary layer.] The cells between the left border and a periodic
+  region that starts at a bounded distance from the border.
+\item[Half-line; $C_\infty$.] The cells $1,2,3,\dots$ with the border on
+  the left only, started in $\mathsf G\,\mathsf L\,\mathsf L\cdots$;
+  $C_\infty$ is its space-time diagram (\cref{sec:prelim}). The
+  \emph{half-line conditions} are the constraints on $C_\infty$ alone used
+  in this paper: no cell of $C_\infty$ fires, see \eqref{eq:neverfire},
+  and $\mathrm{PUMP}(n,n')$ holds (Part~D).
+\item[Agreement.] $C_n(t,i)=C_\infty(t,i)$ whenever $t+i\le2n-2$
+  (\cref{lem:agree}): below this anti-diagonal the line of length $n$
+  cannot distinguish itself from the half-line.
+\item[Reflected triangle $R_n$.]
+  $R_n=\{(t,i):\ 1\le i\le n,\ t+i\ge2n-1,\ t\le2n-2\}$, the part of $C_n$
+  that is influenced by the right border: the triangle between the
+  anti-diagonal $2n-1$, the right border and the firing row.
+\item[Return chain; reflected wave.] The \emph{return chain} consists
+  of the cells $(2n-1-i,i)$, $1\le i\le n$, of the anti-diagonal $2n-1$;
+  by \cref{lem:return}, $C_n$ and $C_\infty$ differ at each of them. The
+  \emph{reflected wave} is the signal of speed one that runs along it,
+  from the right border at time $n-1$ to the left border at time $2n-2$.
+\item[Relative coordinates $(\tau,\kappa)$.] For the line of length $n$,
+  $\tau:=t-(n-1)$ is the time elapsed since the front reached the right
+  end and $\kappa:=n-i$ is the distance to the right end; then
+  $R_n=\{(\tau,\kappa):0\le\kappa\le\tau\le n-1\}$ (\cref{sec:pumping}).
+\item[Input anti-diagonals; input cells; input word $J_n$.] The
+  anti-diagonals $t+i=2n-3$ (\emph{lower}) and $t+i=2n-2$ (\emph{upper}),
+  on which $C_n=C_\infty$ and from which $R_n$ is computed. Their cells are
+  the \emph{input cells}, and $J_n(\kappa)$, $0\le\kappa\le n-1$, is the
+  pair (lower, upper) of input cells at distance $\kappa$ from the right
+  end.
+\item[Determinacy; $\Psi$.] $R_n$ is obtained from $J_n$ and the two
+  borders by one partial map $\Psi$ that depends on $\delta$ but not on
+  $n$ (\cref{lem:determinacy}).
+\item[Cone $\mathrm{cone}_n(\tau,\kappa)$; right-anchored.] The set of
+  input cells in the backward dependency cone of the relative cell
+  $(\tau,\kappa)$ of $R_n$; it is \emph{right-anchored} if the backward
+  dependency cone does not reach the left border
+  (\cref{lem:cone}).
+\item[Co-moving frame; depth; $\Phi_t(j)$; depth-row.] The half-line seen
+  from the front: $\Phi_t(j):=C_\infty(t,t+1-j)$ is the cell at
+  \emph{depth} $j$ behind the front at time $t$ ($0\le j\le t$). The
+  \emph{depth-row} $j$ is the sequence $t\mapsto\Phi_t(j)$, which is
+  eventually periodic; $\theta(j)$ denotes its transient. The
+  \emph{non-periodic part} of the half-line consists of the cells
+  $(t,t+1-j)$ with $t<\theta(j)$, i.e.\ of the transient parts of all
+  depth-rows. In this frame information travels only towards larger depths
+  (a \emph{one-sided} automaton, \eqref{eq:comoving}).
+\item[Chains $v_c(i)$.] For the line of length $n$ and $c\ge-1$, the
+  \emph{chain} $c$ is the anti-diagonal $t+i=2n-2+c$, and
+  $v_c(i):=C_n(2n-2+c-i,i)$ is its cell at position $i$. Chains $-1$ and
+  $0$ are the input anti-diagonals, chain $1$ is the return chain, and
+  cell~$i$ fires on chain $i$ (\cref{sec:pumping}).
+\item[Skewed coordinates $u_c(y)$; slice.] $u_c(y):=v_c(y+\lfloor
+  c/2\rfloor)$, with $\varepsilon_c=1$ for even $c$ and $\varepsilon_c=0$
+  for odd $c$ in the recurrence \eqref{eq:slices}. The \emph{slice} $y$ is
+  the sequence $(u_1(y),u_2(y),\dots)$, and $\mathbf
+  u(y):=(u_1(y),\dots,u_{2s}(y))$ is its initial segment of length $2s$
+  (proof of \cref{lem:left}).
+\item[Finite-state transducer; cascade.] A (sequential) finite-state
+  transducer is a finite automaton that reads a sequence of symbols and
+  writes one symbol for each symbol read; a \emph{cascade} is a sequence
+  of transducers in which each one reads the output of the previous one.
+\item[Division points; hierarchy of signals.] In the classical
+  constructions the line is cut at \emph{division points} near $n/2$,
+  $n/4,\dots$, marked by the crossings of the reflected wave with a
+  hierarchy of slower and slower signals, of speeds $1/(2^j-1)$, emitted
+  by the general; the pieces are then synchronized recursively.
+\item[Descriptive words.] \emph{Self-similar} or \emph{hierarchical}: made
+  of nested, recursively repeated patterns, like the diagrams of Mazoyer's
+  solution. \emph{Chaotic}: without visible periodic, eventually regular or
+  self-similar organisation, like rule~$22$ (no formal notion, such as
+  positive entropy, is claimed). \emph{Architecture} of a half-line: the
+  qualitative arrangement of its regions and signals. \emph{Firing wave}:
+  the pattern that runs ahead of the firing row, for instance the
+  $\mathsf G$'s in the pre-firing configurations $\mathsf L\,\mathsf
+  G^{n-2}\,\mathsf B$ of $\delta_{14}$. \emph{Marker}: a state or pattern
+  that singles out particular cells.
+\end{description}
+
+\subsection*{D. The two barriers}
+\begin{description}[style=unboxed,leftmargin=1em,font=\normalfont\bfseries,itemsep=1pt,parsep=0pt,topsep=2pt]
+\item[Pumping lemma; $\mathrm{PUMP}(n,n')$.] For a minimal-time solution
+  and $4\le n<n'$, the input words $J_n$ and $J_{n'}$ differ somewhere on
+  $\mathrm{cone}_n(n-1,0)$ (\cref{lem:pumping}); $\mathrm{PUMP}(n,n')$
+  denotes this condition, which only involves the half-line. ``Pumping
+  constraints up to $N'$'' means $\mathrm{PUMP}(n,n')$ for all $4\le
+  n<n'\le N'$.
+\item[Speed-$1/3$ barrier.] \Cref{thm:third}: in a minimal-time solution
+  the transients of the depth-rows satisfy $\limsup_{j\to\infty}\theta(j)/j\ge
+  3/2$, i.e.\ along infinitely many depth-rows the transient part of the
+  half-line reaches, up to an arbitrarily small angle, the line $i=t/3$.
+\item[Left-border lemma.] \Cref{lem:left}: if a $k$-state rule
+  synchronizes the line of length $n$ at time $2n-2$, and the upper and
+  lower input anti-diagonals, read by position, are $L$-periodic on
+  $[s,Y]$ and on $[s,Y-1]$ respectively (with $s\ge1$ and $s+L\le Y\le
+  n-s$), then $Y-s\le(k-1)^{2s}L$.
+\item[Left-border barrier.] \Cref{thm:left}: the half-line of a
+  minimal-time solution is not doubly periodic on any wedge.
+\item[Eventually regular; junction words; blocks.] (Definition before
+  \cref{cor:regular}.) A half-line is \emph{eventually regular} if there
+  are a time $t_1$ and a period $P\ge1$ such that, for each residue
+  $r\in\{0,\dots,P-1\}$ and every $\nu\ge0$, the configuration at time
+  $t_1+r+\nu P$ is $w_0\,z_1^{a_1+\nu D_1}\,w_1\cdots z_m^{a_m+\nu D_m}\,w_m$
+  with words $w_j,z_j$ over $W$ and integers $a_j,D_j\ge0$ that depend on
+  $r$ only. The $w_j$ are the \emph{junction words} (they carry the
+  signals), the $z_j^{a_j+\nu D_j}$ are the \emph{blocks} (the periodic
+  regions), $|z_j|$ is the \emph{block period} and $D_j$ the
+  \emph{growth} of block $j$ per period. In \cref{sec:germs} a half-line
+  for which the certificate below fails is called \emph{irregular}; this
+  only records the failure of the certificate, not a proof that the
+  half-line is not eventually regular.
+\item[Regularity certificate.] The finite computation described after
+  \cref{cor:regular}, which proves that a given half-line is eventually
+  regular (program \texttt{germpersist.py}).
+\end{description}
+
+\subsection*{E. Germs}
+\begin{description}[style=unboxed,leftmargin=1em,font=\normalfont\bfseries,itemsep=1pt,parsep=0pt,topsep=2pt]
+\item[Germ; complexity $c_M(\delta)$.] The \emph{germ} of a rule
+  $\delta$ below $M$ is the restriction of $\delta$ to the neighbourhoods
+  that occur at the cells $(t,i)$ of $C_\infty$ with $t\ge1$ and $t+i\le
+  M$; its \emph{complexity} $c_M(\delta)$ is the number of these
+  neighbourhoods other than $(\mathsf L,\mathsf L,\mathsf L)$
+  (\cref{sec:germs}). A germ can also be given on its own, as a list of
+  transitions.
+\item[Determined; extended half-line; closed, open.] A germ
+  \emph{determines} the half-line up to an anti-diagonal beyond $M$ if the
+  simulation of $C_\infty$ with the transitions of the germ only never
+  meets a neighbourhood outside the germ on the cells below that
+  anti-diagonal; the diagram so obtained is the \emph{extended half-line}.
+  Program outputs call the germ \texttt{CLOSED} in this case and
+  \texttt{OPEN} otherwise.
+\item[Anti-diagonal order.] The order of the cells of $C_\infty$ by
+  anti-diagonal and, within an anti-diagonal, by increasing time. The
+  enumeration of germs follows it, and its symmetry breaking requires that
+  $\mathsf A$ occurs before $\mathsf B$ in this order.
+\item[Completion; completion test.] A \emph{completion} of a germ is a
+  rule that contains it. The \emph{completion test for the lengths
+  $2,\dots,N$} asks a SAT solver whether some completion is
+  $\{2,\dots,N\}$-minimal and satisfies the half-line conditions.
+\item[Refuted; survivor; filter.] A germ is \emph{refuted} once it is
+  proved that none of its completions is a minimal-time solution. The
+  \emph{survivors} of a sequence of tests (\emph{filters}) are the germs
+  that none of the tests refutes.
+\end{description}
+
+\subsection*{F. Propositional logic, solvers and certificates}
+\begin{description}[style=unboxed,leftmargin=1em,font=\normalfont\bfseries,itemsep=1pt,parsep=0pt,topsep=2pt]
+\item[Variable; literal; clause; CNF.] A propositional variable takes
+  the value true or false; a \emph{literal} is a variable $X$ or its
+  negation $\neg X$; a \emph{clause} is a disjunction ($\vee$) of literals,
+  and a \emph{unit clause} has a single literal. A formula in
+  \emph{conjunctive normal form} (CNF) is a conjunction of clauses; an
+  \emph{instance} is a formula given to a solver.
+\item[Model; SAT; UNSAT; UNKNOWN.] A \emph{model} is an assignment of
+  truth values that makes the formula true. A formula is
+  \emph{satisfiable} (SAT) if it has a model and \emph{unsatisfiable}
+  (UNSAT) otherwise. UNKNOWN reports that a solver reached its time limit
+  without an answer; the instance is then \emph{undecided}. A model is \emph{decoded} into a rule table by reading
+  off the true variables $T_{e,d}$.
+\item[One-hot encoding.] A group of variables of which exactly one is
+  true; it encodes a quantity with finitely many values.
+\item[The formula $\mathrm{MT}_k(\mathcal N;M,N')$.] The formula of
+  \cref{sec:encoding}, which is satisfiable whenever a $k$-state
+  minimal-time solution exists. Its variables are $T_{e,d}$ (``$\delta(e)=d$'')
+  and $X_{\xi,w}$ (``the cell $\xi$ is in state $w$''); it contains the
+  \emph{transition clauses} for the reflected triangles of the lengths in
+  $\mathcal N$ and for the half-line up to the anti-diagonal $M$, and the
+  pumping constraints up to $N'$ (encoded with auxiliary \emph{difference
+  variables}). Optional parts are the return-chain constraints of
+  \cref{lem:return}, the \emph{determinacy links} (``links'') with
+  variables $E_{n,n'}(\kappa_0)$, ``$J_n$ and $J_{n'}$ coincide on the
+  positions $0,\dots,\kappa_0$'', and symmetry breaking. The
+  \emph{time-major order} of cells is by time, then position. A
+  \emph{soundness check} verifies that a known solution (Mazoyer's)
+  satisfies the formula, which tests that no constraint excludes a genuine
+  solution.
+\item[Symmetry breaking.] Constraints that remove all but one member of
+  each class of equivalent solutions, here the renamings of the auxiliary
+  states.
+\item[Unit propagation.] The inference that repeatedly sets the literal
+  of any clause whose other literals are all false.
+\item[SAT solver; CDCL; conflict.] A SAT solver decides whether a CNF
+  formula is satisfiable. Kissat \cite{Kissat20} and CaDiCaL
+  \cite{CaDiCaL2} implement \emph{conflict-driven clause learning} (CDCL):
+  they assign variables, propagate, and at every \emph{conflict} (a clause
+  whose literals are all false) learn a new clause and backtrack. The number
+  of conflicts measures the effort, and a \emph{conflict budget} limits it.
+  PySAT \cite{PySAT18} is a Python interface to such solvers.
+\item[Incremental solving; assumptions.] Solving a sequence of related
+  formulas with one solver that keeps what it has learned;
+  \emph{assumptions} are literals fixed for a single call.
+\item[Selector variables.] One auxiliary variable $x_g$ per germ $g$, with
+  the clauses $\neg x_g\vee\ell$ for every literal $\ell$ that fixes a
+  transition of $g$, and the clause $\bigvee_g x_g$. A model with $x_g$
+  true satisfies the transitions of $g$; hence the extended formula is
+  unsatisfiable if and only if, for every germ $g$, the original formula
+  together with the transitions of $g$ is unsatisfiable, and one
+  certificate covers the whole list (\cref{prop:germs}).
+\item[Unsatisfiable core.] A subset of the clauses, or of the
+  assumptions, that is already unsatisfiable.
+\item[Proof certificate; DRAT; LRAT; certified.] A proof of
+  unsatisfiability given as a list of clauses, each of which follows from
+  the formula and the preceding clauses by a mechanically checkable rule
+  (reverse unit propagation, or the resolution-asymmetric-tautology
+  property), ending with the empty clause. The DRAT format also allows
+  clause deletions. The LRAT format \cite{CruzFilipeEtAl17} also records,
+  for each clause, the earlier clauses from which it follows, so that it
+  can be checked without any search; \texttt{lrat-check}, of the \textsf{drat-trim}
+  suite \cite{WetzlerHeuleHunt14}, is such a checker. A claim of
+  unsatisfiability is \emph{certified} when its LRAT proof has been
+  checked (output ``\texttt{VERIFIED}''). A \emph{computer-assisted proof}
+  is a proof some of whose steps are finite computations carried out by
+  programs; in this paper every unsatisfiability claim used in such a proof
+  is certified.
+\item[SHA-256 digest.] A cryptographic hash of a file, listed in
+  \ref{app:repro} so that readers can check that they use the same files.
+\item[Counterexample-guided search over lengths.] Solve for a set of
+  lengths, simulate the model, and if it fails at a new length, add that
+  length and repeat (\cref{sec:germs}).
+\item[Logic-based Benders decomposition; nogood.] A scheme in which a
+  master problem proposes partial solutions (here germs), a subproblem
+  (here the completion test) refutes them, and a \emph{nogood}, a clause
+  that excludes the refuted proposal or a generalisation of it, is added
+  to the master problem.
+\item[Depth-first search; nodes; exhaustive; pipeline.] A depth-first
+  search extends a partial solution one decision at a time and backtracks
+  when a test fails; its \emph{nodes} are the partial solutions visited. A
+  \emph{breadth-first} search visits them level by level instead. A search
+  or enumeration is \emph{exhaustive} if it covers all candidates. The
+  \emph{pipeline} of \cref{sec:germs} is the sequence of filters applied to
+  a list of germs.
+\item[Look-ahead search tree; random-probe estimator.] The tree of
+  partial rule tables in which the half-line transitions are fixed in the
+  order of their first use, a node being discarded when the solver refutes
+  it within a conflict budget. Knuth's estimator \cite{Knuth75} follows
+  random root-to-leaf paths (\emph{probes}) and averages the products of
+  the branching degrees along them, an unbiased estimate of the number of
+  nodes.
+\item[Cube-and-conquer.] Splitting a formula into many subproblems, each
+  given by a partial assignment (a \emph{cube}), that are solved
+  independently \cite{HeuleEtAl11}.
+\item[Brute-force checker.] The program \texttt{fsspcheck.c}, which
+  simulates each line directly from the rule table and uses none of the
+  lemmas.
+\item[Wall-clock time; CPU-hours.] The elapsed real time of a run; one
+  CPU-hour is one hour of one processor core.
+\end{description}
+
+}
+
+{\small
+\begin{longtable}{@{}p{0.22\textwidth}p{0.55\textwidth}p{0.15\textwidth}@{}}
+\caption{Symbols, in order of first use.}\label{tab:symbols}\\
+\toprule
+symbol & meaning & where\\
+\midrule
+\endfirsthead
+\toprule
+symbol & meaning & where\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+$S$, $k=|S|$ & set of states, number of states & \cref{sec:prelim}\\
+$\mathsf L,\mathsf G,\mathsf F$ & quiescent state, general, firing state & \cref{sec:prelim}\\
+$W$ & working states $S\setminus\{\mathsf F\}$ & \cref{sec:prelim}\\
+$\mathsf A,\mathsf B$; $\mathsf A_1,\dots,\mathsf A_{k-3}$ & auxiliary states ($k=5$; general $k$) & \cref{sec:prelim,sec:encoding}\\
+$\ast$ & border symbol & \cref{sec:prelim}\\
+$\delta$, $\bar\delta$ & rule; its mirror image & \cref{sec:prelim}, \cref{rem:right}\\
+$e=(x,y,z)$, $d$ & neighbourhood; value $\delta(e)=d$ & \cref{sec:encoding}\\
+$n$, $n'$ & lengths of lines & \cref{sec:prelim}\\
+$t$, $i$, $T$ & time, position, a particular time & \cref{sec:prelim}\\
+$C_n$, $C_\infty$ & diagrams of the line of length $n$ and of the half-line & \cref{sec:prelim}\\
+$\mathcal N$, $N$ & set of lengths; largest length & \cref{sec:prelim}\\
+$f_i$ & front, $C_\infty(i-1,i)$ & \cref{lem:return}\\
+$R_n$ & reflected triangle & \cref{sec:prelim}\\
+$\tau$, $\kappa$ & relative time and distance to the right end & \cref{sec:pumping}\\
+$J_n(\kappa)$ & input word of $R_n$ & \cref{sec:pumping}\\
+$\Psi$ & partial map computing $R_n$ from $J_n$ & \cref{lem:determinacy}\\
+$\mathrm{cone}_n(\tau,\kappa)$ & input cells in the backward cone of $(\tau,\kappa)$ & \cref{sec:pumping}\\
+$\mathrm{PUMP}(n,n')$ & the pumping condition for the lengths $n<n'$ & \cref{sec:pumping}\\
+$\Phi_t(j)$, $j$ & co-moving frame; depth & \cref{sec:pumping}\\
+$\theta(j)$, $P_j$ & transient and a period of the depth-row $j$ & \cref{thm:third}\\
+$v_c(i)$, $c$ & cell $i$ of chain $c$; chain index & \cref{sec:pumping}\\
+$u_c(y)$, $\varepsilon_c$, $y$ & skewed coordinates; slice index & \cref{sec:pumping}\\
+$s$, $L$, $Y$ & start, period and end of a periodic stretch & \cref{lem:left}\\
+$\mathbf u(y)$, $\Gamma$, $\Gamma'$, $y_1,y_2$, $h$ & local to the proof of \cref{lem:left} & \cref{lem:left}\\
+$\Omega$, $\alpha$, $t_0$, $p$, $q$, $\gamma$ & wedge, its slope and start; periods; a constant & \cref{thm:left}\\
+$t_1$, $P$, $r$, $\nu$ & start, period, residue, period count & \cref{cor:regular}\\
+$w_j$, $z_j$, $a_j$, $D_j$, $m$ & junction and block words, exponents, growth, number of blocks & \cref{cor:regular}\\
+$j(r)$, $s_r$, $\beta$ & local to the proof of \cref{cor:regular} & \cref{cor:regular}\\
+$\bar\imath$ & mirrored position $n+1-i$ & \cref{rem:right}\\
+$\mathrm{MT}_k(\mathcal N;M,N')$ & the formula; $M$: half-line bound, $N'$: pumping bound & \cref{sec:encoding}\\
+$T_{e,d}$, $X_{\xi,w}$, $\xi$ & transition and cell variables; a cell & \cref{sec:encoding}\\
+$E_{n,n'}(\kappa_0)$ & determinacy link variable & \cref{sec:encoding}\\
+$c_M(\delta)$ & complexity of the germ of $\delta$ below $M$ & \cref{sec:germs}\\
+$\delta_{12},\dots,\delta_{14}^{\mathrm c}$ & the five-state rules of \cref{sec:five} & \cref{sec:five}\\
+\end{longtable}}

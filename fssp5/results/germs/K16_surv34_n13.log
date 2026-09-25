@@ -1,0 +1,35 @@
+0 SATISFIABLE 484.8 GERM *GL>L GLL>A *LA>L LAL>B *LB>G ALL>B LBB>L BBL>L BLL>B LLB>B LAB>A LBL>B ABB>B BBB>L ABL>B BLB>L rule=/tmp/claude-0/germlong_0_2-13.txt check: FAIL n=14: a cell fires at time 22 < 26
+1 UNKNOWN 900.0 GERM *GL>L GLL>A *LA>G LAL>L ALL>G GLG>A LGL>A LAA>L AAA>G AAL>G LGG>L GGG>L GGL>A LLA>L LLG>A ALA>G
+2 UNSATISFIABLE 8.0 GERM *GL>L GLL>A *LA>G LAL>A *GA>A ALL>A GAA>A *AA>L AAL>L *LL>A ALA>L *AL>L LLA>A LAA>L AAA>L GAL>L
+3 UNSATISFIABLE 6.0 GERM *GL>L GLL>A *LA>G LAL>A *GA>A ALL>A GAA>A *AA>L AAL>L *LL>A ALA>L *AL>L LLA>A LAA>L AAA>L GAL>A
+4 UNSATISFIABLE 287.2 GERM *GL>L GLL>A *LA>B LAL>A *BA>A ALL>A BAA>A *AA>G AAL>L ALA>L LLA>A LAA>L *BL>L BLL>L *LL>L AAA>L
+5 SATISFIABLE 20.6 GERM *GL>G GLL>A *GA>G GAL>L ALL>G GLG>A LGL>L ALA>L LAL>G LLG>L LGG>G ALG>L GGL>L GLA>G GGG>L LLA>L rule=/tmp/claude-0/germlong_5_2-13.txt check: FAIL n=14: a cell fires at time 20 < 26
+6 SATISFIABLE 203.1 GERM *GL>G GLL>A *GA>G GAL>L ALL>G GLG>A LGL>A GAA>L AAA>G AAL>G LGG>L GGG>A ALA>L GGL>A LAA>G LLG>A rule=/tmp/claude-0/germlong_6_2-13.txt check: FAIL n=14: a cell fires at time 18 < 26
+7 SATISFIABLE 750.7 GERM *GL>G GLL>A *GA>G GAL>L ALL>A GLA>A LAL>G GAG>L AGA>L LLA>A ALA>A LAG>G AGL>L GAA>L LAA>L AAG>A rule=/tmp/claude-0/germlong_7_2-13.txt check: FAIL n=14: a cell fires at time 24 < 26
+8 SATISFIABLE 140.9 GERM *GL>G GLL>A *GA>G GAL>A ALL>G GAG>L AGL>L LLA>L LAL>L LLG>A AGA>G GLG>A LGL>L LGA>G ALA>G LAG>A rule=/tmp/claude-0/germlong_8_2-13.txt check: FAIL n=14: a cell fires at time 20 < 26
+9 SATISFIABLE 6.9 GERM *GL>G GLL>A *GA>G GAL>A ALL>A GAA>A AAL>L ALA>A LAL>G AAG>L AGA>L LLA>L LAA>A LAG>A AAA>L GAG>A rule=/tmp/claude-0/germlong_9_2-13.txt check: FAIL n=14: a cell fires at time 24 < 26
+10 SATISFIABLE 14.6 GERM *GL>G GLL>A *GA>G GAL>A ALL>A GAA>A AAL>L ALA>A LAL>G AAG>L AGA>A LAA>L AAA>A LAG>A GAG>G rule=/tmp/claude-0/germlong_10_2-13.txt check: FAIL n=14: a cell fires at time 24 < 26
+11 UNSATISFIABLE 2.0 GERM *GL>G GLL>A *GA>G GAL>A ALL>A GAA>A AAL>L ALA>A LAL>G AAG>G GAG>A AGA>L AGL>G GLA>A LAA>A LAG>A
+12 SATISFIABLE 169.8 GERM *GL>A GLL>G *AG>L AGL>G *LG>A LGG>L *AL>L GGL>L ALL>A *LA>L LLG>G LAG>A LGL>G AGG>G GGG>L GLG>L rule=/tmp/claude-0/germlong_12_2-13.txt check: FAIL n=14: a cell fires at time 22 < 26
+13 SATISFIABLE 44.3 GERM *GL>A GLL>G *AG>L AGL>G *LG>A LGG>L *AL>G GGL>L ALL>A *GA>G LLG>G GAG>A LGL>G AGG>G GGG>L GLG>L rule=/tmp/claude-0/germlong_13_2-13.txt check: FAIL n=14: a cell fires at time 22 < 26
+14 SATISFIABLE 77.2 GERM *GL>A GLL>G *AG>L AGL>G *LG>A LGG>L *AL>A GGL>L ALL>A *AA>A LLG>G AAG>A LGL>G AGG>G GGG>L GLG>L rule=/tmp/claude-0/germlong_14_2-13.txt check: FAIL n=14: a cell fires at time 20 < 26
+15 SATISFIABLE 14.9 GERM *GL>A GLL>G *AG>L AGL>G *LG>A LGG>L *AL>B GGL>L ALL>A *BA>B LLG>G BAG>A LGL>G AGG>G GGG>L GLG>L rule=/tmp/claude-0/germlong_15_2-13.txt check: FAIL n=14: a cell fires at time 19 < 26
+16 SATISFIABLE 23.2 GERM *GL>A GLL>G *AG>L AGL>G *LG>B LGG>L *BL>L GGL>L BLL>A *LA>L LLG>G LAG>A LGL>G AGG>G GGG>L GLG>L rule=/tmp/claude-0/germlong_16_2-13.txt check: FAIL n=14: a cell fires at time 23 < 26
+17 SATISFIABLE 85.2 GERM *GL>A GLL>G *AG>L AGL>G *LG>B LGG>L *BL>G GGL>L BLL>A *GA>G LLG>G GAG>A LGL>G AGG>G GGG>L GLG>L rule=/tmp/claude-0/germlong_17_2-13.txt check: FAIL n=14: a cell fires at time 23 < 26
+18 SATISFIABLE 26.3 GERM *GL>A GLL>G *AG>L AGL>G *LG>B LGG>L *BL>A GGL>L BLL>A *AA>A LLG>G AAG>A LGL>G AGG>G GGG>L GLG>L rule=/tmp/claude-0/germlong_18_2-13.txt check: FAIL n=14: a cell fires at time 25 < 26
+19 SATISFIABLE 35.7 GERM *GL>A GLL>G *AG>L AGL>G *LG>B LGG>L *BL>B GGL>L BLL>A *BA>B LLG>G BAG>A LGL>G AGG>G GGG>L GLG>L rule=/tmp/claude-0/germlong_19_2-13.txt check: FAIL n=14: a cell fires at time 22 < 26
+20 SATISFIABLE 707.3 GERM *GL>A GLL>G *AG>G AGL>B *GB>L GBG>L *LL>G BGL>L LLG>L LGL>G LGG>G GLG>G GGL>G BGG>G GGG>L AGG>L rule=/tmp/claude-0/germlong_20_2-13.txt check: FAIL n=14: a cell fires at time 18 < 26
+21 UNSATISFIABLE 0.4 GERM *GL>A GLL>G *AG>A AGL>G AGG>G GGL>L GLG>G LGL>B GGB>L GBG>G BGL>G LGG>L GGG>L LLG>G LGB>G BGG>G
+22 SATISFIABLE 153.7 GERM *GL>A GLL>G *AG>A AGL>G AGG>G GGL>L GLG>G LGL>B GGB>L GBG>G BGL>G LGG>L GGG>G LGB>G BGB>B BGG>G rule=/tmp/claude-0/germlong_22_2-13.txt check: FAIL n=14: a cell fires at time 19 < 26
+23 SATISFIABLE 6.9 GERM *GL>A GLL>G *AG>A AGL>G AGG>G GGL>L GLG>G LGL>B GGB>G GBG>G GGG>L BGL>L LLG>G LGB>B LGG>L BGG>L rule=/tmp/claude-0/germlong_23_2-13.txt check: FAIL n=14: a cell fires at time 23 < 26
+24 SATISFIABLE 35.7 GERM *GL>A GLL>G *AG>A AGL>B *AB>A ABG>B BGL>L ABL>G BLG>L LGL>G GLG>G LGG>G BGG>G GGL>G GGG>L LLG>L rule=/tmp/claude-0/germlong_24_2-13.txt check: FAIL n=14: a cell fires at time 19 < 26
+25 SATISFIABLE 151.2 GERM *GL>A GLL>G *AG>B AGL>G *BG>B BGG>G GGL>L BGL>G GLG>G LGL>B GGB>L GBG>G LGG>L GGG>G LGB>G BGB>B rule=/tmp/claude-0/germlong_25_2-13.txt check: FAIL n=14: a cell fires at time 20 < 26
+26 SATISFIABLE 236.3 GERM *GL>A GLL>A *AA>G AAL>L ALL>G GLG>A LGL>L ALA>L LAL>G LLG>L LGG>G ALG>L GGL>L GLA>G GGG>L LLA>L rule=/tmp/claude-0/germlong_26_2-13.txt check: FAIL n=14: a cell fires at time 22 < 26
+27 UNSATISFIABLE 1.1 GERM *GL>A GLL>A *AA>G AAL>L ALL>A GLA>G *AG>A LAL>A AGA>A GAA>A AAA>L ALA>L LLA>A LAA>L GAL>A AGL>G
+28 UNSATISFIABLE 1.0 GERM *GL>A GLL>A *AA>G AAL>L ALL>A GLA>G *AG>A LAL>A AGA>A GAA>A AAA>L ALA>L LLA>A LAA>L GAL>A AGL>A
+29 SATISFIABLE 9.4 GERM *GL>A GLL>B *AB>G ABL>L BLL>G GLG>B LGL>L BLB>L LBL>G LLG>L LGG>G BLG>L GGL>L GLB>G GGG>L LLB>L rule=/tmp/claude-0/germlong_29_2-13.txt check: FAIL n=14: only 6 of 14 cells fire at time 26
+30 SATISFIABLE 42.6 GERM *GL>A GLL>B *AB>G ABL>L BLL>G GLG>B LGL>B ABB>L BBB>G BBL>G LGG>L GGG>B BLB>L GGL>B LBB>G LLG>B rule=/tmp/claude-0/germlong_30_2-13.txt check: FAIL n=14: a cell fires at time 23 < 26
+31 SATISFIABLE 6.4 GERM *GL>A GLL>B *AB>A ABL>B BLL>B ABB>B BBL>L BLB>B LBL>A BBA>L BAB>L LLB>L LBB>B LBA>B BBB>L ABA>B rule=/tmp/claude-0/germlong_31_2-13.txt check: FAIL n=14: a cell fires at time 20 < 26
+32 SATISFIABLE 11.1 GERM *GL>A GLL>B *AB>A ABL>B BLL>B ABB>B BBL>L BLB>B LBL>A BBA>L BAB>B LBB>L BBB>B LBA>B ABA>A rule=/tmp/claude-0/germlong_32_2-13.txt check: FAIL n=14: a cell fires at time 18 < 26
+33 UNSATISFIABLE 2.1 GERM *GL>A GLL>B *AB>A ABL>B BLL>B ABB>B BBL>L BLB>B LBL>A BBA>A ABA>B BAB>L BAL>A ALB>B LBB>B LBA>B
+SUMMARY 2-13 {'SATISFIABLE': 25, 'UNKNOWN': 1, 'UNSATISFIABLE': 8}

@@ -12,8 +12,9 @@
  * Symmetry: auxiliary states are introduced in increasing order along the
  * search path (a value a>=3 may be used only after a-1 has been used).
  *
- * usage: fsspdfs k N [-p prefixdepth part nparts] [-s] [-q]
+ * usage: fsspdfs k N [-p prefixdepth part nparts] [-s] [-q] [-g germfile]
  *   -s  print every solution (restricted to the entries that are used)
+ *   -g  fix the transitions of a half-line germ (one "GERM ..." line)
  *   -p  split: only explore the subtrees whose first `prefixdepth`
  *       branching choices have index == part (mod nparts)
  */
@@ -40,6 +41,7 @@ static int cube_depth = -1; static long long ncubes;
 static int setorder[512][3]; static int nset;
 static long long split_counter = 0;
 static int maxaux; /* highest auxiliary state used so far (1 if none) */
+static const char *germfile = NULL;
 static long long *hist; /* depth histogram of dead ends by program position */
 
 static int ncell, cap;
@@ -208,6 +210,7 @@ int main(int argc, char **argv) {
     if (!strcmp(argv[i], "-s")) print_sols = 1;
     else if (!strcmp(argv[i], "-c") && i + 1 < argc) { cube_depth = atoi(argv[i + 1]); i++; }
     else if (!strcmp(argv[i], "-nodiff")) { use_diff = 0; use_front = 0; }
+    else if (!strcmp(argv[i], "-g") && i + 1 < argc) { germfile = argv[i + 1]; i++; }
     else if (!strcmp(argv[i], "-p") && i + 3 < argc) {
       split_depth = atoi(argv[i + 1]); split_part = atoi(argv[i + 2]); split_n = atoi(argv[i + 3]);
       i += 3;
@@ -217,6 +220,26 @@ int main(int argc, char **argv) {
   tab[0][0][0] = 0;       /* d(L,L,L) = L */
   tab[0][0][BND] = 0;     /* d(L,L,*) = L */
   maxaux = 1;
+  if (germfile) {
+    /* fix the transitions of a half-line germ ("GERM lcr>d ..."); the symmetry
+       rule then only applies to auxiliary states that the germ does not use */
+    FILE *fg = fopen(germfile, "r");
+    static char gl[1 << 16];
+    if (!fg || !fgets(gl, sizeof gl, fg)) { fprintf(stderr, "cannot read germ\n"); return 2; }
+    fclose(fg);
+    for (char *tok = strtok(strstr(gl, "GERM") + 4, " \n"); tok; tok = strtok(NULL, " \n")) {
+      if (strlen(tok) != 5 || tok[3] != '>') continue;
+      int e[4];
+      const char *ch = tok;
+      for (int q = 0; q < 4; q++) {
+        char x = ch[q < 3 ? q : 4];
+        e[q] = x == '*' ? BND : x == 'L' ? 0 : x == 'G' ? 1 : x == 'F' ? FST : 2 + (x - 'A');
+      }
+      tab[e[0]][e[1]][e[2]] = e[3];
+      if (e[3] >= 2 && e[3] < FST && e[3] > maxaux) maxaux = e[3];
+      for (int q = 0; q < 3; q++) if (e[q] >= 2 && e[q] < FST && e[q] > maxaux) maxaux = e[q];
+    }
+  }
   build();
   hist = calloc(nprog + 1, sizeof(long long));
   fprintf(stderr, "k=%d N=%d program length %d, cells %d\n", K, N, nprog, ncell);

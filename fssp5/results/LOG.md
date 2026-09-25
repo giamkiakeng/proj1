@@ -47,3 +47,51 @@ All times single core (Intel/AMD cloud vCPU), kissat 4.x (git HEAD 2026-09) unle
   2..10 + {20} SAT; + {30}, {40} UNKNOWN (300 s).  Band tests (germband.py, h=4): UNKNOWN (300 s).
 - lazyk_germ (delta12 germ, lengths 2..14, links): stopped after ~63 min without answer
   (architecture refuted by the lemma anyway).
+- delta13' (results/delta13_chaotic.txt): first germ of K16_surv34 (chaotic half-line, complexity 16);
+  completion for 2..12 in 2.4 s, for 2..13 in 442 s (rerun 485 s), fails n=14; 2..14 UNKNOWN (600 s).
+- germext2 (streaming, N=20000): 2 more of the 34 K<=16 survivors refuted (s=3, L=2); 32 remain.
+- fsspdfs -g (germ fixed, DFS over reflected transitions): no answer within 300 s even for N=8.
+- Mirrored lemma (paper Remark 3.7) checked on Mazoyer: stretches <= 7 (n <= 300, n = 6 mod 7).
+- delta14 (results/delta14.txt): lazyk.py 14 200 --germ results/delta13_chaotic.txt, iteration 1 SAT in 1758 s;
+  synchronizes 2..14 (checked by fsspcheck and by an independent Python simulation), fails n=15 (fires at 22 < 28).
+  Same 16-neighbourhood chaotic germ as delta13'.  NEW FRONTIER: N_max(5) >= 14.
+- germdfs cross-checked by an independent Python enumerator (germdfs_check.py, pumping cones from pumping.py):
+  identical germ sets for K=12 (2), 13 (28), 14 (244).
+- 2..13 tests on the K<=16 survivors (germlong.py, 900 s): #0 SAT (delta13'), #1 UNKNOWN, #2 #3 #4 UNSAT, #5 SAT, ...
+- Restricted class "germ of delta14 + pre-firing configuration L G^(n-2) B for 4<=n<=N" (src/class_prefire14.py):
+  N=14 SAT (delta14 is in the class); N=15 UNSAT (kissat, about 30 min).  So delta14's mechanism does not
+  extend to length 15.  Unrestricted delta14 germ at 2..15: kissat without links UNKNOWN after 4 h; with links
+  and CaDiCaL still running.  delta14c germ at 2..15: UNKNOWN (2400 s).
+
+## Session 3 (after container restart)
+- All background runs of session 2 were killed by a container restart.  Before that, the delta14 germ at
+  lengths 2..15 without links: kissat UNKNOWN after 4 h (log chaos15_nolinks).
+- Paper: glossary of all terms and symbols and an illustrated section (six figures) before the introduction;
+  notation made consistent; four-state free-transition count corrected to 43 (ratio 5^94/4^43 ~ 10^40).
+- The two survivors of complexity exactly 15 (K16_remaining16 #3 = germ of delta14c, and #16) have the same
+  half-line for t >= 1 (checked for t <= 1500) up to the renaming G->A, A->B of delta14c's states:
+  delta14c's half-line uses {L,G,A}, #16's uses {L,A,B} (G only at t = 0).
+- delta14d (results/delta14d.txt): germcegar on #16: 2..13 SAT in 8 s, 2..14 SAT in 376 s; synchronizes
+  2..14 (fsspcheck and an independent Python simulation), fails at n = 15 (a cell fires at t = 22);
+  no firing on the half-line to anti-diagonal 78, PUMP to 40 with 0 violations; germ = #16 (15 neighbourhoods).
+  sha256 22d5bcd83176c0e87b35a53c00db36b78b9a7144d12c1648a8430856e1ad3b2a.
+- Pre-firing configurations (4 <= n <= 14): delta14c G^n, delta14d A^n (uniform), delta14 L G^(n-2) B.
+- Band tests (germband.py) on the delta14 germ, lengths 16..80: h = 2 SAT (0.1 s), h = 4 SAT (0.9 s).
+- Complexity 17 (germdfs 5 78 17 40): 6.08e9 nodes, 53,081 germs of complexity <= 17 (12:2, 13:26, 14:216,
+  15:1,391, 16:8,152 -- identical to the K<=16 run -- and 17:43,294).  Funnel for the 43,294 of complexity 17:
+  germext to anti-diagonal 1300 (s<=3, L<=8, PUMP<=650): 34,613 refuted by the left-border lemma, 637 by
+  pumping, 69 not determined to 1300, 7,975 closed and unrefuted -> 8,044;
+  completion test 2..10 (germinc): 6,834 UNSAT, 1,210 SAT;
+  germext 3300 (L<=12, PUMP<=1650): 492 refuted -> 718;  germext 10^4 (L<=24, PUMP<=800): 411 refuted -> 307;
+  regularity certificate (germpersist t1=600 P<=24 q<=12): 94 regular; (t1=1500 P<=48 q<=24): 26 more -> 187 left
+  (180 not certified, 7 not determined).  Completion test 2..13 on the 187: running.
+- Cube-and-conquer on the complexity-15 half-line at lengths 2..15 (march_cu -d 12; cnfcubes.py, CaDiCaL under
+  assumptions): germ #16 3070 cubes, germ of delta14c 2731 cubes; running (all decided cubes UNSAT so far).
+  Sanity run on the satisfiable instance germ #16 at 2..14 (854 cubes, budget 1e5): no SAT cube among the first
+  293 within 1800 s (234 UNSAT, 59 UNKNOWN) -- the undecided cubes must all be resolved before concluding.
+- LRAT certificate for the 6,834 complexity-17 germs refuted at 2..10 (germcert.py): CaDiCaL 439.5 s, 1.86 GB,
+  lrat-check VERIFIED 33.2 s (digests in results/germs/CERTIFICATES.txt).
+- Length-13 test on the 187 remaining complexity-17 germs (budget 1e6 conflicts): first 30: 13 SAT, 11 UNSAT, 6 UNKNOWN.
+- delta14e (results/delta14e.txt): germcegar on the first complexity-17 germ that passes 2..13 finds a rule for
+  all lengths 2..14 in 401 s; it fails at 15 by one step (a cell fires at time 27 < 28); uniform pre-firing A^n;
+  no firing on the half-line to 78, PUMP to 40 OK.  Germ in results/germs/germ_delta14e.txt (17 neighbourhoods).
