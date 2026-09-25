@@ -9,7 +9,7 @@ CaDiCaL~3.0.1 \cite{CaDiCaL2} (or CaDiCaL~1.9.5 through PySAT
 on a cloud virtual CPU.
 
 \begin{theorem}\label{thm:four}
-No rule with four states $\{\mathsf L,\mathsf G,a,\mathsf F\}$ satisfying
+No rule with four states $\{\mathsf L,\mathsf G,\mathsf A,\mathsf F\}$ satisfying
 \eqref{eq:quiescence} synchronizes all lines of lengths $2,\dots,9$ in
 minimal time. In particular there is no four-state minimal-time solution,
 even without the condition $\delta(\ast,\mathsf L,\mathsf L)=\mathsf L$.
@@ -19,7 +19,7 @@ even without the condition $\delta(\ast,\mathsf L,\mathsf L)=\mathsf L$.
 By \cref{lem:agree,lem:return} and \eqref{eq:neverfire} every such rule
 yields a model of $\mathrm{MT}_4(\{2,\dots,9\};16)$ (for $k=4$ there is a
 single auxiliary state and no symmetry breaking). CaDiCaL proves this
-formula unsatisfiable in $51$\,s and emits an LRAT proof of $177$\,MB
+formula unsatisfiable in $51$\,s and emits an LRAT proof \cite{CruzFilipeEtAl17} of $177$\,MB
 ($41$\,MB compressed), which \texttt{lrat-check} of the \textsf{drat-trim}
 suite \cite{WetzlerHeuleHunt14} verifies in $5.7$\,s. The SHA-256 digests of
 the formula and of the proof are listed in \ref{app:repro}.
@@ -55,8 +55,9 @@ by exhaustive enumeration ($1.09\cdot10^{8}$ search nodes).}\label{tab:four}
 \subsection{Lucky rules}
 
 For five states the table has $94$ free transitions with five values each,
-against $45$ with four values for four states: the search space grows by a
-factor of about $10^{38}$. \Cref{tab:five} lists representative instances.
+against $43$ with four values for four states (in both cases the neighbourhoods
+$(\ast,y,\ast)$ and the two quiescence transitions are excluded): the search
+space grows by a factor of about $5^{94}/4^{43}\approx10^{40}$. \Cref{tab:five} lists representative instances.
 All of them are satisfiable, and in each case the decoded rule fails for
 some length that was not encoded; we call such rules \emph{lucky}. Two kinds
 occur. Rules of the first kind have a \emph{periodic} half-line behind the
@@ -372,7 +373,7 @@ therefore be almost as specific as the germs themselves.
 look-ahead search tree---half-line transitions fixed in order of first use,
 anti-diagonal by anti-diagonal, a node being discarded when the full formula
 with the partial table as assumptions is refuted within $3000$ conflicts---
-with Knuth's random-probe estimator. For four states ($\mathrm{MT}_4$ with
+with Knuth's random-probe estimator \cite{Knuth75}. For four states ($\mathrm{MT}_4$ with
 lengths $2,\dots,9$) the mean over $30$ probes is $27$ nodes. For five
 states ($\mathrm{MT}_5(\{2,\dots,12\};78,39)$ with links) three probes gave
 $4.2\cdot10^{11}$, $3.1\cdot10^{17}$ and $8.3\cdot10^{18}$; adding the

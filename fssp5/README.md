@@ -10,17 +10,18 @@ work. What is established (with proofs or checkable certificates):
 
 | Result | Where | How to check |
 |---|---|---|
+| Glossary of every term and symbol, and an illustrated introduction to the problem (Figures 1-6) | paper, sections "Terms and notation" and "The firing squad in pictures" (before §1) | — |
 | Agreement / reflected-triangle reduction; return-chain lemma | paper §2 | proofs |
 | Pumping lemma (all minimal-time solutions, any number of states) | paper §3, Lemma 3.3 | proof; `src/pumping.py` checks it on Mazoyer's rule (0 violations, 4 ≤ n < n' ≤ 120) |
-| Speed-1/3 barrier theorem | paper §3, Theorem 3.4 | proof; Mazoyer's rows: T(j) ∈ {2j+1, 2j+2} (j < 700) |
+| Speed-1/3 barrier theorem | paper §3, Theorem 3.4 | proof; Mazoyer's rows: θ(j) ∈ {2j+1, 2j+2} (j < 700) |
 | Left-border lemma and left-border barrier theorem (any number of states); no minimal-time solution has an eventually regular half-line (Corollary 3.7); mirrored version for the reflected triangles (Remark 3.8) | paper §3.3, Lemma 3.5, Theorem 3.6, Corollary 3.7, Remark 3.8 | proofs; checked on Mazoyer's rule (periodic stretches ≤ 6 resp. ≤ 7); `src/germpersist.py` certifies eventual regularity of germs |
 | No 4-state minimal-time solution (without assuming δ(*,L,L)=L) | paper §5, Theorem 5.1 | LRAT certificate, `lrat-check` VERIFIED in 5.7 s |
 | Explicit 5-state rules synchronizing all lengths 2..12 (δ12, uniform pre-firing) and 2..13 (δ13), obeying PUMP up to 40 and never firing on the half-line up to anti-diagonal 78 | paper §6, Theorem 6.1 | `src/fsspcheck`, `src/pumping.py`, `src/check_halfline.py`, `src/germcompare.py` on `results/uniformA_2-12.txt`, `results/delta13.txt` |
 | The common half-line of δ12 and δ13 cannot be completed to a solution (fails at n = 518 by the left-border lemma) | paper §6, Corollary 6.2 | `src/germext.c` |
-| A 5-state rule δ14 for **all lengths 2..14** (fails at 15), with a chaotic half-line of complexity 16 that escapes both barriers (found via δ′13 for 2..13 with the same half-line) | paper §6, Proposition 6.3, Figure 2 | `src/fsspcheck`, `src/germext.c` on `results/delta14.txt` (and `results/delta13_chaotic.txt`) |
+| A 5-state rule δ14 for **all lengths 2..14** (fails at 15), with a chaotic half-line of complexity 16 that escapes both barriers (found via δ′13 for 2..13 with the same half-line) | paper §6, Proposition 6.3, Figures 6 and 8 | `src/fsspcheck`, `src/germext.c` on `results/delta14.txt` (and `results/delta13_chaotic.txt`) |
 | A second rule δ14b for all lengths 2..14 (fails at 15), on another complexity-16 germ with a periodic half-line | paper §6.2 | `src/fsspcheck` on `results/delta14b.txt` |
 | A third rule δ14c for all lengths 2..14 (fails at 15), chaotic half-line with 15 neighbourhoods | paper §6.3 | `src/fsspcheck` on `results/delta14c.txt` |
-| Every 5-state minimal-time solution uses ≥ 15 distinct neighbourhoods on its half-line below anti-diagonal 78 | paper §6.3, Proposition 6.4, Table 3 | `src/germdfs.c`, `src/germcert.py` (LRAT), `src/germext.c`; digests in `results/germs/CERTIFICATES.txt` |
+| Every 5-state minimal-time solution uses ≥ 15 distinct neighbourhoods on its half-line below anti-diagonal 78 | paper §6.3, Proposition 6.4, Table 4 | `src/germdfs.c`, `src/germcert.py` (LRAT), `src/germext.c`; digests in `results/germs/CERTIFICATES.txt` |
 | Search-space estimates (Knuth probes): ~27 nodes for 4 states vs 10^11–10^19 for 5 states | paper §6 | `src/knuth.py`, `results/knuth_k5_N12.log` |
 
 ## Layout
@@ -46,10 +47,12 @@ src/germcompare.py       half-line neighbourhoods of rules below an anti-diagona
 src/germpipe.sh          the classification pipeline
 src/germlong.py, germband.py, equiv.py, reflsym.py   further (inconclusive) experiments
 src/ruletable.py         LaTeX tables of rules
-src/figures.py           Figure 1
+src/figures.py           Figures 6-8 (space-time diagrams)
 results/                 rule tables (Mazoyer; partial 5-state rules; delta13), logs
 results/germs/           germ lists, classification logs, certificate digests
-paper/                   LaTeX sources, figure, bibliography
+paper/                   LaTeX sources, figures, bibliography
+paper/sections/terms.tex glossary of all terms and symbols (before the introduction)
+paper/sections/pictures.tex, pic_*.tex, tikzdefs.tex   the picture section (TikZ drawings, Figures 1-5)
 ```
 
 ## Reproducing the main certificates

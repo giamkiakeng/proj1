@@ -1,0 +1,34 @@
+\begin{tikzpicture}[scale=0.93]
+  % the five moods
+  \node[font=\small\bfseries,anchor=west] at (-0.2,2.05) {The five moods};
+  \foreach \s/\f/\x/\lab in {L/sleep/0.3/asleep,G/shout/1.35/general,A/awake/2.4/helper,B/awake/3.45/helper,F/fire/4.5/fire!} {%
+    \soldier{\x}{0}{\s}{\f}
+    \node[font=\scriptsize,align=center,anchor=north] at (\x,-0.06) {$\mathsf{\s}$\\[-1pt]\lab};}
+  \zzz{0.3}{0}
+  % what one soldier sees
+  \node[font=\small\bfseries,anchor=west] at (5.6,2.05) {One tick, one soldier};
+  \soldier{6.05}{0}{G}{awake}
+  \soldier{6.9}{0}{L}{awake}
+  \soldier{7.75}{0}{L}{sleep}
+  \draw[stG,line width=0.8pt,rounded corners=3pt,dashed] (5.72,-0.55) rectangle (8.08,1.62);
+  \foreach \x/\lab in {6.05/left,6.9/me,7.75/right} {\node[font=\scriptsize,anchor=north] at (\x,-0.06) {\lab};}
+  \draw[-{Stealth[length=2.2mm]},ink,line width=0.7pt] (8.3,0.7) -- node[above=2pt,font=\scriptsize]{next tick} (9.3,0.7);
+  \soldier{9.6}{0}{A}{awake}
+  \node[font=\scriptsize,anchor=north] at (9.6,-0.06) {me};
+  % the rule book
+  \node[draw=ink,fill=paper,rounded corners=2pt,anchor=north west,font=\scriptsize,align=left,
+        inner sep=3pt] at (10.15,1.95) {%
+      \textbf{rule book $\delta$}\\[1pt]
+      $\mathsf L\,\mathsf L\,\mathsf L\to\mathsf L$\\
+      $\mathsf G\,\mathsf L\,\mathsf L\to\mathsf A$\\
+      $\mathsf L\,\mathsf G\,\mathsf L\to\mathsf A$\\
+      $\mathsf G\,\mathsf G\,\mathsf G\to\mathsf F$\\[-2pt]
+      \quad$\vdots$\\
+      same book\\for everybody};
+  \node[font=\scriptsize,text=ink,align=left,anchor=north west,text width=12.3cm] at (-0.2,-1.55)
+    {With five states the book has $94$ free lines with $5$ possible entries
+     each: $5^{94}\approx5\cdot10^{65}$ books. With four states there are
+     $4^{43}\approx8\cdot10^{25}$ books, and none of them is a minimal-time
+     solution (\cref{thm:four}). Is one of the five-state books a
+     minimal-time solution? Nobody knows.};
+\end{tikzpicture}

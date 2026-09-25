@@ -12,6 +12,11 @@
 \usepackage[capitalise,noabbrev]{cleveref}
 \usepackage{microtype}
 \usepackage{url}
+\usepackage{tikz}
+\usepackage{etoolbox}
+\usepackage{longtable}
+\usepackage{placeins}
+\input{sections/tikzdefs}
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
@@ -45,6 +50,8 @@ complexity \sep minimal time \sep SAT solving \sep proof certificates
 
 \end{frontmatter}
 
+\input{sections/terms}
+\input{sections/pictures}
 \input{sections/intro}
 \input{sections/prelim}
 \input{sections/pumping}

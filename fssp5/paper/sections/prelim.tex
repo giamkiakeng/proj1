@@ -99,9 +99,9 @@ and $2n$ respectively. Then
 \[
 C_n(2n-1-i,\,i)\;\neq\;C_\infty(2n-1-i,\,i)\qquad(1\le i\le n).
 \]
-In particular the \emph{front} $s_i:=C_\infty(i-1,i)$ satisfies
-$s_{n-1}\neq\mathsf L$, and $\delta(s_{n-1},\mathsf L,\ast)\neq
-\delta(s_{n-1},\mathsf L,\mathsf L)$.
+In particular the \emph{front} $f_i:=C_\infty(i-1,i)$ satisfies
+$f_{n-1}\neq\mathsf L$, and $\delta(f_{n-1},\mathsf L,\ast)\neq
+\delta(f_{n-1},\mathsf L,\mathsf L)$.
 \end{lemma}
 
 \begin{proof}
@@ -114,16 +114,16 @@ $2n-3$, $2n-2$ and $2n-1$. By \cref{lem:agree} the first two are the same
 in $C_n$ and $C_\infty$ (for $i=1$ the left neighbour is the border in both
 diagrams). Since the results differ, the right neighbours differ:
 $C_n(2n-2-i,i+1)\ne C_\infty(2n-2-i,i+1)$, which is the claim for $i+1$.
-For $i=n$ we get $C_n(n-1,n)=\delta(s_{n-1},\mathsf L,\ast)\neq
-C_\infty(n-1,n)=\delta(s_{n-1},\mathsf L,\mathsf L)=s_n$, which is impossible
-if $s_{n-1}=\mathsf L$ by \eqref{eq:quiescence}.
+For $i=n$ we get $C_n(n-1,n)=\delta(f_{n-1},\mathsf L,\ast)\neq
+C_\infty(n-1,n)=\delta(f_{n-1},\mathsf L,\mathsf L)=f_n$, which is impossible
+if $f_{n-1}=\mathsf L$ by \eqref{eq:quiescence}.
 \end{proof}
 
 \begin{remark}\label{rem:lowerbound}
 Suppose a rule synchronizes every line, the line of length $n$ at some time
 $T\le 2n-3$. By \cref{lem:agree}, $C_\infty(T,1)=C_n(T,1)=\mathsf F$, hence
-$C_m(T,1)=\mathsf F$ for every $m\ge n$. For $m>T+1$ the cell $m$ is still
-quiescent at time $T$ by \cref{lem:lightcone}, so the line of length $m$
+$C_{n'}(T,1)=\mathsf F$ for every $n'\ge n$. For $n'>T+1$ the cell $n'$ is still
+quiescent at time $T$ by \cref{lem:lightcone}, so the line of length $n'$
 has a firing cell at time $T$ without firing entirely: a contradiction.
 \end{remark}
 

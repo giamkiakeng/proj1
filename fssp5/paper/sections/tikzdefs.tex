@@ -1,0 +1,76 @@
+%% TikZ definitions for the pictures of the section "The firing squad in pictures".
+%% State colours are those of the space-time diagrams (figures.py).
+\usetikzlibrary{shapes.geometric,shapes.callouts,arrows.meta,decorations.pathmorphing,calc,patterns}
+\definecolor{stL}{HTML}{E2DFD6}
+\definecolor{stG}{HTML}{2A78D6}
+\definecolor{stA}{HTML}{EB6834}
+\definecolor{stB}{HTML}{1BAF7A}
+\definecolor{stF}{HTML}{0B0B0B}
+\definecolor{ink}{HTML}{0B0B0B}
+\definecolor{ink2}{HTML}{52514E}
+\definecolor{skin}{HTML}{F1C9A5}
+\definecolor{brick}{HTML}{B5523B}
+\definecolor{paper}{HTML}{F4F3F0}
+\definecolor{agree}{HTML}{DCE9F8}
+\definecolor{refl}{HTML}{FBE3D6}
+\definecolor{flash}{HTML}{FFD23F}
+
+%% \soldier{x}{y}{state}{face}: a soldier standing at (x,y) (feet), tunic in the
+%% colour of the state, the state letter on the tunic; face = sleep|awake|shout|fire.
+\newcommand{\soldier}[4]{%
+  \edef\sdState{#3}\edef\sdFace{#4}\edef\sdCol{st#3}%
+  \ifdefstring{\sdState}{L}{\def\sdText{ink}}{\def\sdText{white}}%
+  \begin{scope}[shift={(#1,#2)}]
+    \draw[ink,line width=1pt,line cap=round] (-0.06,0.40) -- (-0.09,0.06);
+    \draw[ink,line width=1pt,line cap=round] (0.06,0.40) -- (0.09,0.06);
+    \fill[ink] (-0.16,0) rectangle (-0.04,0.06);
+    \fill[ink] (0.04,0) rectangle (0.16,0.06);
+    \ifdefstring{\sdFace}{fire}{%
+      \draw[brick!60!black,line width=1.6pt,line cap=round] (-0.02,0.50) -- (0.30,1.30);
+      \node[star,star points=10,star point ratio=2.1,fill=flash,draw=stA,line width=0.4pt,
+            inner sep=0pt,minimum size=0.36cm] at (0.33,1.40) {};
+    }{}%
+    \filldraw[fill=\sdCol,draw=ink,line width=0.5pt,rounded corners=1.2pt]
+      (-0.16,0.38) rectangle (0.16,0.84);
+    \ifdefstring{\sdFace}{fire}{%
+      \draw[ink,line width=1pt,line cap=round] (-0.14,0.78) -- (0.05,0.66) -- (0.14,0.86);
+    }{%
+      \draw[ink,line width=1pt,line cap=round] (-0.19,0.80) -- (-0.21,0.46);
+      \draw[ink,line width=1pt,line cap=round] (0.19,0.80) -- (0.21,0.46);
+    }%
+    \node[font=\sffamily\bfseries\scriptsize,text=\sdText] at (0,0.61) {\sdState};
+    \filldraw[fill=skin,draw=ink,line width=0.5pt] (0,1.00) circle (0.13);
+    \filldraw[fill=ink!85,draw=ink,line width=0.4pt]
+      (-0.145,1.07) -- (0.145,1.07) -- (0.11,1.19) -- (-0.11,1.19) -- cycle;
+    \ifdefstring{\sdState}{G}{\node[star,star points=5,fill=flash,inner sep=0pt,minimum size=0.11cm] at (0,1.13) {};}{}%
+    \ifdefstring{\sdFace}{sleep}{%
+      \draw[ink,line width=0.45pt] (-0.075,1.005) arc (180:360:0.028);
+      \draw[ink,line width=0.45pt] (0.019,1.005) arc (180:360:0.028);
+    }{%
+      \fill[ink] (-0.047,1.0) circle (0.016);
+      \fill[ink] (0.047,1.0) circle (0.016);
+    }%
+    \ifdefstring{\sdFace}{shout}{\fill[ink] (0,0.935) ellipse (0.03 and 0.022);}{}%
+    \ifdefstring{\sdFace}{fire}{\fill[ink] (0,0.935) ellipse (0.035 and 0.025);}{}%
+    \ifdefstring{\sdFace}{awake}{\draw[ink,line width=0.4pt] (-0.03,0.94) -- (0.03,0.94);}{}%
+  \end{scope}}
+
+%% \zzz{x}{y}: sleeping marks
+\newcommand{\zzz}[2]{%
+  \node[font=\sffamily\bfseries\tiny,text=ink2] at (#1+0.20,#2+1.22) {z};
+  \node[font=\sffamily\bfseries\scriptsize,text=ink2] at (#1+0.30,#2+1.37) {z};}
+
+%% \brickwall{x}{y}{height}: the border, drawn as a brick wall 0.24 wide
+\newcommand{\brickwall}[3]{%
+  \begin{scope}[shift={(#1,#2)}]
+    \fill[brick] (0,0) rectangle (0.24,#3);
+    \foreach \yy in {0.15,0.30,...,#3} {\draw[white,line width=0.5pt] (0,\yy) -- (0.24,\yy);}
+    \node[font=\small,text=ink2] at (0.12,#3+0.18) {$\ast$};
+  \end{scope}}
+
+%% \stone{k}{x}{colour}{verdict}{references}: a stepping stone of the state-count scoreboard
+\newcommand{\stone}[5]{%
+  \filldraw[fill=#3,draw=ink,line width=0.5pt] (#2,0) circle (0.3);
+  \node[font=\small\bfseries,text=white] at (#2,0) {#1};
+  \node[font=\scriptsize,anchor=north] at (#2,-0.36) {#4};
+  \node[font=\scriptsize,anchor=north,align=center,text=ink2] at (#2,-0.66) {#5};}

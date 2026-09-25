@@ -1,0 +1,60 @@
+\begin{tikzpicture}[scale=1]
+  % ---- (a) hare and tortoise: halving, about 3n (n = 17, one unit = one cell / one step)
+  \begin{scope}[x=0.29cm,y=-0.095cm]
+    \fill[paper] (0.5,0) rectangle (17.5,47);
+    \draw[brick,line width=1.6pt] (0.5,0) -- (0.5,47) (17.5,0) -- (17.5,47);
+    % level 1
+    \draw[stG,line width=1.1pt] (1,0) -- (17,16) -- (9,24);
+    \draw[stB,line width=1.1pt] (1,0) -- (9,24);
+    % level 2
+    \draw[stG,line width=0.8pt,dashed] (9,24) -- (17,32) -- (13,36) (9,24) -- (1,32) -- (5,36);
+    \draw[stB,line width=0.8pt,dashed] (9,24) -- (13,36) (9,24) -- (5,36);
+    % level 3
+    \foreach \m/\d in {13/1,13/-1,5/1,5/-1} {%
+      \draw[stG,line width=0.6pt,densely dotted] (\m,36) -- (\m+4*\d,40) -- (\m+2*\d,42);
+      \draw[stB,line width=0.6pt,densely dotted] (\m,36) -- (\m+2*\d,42);}
+    \foreach \p/\tt in {9/24,13/36,5/36,15/42,11/42,7/42,3/42} {\fill[flash,draw=ink,line width=0.3pt] (\p,\tt) circle (2.2pt);}
+    \fill[stF] (0.5,45.5) rectangle (17.5,47);
+    \node[font=\scriptsize,anchor=north] at (9,47.3) {everybody fires after about $3n$ ticks};
+    \node[font=\small,anchor=south] at (9,-0.8) {(a) hare and tortoise};
+    % icons: hare on the fast signal, tortoise on the slow one
+    \begin{scope}[shift={(6.6,4.35)},x=1cm,y=1cm,scale=0.85]
+      \fill[ink2!80] (0,0) ellipse (0.26 and 0.14);
+      \fill[ink2!80] (0.25,0.12) circle (0.1);
+      \fill[ink2!80,rotate around={62:(0.24,0.2)}] (0.24,0.42) ellipse (0.2 and 0.045);
+      \fill[ink2!80,rotate around={48:(0.29,0.2)}] (0.29,0.42) ellipse (0.2 and 0.045);
+      \fill[white] (0.29,0.14) circle (0.02);
+      \fill[white,draw=ink2!80,line width=0.3pt] (-0.27,0.05) circle (0.06);
+      \draw[ink2!80,line width=1pt,line cap=round] (0.12,-0.1) -- (0.25,-0.2) (-0.15,-0.1) -- (-0.3,-0.2);
+    \end{scope}
+    \begin{scope}[shift={(3.55,8.35)},x=1cm,y=1cm,scale=0.85]
+      \fill[skin!60!ink2] (0.34,0.03) circle (0.075);
+      \fill[skin!60!ink2] (-0.2,-0.03) rectangle (-0.12,-0.1) (0.12,-0.03) rectangle (0.2,-0.1);
+      \filldraw[fill=stB!75!black,draw=ink,line width=0.3pt] (-0.29,-0.02) arc (180:0:0.29 and 0.22) -- cycle;
+      \draw[stB!35,line width=0.4pt] (-0.1,-0.02) -- (-0.05,0.14) -- (0.07,0.14) -- (0.12,-0.02) (-0.05,0.14) -- (-0.14,0.19) (0.07,0.14) -- (0.14,0.19);
+    \end{scope}
+    \node[font=\scriptsize,anchor=west,stG!80!black] at (11.0,6.3) {hare, speed $1$};
+    \node[font=\scriptsize,anchor=west,stB!70!black,align=left] at (0.75,19.0) {tortoise,\\speed $\tfrac13$};
+    \node[font=\scriptsize,anchor=west,align=left] at (9.6,24.2) {they meet in\\the middle};
+  \end{scope}
+  % ---- (b) minimal time: all tortoises at once (n = 33)
+  \begin{scope}[shift={(6.15,0)},x=0.165cm,y=-0.0735cm]
+    \fill[paper] (0.5,0) rectangle (33.5,65);
+    \draw[brick,line width=1.6pt] (0.5,0) -- (0.5,65) (33.5,0) -- (33.5,65);
+    \draw[stG,line width=1.1pt] (1,0) -- (33,32) -- (1,64);
+    \foreach \p/\tt in {17/48,9/56,5/60,3/62} {\draw[stB,line width=0.9pt] (1,0) -- (\p,\tt);
+       \draw[ink2,densely dotted,line width=0.5pt] (\p,\tt) -- (\p,64);
+       \fill[flash,draw=ink,line width=0.3pt] (\p,\tt) circle (2pt);}
+    % the segment [17,33]: the same picture, mirrored, started by the wall
+    \draw[stG,line width=0.7pt,dashed] (17,48) -- (33,64);
+    \draw[stB,line width=0.7pt,dashed] (33,32) -- (25,56) (33,32) -- (29,60);
+    \fill[flash,draw=ink,line width=0.3pt] (25,56) circle (1.6pt) (29,60) circle (1.6pt);
+    \fill[stF] (0.5,64) rectangle (33.5,65.5);
+    \node[font=\scriptsize,anchor=north] at (17,65.8) {everybody fires at $t=2n-2$};
+    \node[font=\small,anchor=south] at (17,-1.1) {(b) all tortoises at once};
+    \node[font=\scriptsize,anchor=west,align=left] at (12.5,14) {speeds $1,\tfrac13,\tfrac17,\tfrac1{15},\dots$};
+    \node[font=\scriptsize,anchor=south] at (17,48.8) {$\tfrac n2$};
+    \node[font=\scriptsize,anchor=south] at (9,56.5) {$\tfrac n4$};
+    \node[font=\scriptsize,anchor=east,align=right] at (32.8,37.5) {echo};
+  \end{scope}
+\end{tikzpicture}
