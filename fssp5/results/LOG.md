@@ -107,3 +107,34 @@ All times single core (Intel/AMD cloud vCPU), kissat 4.x (git HEAD 2026-09) unle
   stopped after ~2.5 h without answer; germ #16 at 2..15: kissat UNKNOWN (2 h); delta14e germ at 2..15 UNKNOWN (30 min).
 - All five rules for 2..14 (delta14, b, c, d, e) fail at 15 by early firing in the right half (cells 9..15,
   times 21..27).
+
+## Session 4 (proofreading for submission)
+- Re-verified by independent simulation (scratch script, no project code): delta12 2..12 (fires at 23 for n=13),
+  delta13 2..13 (21 for n=14), delta14 2..14 (22, cells 13-15 for n=15), delta14b (25, cell 12), delta14c (21,
+  cell 11), delta14d (22, cells 11-15), delta14e (27, cells 9-11); pre-firing patterns as in Table B.6; delta12 and
+  delta13 share the 22-neighbourhood germ and differ in 57 of the other 72 entries; Figure 1 row t=4 = LABBBLLL;
+  delta14 half-line 3 <= t < 1500: cell 1 in {L,G}, cell 2 in {L,A}, others in {L,B}.  Rule tables C.7-C.9 equal
+  the rule files entry by entry.
+- Theorem 5.1 certificate regenerated: mt4_9.cnf and mt4_9.lrat digests identical to Appendix D, 176,861,512
+  bytes, CaDiCaL 45 s, lrat-check "c VERIFIED" in 4.6 s.  (gzip size 49.5 MB; the "41 MB compressed" figure could
+  not be reproduced and was removed from the paper.)
+- Mazoyer: depth-rows 1 <= j < 700 are 3-periodic from theta(j) = 2j+2 (j even or j = 1) and 2j+1 (j >= 3 odd)
+  (simulation to t = 2300).  Mazoyer germ (58 transitions incl. LLL) + lengths 3..12, no symmetry breaking:
+  SAT in 3.5 s (UNSAT with symmetry breaking, since Mazoyer's labels violate the order).
+- PUMP violations of partial_2-9_20.txt (Figure 6(b)) for 4 <= n < n' <= 40: 155.
+- Completion tests (fixgerm.py, half-line to 78, pumping to 39) for the Table 3 germs: p10_rule (2..10 with
+  C_inf(78)+PUMP(40)): SAT up to 10, UNSAT for 11 and 12; pb8_rule (2..8, probably the BAND(3,40) run above,
+  so not cited in the paper): SAT up to 9, UNSAT for 10; partial_2-9_16 and partial_2-9_20: UNSAT already for 2..8; partial_2-12 (M = 22): its half-line
+  fires at (t,i) = (19,9), so no completion satisfies the half-line conditions.
+- Knuth estimator: knuth.py now takes the number of states as 6th argument and counts the root.  Four states,
+  lengths 2..9, M = 16, pumping to 8, links, 30 probes, budget 3000, seed 1: 25.5 nodes
+  (results/knuth_k4_N9.log); the earlier "27 nodes" had no log and was replaced.  The five-state logs record the
+  per-probe products d_1...d_D (lower bounds for the per-probe node estimates).
+- Cube-and-conquer (continued in the background): first labelling (germ of delta14c), lengths 2..15: all 2,731
+  cubes attempted, 2,694 UNSAT, 37 undecided within the limits, no SAT; second labelling unchanged (1,376 UNSAT,
+  375 undecided, 1,319 untried); about 16 CPU-hours of solver time in total.
+- Knuth reruns with the current code (seed 1, budget 3000): `knuth.py 12 78 3 3000` reproduces the logged probes
+  exactly (4.18e11, 3.08e17, 8.31e18; mean estimate 6.7e18 nodes incl. root).  `knuth.py 18 78 3 3000` gives
+  2.09e11, 5.13e16, 4.16e18 (mean 2.22e18); the earlier N=18 log (2.21e5, 4.17e12, 1.01e15) could not be reproduced
+  with the recorded command and was replaced; the paper now says that the lengths up to 18 change little.
+- coresize.py on p10_rule (lengths 2..12): germ 39 transitions (as assumptions), raw core 38 (0.1 s).

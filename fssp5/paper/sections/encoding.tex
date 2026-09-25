@@ -5,7 +5,9 @@ Fix $k$ (the number of states), write
 $W=\{\mathsf L,\mathsf G,\mathsf A_1,\dots,\mathsf A_{k-3}\}$ (for $k=5$,
 $\mathsf A_1=\mathsf A$ and $\mathsf A_2=\mathsf B$) and let $\mathcal N$ be a finite set of lengths. We build a CNF formula
 $\mathrm{MT}_k(\mathcal N;M,N')$ that is satisfiable whenever a $k$-state
-minimal-time solution exists. All constraint families below are either the
+minimal-time solution exists; here $M$ bounds the half-line and $N'$ the
+pumping constraints, and we write $\mathrm{MT}_k(\mathcal N;M)$ when no
+pumping constraints are added. All constraint families below are either the
 definition of $\mathcal N$-minimality or consequences of
 \cref{lem:agree,lem:return,lem:determinacy,lem:pumping} and
 \eqref{eq:neverfire}; none relies on unproved assumptions about the shape of
@@ -31,8 +33,8 @@ and $d\in W$ we add
 $\neg X_{\xi_1,x}\vee\neg X_{\xi_2,y}\vee\neg X_{\xi_3,z}\vee T_{(x,y,z),\mathsf F}$.
 Literals of constant neighbours are omitted.
 
-\paragraph{Half-line} The cells $(t,i)$ of $C_\infty$ with $1\le i\le t+1$
-and $t+i\le M$ receive variables and transition clauses; cells with
+\paragraph{Half-line} The cells $(t,i)$ of $C_\infty$ with $t\ge1$,
+$1\le i\le t+1$ and $t+i\le M$ receive variables and transition clauses; cells with
 $i>t+1$ are the constant $\mathsf L$ (\cref{lem:lightcone}). Every such cell
 is forbidden to fire, by \eqref{eq:neverfire}.
 
@@ -56,15 +58,15 @@ auxiliary variable $E_{n,n'}(\kappa_0)$ is made equivalent to ``$J_n$ and $J_{n'
 coincide on the positions $0,\dots,\kappa_0$''. For every relative cell
 $(\tau,\kappa)$ of $R_n$ whose dependency cone is right-anchored and contained
 in the positions $0,\dots,\kappa_0$ we add
-$E_{n,n'}(\kappa_0)\Rightarrow\bigl(R_n(\tau,\kappa)=R_{n'}(\tau,\kappa)\bigr)$,
+$E_{n,n'}(\kappa_0)\Rightarrow\bigl(C_n(n-1+\tau,n-\kappa)=C_{n'}(n'-1+\tau,n'-\kappa)\bigr)$,
 and, for the firing cells $\tau=n-1$, the clause $\neg E_{n,n'}(\kappa_0)$
 (\cref{lem:determinacy,lem:pumping}). These clauses are implied by the
 others but allow the solver to transfer information between lines.
 
 \paragraph{Symmetry breaking} Permuting the auxiliary states maps
 solutions to solutions. We require that, in the time-major enumeration of
-the encoded half-line cells, the first occurrence of $\mathsf A_{j}$ precedes the
-first occurrence of $\mathsf A_{j+1}$; every solution can be renamed to satisfy
+the encoded half-line cells, $\mathsf A_{j+1}$ occurs only after a first
+occurrence of $\mathsf A_{j}$; every solution can be renamed to satisfy
 this. For $k=5$ this halves the search space.
 
 \paragraph{Soundness checks}

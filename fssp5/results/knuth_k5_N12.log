@@ -1,3 +1,41 @@
-probe 0: depth 30, pruned, weight 4.18e+11 (64s)
-probe 1: depth 32, pruned, weight 3.08e+17 (149s)
-probe 2: depth 36, pruned, weight 8.31e+18 (252s)
+probe 0: depth 30, pruned, weight 4.18e+11 (103s)
+probe 1: depth 32, pruned, weight 3.08e+17 (233s)
+probe 2: depth 36, pruned, weight 8.31e+18 (355s)
+estimated nodes per level (mean over probes; the root is level 0):
+  depth  1: 3
+  depth  2: 7
+  depth  3: 24
+  depth  4: 66
+  depth  5: 252
+  depth  6: 972
+  depth  7: 3.56e+03
+  depth  8: 1.08e+04
+  depth  9: 4.32e+04
+  depth 10: 1.73e+05
+  depth 11: 6.84e+05
+  depth 12: 2.72e+06
+  depth 13: 6.26e+06
+  depth 14: 2.5e+07
+  depth 15: 9.97e+07
+  depth 16: 3.97e+08
+  depth 17: 1.59e+09
+  depth 18: 6.34e+09
+  depth 19: 2.17e+10
+  depth 20: 7.61e+10
+  depth 21: 2.61e+11
+  depth 22: 1.04e+12
+  depth 23: 4.18e+12
+  depth 24: 1.67e+13
+  depth 25: 5.85e+13
+  depth 26: 2e+14
+  depth 27: 8.02e+14
+  depth 28: 3.21e+15
+  depth 29: 1.12e+16
+  depth 30: 4.49e+16
+  depth 31: 1.8e+17
+  depth 32: 2.31e+17
+  depth 33: 6.93e+17
+  depth 34: 2.77e+18
+  depth 35: 2.77e+18
+  depth 36: 0
+estimated total nodes (including the root): 6.7e+18

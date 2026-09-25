@@ -19,8 +19,8 @@ even without the condition $\delta(\ast,\mathsf L,\mathsf L)=\mathsf L$.
 By \cref{lem:agree,lem:return} and \eqref{eq:neverfire} every such rule
 yields a model of $\mathrm{MT}_4(\{2,\dots,9\};16)$ (for $k=4$ there is a
 single auxiliary state and no symmetry breaking). CaDiCaL proves this
-formula unsatisfiable in $51$\,s and emits an LRAT proof \cite{CruzFilipeEtAl17} of $177$\,MB
-($41$\,MB compressed), which \texttt{lrat-check} of the \textsf{drat-trim}
+formula unsatisfiable in $51$\,s and emits an LRAT proof
+\cite{CruzFilipeEtAl17} of $177$\,MB, which \texttt{lrat-check} of the \textsf{drat-trim}
 suite \cite{WetzlerHeuleHunt14} verifies in $5.7$\,s. The SHA-256 digests of
 the formula and of the proof are listed in \ref{app:repro}.
 \end{proof}
@@ -72,7 +72,7 @@ models we examined in detail---\cref{fig:diagrams}(c) and the rules of
 \cref{thm:frontier}, whose common half-line consists of a front of $\mathsf G$'s, a
 solid wake of $\mathsf G$'s and a region $\mathsf{A}\,\mathsf{L}\,\mathsf{A}\,\mathsf{L}\cdots$
 behind a boundary of speed exactly $1/3$---a region delimited by a line of
-slope $1/3$ appears, as predicted by \cref{thm:third}. Chaotic half-lines
+speed $1/3$ appears, as predicted by \cref{thm:third}. Chaotic half-lines
 that never fire satisfy the pumping constraints as well; one of them is
 discussed after \cref{cor:germ12}.
 
@@ -92,7 +92,8 @@ $\mathrm{MT}_5(\{2,\dots,12\};78,40)$ + links + uniform pre-firing $\mathsf A^n$
 \bottomrule
 \end{tabular}
 \caption{Five-state instances. $\mathrm{MT}_k(\mathcal N;M,N')$: lengths
-$\mathcal N$, half-line up to anti-diagonal $M$, pumping pairs up to $N'$.}
+$\mathcal N$, half-line up to anti-diagonal $M$, pumping pairs up to $N'$
+(none if $N'$ is omitted).}
 \label{tab:five}
 \end{table}
 
@@ -104,7 +105,7 @@ solution on $n=40$ cells; the last row is the firing row. (b) Half-line of a
 five-state rule that synchronizes the lengths $2,\dots,9$ and $20$ but
 violates the pumping lemma: its background is periodic. (c) Half-line of a
 five-state rule found under the pumping constraints: the boundary between
-the checkered region and the diagonal background has slope $1/3$.}
+the checkered region and the diagonal background has speed $1/3$.}
 \label{fig:diagrams}
 \end{figure}
 
@@ -148,7 +149,7 @@ restricted to lengths at most $13$ (even together with the pumping
 constraints up to $40$ and the half-line up to anti-diagonal $78$), are
 satisfiable (\cref{prop:chaotic} below extends this to length $14$), and
 the requirement ``uniform configuration before firing'', satisfied by
-Mazoyer's solution, does not help below length $12$. The half-line shared by the two rules
+Mazoyer's solution, does not help for the lengths up to $12$. The half-line shared by the two rules
 consists of a front of $\mathsf G$'s, a solid wake of $\mathsf G$'s and,
 behind a boundary of speed exactly $1/3$, a region
 $\mathsf{A}\,\mathsf{L}\,\mathsf{A}\,\mathsf{L}\cdots$ that is periodic in
@@ -174,9 +175,9 @@ $L=1$ and $Y=259$ would give $257\le4^4=256$.
 
 So no choice of the remaining transitions can rescue this architecture.
 The lemma only bites at length $518$, whereas the two rules themselves
-already fail at lengths $13$ and $14$. The regularity certificate described after
-\cref{cor:regular} (with $P=6$) re-proves \cref{cor:germ12} without any
-length bound.
+already fail at lengths $13$ and $14$. The regularity certificate of
+\cref{lem:certificate} (with $P=6$) gives a second proof of the last statement
+of \cref{cor:germ12} that does not use a particular length.
 
 The frontier is not tied to this architecture, and it is not at
 thirteen. The classification of \cref{sec:germs} below left a few germs of
@@ -219,8 +220,9 @@ $\delta_{14}$ fixed, no rule synchronizes all lengths $2,\dots,15$ with
 these configurations before firing (Kissat, unsatisfiable after about
 $30$ minutes); without this restriction the lengths $2,\dots,15$ remain
 undecided after several hours. The half-line has non-periodic structure
-everywhere, so it passes both barriers of \cref{sec:pumping} trivially, and the only arguments that apply to it are
-completion tests for longer lines, which are expensive. Consequently, the
+everywhere, and in the ranges of \cref{prop:chaotic} neither barrier of
+\cref{sec:pumping} excludes it; the only arguments that we can apply to it
+are completion tests for longer lines, which are expensive. Consequently, the
 necessary conditions used in this paper, restricted to lengths at most $14$
 (together with the pumping constraints up to $40$ and the half-line up to
 anti-diagonal $78$), are satisfiable, and a refutation of five-state
@@ -231,7 +233,7 @@ least $15$.
 $14$ and $15$. Four further rules synchronize every line of length at most
 $14$, on other germs (\cref{app:more14}): $\delta_{14}^{\mathrm b}$, whose
 half-line is eventually regular, so that no completion of its germ is a
-solution (\cref{cor:regular}); $\delta_{14}^{\mathrm c}$ and
+solution (\cref{lem:certificate}); $\delta_{14}^{\mathrm c}$ and
 $\delta_{14}^{\mathrm d}$, on the two surviving germs of complexity $15$,
 which share one half-line up to a renaming of the states; and
 $\delta_{14}^{\mathrm e}$, on a germ of complexity $17$. All five fail at
@@ -308,8 +310,9 @@ details in \cref{app:k16}). The completion test for the lengths
 $2,\dots,10$ refutes $8{,}824$ germs, with one LRAT certificate; the lemmas,
 applied to half-lines extended up to anti-diagonal $10^4$, refute $931$ of
 the survivors; a completion test for the lengths $2,\dots,13$ and
-\cref{cor:regular} refute $8$ more each. Used alone, the half-line
-arguments refute $8{,}263$ of the $9{,}787$ germs, without any SAT call. The
+\cref{lem:certificate} refute $8$ more each. Used alone, the half-line
+arguments refute at least $8{,}263$ of the $9{,}787$ germs, without any SAT
+call. The
 $16$ germs that remain, among them the germ of $\delta_{14}$, are irregular
 as far as our certificates can tell, and those we inspected are chaotic.
 Two of them have complexity exactly $15$ and share one half-line up to a
@@ -334,7 +337,7 @@ germs (non-firing, front $\ne\mathsf L$, $\mathrm{PUMP}$ to $40$) & $244$ & $9{,
 refuted by the completion test for $2,\dots,10$ (LRAT) & $230$ & $8{,}824$\\
 then refuted by \cref{lem:left} or \cref{lem:pumping} & $14$ & $931$\\
 then refuted by the completion test for $2,\dots,13$ & -- & $8$\\
-then refuted by \cref{cor:regular} (eventually regular) & -- & $8$\\
+then refuted by \cref{lem:certificate} (eventually regular) & -- & $8$\\
 remaining (not certified regular) & $0$ & $16$\\
 \midrule
 refuted by \cref{lem:left} or \cref{lem:pumping} alone & $218$ & ${\ge}\,8{,}263$\\
@@ -349,33 +352,45 @@ $3300$ for $c_{78}\le14$ and $1300$ for $c_{78}\le16$).}
 
 \subsection{Where the difficulty lies}\label{sec:difficulty}
 
-Once a germ is fixed, the half-line is determined and only the reflected
-triangles remain. For the germs of the rules of \cref{tab:five} Kissat
-decides the completion problem in less than one second: for the rule with
-lengths $2,\dots,10$ a completion exists for the lengths up to $8$ and
-not up to $12$, and the other germs fail already for $8$. Fixing the $58$
-transitions that Mazoyer's rule uses on its half-line up to anti-diagonal
-$78$ leaves a completion problem for the lengths $3,\dots,12$ that Kissat
-solves in $4$\,s. The chaotic germs are the exception: the completions of
-the germ of $\delta_{14}$ for the lengths up to $12$, $13$ and $14$ take
-$2$\,s, $442$\,s and $1758$\,s (the last one with links), and for $15$ no
-run has finished (\cref{app:cube}).
+Once a germ is fixed, the half-line is determined up to anti-diagonal $78$
+and only the reflected triangles remain. For three lucky rules of
+\cref{tab:five}, those for $\{2,\dots,9,16\}$, for $\{2,\dots,9,20\}$ and,
+found with the half-line up to anti-diagonal $78$, for $2,\dots,10$, Kissat
+decides the completion problem of the germ in less than one second: the
+first two germs have no completion even for the lengths $2,\dots,8$, the
+third has completions for the lengths up to $10$ but not up to $11$. (The
+half-line of the rule for $2,\dots,12$, found with the half-line only up to
+anti-diagonal $22$, fires below anti-diagonal $78$.) Fixing the $58$ transitions that
+Mazoyer's rule uses on its half-line up to anti-diagonal $78$ leaves a
+completion problem for the lengths $3,\dots,12$ (without symmetry breaking)
+that Kissat solves in $4$\,s. The chaotic germs are the exception: the
+completions of the germ of $\delta_{14}$ for the lengths up to $12$, $13$
+and $14$ take $2$\,s, $442$\,s and $1758$\,s (the last one with links), and
+for the lengths up to $15$ a Kissat run without links stopped without an
+answer after four hours.
 
 To measure the size of the whole search, we estimated the natural
 look-ahead search tree---half-line transitions fixed in order of first use,
 anti-diagonal by anti-diagonal, a node being discarded when the full
 formula with the partial table as assumptions is refuted within $3000$
-conflicts---with Knuth's random-probe estimator \cite{Knuth75}. For four
-states ($\mathrm{MT}_4$ with lengths $2,\dots,9$) the mean over $30$ probes
-is $27$ nodes. For five states ($\mathrm{MT}_5(\{2,\dots,12\};78,39)$ with
-links) three probes gave $4.2\cdot10^{11}$, $3.1\cdot10^{17}$ and
-$8.3\cdot10^{18}$; adding the lengths up to $18$ prunes more strongly along
-some paths but not in general (three probes: $2.2\cdot10^{5}$,
-$4.2\cdot10^{12}$, $1.0\cdot10^{15}$). The estimator has a large variance,
-but the gap of at least ten orders of magnitude is robust and explains why
+conflicts---with Knuth's random-probe estimator \cite{Knuth75}: a probe
+follows a random path from the root to a leaf, and if $d_1,\dots,d_D$ are
+the numbers of children of the nodes of the path before the leaf, then
+$1+d_1+d_1d_2+\dots+d_1\cdots d_D$ is an unbiased estimate of the number of
+nodes. For four states ($\mathrm{MT}_4(\{2,\dots,9\};16,8)$ with links) the
+mean of this estimate over $30$ probes is $25.5$ nodes. For five states
+($\mathrm{MT}_5(\{2,\dots,12\};78,39)$ with links) three probes reach depths
+$30$ to $36$; their last terms $d_1\cdots d_D$, which are lower bounds for
+their estimates, are $4.2\cdot10^{11}$, $3.1\cdot10^{17}$ and
+$8.3\cdot10^{18}$, and the mean estimate is $6.7\cdot10^{18}$ nodes. Adding
+the lengths up to $18$ changes little (last terms $2.1\cdot10^{11}$,
+$5.1\cdot10^{16}$ and $4.2\cdot10^{18}$, mean estimate $2.2\cdot10^{18}$).
+The estimator has a large variance and three probes are few, but every
+five-state probe exceeds the four-state estimate by at least nine orders
+of magnitude, in line with the fact that
 our runs on the unrestricted five-state formulas with the pumping
-constraints for $N=12$, $14$ and $18$ (up to about $1.5$ CPU-hours each)
-did not terminate. Clause learning compresses such trees considerably, and
-cube-and-conquer \cite{HeuleEtAl11} parallelizes them almost linearly, but
-a complete five-state search along these lines is a computation of a much
-larger scale than the ones reported here.
+constraints for the lengths $2,\dots,N$ with $N=12$, $14$ and $18$ (up to
+about $1.5$ CPU-hours each) did not terminate. Clause learning compresses
+such trees considerably, and cube-and-conquer \cite{HeuleEtAl11}
+parallelizes them well, but a complete five-state search along these lines
+is a computation of a much larger scale than the ones reported here.

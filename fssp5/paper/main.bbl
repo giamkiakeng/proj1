@@ -79,10 +79,10 @@ H.~Umeo, N.~Kamikawa, J.-B. Yun{\`e}s, A family of smallest symmetrical
   Processing Letters 19~(2) (2009) 299--313.
 
 \bibitem{Duprat97}
-J.~Duprat, Firing squad synchronization problem: a formal proof of {M}azoyer's
-  six-state solution in {C}oq, Coq user contribution \texttt{FiringSquad}, LIP,
-  ENS Lyon; archived at \url{https://github.com/rocq-archive/firing-squad}
-  (1997).
+J.~Duprat, Firing {S}quad {S}ynchronization {P}roblem, Coq user contribution
+  \texttt{FiringSquad} (formal proof of the correctness of Mazoyer's six-state
+  solution), LIP, ENS Lyon; archived at
+  \url{https://github.com/rocq-archive/firing-squad} (1997).
 
 \bibitem{Minsky67}
 M.~L. Minsky, Computation: Finite and Infinite Machines, Prentice-Hall,

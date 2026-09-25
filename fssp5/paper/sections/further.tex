@@ -16,10 +16,9 @@ complexity $16$. Its half-line is of the periodic kind: a boundary layer
 of four cells followed by a region that is periodic in time and space. With
 a boundary layer of four cells the bound of \cref{lem:left} (with $s=5$)
 lies far beyond the lengths we can simulate, but the half-line is
-eventually regular: the certificate described after \cref{cor:regular}
-succeeds with $t_1=600$ and $P=12$ (program \texttt{germpersist.py}). Hence,
-by \cref{cor:regular}, no completion of this germ is a minimal-time
-solution.
+eventually regular: the certificate of \cref{lem:certificate} succeeds
+with $t_1=600$ and $P=12$ (program \texttt{germpersist.py}). Hence no
+completion of this germ is a minimal-time solution.
 
 Two of the $16$ germs that survive the classification of \cref{sec:germs}
 have complexity exactly $15$, and their half-lines coincide on all cells
@@ -52,17 +51,19 @@ minutes). The corresponding tests for the uniform configurations of
 $\delta_{14}^{\mathrm c}$ and $\delta_{14}^{\mathrm d}$ were stopped without
 an answer after about $2.5$ hours each.
 
-\begin{table}[h]
+\begin{table}[ht]
 \centering\small
-\begin{tabular}{@{}lccccc@{}}
+\begin{tabular}{@{}lclccc@{}}
 \toprule
-rule & $c_{78}$ & half-line & before firing ($4\le n\le14$) & first firing at $n=15$ & cells\\
+ & & & before firing & \multicolumn{2}{c}{first firing at $n=15$}\\
+\cmidrule(l){5-6}
+rule & $c_{78}$ & half-line & ($4\le n\le14$) & time & cells\\
 \midrule
-$\delta_{14}$ & $16$ & chaotic (rule $22$) & $\mathsf L\,\mathsf G^{n-2}\,\mathsf B$ & $t=22$ & $13$--$15$\\
-$\delta_{14}^{\mathrm b}$ & $16$ & eventually regular & $\mathsf G^{n-1}\,\mathsf A$ & $t=25$ & $12$\\
-$\delta_{14}^{\mathrm c}$ & $15$ & irregular & $\mathsf G^{n}$ & $t=21$ & $11$\\
-$\delta_{14}^{\mathrm d}$ & $15$ & that of $\delta_{14}^{\mathrm c}$, renamed & $\mathsf A^{n}$ & $t=22$ & $11$--$15$\\
-$\delta_{14}^{\mathrm e}$ & $17$ & irregular & $\mathsf A^{n}$ & $t=27$ & $9$--$11$\\
+$\delta_{14}$ & $16$ & chaotic (rule $22$) & $\mathsf L\,\mathsf G^{n-2}\,\mathsf B$ & $22$ & $13$--$15$\\
+$\delta_{14}^{\mathrm b}$ & $16$ & eventually regular & $\mathsf G^{n-1}\,\mathsf A$ & $25$ & $12$\\
+$\delta_{14}^{\mathrm c}$ & $15$ & irregular & $\mathsf G^{n}$ & $21$ & $11$\\
+$\delta_{14}^{\mathrm d}$ & $15$ & that of $\delta_{14}^{\mathrm c}$, renamed & $\mathsf A^{n}$ & $22$ & $11$--$15$\\
+$\delta_{14}^{\mathrm e}$ & $17$ & irregular & $\mathsf A^{n}$ & $27$ & $9$--$11$\\
 \bottomrule
 \end{tabular}
 \caption{The five rules that synchronize every line of length at most $14$
@@ -80,8 +81,8 @@ in $51$\,s). Of the $963$ survivors, $931$ are refuted by \cref{lem:left}
 or \cref{lem:pumping} applied to their half-lines, each of which is
 determined by the germ far enough for the lemma to apply (we simulate up to
 anti-diagonal $10^4$, and for two germs the input anti-diagonals of the
-line of length $20{,}000$). Used alone, the half-line arguments refute
-$8{,}263$ of the $9{,}787$ germs, without any SAT call. Among the $32$ germs
+line of length $20{,}000$). Used alone, the half-line arguments refute at
+least $8{,}263$ of the $9{,}787$ germs, without any SAT call. Among the $32$ germs
 that pass both filters (one of which is not determined beyond anti-diagonal
 $94$) are germs with chaotic or self-similar half-lines, on which
 \cref{lem:left} has no grip, and germs whose periodic regions start too far
@@ -91,7 +92,7 @@ $8$ of them (one LRAT proof of $1.4$\,GB, found in $318$\,s and checked in
 $33$\,s); $23$ of the remaining $24$ do have completions for these lengths
 (the last one is undecided after $900$\,s). Of these $24$, $8$ have
 eventually regular half-lines (certified with periods $P\le48$) and are
-excluded by \cref{cor:regular}, although $7$ of them admit completions for
+excluded by \cref{lem:certificate}, although $7$ of them admit completions for
 all lengths up to $13$. For the last $16$ germs, among them the germ of
 $\delta_{14}$, the certificate fails (periods $P\le48$, block periods at
 most $24$, starting times up to $1500$); the half-lines we inspected are
@@ -111,7 +112,7 @@ completion test for the lengths $2,\dots,10$ refutes $6{,}834$ of the
 remaining $8{,}044$ (one LRAT proof of $1.9$\,GB, found in $440$\,s and
 checked in $33$\,s). Extending the half-lines of the $1{,}210$ survivors to
 anti-diagonals $3300$ and $10^4$, the two lemmas refute $903$ more, and the
-regularity certificate excludes $120$ of the rest by \cref{cor:regular}
+regularity certificate of \cref{lem:certificate} excludes $120$ of the rest
 (periods $P\le48$, block periods at most $24$). This leaves $187$ germs of
 complexity $17$. We ran the completion test for the lengths $2,\dots,13$ on
 $30$ of them only: $11$ are refuted, $6$ are undecided within $10^6$
@@ -127,10 +128,12 @@ labelling) cubes with the look-ahead solver
 \textsf{march\_cu} (depth $12$) \cite{HeuleEtAl11} and solved the cubes
 with CaDiCaL under assumptions and, for the hard ones, with Kissat on the
 formula extended by the cube, which was much faster on them. After about
-ten CPU-hours, $1{,}898$ and $1{,}376$ cubes are refuted and none is
-satisfiable, but $14$ and $375$ cubes resisted the limits we set (up to
-$2\cdot10^{6}$ conflicts, or ten minutes of Kissat) and $819$ and $1{,}319$
-were not attempted: both problems remain undecided. Single runs on the
+sixteen CPU-hours no cube is satisfiable. Every cube of the first
+labelling has been attempted: $2{,}694$ are refuted and $37$ resisted the
+limits we set (up to $2\cdot10^{6}$ conflicts, or five to ten minutes of
+Kissat). Of the cubes of the second labelling, $1{,}376$ are refuted, $375$
+resisted these limits and $1{,}319$ were not attempted. Both problems
+therefore remain undecided. Single runs on the
 whole problems were not more successful: Kissat on the second labelling
 with the lengths $2,\dots,15$ stopped without an answer after two hours,
 and on the first labelling with the lengths $2,\dots,14$ and the
@@ -142,7 +145,8 @@ $15,\dots,26$ up to relative time $12$ after three hours.
 For the periodic germs, the completion problem is decided in less than a
 second, but its unsatisfiable cores are large: for the germ of the rule of
 \cref{tab:five} with lengths $2,\dots,10$, completion required for the
-lengths $2,\dots,12$, the core contains $38$ of its $39$ transitions, and
-shrinking it requires solving exactly the hard subproblems. Nogoods learned
+lengths $2,\dots,12$, the core returned by CaDiCaL contains $38$ of its $39$
+transitions, and shrinking it requires solving exactly the hard subproblems
+(each deletion step of a minimization takes about a minute). Nogoods learned
 from the completion problem, as in a logic-based Benders decomposition,
 would therefore be almost as specific as the germs themselves.

@@ -1,5 +1,10 @@
 %% ---------------------------------------------------------------------
 \appendix
+% elsarticle defines \thesection as "Appendix ~A" (a space and a tie);
+% keep only the tie
+\makeatletter
+\gdef\thesection{Appendix~\@Alph\c@section}
+\makeatother
 
 \input{sections/terms}
 
@@ -119,6 +124,16 @@ The files \texttt{results/germs/germ\_delta12.txt} and
 \texttt{germ\_delta14.txt} contain the two germs in the one-line format of
 \texttt{germdfs.c}, as printed by \texttt{germcompare.py --germline}; the
 complete pipeline for complexity at most $16$ is \texttt{germpipe.sh}.
+
+\paragraph{Search-size estimates (\cref{sec:difficulty})}
+{\footnotesize
+\begin{verbatim}
+python3 knuth.py 9 16 30 3000 1 4  # 25.5 nodes (knuth_k4_N9.log)
+python3 knuth.py 12 78 3 3000      # 6.7e18 (knuth_k5_N12.log)
+python3 knuth.py 18 78 3 3000      # 2.2e18 (knuth_k5_N18.log)
+\end{verbatim}}
+The logs are in \texttt{results}, and the per-cube results of
+\cref{app:cube} in \texttt{results/cubes}.
 
 \paragraph{Validation against Mazoyer's solution}
 {\footnotesize

@@ -12,7 +12,7 @@ surviving child; the product of the numbers of surviving children is an
 unbiased estimator of the number of leaves (and partial products estimate
 the number of nodes per level).
 
-usage: knuth.py N M probes budget [seed]
+usage: knuth.py N M probes budget [seed] [k]   (k = number of states, default 5)
 """
 import os
 import random
@@ -29,10 +29,11 @@ BND = gencnf.BND
 def main():
     N, M, probes, budget = map(int, sys.argv[1:5])
     seed = int(sys.argv[5]) if len(sys.argv) > 5 else 1
+    k = int(sys.argv[6]) if len(sys.argv) > 6 else 5
     rnd = random.Random(seed)
-    E = gencnf.build(5, N, minf=M, pump=min(40, M // 2), links=True)
+    E = gencnf.build(k, N, minf=M, pump=min(40, M // 2), links=True)
     s = Solver(name='cd19', bootstrap_with=E.clauses)
-    W = [0, 1, 2, 3]
+    W = list(range(k - 1))  # working states
     # evaluation order of half-line cells: anti-diagonals
     cells = []
     for m in range(2, M + 1):
@@ -84,14 +85,14 @@ def main():
             assum.append(E.T[e][d])
         print("probe %d: depth %d, %s, weight %.3g (%.0fs)" % (p, depth, leaf, weight, time.time() - t0))
         sys.stdout.flush()
-    print("estimated nodes per level (mean over probes):")
-    tot = 0.0
+    print("estimated nodes per level (mean over probes; the root is level 0):")
+    tot = 1.0
     for dpt in sorted(est_levels):
         vals = est_levels[dpt] + [0.0] * (probes - len(est_levels[dpt]))
         m = sum(vals) / probes
         tot += m
         print("  depth %2d: %.3g" % (dpt, m))
-    print("estimated total nodes: %.3g" % tot)
+    print("estimated total nodes (including the root): %.3g" % tot)
 
 
 if __name__ == '__main__':

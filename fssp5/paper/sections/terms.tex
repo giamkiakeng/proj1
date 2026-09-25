@@ -176,10 +176,11 @@ and no statement of the paper depends on them. The symbols are summarised in
   Duprat's formalization of its correctness proof in the proof assistant
   Coq \cite{Duprat97}.
 \item[The rules $\delta_{12}$, $\delta_{13}$, $\delta_{14}$,
-  $\delta_{14}^{\mathrm b}$, $\delta_{14}^{\mathrm c}$.] Explicit five-state
-  rules found in this work (\cref{sec:five}). The index is the largest $N$
-  for which the rule is $\{2,\dots,N\}$-minimal ($12$, $13$, and $14$ for
-  the last three); each of them fails at length $N+1$.
+  $\delta_{14}^{\mathrm b},\dots,\delta_{14}^{\mathrm e}$.] Explicit
+  five-state rules found in this work (\cref{sec:five} and
+  \cref{app:more14}). The index is the largest $N$ for which the rule is
+  $\{2,\dots,N\}$-minimal ($12$, $13$, and $14$ for the last five); each of
+  them fails at length $N+1$.
 \item[Lucky rule.] A rule returned by a solver for a finite set
   $\mathcal N$ of lengths that is $\mathcal N$-minimal but fails at some
   length outside $\mathcal N$ (\cref{sec:five}).
@@ -241,8 +242,9 @@ and no statement of the paper depends on them. The symbols are summarised in
   the left only, started in $\mathsf G\,\mathsf L\,\mathsf L\cdots$;
   $C_\infty$ is its space-time diagram (\cref{sec:prelim}). The
   \emph{half-line conditions} are the constraints on $C_\infty$ alone used
-  in this paper: no cell of $C_\infty$ fires, see \eqref{eq:neverfire},
-  and $\mathrm{PUMP}(n,n')$ holds (\cref{app:gl-barriers}).
+  in this paper: no cell of $C_\infty$ fires, see \eqref{eq:neverfire}, the
+  front is never $\mathsf L$ (\cref{lem:return}), and $\mathrm{PUMP}(n,n')$
+  holds (\cref{app:gl-barriers}).
 \item[Agreement.] $C_n(t,i)=C_\infty(t,i)$ whenever $t+i\le2n-2$
   (\cref{lem:agree}): below this anti-diagonal the line of length $n$
   cannot distinguish itself from the half-line.
@@ -338,16 +340,16 @@ and no statement of the paper depends on them. The symbols are summarised in
   are a time $t_1$ and a period $P\ge1$ such that, for each residue
   $r\in\{0,\dots,P-1\}$ and every $\nu\ge0$, the configuration at time
   $t_1+r+\nu P$ is $w_0\,z_1^{a_1+\nu D_1}\,w_1\cdots z_m^{a_m+\nu D_m}\,w_m$
-  with words $w_j,z_j$ over $W$ and integers $a_j,D_j\ge0$ that depend on
-  $r$ only. The $w_j$ are the \emph{junction words} (they carry the
+  with words $w_j$ and nonempty words $z_j$ over $W$ and integers
+  $a_j,D_j\ge0$ that depend on $r$ only. The $w_j$ are the \emph{junction words} (they carry the
   signals), the $z_j^{a_j+\nu D_j}$ are the \emph{blocks} (the periodic
   regions), $|z_j|$ is the \emph{block period} and $D_j$ the
   \emph{growth} of block $j$ per period. In \cref{sec:germs} a half-line
   for which the certificate below fails is called \emph{irregular}; this
   only records the failure of the certificate, not a proof that the
   half-line is not eventually regular.
-\item[Regularity certificate.] The finite computation described after
-  \cref{cor:regular}, which proves that a given half-line is eventually
+\item[Regularity certificate.] The finite test of \cref{lem:certificate},
+  which proves that a given half-line is eventually
   regular (program \texttt{germpersist.py}).
 \end{description}
 
@@ -454,7 +456,7 @@ and no statement of the paper depends on them. The symbols are summarised in
   \ref{app:repro} so that readers can check that they use the same files.
 \item[Counterexample-guided search over lengths.] Solve for a set of
   lengths, simulate the model, and if it fails at a new length, add that
-  length and repeat (\cref{sec:germs}).
+  length and repeat (\cref{app:more14}).
 \item[Logic-based Benders decomposition; nogood.] A scheme in which a
   master problem proposes partial solutions (here germs), a subproblem
   (here the completion test) refutes them, and a \emph{nogood}, a clause
@@ -471,9 +473,10 @@ and no statement of the paper depends on them. The symbols are summarised in
   partial rule tables in which the half-line transitions are fixed in the
   order of their first use, a node being discarded when the solver refutes
   it within a conflict budget. Knuth's estimator \cite{Knuth75} follows
-  random root-to-leaf paths (\emph{probes}) and averages the products of
-  the branching degrees along them, an unbiased estimate of the number of
-  nodes.
+  random root-to-leaf paths (\emph{probes}); if $d_1,\dots,d_D$ are the
+  numbers of children of the nodes of a probe before its leaf, then
+  $1+d_1+d_1d_2+\dots+d_1\cdots d_D$ is an unbiased estimate of the number
+  of nodes, and the estimates are averaged over the probes.
 \item[Cube-and-conquer.] Splitting a formula into many subproblems, each
   given by a partial assignment (a \emph{cube}), that are solved
   independently \cite{HeuleEtAl11}; the cubes are produced by the
@@ -491,7 +494,7 @@ and no statement of the paper depends on them. The symbols are summarised in
 }
 
 {\small
-\begin{longtable}{@{}p{0.22\textwidth}p{0.55\textwidth}p{0.15\textwidth}@{}}
+\begin{longtable}{@{}p{0.22\textwidth}>{\raggedright\arraybackslash}p{0.52\textwidth}>{\raggedright\arraybackslash}p{0.18\textwidth}@{}}
 \caption{Symbols, in order of first use.}\label{tab:symbols}\\
 \toprule
 symbol & meaning & where\\
@@ -531,10 +534,11 @@ $\Omega$, $\alpha$, $t_0$, $p$, $q$, $\gamma$ & wedge, its slope and start; peri
 $t_1$, $P$, $r$, $\nu$ & start, period, residue, period count & \cref{cor:regular}\\
 $w_j$, $z_j$, $a_j$, $D_j$, $m$ & junction and block words, exponents, growth, number of blocks & \cref{cor:regular}\\
 $j(r)$, $s_r$, $\beta$ & local to the proof of \cref{cor:regular} & \cref{cor:regular}\\
+$X(\mathbf e)$, $\mathbf 1_j$, $\Lambda$, $q_j$, $\ell_\nu$ & block word, unit vector, $P$ steps of the half-line; local to \cref{lem:certificate} & \cref{lem:certificate}\\
 $\bar\imath$ & mirrored position $n+1-i$ & \cref{rem:right}\\
-$\mathrm{MT}_k(\mathcal N;M,N')$ & the formula; $M$: half-line bound, $N'$: pumping bound & \cref{sec:encoding}\\
+$\mathrm{MT}_k(\mathcal N;M,N')$ & the formula; $M$: half-line bound, $N'$: pumping bound (omitted: no pumping) & \cref{sec:encoding}\\
 $T_{e,d}$, $X_{\xi,w}$, $\xi$ & transition and cell variables; a cell & \cref{sec:encoding}\\
 $E_{n,n'}(\kappa_0)$ & determinacy link variable & \cref{sec:encoding}\\
 $c_M(\delta)$ & complexity of the germ of $\delta$ below $M$ & \cref{sec:germs}\\
-$\delta_{12},\dots,\delta_{14}^{\mathrm c}$ & the five-state rules of \cref{sec:five} & \cref{sec:five}\\
+$\delta_{12},\dots,\delta_{14}^{\mathrm e}$ & the five-state rules of \cref{sec:five} and \cref{app:more14} & \cref{sec:five}, \cref{app:more14}\\
 \end{longtable}}

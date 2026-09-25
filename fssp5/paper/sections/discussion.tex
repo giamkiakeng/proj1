@@ -9,9 +9,9 @@ negligible cost, the whole class of rules whose half-line becomes periodic
 behind the front too early. \Cref{thm:third} shows that the constraint has a
 transparent geometric meaning: in every minimal-time solution the
 non-periodic part of the half-line reaches the line $i=t/3$. For Mazoyer's
-solution every depth-row is $3$-periodic from time $2j+1$ or $2j+2$, i.e.\
-the periodic zone behind the front is bounded by a signal of speed $1/2$,
-comfortably within the bound.
+solution every depth-row $j<700$ is $3$-periodic from time $2j+1$ or $2j+2$,
+i.e.\ the periodic zone behind the front is bounded by a signal of speed
+$1/2$, comfortably within the bound.
 
 \paragraph{Why lucky rules are hard to kill}
 Small sets of necessary conditions are typically met by rules that are not
@@ -20,15 +20,16 @@ disappear (if no solution exists, some finite set of lengths suffices, since
 there are finitely many rules). For four states the answer is $9$ (or $8$ with a long
 half-line). For five states the rule space is larger by roughly $40$
 orders of magnitude ($5^{94}$ versus $4^{43}$ transition tables), and our
-experiments show rules for all lengths up to at least $14$, and partial
-rules for any single additional length we tried. Under the pumping
+experiments show rules for all lengths up to $14$, and partial rules for
+any single additional length we tried. Under the pumping
 constraints the surviving rules are of two kinds. Either their half-lines
 consist of finitely many periodic regions separated by signals, with a
 boundary of speed $1/3$ (as for $\delta_{12}$ and $\delta_{13}$); such
 half-lines are periodic in a wedge at the left border and are excluded by
 \cref{thm:left}, although only for long lines. Or their half-lines are
-chaotic (as for $\delta_{14}$); these pass both barriers, and at present
-only completion tests on longer lines can exclude them.
+chaotic (as for $\delta_{14}$); these pass both barriers in the ranges we
+checked, and at present only completion tests on longer lines can exclude
+them.
 
 \paragraph{The mirrored construction}
 The cone of \cref{lem:cone} ends where the anti-diagonal $t+i=2n-2$ meets
@@ -78,8 +79,8 @@ Half-lines that pass \cref{thm:third,thm:left} can be hierarchical, like
 the half-line of Mazoyer's six-state solution, or chaotic. All five-state
 half-lines that passed every test of \cref{sec:germs} and that we inspected
 are chaotic, like the one of $\delta_{14}$, which is essentially the
-elementary rule $22$. A germ that
-determines its half-line leaves at most $78$ free transitions, i.e.\ about
+elementary rule $22$. A germ of complexity $c$ leaves $94-c$ free
+transitions, for the germ of $\delta_{14}$ that is $78$, i.e.\
 $5^{78}\approx2^{181}$ completions, and each additional length imposes of the
 order of $n$ independent-looking conditions on the reflected triangle. If
 these conditions behaved like independent events of bounded probability,
@@ -95,8 +96,8 @@ way of recognising the cell $2s$.
 \paragraph{Open problems}
 \begin{enumerate}[label=(\arabic*)]
 \item Does a five-state minimal-time solution exist? By
-  \cref{thm:frontier}, a negative answer along the lines of \cref{thm:four}
-  requires lines of length at least $14$.
+  \cref{prop:chaotic}, a negative answer along the lines of \cref{thm:four}
+  requires lines of length at least $15$.
 \item Is there a necessary condition, in the spirit of \cref{lem:pumping},
   that constrains the reflected triangles themselves and not only the
   half-line?
