@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.9.24)  25 SEP 2026 06:38
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.9.24)  25 SEP 2026 09:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1077,7 +1077,7 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\new@ifnextchar' on input line 4.
 
 (./sections/delta12.tex) (./sections/delta13.tex) (./sections/delta14.tex)
-[43] [44] [45] [46] [47]) [48] (./main.aux)
+[43] [44] [45] [46] [47] [48]) [49] (./main.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
@@ -1086,8 +1086,8 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 725FEF4DCED9EEF05DC631BAE2CB0AE5;3304.
  ) 
 Here is how much of TeX's memory you used:
- 29817 strings out of 476106
- 565504 string characters out of 5793933
+ 29818 strings out of 476106
+ 565511 string characters out of 5793933
  2016975 words of memory out of 5000000
  50378 multiletter control sequences out of 15000+600000
  744417 words of font info for 471 fonts, out of 8000000 for 9000
@@ -1114,10 +1114,10 @@ lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy9.pfb></usr/share/texm
 f/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt
 9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10
 .pfb>
-Output written on main.pdf (48 pages, 813520 bytes).
+Output written on main.pdf (49 pages, 816004 bytes).
 PDF statistics:
- 1168 PDF objects out of 1200 (max. 8388607)
- 888 compressed objects within 9 object streams
- 186 named destinations out of 1000 (max. 500000)
+ 1178 PDF objects out of 1200 (max. 8388607)
+ 897 compressed objects within 9 object streams
+ 187 named destinations out of 1000 (max. 500000)
  97964 words of extra memory for PDF output out of 106986 (max. 10000000)
 

@@ -44,3 +44,11 @@ Eventual regularity (Corollary 3.7), src/germpersist.py:
   python3 src/germpersist.py <the 17 others> 1500 48 24      -> K16_rem17_persist.txt (1 more REGULAR)
   remaining 16 (not certified regular): K16_remaining16.txt
   delta14b germ: REGULAR P=12 (t1=600); delta12/delta13 germ: REGULAR P=6.
+
+Complexity 17 (germs_K17.txt = germdfs 5 78 17 40 output, 53,081 germs; gzip-compressed in the repository):
+  sha256(germs_K17.txt, uncompressed)   b545f6e0e186c52683ecc685261f7a0f699c80fd678e9742b87e0980a384db38
+  6,834 germs of complexity 17 refuted by the completion test for 2..10 (K17_refuted10.txt, uncompressed):
+  sha256(K17_refuted10.txt)             af88915cf1241728a3e426a66da87ead4704bf0d1e810282494590119028806c
+  germcert.py K17_refuted10.txt 10 cert17_10 78: CaDiCaL UNSAT 439.5 s, LRAT 1.86 GB, lrat-check VERIFIED 33.2 s
+  sha256(cert17_10.cnf)                 fad099e60b6abe33f5fd9886f8de03ad61c85f149ca06ec06398309ee548fe77
+  sha256(cert17_10.lrat)                b29a38a4886660416d0a5b365b8a23064a1345617b6f8ce41277b945b43c7e21

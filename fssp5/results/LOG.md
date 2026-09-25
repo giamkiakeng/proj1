@@ -85,3 +85,13 @@ All times single core (Intel/AMD cloud vCPU), kissat 4.x (git HEAD 2026-09) unle
   germext 3300 (L<=12, PUMP<=1650): 492 refuted -> 718;  germext 10^4 (L<=24, PUMP<=800): 411 refuted -> 307;
   regularity certificate (germpersist t1=600 P<=24 q<=12): 94 regular; (t1=1500 P<=48 q<=24): 26 more -> 187 left
   (180 not certified, 7 not determined).  Completion test 2..13 on the 187: running.
+- Cube-and-conquer on the complexity-15 half-line at lengths 2..15 (march_cu -d 12; cnfcubes.py, CaDiCaL under
+  assumptions): germ #16 3070 cubes, germ of delta14c 2731 cubes; running (all decided cubes UNSAT so far).
+  Sanity run on the satisfiable instance germ #16 at 2..14 (854 cubes, budget 1e5): no SAT cube among the first
+  293 within 1800 s (234 UNSAT, 59 UNKNOWN) -- the undecided cubes must all be resolved before concluding.
+- LRAT certificate for the 6,834 complexity-17 germs refuted at 2..10 (germcert.py): CaDiCaL 439.5 s, 1.86 GB,
+  lrat-check VERIFIED 33.2 s (digests in results/germs/CERTIFICATES.txt).
+- Length-13 test on the 187 remaining complexity-17 germs (budget 1e6 conflicts): first 30: 13 SAT, 11 UNSAT, 6 UNKNOWN.
+- delta14e (results/delta14e.txt): germcegar on the first complexity-17 germ that passes 2..13 finds a rule for
+  all lengths 2..14 in 401 s; it fails at 15 by one step (a cell fires at time 27 < 28); uniform pre-firing A^n;
+  no firing on the half-line to 78, PUMP to 40 OK.  Germ in results/germs/germ_delta14e.txt (17 neighbourhoods).

@@ -332,6 +332,27 @@ one half-line in its two labellings, and a completion test can only do so
 with lines of length at least $15$. For most of the other survivors the
 lengths $2,\dots,14$ are undecided after $40$ minutes.
 
+The same filters, applied in a different order, reduce the germs of
+complexity exactly $17$ to a few hundred. The enumeration with bound $17$
+visits $6.1\cdot10^{9}$ nodes and returns $53{,}081$ germs; those of
+complexity at most $16$ are exactly the $9{,}787$ germs of
+\cref{tab:germs}, and $43{,}294$ have complexity $17$. On the half-lines
+extended to anti-diagonal $1300$, \cref{lem:left} refutes $34{,}613$ of them
+and \cref{lem:pumping} (lengths up to $650$) another $637$. The completion
+test for the lengths $2,\dots,10$ refutes $6{,}834$ of the remaining
+$8{,}044$ (one LRAT proof of $1.9$\,GB, found in $440$\,s and checked in
+$33$\,s). Extending the half-lines of the $1{,}210$ survivors to
+anti-diagonals $3300$ and $10^4$, the two lemmas refute $903$ more, and the
+regularity certificate excludes $120$ of the rest by \cref{cor:regular}
+(periods $P\le48$, block periods at most $24$). This leaves $187$ germs of
+complexity $17$. We ran the completion test for the lengths $2,\dots,13$
+on $30$ of them only: $11$ are refuted, $6$ are undecided within $10^6$
+conflicts, and $13$ have completions. The first of these extends to a fifth
+rule for all lengths up to $14$, $\delta_{14}^{\mathrm e}$ (file
+\texttt{delta14e.txt}; its half-line is irregular), which ends with a
+uniform configuration $\mathsf A^n$ and fails at $n=15$ by a single step:
+a cell fires at time $27$ instead of $28$.
+
 \begin{table}[t]
 \centering\small
 \begin{tabular}{@{}lrr@{}}
