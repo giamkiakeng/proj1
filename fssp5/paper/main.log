@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.9.24)  25 SEP 2026 09:31
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.9.24)  25 SEP 2026 10:09
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1007,27 +1007,27 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
  [9]
-Underfull \hbox (badness 10000) in paragraph at lines 505--506
+Underfull \hbox (badness 10000) in paragraph at lines 509--510
 []|\T1/lmr/m/n/10 (+20) Sections []2[]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 507--508
+Underfull \hbox (badness 10000) in paragraph at lines 511--512
 []|\T1/lmr/m/n/10 (+20) Section []2[],
  []
 
 
-Overfull \hbox (0.81763pt too wide) in paragraph at lines 527--528
+Overfull \hbox (0.81763pt too wide) in paragraph at lines 531--532
 []|\T1/lmr/m/n/10 (-20) Corollary []3.7[]| 
  []
 
 
-Overfull \hbox (0.81763pt too wide) in paragraph at lines 528--529
+Overfull \hbox (0.81763pt too wide) in paragraph at lines 532--533
 []|\T1/lmr/m/n/10 (-20) Corollary []3.7[]| 
  []
 
 
-Overfull \hbox (0.81763pt too wide) in paragraph at lines 529--530
+Overfull \hbox (0.81763pt too wide) in paragraph at lines 533--534
 []|\T1/lmr/m/n/10 (-20) Corollary []3.7[]| 
  []
 
@@ -1040,7 +1040,7 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <12> on input line 13.
 ) [14]
-<fig_squads14.pdf, id=353, 313.99373pt x 323.95003pt>
+<fig_squads14.pdf, id=352, 313.99373pt x 323.95003pt>
 File: fig_squads14.pdf Graphic file (type pdf)
 <use fig_squads14.pdf>
 Package pdftex.def Info: fig_squads14.pdf  used on input line 135.
@@ -1070,8 +1070,8 @@ File: fig_halflines.pdf Graphic file (type pdf)
 Package pdftex.def Info: fig_halflines.pdf  used on input line 242.
 (pdftex.def)             Requested size: 360.0pt x 203.17833pt.
 
-[34 <./fig_halflines.pdf>] [35] [36]) (./sections/discussion.tex [37] [38]
-[39]) (./main.bbl [40] [41] [42]) (./sections/appendix.tex
+[34 <./fig_halflines.pdf>] [35] [36] [37]) (./sections/discussion.tex [38]
+[39]) [40] (./main.bbl [41] [42]) (./sections/appendix.tex
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\new@ifnextchar' on input line 4.
@@ -1086,11 +1086,11 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 725FEF4DCED9EEF05DC631BAE2CB0AE5;3304.
  ) 
 Here is how much of TeX's memory you used:
- 29818 strings out of 476106
- 565511 string characters out of 5793933
+ 29824 strings out of 476106
+ 565579 string characters out of 5793933
  2016975 words of memory out of 5000000
  50378 multiletter control sequences out of 15000+600000
- 744417 words of font info for 471 fonts, out of 8000000 for 9000
+ 744707 words of font info for 474 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
  84i,12n,87p,1001b,932s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/ty
@@ -1114,10 +1114,10 @@ lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy9.pfb></usr/share/texm
 f/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt
 9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10
 .pfb>
-Output written on main.pdf (49 pages, 816487 bytes).
+Output written on main.pdf (49 pages, 818621 bytes).
 PDF statistics:
- 1179 PDF objects out of 1200 (max. 8388607)
- 898 compressed objects within 9 object streams
+ 1180 PDF objects out of 1200 (max. 8388607)
+ 899 compressed objects within 9 object streams
  187 named destinations out of 1000 (max. 500000)
  97964 words of extra memory for PDF output out of 106986 (max. 10000000)
 

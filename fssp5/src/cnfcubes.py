@@ -10,7 +10,10 @@ refuted during cubing, so the formula is unsatisfiable iff every cube is.
 
 Cubes already decided (SAT/UNSAT) in any *.log file of the log directory are skipped.
 
-usage: cnfcubes.py formula.cnf cubes.icnf part nparts log [conflict_budget]
+A cube with any status in another worker's log is skipped as well (so that
+forward and --reverse workers on the same share meet without overlap).
+
+usage: cnfcubes.py formula.cnf cubes.icnf part nparts log [conflict_budget] [--reverse]
 """
 import sys
 import time
@@ -21,24 +24,33 @@ from pysat.solvers import Solver
 
 def main():
     cnf, cubefile, part, nparts, log = sys.argv[1], sys.argv[2], int(sys.argv[3]), int(sys.argv[4]), sys.argv[5]
-    budget = int(sys.argv[6]) if len(sys.argv) > 6 else 0
+    budget = int(sys.argv[6]) if len(sys.argv) > 6 and not sys.argv[6].startswith('--') else 0
     F = CNF(from_file=cnf)
     cubes = []
     for ln in open(cubefile):
         if ln.startswith('a'):
             cubes.append([int(x) for x in ln.split()[1:] if x != '0'])
-    done = set()                       # cubes already decided in earlier runs (any log in the same directory)
     import glob
     import os
-    for fn in glob.glob(os.path.join(os.path.dirname(os.path.abspath(log)), '*.log')):
-        for ln in open(fn):
-            t = ln.split()
-            if len(t) >= 2 and t[1] in ('SAT', 'UNSAT'):
-                done.add(int(t[0]))
+
+    def decided():
+        # cubes decided (SAT/UNSAT) or being handled by another worker: any log in the same directory
+        out = set()
+        for fn in glob.glob(os.path.join(os.path.dirname(os.path.abspath(log)), '*.log')):
+            for ln in open(fn):
+                t = ln.split()
+                if len(t) >= 2 and t[1] in ('SAT', 'UNSAT', 'UNKNOWN') and fn != os.path.abspath(log):
+                    out.add(int(t[0]))
+                elif len(t) >= 2 and t[1] in ('SAT', 'UNSAT'):
+                    out.add(int(t[0]))
+        return out
+    order = list(enumerate(cubes))
+    if '--reverse' in sys.argv:
+        order.reverse()
     s = Solver(name='cadical195', bootstrap_with=F.clauses)
     with open(log, 'a') as fh:
-        for j, cube in enumerate(cubes):
-            if j % nparts != part or j in done:
+        for j, cube in order:
+            if j % nparts != part or j in decided():
                 continue
             t0 = time.time()
             if budget:

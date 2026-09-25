@@ -329,7 +329,15 @@ $22$), and both end with a uniform configuration before firing,
 $\mathsf G^n$ and $\mathsf A^n$ respectively, for $4\le n\le14$. Raising
 the bound of \cref{prop:germs} to $16$ therefore amounts to refuting this
 one half-line in its two labellings, and a completion test can only do so
-with lines of length at least $15$. For most of the other survivors the
+with lines of length at least $15$. We split the two completion problems for
+the lengths $2,\dots,15$ into $3{,}070$ and $2{,}731$ cubes with the
+look-ahead solver \textsf{march\_cu} (depth $12$) \cite{HeuleEtAl11} and
+solved the cubes with CaDiCaL under assumptions and, for the hard ones, with
+Kissat on the formula extended by the cube. After about ten CPU-hours,
+$1{,}376$ and $1{,}898$ cubes are refuted and none is satisfiable, but
+$375$ and $14$ cubes resisted the limits we set (up to $2\cdot10^{6}$
+conflicts, or ten minutes of Kissat) and $1{,}319$ and $819$ were not
+attempted: both problems remain undecided. For most of the other survivors the
 lengths $2,\dots,14$ are undecided after $40$ minutes.
 
 The same filters, applied in a different order, reduce the germs of

@@ -476,7 +476,11 @@ statement of the paper depends on them. The symbols are summarised in
   nodes.
 \item[Cube-and-conquer.] Splitting a formula into many subproblems, each
   given by a partial assignment (a \emph{cube}), that are solved
-  independently \cite{HeuleEtAl11}.
+  independently \cite{HeuleEtAl11}; the cubes are produced by the
+  look-ahead solver \textsf{march\_cu}, and a cube is \emph{refuted} when
+  the formula together with it is unsatisfiable. Together the cubes cover
+  all assignments, so the formula is unsatisfiable if and only if every cube
+  is refuted.
 \item[Brute-force checker.] The program \texttt{fsspcheck.c}, which
   simulates each line directly from the rule table and uses none of the
   lemmas.
