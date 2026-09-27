@@ -7,11 +7,43 @@ $\mathsf A_1=\mathsf A$ and $\mathsf A_2=\mathsf B$) and let $\mathcal N$ be a f
 $\mathrm{MT}_k(\mathcal N;M,N')$ that is satisfiable whenever a $k$-state
 minimal-time solution exists; here $M$ bounds the half-line and $N'$ the
 pumping constraints, and we write $\mathrm{MT}_k(\mathcal N;M)$ when no
-pumping constraints are added. All constraint families below are either the
-definition of $\mathcal N$-minimality or consequences of
+pumping constraints are added. The formula transcribes the space-time
+diagrams directly: there is one propositional variable for each possible
+entry of the rule table and for each possible state of each relevant cell,
+and the clauses force the cells to follow the rule and the lines to fire on
+time. All constraint families are either the definition of
+$\mathcal N$-minimality or consequences of
 \cref{lem:agree,lem:return,lem:determinacy,lem:pumping} and
 \eqref{eq:neverfire}; none relies on unproved assumptions about the shape of
-solutions.
+solutions. \Cref{tab:families} lists them; the paragraphs below give the
+details.
+
+\begin{table}[t]
+\centering\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.17\textwidth}>{\raggedright\arraybackslash}p{0.5\textwidth}>{\raggedright\arraybackslash}p{0.25\textwidth}@{}}
+\toprule
+family & requirement & justification\\
+\midrule
+half-line & the cells of $C_\infty$ up to the anti-diagonal $M$ follow $\delta$,
+  and none of them fires & definition of $C_\infty$; \eqref{eq:neverfire}\\
+lines & for $n\in\mathcal N$: the cells of $R_n$ follow $\delta$, none of them
+  fires before time $2n-2$, and all $n$ cells fire at time $2n-2$ &
+  $\mathcal N$-minimality; \cref{lem:agree}\\
+return chains & $C_n\ne C_\infty$ on the anti-diagonal $t+i=2n-1$ &
+  \cref{lem:return}\\
+pumping & $J_n$ and $J_{n'}$ differ on $\mathrm{cone}_n(n-1,0)$ for
+  $4\le n<n'\le N'$ & \cref{lem:pumping}\\
+links & equal input words give equal cells in $R_n$ and $R_{n'}$ &
+  \cref{lem:determinacy} (implied by the others)\\
+symmetry breaking & the auxiliary states first appear in a fixed order &
+  renaming of the auxiliary states\\
+\bottomrule
+\end{tabular}
+\caption{The constraint families of $\mathrm{MT}_k(\mathcal N;M,N')$. Return
+chains, links and symmetry breaking are optional; the pumping constraints are
+absent when $N'$ is omitted.}
+\label{tab:families}
+\end{table}
 
 \paragraph{Variables}
 For every neighbourhood $e=(x,y,z)\in(W\cup\{\ast\})\times W\times(W\cup\{\ast\})$

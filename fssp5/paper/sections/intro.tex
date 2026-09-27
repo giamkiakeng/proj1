@@ -50,6 +50,18 @@ are the subject of this paper.}
 \label{fig:scoreboard}
 \end{figure}
 
+\paragraph{The idea in brief}
+Until the news of its right border comes back, the line of length $n$
+cannot tell that it is finite: it behaves exactly like an infinite
+half-line (\cref{fig:echo}). A solution therefore consists of a single
+space-time diagram of the half-line, shared by all lengths, and, for each
+length $n$, a triangle near the right end in which the echo of the border is
+processed. Everything that the triangle of length $n$ knows about the
+half-line is written on two anti-diagonals. This separation lets us derive
+necessary conditions on the half-line alone, which are cheap to test, and
+formulate the search for rules as a satisfiability problem whose negative
+answers come with independently checkable certificates.
+
 \paragraph{This paper}
 We do not settle the five-state question. We develop tools that apply to
 minimal-time solutions with any number of states, use them to give a
@@ -154,4 +166,8 @@ five-state frontier; \cref{sec:discussion} discusses what separates five
 states from six and lists open problems. \Cref{app:glossary} is a glossary
 of all terms and symbols, \cref{app:further} records the further
 experiments, \cref{app:delta12} gives the rule tables and \cref{app:repro}
-explains how to reproduce every computation.
+explains how to reproduce every computation. Readers mainly interested in
+the results can read \cref{sec:intro,sec:prelim},
+\cref{sec:coords,sec:pumplemma,sec:third} and \cref{sec:five}; the
+computations of \cref{sec:encoding,sec:four,sec:five} use the lemmas of
+\cref{sec:pumping} only through their statements.

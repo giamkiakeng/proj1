@@ -1,7 +1,23 @@
 %% ---------------------------------------------------------------------
-\section{Reflected triangles and a pumping lemma}\label{sec:pumping}
+\section{Two barriers on the half-line}\label{sec:pumping}
 
-\subsection{Relative coordinates}
+A minimal-time solution has to fire every line at exactly the right moment,
+for all lengths at once. This section turns that requirement into two
+necessary conditions on the half-line diagram $C_\infty$ alone, one for
+each end of the line. At the right end, the firing of the last cell of the
+line of length $n$ is decided by the right half of the two anti-diagonals
+on which the line stops agreeing with the half-line; the lines of two
+different lengths must therefore never look alike there (the pumping lemma,
+\cref{lem:pumping}), and this forces the half-line to keep changing along
+the line $i=t/3$ (\cref{thm:third}). At the left end, the cells near the
+border are fired by a narrow band of anti-diagonals that behaves like a
+finite automaton reading the half-line; such an automaton cannot count
+along a long periodic stretch (the left-border lemma, \cref{lem:left}), so
+the half-line cannot be periodic near the border
+(\cref{thm:left,cor:regular}). \Cref{fig:anatomy,fig:chains} show the
+objects involved.
+
+\subsection{Reflected triangles in relative coordinates}\label{sec:coords}
 
 Fix $n\ge2$. For a cell $(t,i)$ of the line of length $n$ put
 $\tau:=t-(n-1)$ (time elapsed since the front reached the right end) and
@@ -22,7 +38,8 @@ J_n(\kappa):=\bigl(C_\infty(n-3+\kappa,\,n-\kappa),\;C_\infty(n-2+\kappa,\,n-\ka
 the \emph{input word} of $R_n$; its two components are the \emph{lower}
 ($t+i=2n-3$) and \emph{upper} ($t+i=2n-2$) input cells. (For $n=2$ and
 $\kappa=0$ the lower cell would lie at time $-1$; it is a predecessor of no
-cell of $R_n$, and we set it to $\mathsf L$.)
+cell of $R_n$, and we set it to $\mathsf L$.) \Cref{fig:anatomy} shows these
+regions for $n=12$.
 
 \begin{lemma}[determinacy]\label{lem:determinacy}
 There is a single partial map $\Psi$, depending on $\delta$ only, such that
@@ -72,6 +89,32 @@ is also computed mechanically in the accompanying code, file
 \texttt{pumping.py}.)
 \end{proof}
 
+\begin{figure}[t]
+\centering
+\input{sections/pic_anatomy}
+\caption{Anatomy of the line of length $n=12$ (time runs downwards, one
+square per cell and time step; the colours show regions, not states).
+Above the two input anti-diagonals the line coincides with the half-line
+(\cref{lem:agree}); the reflected triangle $R_n$ below them is computed from
+these two anti-diagonals alone (\cref{lem:determinacy}), in the relative
+coordinates $\tau$ and $\kappa$ measured from the right end. The firing of
+the right end ($\bigstar$) depends only on the dark input cells, its cone
+(\cref{lem:cone}), which ends where the dotted line $i=t/3$ crosses the input
+anti-diagonals (\cref{thm:third}).}
+\label{fig:anatomy}
+\end{figure}
+
+\subsection{The pumping lemma}\label{sec:pumplemma}
+
+The right end of the line of length $n$ fires at the relative time
+$\tau=n-1$, and by \cref{lem:determinacy,lem:cone} this event is decided by
+the input cells of its cone, the dark cells of \cref{fig:anatomy}: roughly
+the right halves of the two input anti-diagonals. A longer line, of length
+$n'>n$, reaches the same relative cell $(\tau,\kappa)=(n-1,0)$ at the time
+$n'+n-2$, before its own firing time $2n'-2$. If its input word agreed with
+that of the line of length $n$ on the whole cone, its right end would fire
+at that moment, too early. Hence:
+
 \begin{lemma}[pumping]\label{lem:pumping}
 Let $\delta$ be a minimal-time solution and $4\le n<n'$. Then $J_n$ and
 $J_{n'}$ differ on $\mathrm{cone}_n(n-1,0)$.
@@ -92,7 +135,7 @@ the constraint family $\mathrm{PUMP}(n,n')$ used in \cref{sec:encoding}. As a
 sanity check, we verified mechanically that Mazoyer's six-state solution
 satisfies $\mathrm{PUMP}(n,n')$ for all $4\le n<n'\le120$.
 
-\subsection{Consequence: a speed-\texorpdfstring{$1/3$}{1/3} barrier}
+\subsection{A speed-\texorpdfstring{$1/3$}{1/3} barrier}\label{sec:third}
 
 Write the half-line diagram in the frame of the front:
 $\Phi_t(j):=C_\infty(t,\,t+1-j)$ for $0\le j\le t$ (the cell at
@@ -107,6 +150,13 @@ depths, at most two depths per step. In particular every depth-row
 $t\mapsto\Phi_t(j)$ is eventually periodic.
 In these coordinates
 $J_n(\kappa)=\bigl(\Phi_{n-3+\kappa}(2\kappa-2),\ \Phi_{n-2+\kappa}(2\kappa-1)\bigr)$.
+
+The pumping lemma therefore says that the depth-rows cannot all become
+periodic early: if every input cell of the cone were read in the periodic
+regime of its depth-row, the lines of lengths $n$ and $n+P$, for a common
+period $P$, would have the same input word on the cone. The far end of the
+cone lies at depth about $n$ and at time about $3n/2$
+(\cref{fig:anatomy}), and this gives the following bound.
 
 \begin{theorem}[speed-$1/3$ barrier]\label{thm:third}
 Let $\delta$ be a minimal-time solution. Every depth-row
@@ -152,12 +202,22 @@ the ``lucky'' partial rules found by the solvers (\cref{sec:five}): their
 half-line diagrams are periodic behind the front far beyond the line
 $i=t/3$.
 
-\subsection{A second barrier, at the left border}
+\subsection{A second barrier, at the left border}\label{sec:leftborder}
 
 \Cref{lem:pumping} looks at the right end of the line. The left end gives a
-constraint of a different nature, again on the half-line only. Fix $n\ge2$
-and number the anti-diagonals of the line of length $n$ from the input
-anti-diagonals on: for $c\ge-1$ and $1\le i\le n$ with $c\le i$ put
+constraint of a different nature, again on the half-line only. The idea is
+the following. Near the left border, the reflected triangle is produced by
+a band of consecutive anti-diagonals, the \emph{chains}, that follow the
+reflected wave. Read from right to left, this band behaves like a finite
+automaton that moves one cell per step and reads the two input
+anti-diagonals as it goes (\cref{fig:chains}), and it must fire the cell
+$2s$ exactly when it arrives there. An automaton with finitely many states
+that reads a long periodic stretch of its input returns to an earlier
+state; it cannot tell where the stretch ends, so it cannot time this
+firing. \Cref{lem:left} makes this quantitative.
+
+To set this up, fix $n\ge2$ and number the anti-diagonals of the line of
+length $n$ from the input anti-diagonals on: for $c\ge-1$ and $1\le i\le n$ with $c\le i$ put
 \[
 v_c(i):=C_n(2n-2+c-i,\;i),
 \]
@@ -183,9 +243,20 @@ $2n-2+\lceil c/2\rceil-y$: it must be $\mathsf F$ if $\lceil c/2\rceil=y$
 and must differ from $\mathsf F$ if $\lceil c/2\rceil<y$. Thus each \emph{slice}
 $(u_1(y),u_2(y),\dots)$ is obtained from the slice $y+1$ by a sequential
 finite-state transducer that reads the components in increasing order and
-whose initial state is determined by the two input cells $u_{-1}(y),u_0(y)$: read from right to left, the reflected triangle is a
-cascade of finite-state transducers, the left-hand counterpart of the
-co-moving description \eqref{eq:comoving} of the half-line.
+whose initial state is determined by the two input cells
+$u_{-1}(y),u_0(y)$ (\cref{fig:chains}): read from right to left, the
+reflected triangle is a cascade of finite-state transducers, the left-hand
+counterpart of the co-moving description \eqref{eq:comoving} of the
+half-line.
+
+\begin{figure}[t]
+\centering
+\input{sections/pic_chains}
+\caption{The lower left corner of the line of length $n=12$ (time runs
+downwards; the colours show regions, not states), with the chains of the
+left-border lemma and three of the slices used in its proof.}
+\label{fig:chains}
+\end{figure}
 
 \begin{lemma}[left border]\label{lem:left}
 Let $\delta$ have $k$ states and synchronize the line of length $n$ at time
@@ -230,12 +301,10 @@ But $\lceil 2s/2\rceil=s<s+h$, so $u_{2s}(s+h)$, the cell $2s+h$ at time
 $2n-2-h$, is not $\mathsf F$: a contradiction.
 \end{proof}
 
-In words: a band of $2s$ chains that crosses a long periodic stretch of the
-input anti-diagonals is a finite-state system, so it cannot time the firing
-of the cell $2s$, which it must trigger exactly when it arrives there. The
-border itself is harmless (cell~$1$ fires because the return chain meets
-the border), which is why the lemma starts at $s\ge1$ and pays a factor
-exponential in $s$.
+The border itself is harmless (cell~$1$ fires because the return chain
+meets the border), which is why the lemma starts at $s\ge1$ and pays a
+factor exponential in $s$: the band of the first $2s$ chains has up to
+$(k-1)^{2s}$ states.
 
 \begin{theorem}[left-border barrier]\label{thm:left}
 Let $\delta$ be a minimal-time solution. There are no $s\ge1$, $\alpha>0$,
@@ -254,6 +323,35 @@ $Y_n\ge \tfrac{\alpha}{1+\alpha}\,2n-\gamma$, where $\gamma$ depends on
 $\alpha,L,t_0$ only. For $n$ large, $\min(Y_n,n-s)-s>(k-1)^{2s}L$,
 contradicting \cref{lem:left}.
 \end{proof}
+
+\begin{remark}[the right end]\label{rem:right}
+The proof of \cref{lem:left} uses neither \cref{lem:agree} nor the position
+of the chains inside $R_n$: it only uses the recurrence \eqref{eq:chains}
+for $c\ge1$, the firing condition ($v_c(i)=\mathsf F$ if and only if $c=i$)
+and the periodicity of the two chains $c=-1,0$. It therefore applies
+verbatim to the mirror image of the line, i.e.\ to the rule
+$\bar\delta(x_1,x_2,x_3):=\delta(x_3,x_2,x_1)$ and the cells $\bar\imath:=n+1-i$, whose
+chains $c$ are the diagonals $t-i=n-3+c$ of the line of length $n$. Hence,
+if $\delta$ synchronizes the line of length $n$ at time $2n-2$, the words
+\begin{align*}
+&y\mapsto C_n(2n-2-y,\,n+1-y)\qquad(s\le y\le Y),\\
+&y\mapsto C_n(2n-3-y,\,n+1-y)\qquad(s\le y\le Y-1),
+\end{align*}
+read along the diagonals $t-i=n-3$ and $t-i=n-4$ from the right end, are
+not $L$-periodic when $Y-s>(k-1)^{2s}L$ and $Y\le n-s$. For $y\le n/2$
+these cells lie in $R_n$: seen from the right end, the reflected triangles
+cannot be periodic over long stretches either. Unlike \cref{lem:left},
+this is a constraint on the reflected part of the rule, not on the
+half-line. (On Mazoyer's rule, for the lengths $n\le300$ with $n\equiv6
+\pmod 7$, $s\le2$ and $L\le6$, these stretches have length at most $7$.)
+\end{remark}
+
+\subsection{Eventually regular half-lines}\label{sec:regular}
+
+A half-line that settles into finitely many periodic regions separated by
+signals is periodic in a wedge at the border, so the left-border barrier
+excludes it. We make this precise and then give a finite test that proves
+this behaviour for a concrete half-line.
 
 Say that the half-line of a rule is \emph{eventually regular} if there are
 $t_1$, $P\ge1$ and, for each residue $r\in\{0,\dots,P-1\}$, words
@@ -363,27 +461,7 @@ induction step directly, by evolving the configurations with one or two
 additional periods in each block, and compares the predicted configurations
 $100$ periods later with a direct simulation.
 
-\begin{remark}[the right end]\label{rem:right}
-The proof of \cref{lem:left} uses neither \cref{lem:agree} nor the position
-of the chains inside $R_n$: it only uses the recurrence \eqref{eq:chains}
-for $c\ge1$, the firing condition ($v_c(i)=\mathsf F$ if and only if $c=i$)
-and the periodicity of the two chains $c=-1,0$. It therefore applies
-verbatim to the mirror image of the line, i.e.\ to the rule
-$\bar\delta(x_1,x_2,x_3):=\delta(x_3,x_2,x_1)$ and the cells $\bar\imath:=n+1-i$, whose
-chains $c$ are the diagonals $t-i=n-3+c$ of the line of length $n$. Hence,
-if $\delta$ synchronizes the line of length $n$ at time $2n-2$, the words
-\begin{align*}
-&y\mapsto C_n(2n-2-y,\,n+1-y)\qquad(s\le y\le Y),\\
-&y\mapsto C_n(2n-3-y,\,n+1-y)\qquad(s\le y\le Y-1),
-\end{align*}
-read along the diagonals $t-i=n-3$ and $t-i=n-4$ from the right end, are
-not $L$-periodic when $Y-s>(k-1)^{2s}L$ and $Y\le n-s$. For $y\le n/2$
-these cells lie in $R_n$: seen from the right end, the reflected triangles
-cannot be periodic over long stretches either. Unlike \cref{lem:left},
-this is a constraint on the reflected part of the rule, not on the
-half-line. (On Mazoyer's rule, for the lengths $n\le300$ with $n\equiv6
-\pmod 7$, $s\le2$ and $L\le6$, these stretches have length at most $7$.)
-\end{remark}
+\subsection{The barriers in the classical constructions}\label{sec:classical}
 
 \Cref{thm:third,thm:left} complement each other: the half-line of a
 minimal-time solution has non-periodic structure reaching the line $i=t/3$
