@@ -1,6 +1,9 @@
 %% ---------------------------------------------------------------------
 \section{Discussion}\label{sec:discussion}
 
+We summarise what the two barriers and the searches achieve, discuss why
+five states seem to be much harder than six, and list open problems.
+
 \paragraph{What the pumping lemma buys}
 \Cref{lem:pumping} turns an infinite family of requirements on the
 reflected triangles into constraints on the half-line diagram only. It is
@@ -21,8 +24,8 @@ there are finitely many rules). For four states the answer is $9$ (or $8$ with a
 half-line). For five states the rule space is larger by roughly $40$
 orders of magnitude ($5^{94}$ versus $4^{43}$ transition tables), and our
 experiments show rules for all lengths up to $14$, and partial rules for
-any single additional length we tried. Under the pumping
-constraints the surviving rules are of two kinds. Either their half-lines
+any single additional length we tried. In our experiments, the rules that
+survive the pumping constraints are of two kinds. Either their half-lines
 consist of finitely many periodic regions separated by signals, with a
 boundary of speed $1/3$ (as for $\delta_{12}$ and $\delta_{13}$); such
 half-lines are periodic in a wedge at the left border and are excluded by
@@ -32,8 +35,8 @@ checked, and at present only completion tests on longer lines can exclude
 them.
 
 \paragraph{The mirrored construction}
-The cone of \cref{lem:cone} ends where the anti-diagonal $t+i=2n-2$ meets
-the line $i=t/3$. By \cref{lem:determinacy}, the part of $R_n$ whose cone lies
+The cone of \cref{lem:cone} ends near the point where the anti-diagonal
+$t+i=2n-2$ meets the line $i=t/3$ (\cref{fig:anatomy}). By \cref{lem:determinacy}, the part of $R_n$ whose cone lies
 in the periodic zone behind the front is the same for all large $n$ of a
 given residue class, and the information that makes the right end fire
 exactly at time $2n-2$ enters $R_n$ near that crossing and travels to the
@@ -79,12 +82,13 @@ Half-lines that pass \cref{thm:third,thm:left} can be hierarchical, like
 the half-line of Mazoyer's six-state solution, or chaotic. All five-state
 half-lines that passed every test of \cref{sec:germs} and that we inspected
 are chaotic, like the one of $\delta_{14}$, which is essentially the
-elementary rule $22$. A germ of complexity $c$ leaves $94-c$ free
-transitions, for the germ of $\delta_{14}$ that is $78$, i.e.\
-$5^{78}\approx2^{181}$ completions, and each additional length imposes of the
+elementary rule $22$. A germ of complexity $c$ leaves $94-c$ transitions
+free; for the germ of $\delta_{14}$ these are $78$, i.e.\
+$5^{78}\approx2^{181}$ completions. Each additional length $n$ imposes of the
 order of $n$ independent-looking conditions on the reflected triangle. If
-these conditions behaved like independent events of bounded probability,
-the completions of a chaotic germ would run out around $n\approx20$; the
+these conditions behaved like independent events of probability $1/2$,
+about $2^{181-N^2/2}$ completions would survive the lengths up to $N$, so
+the completions of a chaotic germ would run out around $N\approx20$; the
 rule $\delta_{14}$ and the completion runs of \cref{sec:germs} are
 consistent with this heuristic, which we have not been able to turn into a
 proof. For the left border the difficulty is concrete: by the proof of
@@ -107,6 +111,6 @@ way of recognising the cell $2s$.
 \item Can the bound $(k-1)^{2s}L$ of \cref{lem:left} be replaced by one
   that is polynomial in $s$, or by one that also covers anti-diagonals that
   are periodic only up to a bounded number of defects? Either would make the
-  lemma effective for the self-similar half-lines that survive the filters
-  of \cref{sec:germs}.
+  lemma effective on shorter lines and on half-lines whose periodic regions
+  start far from the border (\cref{app:k16}).
 \end{enumerate}

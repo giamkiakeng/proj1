@@ -18,15 +18,15 @@ work. What is established (with proofs or checkable certificates):
 
 | Result | Where | How to check |
 |---|---|---|
-| Glossary of every term and symbol; drawings explaining the problem (Figures 1–5) | paper, Notation at a glance, Appendix A; Figures 1–5 in §1–§3 | — |
+| Glossary of every term and symbol; drawings explaining the problem and the proofs (Figures 1–7) | paper, Notation at a glance, Appendix A; Figures 1–7 in §1–§3 | — |
 | Agreement / reflected-triangle reduction; return-chain lemma | paper §2 | proofs |
 | Pumping lemma (all minimal-time solutions, any number of states) | paper §3, Lemma 3.3 | proof; `src/pumping.py` checks it on Mazoyer's rule (0 violations, 4 ≤ n < n' ≤ 120) |
 | Speed-1/3 barrier theorem | paper §3, Theorem 3.4 | proof; Mazoyer's rows: θ(j) ∈ {2j+1, 2j+2} (j < 700) |
-| Left-border lemma and left-border barrier theorem (any number of states); no minimal-time solution has an eventually regular half-line (Corollary 3.7), with a finite certificate for concrete half-lines (Lemma 3.8); mirrored version for the reflected triangles (Remark 3.9) | paper §3.3, Lemma 3.5, Theorem 3.6, Corollary 3.7, Lemma 3.8, Remark 3.9 | proofs; checked on Mazoyer's rule (periodic stretches ≤ 6 resp. ≤ 7); `src/germpersist.py` certifies eventual regularity of germs |
+| Left-border lemma and left-border barrier theorem (any number of states); no minimal-time solution has an eventually regular half-line (Corollary 3.8), with a finite certificate for concrete half-lines (Lemma 3.9); mirrored version for the reflected triangles (Remark 3.7) | paper §3.4–3.5, Lemma 3.5, Theorem 3.6, Remark 3.7, Corollary 3.8, Lemma 3.9 | proofs; checked on Mazoyer's rule (periodic stretches ≤ 6 resp. ≤ 7); `src/germpersist.py` certifies eventual regularity of germs |
 | No 4-state minimal-time solution (without assuming δ(*,L,L)=L) | paper §5, Theorem 5.1 | LRAT certificate, `lrat-check` VERIFIED in 5.7 s |
 | Explicit 5-state rules synchronizing all lengths 2..12 (δ12, uniform pre-firing) and 2..13 (δ13), obeying PUMP up to 40 and never firing on the half-line up to anti-diagonal 78 | paper §6, Theorem 6.1 | `src/fsspcheck`, `src/pumping.py`, `src/check_halfline.py`, `src/germcompare.py` on `results/uniformA_2-12.txt`, `results/delta13.txt` |
 | The common half-line of δ12 and δ13 cannot be completed to a solution (fails at n = 518 by the left-border lemma) | paper §6, Corollary 6.2 | `src/germext.c` |
-| A 5-state rule δ14 for **all lengths 2..14** (fails at 15), with a chaotic half-line of complexity 16 that escapes both barriers (found via δ′13 for 2..13 with the same half-line) | paper §6.2, Proposition 6.3, Figures 7 and 8 | `src/fsspcheck`, `src/germext.c` on `results/delta14.txt` (and `results/delta13_chaotic.txt`) |
+| A 5-state rule δ14 for **all lengths 2..14** (fails at 15), with a chaotic half-line of complexity 16 that neither barrier excludes in the tested ranges (found via δ′13 for 2..13 with the same half-line) | paper §6.2, Proposition 6.3, Figures 9 and 10 | `src/fsspcheck`, `src/germext.c` on `results/delta14.txt` (and `results/delta13_chaotic.txt`) |
 | A second rule δ14b for all lengths 2..14 (fails at 15), on another complexity-16 germ with a periodic half-line | paper §6.2, Appendix B.1 | `src/fsspcheck` on `results/delta14b.txt` |
 | A third rule δ14c for all lengths 2..14 (fails at 15), chaotic half-line with 15 neighbourhoods | paper §6.2, Appendix B.1 | `src/fsspcheck` on `results/delta14c.txt` |
 | A fourth rule δ14d for all lengths 2..14 (fails at 15) on the other complexity-15 survivor; its half-line equals that of δ14c up to renaming states (t ≥ 1); both end with uniform pre-firing configurations (Gⁿ, Aⁿ) | paper §6.2, Appendix B.1 | `src/fsspcheck` on `results/delta14d.txt`; `src/class_prefire.py` for the pre-firing classes |
@@ -52,17 +52,17 @@ src/germinc.py           incremental completion test of germs (CaDiCaL via PySAT
 src/germcert.py          one LRAT certificate for a whole list of refuted germs
 src/germext.c            extends germ half-lines; left-border lemma and pumping checks
 src/germext2.c           streaming left-border check on one very long line
-src/germpersist.py       certificate of eventual regularity of a germ's half-line (Lemma 3.8)
+src/germpersist.py       certificate of eventual regularity of a germ's half-line (Lemma 3.9)
 src/germcompare.py       half-line neighbourhoods of rules below an anti-diagonal
 src/germpipe.sh          the classification pipeline
 src/germlong.py, germband.py, equiv.py, reflsym.py   further (inconclusive) experiments
 src/ruletable.py         LaTeX tables of rules
-src/figures.py           Figures 6-8 (space-time diagrams)
+src/figures.py           Figures 8-10 (space-time diagrams)
 results/                 rule tables (Mazoyer; partial 5-state rules; delta13), logs
 results/germs/           germ lists, classification logs, certificate digests
 paper/                   LaTeX sources, figures, bibliography
 paper/sections/terms.tex glossary of all terms and symbols (Appendix A); notation.tex the one-page summary
-paper/sections/pic_*.tex, tikzdefs.tex   TikZ drawings (Figures 1-5); further.tex Appendix B
+paper/sections/pic_*.tex, tikzdefs.tex   TikZ drawings (Figures 1-7); further.tex Appendix B
 paper/highlights.docx (.txt)   optional highlights for the submission (5 bullets, at most 85 characters each)
 ```
 

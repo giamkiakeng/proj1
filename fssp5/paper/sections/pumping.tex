@@ -5,8 +5,8 @@ A minimal-time solution has to fire every line at exactly the right moment,
 for all lengths at once. This section turns that requirement into two
 necessary conditions on the half-line diagram $C_\infty$ alone, one for
 each end of the line. At the right end, the firing of the last cell of the
-line of length $n$ is decided by the right half of the two anti-diagonals
-on which the line stops agreeing with the half-line; the lines of two
+line of length $n$ is decided by the right halves of the last two
+anti-diagonals on which the line still agrees with the half-line; the lines of two
 different lengths must therefore never look alike there (the pumping lemma,
 \cref{lem:pumping}), and this forces the half-line to keep changing along
 the line $i=t/3$ (\cref{thm:third}). At the left end, the cells near the
@@ -210,11 +210,12 @@ the following. Near the left border, the reflected triangle is produced by
 a band of consecutive anti-diagonals, the \emph{chains}, that follow the
 reflected wave. Read from right to left, this band behaves like a finite
 automaton that moves one cell per step and reads the two input
-anti-diagonals as it goes (\cref{fig:chains}), and it must fire the cell
-$2s$ exactly when it arrives there. An automaton with finitely many states
-that reads a long periodic stretch of its input returns to an earlier
-state; it cannot tell where the stretch ends, so it cannot time this
-firing. \Cref{lem:left} makes this quantitative.
+anti-diagonals as it goes (\cref{fig:chains}), and it must fire each cell
+exactly when it arrives there. An automaton with finitely many states that
+reads a long periodic stretch of its input returns to an earlier state; it
+cannot tell where the stretch ends, so it cannot time the firing.
+\Cref{lem:left} makes this quantitative, for a band of $2s$ chains and the
+cell $2s$.
 
 To set this up, fix $n\ge2$ and number the anti-diagonals of the line of
 length $n$ from the input anti-diagonals on: for $c\ge-1$ and $1\le i\le n$ with $c\le i$ put
