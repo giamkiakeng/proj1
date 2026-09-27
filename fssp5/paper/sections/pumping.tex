@@ -169,7 +169,9 @@ $i=t/3$ of the original coordinates.
 \end{theorem}
 
 \begin{proof}
-Row $0$ satisfies $\Phi_{t+1}(0)=\delta(\Phi_t(0),\mathsf L,\mathsf L)$ and is
+We show that the depth-rows are eventually periodic, apply the pumping lemma
+to two lengths that differ by a common period, and convert the result into
+a bound on $\theta$. Row $0$ satisfies $\Phi_{t+1}(0)=\delta(\Phi_t(0),\mathsf L,\mathsf L)$ and is
 eventually periodic; by \eqref{eq:comoving}, row $j$ is a finite-state system
 driven by the eventually periodic rows $j-1$, $j-2$, hence eventually
 periodic, with some period $P_j$. Fix $n\ge4$ and let $P$ be a common
@@ -271,7 +273,9 @@ are $L$-periodic. Then $Y-s\le (k-1)^{2s}L$.
 \end{lemma}
 
 \begin{proof}
-For $s\le y\le Y$ let $\mathbf u(y):=(u_1(y),\dots,u_{2s}(y))$. These are cells
+We show that the slices of the band form a deterministic finite-state
+system driven by the input anti-diagonals, and use the pigeonhole principle
+on a long periodic stretch. For $s\le y\le Y$ let $\mathbf u(y):=(u_1(y),\dots,u_{2s}(y))$. These are cells
 $y+\lfloor c/2\rfloor\le Y+s\le n$ with $\lceil c/2\rceil\le s\le y$, so
 they are defined, and for $y>s$ none of them is $\mathsf F$. By
 \eqref{eq:slices}, $u_c(y)$ with $1\le c\le 2s$ is computed from components
@@ -404,7 +408,9 @@ solution.
 \end{lemma}
 
 \begin{proof}
-For a word $Y$ over $W$ let $\Lambda(Y)$ be the word formed by the cells
+An induction on the exponents shows that the decomposition persists; the
+leftmost growing block then yields a periodic wedge. For a word $Y$ over $W$
+let $\Lambda(Y)$ be the word formed by the cells
 $1,\dots,|Y|+P$ after $P$ steps of the half-line started from $Y$ followed
 by quiescent cells, with the border on the left; by \eqref{eq:quiescence}
 the cells beyond $|Y|+P$ are still quiescent, and $\Lambda$ maps the
