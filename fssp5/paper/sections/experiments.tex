@@ -438,22 +438,20 @@ L\,\mathsf A)$ or $I=(\mathsf L\,\mathsf B)$ the lengths $2,\dots,9$
 \texttt{lrat-check} in $7.1$\,s, $3.5$\,s and $3.3$\,s). The symmetric rules ($I$ the
 identity) go further: in both readings there are rules satisfying
 (B1)--(B4) that synchronize every line of length at most $11$ (file
-\path{results/balzer_sym11.txt}); in the strong reading no such rule
-synchronizes the lengths $2,\dots,12$ ($119$\,s, LRAT certificate of
-$477$\,MB checked in $8.5$\,s). Hence:
+\path{results/balzer_sym11.txt}), but even in the weak reading no such
+rule synchronizes the lengths $2,\dots,12$ (Kissat, $16$ minutes; DRAT proof
+of $958$\,MB verified by \textsf{drat-trim} \cite{WetzlerHeuleHunt14} in
+$31$ minutes; for the strong reading CaDiCaL needs $119$\,s and gives an
+LRAT certificate of $477$\,MB, checked in $8.5$\,s). Since the strong
+reading only adds conditions, this gives:
 
 \begin{proposition}\label{prop:balzer}
-No five-state rule satisfying the strong reading of (B1)--(B4), with an
+No five-state rule satisfying (B1)--(B4) in the weak reading, with an
 involution $I$ that fixes $\mathsf F$, synchronizes all lines of lengths
-$2,\dots,12$ in minimal time. In particular Balzer's
-conditional result holds in this reading, and the lengths up to $11$ do
-not suffice to prove it.
+$2,\dots,12$ in minimal time; a fortiori none satisfying the strong reading
+does. In particular Balzer's conditional result holds in both readings, and
+the lengths up to $11$ do not suffice to prove it.
 \end{proposition}
-
-The weak reading behaves in the same way: Kissat refutes the symmetric case
-for the lengths $2,\dots,12$ in $16$ minutes (a solver run without
-certificate), so that in this reading, too, no five-state rule satisfying
-(B1)--(B4) synchronizes the lengths $2,\dots,12$.
 
 \subsection{Where the difficulty lies}\label{sec:difficulty}
 
