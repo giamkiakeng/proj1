@@ -177,6 +177,12 @@ done
 
 (the PDFs belong in the scratch directory or in `fssp5/literature/`, never in a public commit).
 
+CORE also holds Balzer 1967 (its discovery API returns record 82657788 for the DOI); the
+download link `https://core.ac.uk/download/pdf/82657788.pdf` is behind a Cloudflare bot check that
+also stops a plain browser, and the discovery call for Mazoyer 1996 was rate-limited. With a free
+CORE API key (`CORE_API_KEY`) the file is available as
+`https://api.core.ac.uk/v3/outputs/82657788/download` (header `Authorization: Bearer $CORE_API_KEY`).
+
 1. Download Balzer 1967 (free, open archive) by hand and check the wording of the four conditions
    and of his five-state statement against Section 6.4.
 2. Download Mazoyer 1996 (free, open archive) and check it for statements overlapping Lemma 3.3,
