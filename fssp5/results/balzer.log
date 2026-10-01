@@ -3,6 +3,8 @@
 # Yunes (thesis, Paris 7, 1993, Sect. 2.7):
 #   B1 G stable, B2 image solution (involution I), B3 pre-firing GGG/*GG/GG* -> F, B4 G dominant.
 # weak reading (conds 1234): B1 only for working neighbours; B3 without "only these produce F".
+N=12    conds=1234 I=id  CaDiCaL with LRAT output stopped after 15 min (proof file > 2.7 GB);
+        Kissat 4.0.4 without proof: UNSATISFIABLE in 16 min 6 s (2148 vars, 114965 clauses)
 # strong reading (conds 1234s): B1 also for border neighbours; no other neighbourhood produces F.
 # I(*)=*, I(F)=F, hence I(G)=G; I in {id, (A B), (L A), (L B)}.  Solver: CaDiCaL 3.0.1,
 # certificates: LRAT (--lrat --binary=false), checked with lrat-check (drat-trim suite).

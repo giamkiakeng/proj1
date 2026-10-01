@@ -151,3 +151,5 @@ All times single core (Intel/AMD cloud vCPU), kissat 4.x (git HEAD 2026-09) unle
   I=(L A), (L B) (LRAT); I=id SAT up to 11 in both readings; strong reading I=id UNSAT at N=12 (LRAT 476.5 MB,
   lrat-check 8.5 s).  Rules for 2..11: results/balzer_sym11.txt (strong), balzer_sym11_weak.txt (weak), both
   checked with fsspcheck (fail at n=12).
+- Weak reading, I=id, N=12: Kissat UNSATISFIABLE in 16 min (no proof); a DRAT proof run (Kissat + drat-trim) was
+  started for certification.  So all four involutions are refuted in both readings for the lengths 2..12.

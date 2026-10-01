@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.9.24)  1 OCT 2026 08:29
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.9.24)  1 OCT 2026 08:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1066,8 +1066,8 @@ Underfull \hbox (badness 5490) in paragraph at lines 178--182
 
 [41]) (./sections/appendix.tex (./sections/terms.tex [42] [43] [44] [45]
 [46] [47] [48] [49] [50]) (./sections/further.tex [51] [52] [53])
-(./sections/delta12.tex) (./sections/delta13.tex) (./sections/delta14.tex)
-[54] [55] [56]) [57] [58] [59] [60] (./main.aux)
+(./sections/delta12.tex [54]) (./sections/delta13.tex) (./sections/delta14.tex)
+[55] [56]) [57] [58] [59] [60] (./main.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
@@ -1105,7 +1105,7 @@ f/fonts/type1/public/lm/lmsy9.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt1
 0.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt9.pfb></usr/share/texlive/tex
 mf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on main.pdf (60 pages, 909247 bytes).
+Output written on main.pdf (60 pages, 909472 bytes).
 PDF statistics:
  1490 PDF objects out of 1728 (max. 8388607)
  1187 compressed objects within 12 object streams
