@@ -37,6 +37,33 @@ engine's summary of the page and must be checked against the paper before being 
 * **P. Sanders, Parcella '94.** Only the account "Balzer's search was incomplete; Sanders
   reaffirmed the four-state result with a corrected search" *(summary)*.
 
+### Retry on 2026-10-01
+
+After a container restart the gateway still answered 403 ("policy denial") to every scholarly
+host tried, from the shell and from the fetch tool: arxiv.org, export.arxiv.org,
+www.sciencedirect.com, pdf.sciencedirectassets.com, api.crossref.org, api.openalex.org,
+api.semanticscholar.org, core.ac.uk, scholar.archive.org, web.archive.org, link.springer.com,
+hal.science, eudml.org, drops.dagstuhl.de, dblp.org, zbmath.org, academia.edu, osti.gov,
+books.google.com, citeseerx, wikipedia.org, the DePaul and Yunès homepages. Only package
+registries and GitHub are reachable, and no public GitHub repository with these papers was found.
+
+### The four papers to obtain (all free in Elsevier's open archive)
+
+| Paper | Link |
+|---|---|
+| R. Balzer, Information and Control 10(1) (1967) 22–42 | https://www.sciencedirect.com/science/article/pii/S0019995867900320 |
+| J. Mazoyer, TCS 50(2) (1987) 183–238 | https://www.sciencedirect.com/science/article/pii/0304397587901241 |
+| J. Mazoyer, TCS 168(2) (1996) 367–404 | https://doi.org/10.1016/S0304-3975(96)00084-9 (DOI from the search index) |
+| J. Mazoyer, V. Terrier, TCS 217(1) (1999) 53–80 | https://www.sciencedirect.com/science/article/pii/S0304397598001509 |
+
+Placing the PDFs in `fssp5/literature/` (they should not be committed to the public repository)
+or allowing `www.sciencedirect.com` and `pdf.sciencedirectassets.com` in the environment's network
+settings would let the comparison be completed.
+
+Not relevant after checking the abstract: G. Richard, *On the synchronisation problem over cellular
+automata*, STACS 2017 (global synchronisation on infinite and periodic configurations, a different
+problem).
+
 ## 3. Effect on the claims of the manuscript
 
 | Claim | Before | After retrieval |
