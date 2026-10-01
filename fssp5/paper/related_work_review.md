@@ -159,6 +159,24 @@ stands, with claim 3 reduced to "certificate of a known result" and one small ce
 
 ## 6. Still to do before submission
 
+Status of the two missing full texts (2026-10-01, second attempt). Every automated route was
+tried: ScienceDirect and its PDF host answer with a Cloudflare CAPTCHA ("Are you a robot?") and
+declare text and data mining reserved (`tdm-reservation: 1`); OpenAlex and Semantic Scholar list
+no repository copy (`any_repository_has_fulltext: false`); the Internet Archive's journal scans
+contain only tables of contents for TCS and nothing for Information and Control; HAL has
+metadata only; the authors' homepages have no copies; web.archive.org and api.fatcat.wiki close
+the connection. Elsevier's sanctioned route for programmatic access is its article API, which
+needs a (free) API key. With a key stored in the environment as `ELSEVIER_API_KEY`:
+
+```
+for pii in S0304397596000849 S0019995867900320; do
+  curl -sS -H "X-ELS-APIKey: $ELSEVIER_API_KEY" -H "Accept: application/pdf" \
+       "https://api.elsevier.com/content/article/pii/$pii" -o "$pii.pdf"
+done
+```
+
+(the PDFs belong in the scratch directory or in `fssp5/literature/`, never in a public commit).
+
 1. Download Balzer 1967 (free, open archive) by hand and check the wording of the four conditions
    and of his five-state statement against Section 6.4.
 2. Download Mazoyer 1996 (free, open archive) and check it for statements overlapping Lemma 3.3,
