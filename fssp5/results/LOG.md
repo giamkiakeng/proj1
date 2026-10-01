@@ -138,3 +138,16 @@ All times single core (Intel/AMD cloud vCPU), kissat 4.x (git HEAD 2026-09) unle
   2.09e11, 5.13e16, 4.16e18 (mean 2.22e18); the earlier N=18 log (2.21e5, 4.17e12, 1.01e15) could not be reproduced
   with the recorded command and was replaced; the paper now says that the lengths up to 18 change little.
 - coresize.py on p10_rule (lengths 2..12): germ 39 transitions (as assumptions), raw core 38 (0.1 s).
+
+## Session 5 (retrieval of related work; Balzer's conditions)
+- Full texts obtained (kept outside the repository): Sanders 1994 (author's copy, KIT), Yunes 1993 thesis (HAL,
+  OCR), Mazoyer 1986 preprint of the six-state paper (Numdam), Mazoyer-Terrier LIP RR 94-50 (HAL), Duprat 2002 (HAL),
+  arXiv surveys and Kobayashi's papers.  Balzer 1967 and Mazoyer 1996 not obtainable (ScienceDirect 403); zbMATH
+  summaries used.  Details and the effect on the claims: paper/related_work_review.md.
+- Sanders 1994 imposes only delta(L,L,L) = delta(L,L,#) = L.  His Figure 2 near miss (transcribed, 34 transitions)
+  synchronizes 2..8 and is entry 26 of `fsspdfs 4 8 -s` (27 partial rules; none uses (*,L,L)).
+- Yunes 1993, Sect. 3.1: 27 four-state automata for 2..8, none for 2..9 (with delta(*,L,L) = L), i.e. Table 3.
+- Balzer's conditions (src/balzer.py, results/balzer.log): weak reading UNSAT at N=10 for I=(A B), at N=9 for
+  I=(L A), (L B) (LRAT); I=id SAT up to 11 in both readings; strong reading I=id UNSAT at N=12 (LRAT 476.5 MB,
+  lrat-check 8.5 s).  Rules for 2..11: results/balzer_sym11.txt (strong), balzer_sym11_weak.txt (weak), both
+  checked with fsspcheck (fail at n=12).

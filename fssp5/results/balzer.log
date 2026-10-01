@@ -1,0 +1,33 @@
+# Five-state rules under Balzer's extra conditions (src/balzer.py)
+# Conditions as reported by Mazoyer (Publ. Dept. Math. Lyon 1A, 1986, Sect. 7) and
+# Yunes (thesis, Paris 7, 1993, Sect. 2.7):
+#   B1 G stable, B2 image solution (involution I), B3 pre-firing GGG/*GG/GG* -> F, B4 G dominant.
+# weak reading (conds 1234): B1 only for working neighbours; B3 without "only these produce F".
+# strong reading (conds 1234s): B1 also for border neighbours; no other neighbourhood produces F.
+# I(*)=*, I(F)=F, hence I(G)=G; I in {id, (A B), (L A), (L B)}.  Solver: CaDiCaL 3.0.1,
+# certificates: LRAT (--lrat --binary=false), checked with lrat-check (drat-trim suite).
+#
+# weak reading
+N=3..9  conds=1234 I=AB  SATISFIABLE (each < 4 s)
+N=10    conds=1234 I=AB  UNSATISFIABLE 84.6 s  LRAT VERIFIED (380.1 MB, check 7.1 s)
+N=3..8  conds=1234 I=LA  SATISFIABLE
+N=9     conds=1234 I=LA  UNSATISFIABLE 37.1 s  LRAT VERIFIED (187.6 MB, check 3.5 s)
+N=3..8  conds=1234 I=LB  SATISFIABLE
+N=9     conds=1234 I=LB  UNSATISFIABLE 36.9 s  LRAT VERIFIED (184.4 MB, check 3.3 s)
+N=3..11 conds=1234 I=id  SATISFIABLE (N=10: 156 s, N=11: 1.5 s); the N=11 rule
+        (results/balzer_sym11_weak.txt) synchronizes 2..11 (fsspcheck), fails n=12 (fires at 21 < 22)
+# strong reading
+N=8..11 conds=1234s I=id SATISFIABLE; the N=11 rule (results/balzer_sym11.txt) satisfies
+        all strong conditions, synchronizes 2..11 (fsspcheck), fails n=12 (fires at 20 < 22)
+N=12    conds=1234s I=id UNSATISFIABLE 118.6 s LRAT VERIFIED (476.5 MB, check 8.5 s)
+        (the strong reading is stronger than the weak one, so I=AB, LA, LB are refuted at N=10, 9, 9)
+#
+# SHA-256 of the formulas (regenerate with balzer.py N CONDS I) and of the LRAT proofs
+AB N=10 weak    cnf d87457fe81b2c73aa421daf7518ff42af6abe252e9f61a3b96cc4e16b58e3ec6
+                lrat 18809db28655070300929ef749e724208b0ed1f21302c16b4fb2edf60897ada0
+LA N=9 weak     cnf 401ef8512025845c6b85cf06fbef31f8b5911dcad63df1aedc544859b5a6e4d6
+                lrat d74de977866932df674297ef9f6dc9992de9db9e8e3745fc42989485374a0e9a
+LB N=9 weak     cnf d7ba0d4098db5e67885fcff093e450b4fcd58cfd826a99cd9eb0083f324648a1
+                lrat 5784ee121c70e26f63b9e12b573aaa7ee395a606ecb58b70b70f3554a28398b9
+id N=12 strong  cnf 18c288e34ae749c162ef23611f36cfb98a5a77d5c34b50c6a42c7e8fcee27767
+                lrat eac101e2118ff551c8359e5cdc989ac4c1bc80e1fa5da2865ffb0483ab3bb337

@@ -41,6 +41,11 @@ H.-D. Gerken, {\"U}ber {S}ynchronisationsprobleme bei {Z}ellularautomaten,
 J.~Mazoyer, A six-state minimal time solution to the firing squad
   synchronization problem, Theoretical Computer Science 50~(2) (1987) 183--238.
 
+\bibitem{Yunes93}
+J.-B. Yun{\`e}s, Synchronisation et automates cellulaires: la ligne de
+  fusiliers, Ph.D. thesis, Universit{\'e} Paris~7, available from HAL,
+  \texttt{tel-00139049} (1993).
+
 \bibitem{Sanders94}
 P.~Sanders, Massively parallel search for transition-tables of polyautomata,
   in: Parcella '94: Proceedings of the VI International Workshop on Parallel
@@ -101,6 +106,34 @@ A.~Berthiaume, T.~Bittner, L.~Perkovi{\'c}, A.~Settle, J.~Simon, Bounding the
   firing synchronization problem on a ring, Theoretical Computer Science
   320~(2--3) (2004) 213--228.
 
+\bibitem{Settle99}
+A.~Settle, New bounds for the distributed firing synchronization problem, Ph.D.
+  thesis, University of Chicago (1999).
+
+\bibitem{YamashitaEtAl14}
+K.~Yamashita, Y.~Nishitani, S.~Hirose, S.~Okawa, N.~Osato, The firing squad
+  synchronization problem with sub-generals, Information Processing Letters
+  114~(1--2) (2014) 60--65.
+
+\bibitem{Kobayashi19}
+K.~Kobayashi, Nonexistence of minimal-time solutions for some variations of the
+  firing squad synchronization problem having simple geometric configurations,
+  arXiv:1909.10125 (2019).
+
+\bibitem{MazoyerTerrier94}
+J.~Mazoyer, V.~Terrier, Signals in one dimensional cellular automata, Research
+  Report 94-50, Laboratoire de l'Informatique du Parall{\'e}lisme, ENS Lyon,
+  available from HAL, \texttt{hal-02101868} (1994).
+
+\bibitem{MazoyerTerrier99}
+J.~Mazoyer, V.~Terrier, Signals in one-dimensional cellular automata,
+  Theoretical Computer Science 217~(1) (1999) 53--80.
+
+\bibitem{DAntonioDelzanno04}
+M.~D'Antonio, G.~Delzanno, {SAT}-based analysis of cellular automata, in:
+  Cellular Automata (ACRI 2004), Vol. 3305 of Lecture Notes in Computer
+  Science, Springer, 2004, pp. 745--754.
+
 \bibitem{HeuleKullmannMarek16}
 M.~J.~H. Heule, O.~Kullmann, V.~W. Marek, Solving and verifying the {B}oolean
   {P}ythagorean triples problem via cube-and-conquer, in: Theory and
@@ -141,11 +174,23 @@ N.~Wetzler, M.~J.~H. Heule, J.~Hunt, Warren~A., {DRAT-trim}: efficient checking
   Satisfiability Testing (SAT 2014), Vol. 8561 of Lecture Notes in Computer
   Science, Springer, 2014, pp. 422--429.
 
+\bibitem{AverageUser21}
+{Average-user}, Search to prove the nonexistence of a 4-states minimal time
+  solution to the {F}iring {S}quad {S}ynchronization {P}roblem, GitHub gist,
+  \url{https://gist.github.com/Average-user/4241ca84777ae6ed38326710d8b47da4}
+  (2021).
+
 \bibitem{Wolfram83}
 S.~Wolfram, Statistical mechanics of cellular automata, Reviews of Modern
   Physics 55~(3) (1983) 601--644.
 \newblock \href {https://doi.org/10.1103/RevModPhys.55.601}
   {\path{doi:10.1103/RevModPhys.55.601}}.
+
+\bibitem{Mazoyer86Lyon}
+J.~Mazoyer, A six states minimal time solution to the firing squad
+  synchronization problem, Publications du D{\'e}partement de Math{\'e}matiques
+  de Lyon~(1A) (1986) 1--92, preprint version of the paper in Theoret.\
+  Comput.\ Sci.\ 50 (1987); available from Numdam.
 
 \bibitem{Knuth75}
 D.~E. Knuth, Estimating the efficiency of backtrack programs, Mathematics of

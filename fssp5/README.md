@@ -56,6 +56,7 @@ src/germpersist.py       certificate of eventual regularity of a germ's half-lin
 src/germcompare.py       half-line neighbourhoods of rules below an anti-diagonal
 src/germpipe.sh          the classification pipeline
 src/germlong.py, germband.py, equiv.py, reflsym.py   further (inconclusive) experiments
+src/balzer.py            five-state rules under Balzer's extra conditions (Section 6.4, results/balzer.log)
 src/ruletable.py         LaTeX tables of rules
 src/figures.py           Figures 8-10 (space-time diagrams)
 results/                 rule tables (Mazoyer; partial 5-state rules; delta13), logs

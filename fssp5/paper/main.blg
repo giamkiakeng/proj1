@@ -3,44 +3,46 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: main.aux
 The style file: elsarticle-num.bst
 Database file #1: refs.bib
-You've used 30 entries,
+Warning--there's a number but no volume in Mazoyer86Lyon
+You've used 39 entries,
             2952 wiz_defined-function locations,
-            898 strings with 10679 characters,
-and the built_in function-call counts, 10657 in all, are:
-= -- 1038
-> -- 237
-< -- 24
-+ -- 98
-- -- 68
-* -- 689
-:= -- 1300
-add.period$ -- 31
-call.type$ -- 30
-change.case$ -- 31
+            956 strings with 12332 characters,
+and the built_in function-call counts, 13024 in all, are:
+= -- 1285
+> -- 294
+< -- 27
++ -- 123
+- -- 84
+* -- 818
+:= -- 1614
+add.period$ -- 40
+call.type$ -- 39
+change.case$ -- 43
 chr.to.int$ -- 0
-cite$ -- 30
-duplicate$ -- 395
-empty$ -- 1284
-format.name$ -- 82
-if$ -- 2845
+cite$ -- 40
+duplicate$ -- 477
+empty$ -- 1563
+format.name$ -- 102
+if$ -- 3485
 int.to.chr$ -- 0
-int.to.str$ -- 30
-missing$ -- 27
-newline$ -- 99
-num.names$ -- 36
-pop$ -- 243
+int.to.str$ -- 39
+missing$ -- 31
+newline$ -- 126
+num.names$ -- 45
+pop$ -- 298
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 779
+skip$ -- 967
 stack$ -- 0
-substring$ -- 678
-swap$ -- 155
-text.length$ -- 24
+substring$ -- 770
+swap$ -- 175
+text.length$ -- 27
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 0
-while$ -- 97
-width$ -- 32
-write$ -- 274
+warning$ -- 1
+while$ -- 115
+width$ -- 41
+write$ -- 354
+(There was 1 warning)

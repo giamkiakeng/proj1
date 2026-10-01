@@ -55,7 +55,11 @@ programs, the rule tables and the logs. The main components are:
   \cref{lem:pumping} on it (\texttt{germext2.c}: streaming version of the
   check of \cref{lem:left} for a single long line);
 \item[\texttt{src/germcompare.py}] the neighbourhoods used by the half-line
-  of a rule below a given anti-diagonal (\cref{thm:frontier}(c)).
+  of a rule below a given anti-diagonal (\cref{thm:frontier}(c));
+\item[\texttt{src/balzer.py}] the formulas with Balzer's conditions of
+  \cref{sec:balzer} (\cref{prop:balzer}); the runs, the two rules for the
+  lengths $2,\dots,11$ and the digests of the formulas and certificates are
+  in \path{results/balzer.log}.
 \end{description}
 The directory \texttt{results/germs} contains the germ lists, the logs of
 the classification and, in \texttt{CERTIFICATES.txt}, the digests of the

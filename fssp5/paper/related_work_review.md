@@ -1,89 +1,167 @@
-# Related work retrieved for the assessment of the manuscript
+# Related work: retrieval record and novelty assessment
 
-Retrieved on 2026-09-29. **Full texts could not be downloaded**: the session's network policy
-blocks the publisher and preprint hosts (arxiv.org, sciencedirect.com, elsevier.com,
-link.springer.com, epubs.siam.org, dl.acm.org, hal.science, numdam.org, semanticscholar.org,
-researchgate.net, wikipedia.org and others). What follows was retrieved through web search:
-titles, bibliographic data and the abstracts or summaries that the search index returns. Every
-statement below is marked with its source; statements marked *(summary)* come from a search
-engine's summary of the page and must be checked against the paper before being cited.
+First retrieval on 2026-09-29 (search summaries only). Updated on 2026-10-01, after the
+network policy was opened: full texts were obtained for the works marked **full text** below. The
+PDFs are kept outside the repository (copyrighted works are not redistributed); every source is
+given with its public location. Statements are marked with their source. *(summary)* means a
+search-engine or database summary, not the paper itself.
 
-## 1. Works the manuscript does not cite but should
+## 1. What was retrieved
 
-| Work | What is known about it | Relevance |
+| Work | Obtained | Location |
 |---|---|---|
-| R. Balzer, *An 8-state minimal time solution to the FSSP*, Information and Control 10 (1967) 22–42 (already cited) | Besides the four-state bound, the paper apparently "presents a reasonable set of conditions for which no five state minimal time solution exists" *(quoted in the gist below, attributed to Balzer; not checked against the paper)* | **High.** A conditional five-state non-existence result from 1967, of the same kind as our Proposition 6.4 and the class results. The manuscript must state Balzer's conditions and compare. |
-| Average-user, *Search to prove the nonexistence of a 4-states minimal time solution to the FSSP*, GitHub gist 4241ca84777ae6ed38326710d8b47da4 (not a publication) | An independent exhaustive search (LuaJIT): of 241,176,313 nodes, none synchronizes all lengths 2..9 in minimal time *(summary)* | **High for Theorem 5.1.** Independently confirms that the lengths 2..9 suffice for four states, so the threshold 9 is not new; only the LRAT certificate and dropping the left quiescence condition remain new. |
-| M. D'Antonio, G. Delzanno, *SAT-Based Analysis of Cellular Automata*, ACRI 2004, LNCS 3305 | Encodes CA evolution in propositional logic and applies zChaff to forward and inverse reachability for classical examples, including the FSSP *(summary)* | **Medium.** Earlier SAT work on the FSSP (analysis of given rules, not a search for rules). The sentence "we are not aware of previous SAT-based work on the state complexity of the FSSP" can stay, but this work must be cited. |
-| J. Mazoyer, V. Terrier, *Signals in one-dimensional cellular automata*, TCS 217 (1999) 53–80 | "We study generation of some signals ... a notion of constructibility of increasing functions ... We also exhibit some impossible moves of data" *(abstract)* | **High for Lemma 3.5.** Impossibility results for moving data in 1-D CA are the closest known relative of the left-border argument. Needs a direct comparison. |
-| D. Goldstein, K. Kobayashi, *On the complexity of network synchronization*, SIAM J. Comput. 35 (2005) 567–589 | If a minimal-time solution exists for 3-D undirected grid networks then P = NP *(summary)* | Medium: non-existence of minimal-time solutions for variants. |
-| D. Goldstein, K. Kobayashi, *On minimal-time solutions of firing squad synchronization problems for networks*, SIAM J. Comput. 41 (2012) 618–669 | Bibliographic data only | Medium: same line of work. |
-| K. Kobayashi, *Nonexistence of minimal-time solutions for some variations of the FSSP having simple geometric configurations*, arXiv:1909.10125 (2019) | Proves non-existence of minimal-time solutions for L-shaped paths and rectangular walls with fixed side ratios *(abstract)* | Medium: the closest modern non-existence proofs for minimal time. |
-| K. Kobayashi, *Minimum firing times of FSSPs for paths in grid spaces*, arXiv:1909.05406 (2019) | Minimal-time solutions for paths in 2-D/3-D grids "are not known and are unlikely to exist"; no non-existence proofs yet; one result suggests what study is needed *(abstract)* | Low to medium: methodology of non-existence proofs. |
-| J. Durand-Lose, A. Emmanuel, *Abstract Geometrical Computation 11: Slanted firing squad synchronisation on signal machines*, TCS 894 (2021) 103–120; arXiv:2106.11176 | Most FSSP constructions translate to signal machines and "generate fractal figures with an accumulation" *(summary)* | Medium for Theorem 3.6: describes the accumulation of signals that our barrier proves necessary; our result is a necessity statement for CA, theirs a construction. |
-| C. S. Calude, M. Napoli, M. Parente, *Minimum and non-minimum time solutions to the FSSP*, LNCS 8808 (2014) | Survey *(abstract)* | Low: survey to cite. |
-| L. Maignan, J.-B. Yunès, *A spatio-temporal algorithmic point of view on FSSP*, ACRI 2012, LNCS 7495 | Solves the FSSP by recursive division expressed with fields *(abstract)* | Low: describes the recursive division structure. |
-| H. Umeo, T. Yanagihara, *A small five-state non-optimum-time solution to the FSSP*, Fundamenta Informaticae (2009) | Five-state protocol for lengths 2^k, non-optimum time *(summary)* | Low: partial five-state solutions (families of lengths). |
-| H. Umeo, N. Kamikawa, G. Fujita, *A new class of the smallest 4-state semi-symmetric FSSP partial solutions for 1D arrays*, ACRI 2024, LNCS 14978 | Four-state protocols for rings of length 2^k−1 *(summary)* | Low: recent partial solutions. |
+| P. Sanders, *Massively parallel search for transition-tables of polyautomata*, Parcella '94, 99–108 | **full text** (author's copy) | https://ae.iti.kit.edu/documents/people/sanders/papers/parcella94.pdf |
+| J.-B. Yunès, *Synchronisation et automates cellulaires: la ligne de fusiliers*, PhD thesis, Paris 7, 1993 | **full text** (scanned; read by OCR) | HAL tel-00139049 |
+| J. Mazoyer, *A six states minimal time solution to the FSSP*, Publ. Dépt. Math. Lyon 1A (1986) 1–92 (preprint of TCS 50, 1987) | **full text** | https://numdam.org/item/PDML_1986___1A_A1_0/ |
+| J. Mazoyer, V. Terrier, *Signals in one dimensional cellular automata*, LIP Research Report 94-50 (1994) (report version of TCS 217, 1999) | **full text** | HAL hal-02101868 |
+| J. Duprat, *Proof of correctness of the Mazoyer's solution of the firing squad problem in Coq*, LIP report (2002) | **full text** | HAL hal-02101837 |
+| Gruska, La Torre, Napoli, Parente, *Various solutions to the FSSP*, arXiv cs/0511044 (2005) | **full text** | arXiv |
+| Correa, Gustavo, Lemos, Settle, *An overview of recent solutions to and lower bounds for the FSP*, arXiv 1701.01045 (2017) | **full text** | arXiv |
+| K. Kobayashi, arXiv 1909.10125, 1909.05406, 1909.05408 (2019) | **full text** | arXiv |
+| J. Durand-Lose, A. Emmanuel, arXiv 2106.11176 (2021); Nguyen, Maignan, arXiv 2005.08570 (2020); Yunès, arXiv 1212.3069 | **full text** | arXiv |
+| Average-user, GitHub gist 4241ca84777ae6ed38326710d8b47da4 (2021) | **full text** (code and description) | https://gist.github.com/Average-user/4241ca84777ae6ed38326710d8b47da4 |
+| R. Balzer, Information and Control 10 (1967) 22–42 | zbMATH summary (Zbl 1347.68249); conditions via Mazoyer 1986 and Yunès 1993 | full text **not obtained** |
+| J. Mazoyer, *On optimal solutions to the FSSP*, TCS 168 (1996) 367–404 | zbMATH summary (Zbl 0878.68088); description in Gruska et al. | full text **not obtained** |
+| J. Mazoyer, V. Terrier, TCS 217 (1999) 53–80 | zbMATH summary (Zbl 0915.68125); report version read in full | journal version **not obtained** |
+| A. Settle, *New bounds for the distributed firing synchronization problem*, PhD thesis, Univ. of Chicago, 1999 | description in Correa et al. | **not obtained** |
+| K. Yamashita et al., *The FSSP with sub-generals*, IPL 114 (2014) 60–65 | bibliographic data (Crossref); argument described by Kobayashi 2019 | **not obtained** |
+| M. D'Antonio, G. Delzanno, *SAT-based analysis of cellular automata*, ACRI 2004, LNCS 3305, 745–754 | bibliographic data, Semantic Scholar summary | **not obtained** |
 
-## 2. Works that decide novelty but could not be retrieved
+Why some full texts are missing: ScienceDirect and Springer answer HTTP 403 to automated clients
+(bot protection, also for headless Chromium with the proxy CA trusted); the Elsevier article API
+returns only metadata without an API key; archive.org and scholar.archive.org rate-limit the
+shared egress address; CORE sits behind a Cloudflare challenge. Balzer 1967, Mazoyer 1996 and
+Mazoyer–Terrier 1999 are free in Elsevier's open archive and can be downloaded by hand.
 
-* **J. Mazoyer, *On optimal solutions to the FSSP*, TCS 168 (1996) 367–404.** No abstract was
-  retrievable. It studies the structure of optimal (minimal-time) solutions and is the most likely
-  place for results overlapping with Lemma 3.3, Theorem 3.4 and Theorem 3.6. It must be read before
-  submission.
-* **Balzer 1967, Section on five states.** The conditions of the conditional five-state result are
-  unknown.
-* **P. Sanders, Parcella '94.** Only the account "Balzer's search was incomplete; Sanders
-  reaffirmed the four-state result with a corrected search" *(summary)*.
+## 2. Findings, source by source
 
-### Retry on 2026-10-01
+**Sanders 1994 (full text).**
+- The specification imposes only σ(Z0,Z0,Z0) = σ(Z0,Z0,#) = Z0, exactly the conditions
+  (eq. quiescence) of the manuscript. The manuscript's "even without the left quiescence condition"
+  is therefore not new relative to Sanders.
+- Balzer's backtracking heuristic was incorrect, "rendering the proof incomplete"; the corrected
+  search has about 16,000,000 nodes instead of 60,000; the MasPar program proves the four-state
+  bound in less than 11 s. Figure 2 shows a four-state rule that works up to length 8.
+  **Checked:** the transcribed rule (34 transitions besides the quiescence ones) synchronizes the
+  lengths 2..8 and hits an undefined neighbourhood (G,G,L) at length 9; it is exactly one of the 27
+  partial rules of the manuscript's Table 3 (number 26 in the output of `fsspdfs 4 8 -s`).
+- "Whether one accepts the output of a C program as a proof is a philosophical question" — the
+  LRAT certificate of Theorem 5.1 answers exactly this point.
+- Five states: estimated "about 10^16 times the age of the universe on a MasPar" (checked on the
+  page image); a 24-hour randomized search found nothing; Balzer's approach of postulating
+  properties of a solution "looked better than it is" because of the wrong heuristics, and "his
+  strongest postulates do not hold for Mazoyer's six-state solution".
 
-After a container restart the gateway still answered 403 ("policy denial") to every scholarly
-host tried, from the shell and from the fetch tool: arxiv.org, export.arxiv.org,
-www.sciencedirect.com, pdf.sciencedirectassets.com, api.crossref.org, api.openalex.org,
-api.semanticscholar.org, core.ac.uk, scholar.archive.org, web.archive.org, link.springer.com,
-hal.science, eudml.org, drops.dagstuhl.de, dblp.org, zbmath.org, academia.edu, osti.gov,
-books.google.com, citeseerx, wikipedia.org, the DePaul and Yunès homepages. Only package
-registries and GitHub are reachable, and no public GitHub repository with these papers was found.
+**Yunès 1993 (full text, OCR).**
+- §3.1: Balzer's search re-implemented with the three latent transitions ($,L,L), (L,L,L), (L,L,$)
+  fixed to L: 23,925,498 automata scanned in 153 s; "it suffices to look at the lines of lengths
+  2 to 9"; there are exactly **27** four-state automata synchronizing all lengths 2..8, none also
+  length 9; five states out of reach. **This is the manuscript's Table 3 (27 and 0).** None of the
+  manuscript's 27 partial rules uses the neighbourhood (*,L,L), so the two counts refer to the
+  same set.
+- §2.7 "Verifying Balzer's conditions": (1) image solution with an involution I, (2) a resident
+  state R: (x,R,y) → R for (x,y) ∈ Q² − {(R,R)}, (3) a pre-synchronization state S:
+  (x,S,y) → F for x,y ∈ {S,$}, (4) a dominant state D: (D,x,D) → D for x ≠ D.
+- §3.2: no three-state solution in any time.
 
-### The four papers to obtain (all free in Elsevier's open archive)
+**Mazoyer 1986 (full text), §7.** "Balzer has shown that no minimal time solution exists with 4
+states; no minimal time solution satisfying extra conditions exists with 5 states. However, the
+solution presented here does not satisfy Balzer's four extra conditions: in particular his
+conditions 1 (the stability of state G) and 4 (rules (G,V,G) → G for V ≠ G) are violated, the very
+idea of our solution is not to be an 'image solution' (his condition 2), the only condition
+satisfied is condition 3 (the fire is introduced only by environments GGG, XGG, GGX)." Together
+with Yunès this fixes Balzer's conditions up to two details (border neighbours in condition 1,
+"only" in condition 3), which the manuscript now treats as a weak and a strong reading.
 
-| Paper | Link |
-|---|---|
-| R. Balzer, Information and Control 10(1) (1967) 22–42 | https://www.sciencedirect.com/science/article/pii/S0019995867900320 |
-| J. Mazoyer, TCS 50(2) (1987) 183–238 | https://www.sciencedirect.com/science/article/pii/0304397587901241 |
-| J. Mazoyer, TCS 168(2) (1996) 367–404 | https://doi.org/10.1016/S0304-3975(96)00084-9 (DOI from the search index) |
-| J. Mazoyer, V. Terrier, TCS 217(1) (1999) 53–80 | https://www.sciencedirect.com/science/article/pii/S0304397598001509 |
+**Mazoyer–Terrier 1994 (full text of the report).** Signals generated by a single impulse,
+Fischer-constructible functions and their closure properties. The "impossible moves of data" are
+a gap theorem (report, Prop. 1): a rightward signal of ratio φ has φ(n) − n eventually constant or
+φ(n) ≥ n + log_q n, q the number of states. Its proof is a pigeonhole argument on the words of the
+first log_q n0 diagonals behind the front, which become periodic once two columns coincide — the
+eventual periodicity of the depth-rows used as the first step of the manuscript's Theorem 3.4
+(now cited). No statement about minimal-time solutions, the reflected triangles, the line i = t/3
+or the left border. Prop. 12 (real-time recognition) uses the agreement of the diagrams of a^n and
+a^m below the anti-diagonal c + t = n, the analogue of the manuscript's Lemma 2.2.
 
-Placing the PDFs in `fssp5/literature/` (they should not be committed to the public repository)
-or allowing `www.sciencedirect.com` and `pdf.sciencedirectassets.com` in the environment's network
-settings would let the comparison be completed.
+**Mazoyer 1996 (zbMATH summary; Gruska et al.).** "After proving that the sets of solutions and of
+minimal time solutions to the FSSP are not recursively enumerable, he constructs particular
+solutions for one-way and two-way information flow channels" (zbMATH); "Mazoyer, in [15] showed
+that a minimal time synchronization exists for a 1-Line", i.e. with one bit exchanged per step
+(Gruska et al.). The manuscript's former description ("studied the structure of optimal solutions
+and the information flow they require") was inaccurate and is corrected.
 
-Not relevant after checking the abstract: G. Richard, *On the synchronisation problem over cellular
-automata*, STACS 2017 (global synchronisation on infinite and periodic configurations, a different
-problem).
+**Kobayashi 2019 and Yamashita et al. 2014 (via Kobayashi).** Non-existence of minimal-time
+solutions for variants (sub-generals, L-shaped paths, rectangular walls): a repetition of a pair of
+consecutive states at two times, forced by the pigeonhole principle once the configuration is
+long, propagates through the quiescent region and makes a node fire too early. This is the same
+mechanism as the manuscript's pumping lemma (two lengths whose input words agree on the cone fire
+at the same relative time); now cited, with the difference stated (there it excludes all solutions
+of a variant, here it constrains the solutions of the original problem).
 
-## 3. Effect on the claims of the manuscript
+**Correa et al. 2017.** Settle's thesis (1999) proves that no three-state minimal-time solution
+exists and "weaker results ... for 4-state and 5-state solutions, showing that there are no
+solutions subject to a small number of constraints"; now cited as Settle99 via the survey.
 
-| Claim | Before | After retrieval |
+**Gist (Average-user).** LuaJIT search with δ(*,L,L) = L imposed; reports 241,176,313 nodes and 0
+solutions for the lengths 2..9, and 27 for 2..8, "as reported by Sanders". Independent
+confirmation of Yunès's numbers; cited in the four-state section.
+
+**Durand-Lose–Emmanuel 2021.** Constructions on signal machines (accumulations, fractal
+structure); no necessity statements for cellular automata. Not in conflict with Theorem 3.6.
+
+## 3. New computation prompted by the retrieval: Balzer's conditions
+
+`src/balzer.py` adds (B1)–(B4) (Mazoyer's formulation, for the state G) to MT_5({2..N}) without
+symmetry breaking, for each involution I of {L,A,B} (I(F) = F forces I(G) = G). Results
+(`results/balzer.log`, LRAT certificates checked by lrat-check, digests recorded):
+
+| involution | weak reading | strong reading |
 |---|---|---|
-| 1. Pumping lemma and speed-1/3 barrier (L3.3, T3.4) | plausibly new | still plausibly new; overlap with Mazoyer 1996 and Mazoyer–Terrier 1999 unresolved |
-| 2. Left-border barrier, no eventually regular half-line (L3.5, T3.6, C3.8, L3.9) | plausibly new, strongest | plausibly new as a necessity statement; signal-machine work describes the phenomenon; overlap with Mazoyer–Terrier's impossibility results unresolved |
-| 3. Certified four-state bound (T5.1) | known result, certificate new | weaker: the threshold 9 is independently known (gist); novelty reduces to the LRAT certificate and the dropped left quiescence condition |
-| 4. Five-state rules for all lengths ≤ 14 | apparently new | no earlier report found; must be compared with Balzer's conditional five-state result |
-| 5. c_78 ≥ 15 (P6.4) | new, low weight | new, low weight; conceptually close to Balzer's conditional result, which must be discussed |
+| (A B) | UNSAT at N = 10 (LRAT) | UNSAT at N ≤ 10 (implied) |
+| (L A), (L B) | UNSAT at N = 9 (LRAT) | UNSAT at N ≤ 9 (implied) |
+| identity (symmetric rules) | SAT up to N = 11; N = 12 see `results/balzer.log` | SAT up to N = 11, **UNSAT at N = 12** (LRAT, 477 MB, checked in 8.5 s) |
 
-## 4. Sources
+Hence the new Proposition 6.5: no five-state rule satisfying the strong reading of Balzer's
+conditions synchronizes the lengths 2..12 — a certified version of Balzer's conditional
+five-state result, whose original search was incomplete (Sanders); lengths up to 11 do not
+suffice. Both rules for 2..11 were checked with the independent simulator `fsspcheck`.
 
-* https://gist.github.com/Average-user/4241ca84777ae6ed38326710d8b47da4
-* https://link.springer.com/chapter/10.1007/978-3-540-30479-1_77 (D'Antonio, Delzanno)
-* https://www.sciencedirect.com/science/article/pii/S0304397598001509 (Mazoyer, Terrier)
-* https://doi.org/10.1137/S0097539705447086 (Goldstein, Kobayashi 2005)
-* https://arxiv.org/abs/1909.10125 and https://arxiv.org/abs/1909.05406 (Kobayashi)
-* https://arxiv.org/abs/2106.11176 (Durand-Lose, Emmanuel)
-* https://link.springer.com/chapter/10.1007/978-3-319-13350-8_9 (Calude, Napoli, Parente)
-* https://link.springer.com/chapter/10.1007/978-3-642-33350-7_11 (Maignan, Yunès)
-* https://journals.sagepub.com/doi/10.3233/FI-2009-0038 (Umeo, Yanagihara 2009)
-* https://link.springer.com/chapter/10.1007/978-3-031-71552-5_6 (Umeo, Kamikawa, Fujita 2024)
-* https://www.sciencedirect.com/science/article/pii/S0019995867900320 (Balzer 1967)
+## 4. Effect on the claims
+
+| Claim | Before retrieval | After retrieval |
+|---|---|---|
+| 1. Pumping lemma, speed-1/3 barrier (L3.3, T3.4) | plausibly new | **new as far as the retrieved literature shows**; its mechanism (early firing forced by a repeated pair of states) is that of Yamashita et al. and Kobayashi for variants, and the eventual periodicity of the depth-rows is classical (Mazoyer–Terrier) — both now cited. Residual risk: the full text of Mazoyer 1996 was not read; its documented results (non-r.e., one-bit solutions) do not overlap. |
+| 2. Left-border barrier, no eventually regular half-line (L3.5, T3.6, C3.8, L3.9) | plausibly new, strongest | **new as far as the retrieved literature shows**; Mazoyer–Terrier's impossibility results concern signal ratios near the front, not periodicity at the border. Same residual risk. |
+| 3. Certified four-state bound (T5.1) | known result, certificate new | **only the certificate is new.** The threshold 9 and the count 27 are Yunès 1993; Sanders used the same quiescence conditions; Sanders's near miss is one of the 27. Minor additional facts: lengths 2..8 suffice with the half-line to anti-diagonal 78; pumping constraints alone are weak. The manuscript now attributes all of this. |
+| 4. Five-state rules for all lengths ≤ 14 | apparently new | **new**: no earlier report of five-state rules for long initial segments of lengths; Sanders's randomized search found nothing, Yunès and Balzer could not search five states. |
+| 5. c_78 ≥ 15 (P6.4) | new, low weight | **new**, unconditional (unlike Balzer's conditional result). |
+| 6. Balzer's conditions (P6.5, added) | — | **new, certified**; first independent check of Balzer's 1967 conditional claim. Caveat: the conditions are taken from two secondary sources (Mazoyer 1986, Yunès 1993), which agree in substance; Balzer's own wording should be checked against the paper. |
+
+Count of claims worth peer review: the earlier answer (five, of which two are new theorems)
+stands, with claim 3 reduced to "certificate of a known result" and one small certified result
+(claim 6) added.
+
+## 5. Changes made to the manuscript
+
+- Introduction: four-state history (Balzer, Yunès, Sanders) and Balzer's conditional five-state
+  result; corrected description of Mazoyer 1996 (non-r.e.; one-bit solutions); new citations of
+  Settle 1999, Yamashita et al. 2014, Kobayashi 2019, Mazoyer–Terrier 1994/1999, D'Antonio–Delzanno
+  2004; contribution (i) marked as elementary; contribution (iii) marked as a certificate of a
+  known fact; contribution (iv) mentions Proposition 6.5; results table extended.
+- Abstract: "of the known fact that no four-state minimal-time solution exists".
+- Section 2: Mazoyer's non-recursive-enumerability theorem and its consequence for existence proofs.
+- Section 3: the eventual periodicity of the depth-rows credited to Mazoyer–Terrier.
+- Section 5: Table 3 numbers attributed to Yunès 1993, Sanders 1994 and the gist; Sanders's near
+  miss identified among the 27; the certificate stated as the contribution.
+- Section 6: new subsection 6.4 "Balzer's conditions" with Proposition 6.5; Sanders's five-state
+  estimate added to Section 6.5.
+- Glossary: entry "Image solution; Balzer's conditions". Bibliography: nine new entries.
+
+## 6. Still to do before submission
+
+1. Download Balzer 1967 (free, open archive) by hand and check the wording of the four conditions
+   and of his five-state statement against Section 6.4.
+2. Download Mazoyer 1996 (free, open archive) and check it for statements overlapping Lemma 3.3,
+   Theorem 3.4, Lemma 3.5 and Theorem 3.6. This is the only remaining risk for the two theorems.
+3. Optional: Settle's thesis (conditional four- and five-state results) and the journal version of
+   Mazoyer–Terrier, to cite section numbers of the published versions.

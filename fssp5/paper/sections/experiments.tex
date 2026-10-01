@@ -31,7 +31,20 @@ is satisfiable, and an independent depth-first enumeration (program
 \texttt{fsspdfs.c}, which fills the table lazily in the order in which
 transitions are needed) finds the numbers of partial rules listed in
 \cref{tab:four}, counted on the transitions they use; it reaches zero exactly
-at the lengths $2,\dots,9$, in agreement with the solver. With the half-line extended to
+at the lengths $2,\dots,9$, in agreement with the solver. These numbers
+agree with the earlier searches. Yun\`es \cite[\S3.1]{Yunes93}, repeating
+Balzer's search with the additional condition $\delta(\ast,\mathsf
+L,\mathsf L)=\mathsf L$, found exactly $27$ four-state automata (counted on
+the transitions they use) that synchronize the lengths $2,\dots,8$, and none
+that also synchronizes the length $9$; none of our $27$ partial rules uses
+the neighbourhood $(\ast,\mathsf L,\mathsf L)$. Sanders, who imposes only
+\eqref{eq:quiescence}, shows a four-state rule that works up to length $8$
+\cite[Fig.~2]{Sanders94}; it is one of our $27$ partial rules. An
+independent recent search \cite{AverageUser21} reports the same numbers.
+What \cref{thm:four} adds is the certificate: the earlier proofs rest on
+the correctness of search programs, and Sanders himself left open
+``whether one accepts the output of a C program as a proof''
+\cite{Sanders94}. With the half-line extended to
 anti-diagonal $78$ the lengths $2,\dots,8$ already suffice. The pumping
 constraints alone are weak for four states: together with the half-line up
 to anti-diagonal~$78$, the lengths $2,\dots,7$ remain satisfiable.
@@ -61,7 +74,8 @@ explicit rules that synchronize every line of length at most $14$, the
 current frontier, and shows how the barriers of \cref{sec:pumping} exclude
 the half-lines of some of them. \Cref{sec:germs} turns the question around:
 instead of searching for rules, it enumerates the possible half-lines of
-low complexity and excludes all but a few of them. \Cref{sec:difficulty}
+low complexity and excludes all but a few of them. \Cref{sec:balzer}
+checks Balzer's conditional five-state result, and \cref{sec:difficulty}
 estimates the size of the remaining search.
 
 \subsection{Lucky rules}\label{sec:lucky}
@@ -386,6 +400,56 @@ $3300$ for $c_{78}\le14$ and $1300$ for $c_{78}\le16$).}
 \label{tab:germs}
 \end{table}
 
+\subsection{Balzer's conditions}\label{sec:balzer}
+
+Balzer \cite{Balzer67} also reported that no five-state minimal-time
+solution satisfies four additional conditions. We could not consult this
+part of his paper, and we take the conditions from Mazoyer
+\cite[\S7]{Mazoyer86Lyon}, who states them for the general $\mathsf G$; Yun\`es
+\cite[\S2.7]{Yunes93} states them for arbitrary states. In our notation:
+\begin{enumerate}[label=(B\arabic*)]
+\item $\mathsf G$ is stable: $\delta(x,\mathsf G,y)=\mathsf G$ unless both
+  $x$ and $y$ belong to $\{\mathsf G,\ast\}$;
+\item the rule is an image solution (\cref{app:gl-squad}) for some
+  involution $I$;
+\item $\delta(\mathsf G,\mathsf G,\mathsf G)=\delta(\ast,\mathsf G,\mathsf
+  G)=\delta(\mathsf G,\mathsf G,\ast)=\mathsf F$, and no other
+  neighbourhood is mapped to $\mathsf F$;
+\item $\delta(\mathsf G,v,\mathsf G)=\mathsf G$ for every working state
+  $v\neq\mathsf G$.
+\end{enumerate}
+The two sources differ in details: Yun\`es requires (B1) only when $x$ and
+$y$ are working states and does not require that no other neighbourhood
+produces $\mathsf F$. We call (B1)--(B4) as displayed the \emph{strong
+reading} and the version with these two restrictions dropped the
+\emph{weak reading}. Mazoyer's six-state solution satisfies only (B3)
+\cite{Mazoyer86Lyon}, and Sanders \cite{Sanders94} notes that the error in
+Balzer's search ``made this approach look better than it is''.
+
+All four conditions fix transitions or relate pairs of transitions, so they
+are added to $\mathrm{MT}_5(\{2,\dots,N\})$ as unit and binary clauses (program
+\texttt{balzer.py}, without symmetry breaking). We take $I(\mathsf
+F)=\mathsf F$; then (B3) forces $I(\mathsf G)=\mathsf G$, so $I$ is one of
+the four involutions of $\{\mathsf L,\mathsf A,\mathsf B\}$, and we treat
+them separately. In the weak reading, no rule with $I=(\mathsf A\,\mathsf
+B)$ synchronizes the lengths $2,\dots,10$ and no rule with $I=(\mathsf
+L\,\mathsf A)$ or $I=(\mathsf L\,\mathsf B)$ the lengths $2,\dots,9$
+(CaDiCaL, $85$\,s, $37$\,s and $37$\,s; LRAT certificates checked by
+\texttt{lrat-check} in $7.1$\,s, $3.5$\,s and $3.3$\,s). The symmetric rules ($I$ the
+identity) go further: in both readings there are rules satisfying
+(B1)--(B4) that synchronize every line of length at most $11$ (file
+\path{results/balzer_sym11.txt}); in the strong reading no such rule
+synchronizes the lengths $2,\dots,12$ ($119$\,s, LRAT certificate of
+$477$\,MB checked in $8.5$\,s). Hence:
+
+\begin{proposition}\label{prop:balzer}
+No five-state rule satisfying the strong reading of (B1)--(B4), with an
+involution $I$ that fixes $\mathsf F$, synchronizes all lines of lengths
+$2,\dots,12$ in minimal time. In particular Balzer's
+conditional result holds in this reading, and the lengths up to $11$ do
+not suffice to prove it.
+\end{proposition}
+
 \subsection{Where the difficulty lies}\label{sec:difficulty}
 
 Once a germ is fixed, the half-line is determined up to anti-diagonal $78$
@@ -430,3 +494,9 @@ about $1.5$ CPU-hours each) did not terminate. Clause learning compresses
 such trees considerably, and cube-and-conquer \cite{HeuleEtAl11}
 parallelizes them well, but a complete five-state search along these lines
 is a computation of a much larger scale than the ones reported here.
+Earlier attempts give the same picture. Yun\`es \cite[\S3.1]{Yunes93} could
+not complete Balzer's search for five states, and Sanders \cite{Sanders94},
+whose program proves the four-state bound in less than $11$ seconds on a
+MasPar with $16384$ processors, estimated that a five-state search would
+take about $10^{16}$ times the age of the universe on that machine; a
+$24$-hour randomized search for a five-state solution found nothing.

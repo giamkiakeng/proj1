@@ -16,6 +16,7 @@
 \citation{Gerken87}
 \citation{Mazoyer87}
 \citation{Balzer67}
+\citation{Yunes93}
 \citation{Sanders94}
 \citation{Umeo09,Correa17}
 \citation{Clergue18,NguyenMaignan20}
@@ -33,179 +34,203 @@
 \@writefile{toc}{\contentsline {paragraph}{The idea in brief}{4}{section*.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{This paper}{4}{section*.4}\protected@file@percent }
 \citation{Duprat97}
+\citation{Balzer67,Yunes93,Sanders94}
 \citation{Mazoyer86,Umeo09}
 \citation{Minsky67}
 \citation{Mazoyer96}
 \citation{SettleSimon02}
 \citation{BerthiaumeEtAl04}
+\citation{Settle99}
 \citation{Correa17}
+\citation{YamashitaEtAl14,Kobayashi19}
+\citation{MazoyerTerrier94,MazoyerTerrier99}
 \citation{Clergue18}
 \citation{NguyenMaignan20}
+\citation{DAntonioDelzanno04}
 \citation{HeuleKullmannMarek16,Heule18}
-\@writefile{toc}{\contentsline {paragraph}{Related work}{5}{section*.5}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces The results of the paper and the evidence for them. Numbers refer to numbered statements (lemmas, theorems, propositions, corollaries and remarks share one counter per section), B.1--B.4 to the parts of \cref  {app:further}. \emph  {Simulation}: a finite computation that the programs of \cref  {app:repro} repeat; \emph  {certified computation}: unsatisfiability claims with LRAT proofs checked by \texttt  {lrat-check}; \emph  {solver runs}: solver results without certificates.}}{6}{table.1}\protected@file@percent }
 \newlabel{tab:results}{{1}{6}{The results of the paper and the evidence for them. Numbers refer to numbered statements (lemmas, theorems, propositions, corollaries and remarks share one counter per section), B.1--B.4 to the parts of \cref {app:further}. \emph {Simulation}: a finite computation that the programs of \cref {app:repro} repeat; \emph {certified computation}: unsatisfiability claims with LRAT proofs checked by \texttt {lrat-check}; \emph {solver runs}: solver results without certificates}{table.1}{}}
 \newlabel{tab:results@cref}{{[table][1][]1}{[1][5][]6}}
-\@writefile{toc}{\contentsline {paragraph}{Organisation}{6}{section*.6}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Left: the five states of a five-state rule, drawn as soldiers. Right: one step of one cell. The cell in the middle sees its left neighbour in state $\mathsf  G$, itself in state $\mathsf  L$ and its right neighbour in state $\mathsf  L$, looks up the entry $\mathsf  G\,\mathsf  L\,\mathsf  L$ of the rule and becomes $\mathsf  A$. The four entries shown belong to the rule $\delta _{14}$ of \cref  {tab:delta14}.}}{7}{figure.3}\protected@file@percent }
-\newlabel{fig:moods}{{3}{7}{Left: the five states of a five-state rule, drawn as soldiers. Right: one step of one cell. The cell in the middle sees its left neighbour in state $\mathsf G$, itself in state $\mathsf L$ and its right neighbour in state $\mathsf L$, looks up the entry $\mathsf G\,\mathsf L\,\mathsf L$ of the rule and becomes $\mathsf A$. The four entries shown belong to the rule $\delta _{14}$ of \cref {tab:delta14}}{figure.3}{}}
-\newlabel{fig:moods@cref}{{[figure][3][]3}{[1][7][]7}}
+\@writefile{toc}{\contentsline {paragraph}{Related work}{6}{section*.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Organisation}{7}{section*.6}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {2}Preliminaries}{7}{section.2}\protected@file@percent }
 \newlabel{sec:prelim}{{2}{7}{Preliminaries}{section.2}{}}
-\newlabel{sec:prelim@cref}{{[section][2][]2}{[1][6][]7}}
+\newlabel{sec:prelim@cref}{{[section][2][]2}{[1][7][]7}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}The problem}{7}{subsection.2.1}\protected@file@percent }
-\newlabel{eq:quiescence}{{1}{7}{The problem}{equation.2.1}{}}
-\newlabel{eq:quiescence@cref}{{[equation][1][]1}{[1][7][]7}}
 \citation{Moore64,Waksman66,Balzer67}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}The half-line and the agreement lemma}{8}{subsection.2.2}\protected@file@percent }
-\newlabel{lem:lightcone}{{2.1}{8}{light cone}{theorem.2.1}{}}
-\newlabel{lem:lightcone@cref}{{[lemma][1][2]2.1}{[1][8][]8}}
-\newlabel{lem:agree}{{2.2}{8}{agreement}{theorem.2.2}{}}
-\newlabel{lem:agree@cref}{{[lemma][2][2]2.2}{[1][8][]8}}
-\newlabel{lem:return}{{2.3}{9}{return chain}{theorem.2.3}{}}
-\newlabel{lem:return@cref}{{[lemma][3][2]2.3}{[1][9][]9}}
-\newlabel{rem:lowerbound}{{2.4}{9}{}{theorem.2.4}{}}
-\newlabel{rem:lowerbound@cref}{{[remark][4][2]2.4}{[1][9][]9}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Space-time diagrams (time runs downwards, one square per cell and time step) of the lines of lengths $6$ and $9$, coloured by what each cell can know. On the cells with $t+i\le 10$ (light blue, bounded by the dashed anti-diagonal) the two diagrams coincide for every rule (\cref  {lem:agree}); the right border acts only in the reflected triangle $R_n$, below the return chain. The colours show regions, not states.}}{10}{figure.4}\protected@file@percent }
-\newlabel{fig:echo}{{4}{10}{Space-time diagrams (time runs downwards, one square per cell and time step) of the lines of lengths $6$ and $9$, coloured by what each cell can know. On the cells with $t+i\le 10$ (light blue, bounded by the dashed anti-diagonal) the two diagrams coincide for every rule (\cref {lem:agree}); the right border acts only in the reflected triangle $R_n$, below the return chain. The colours show regions, not states}{figure.4}{}}
-\newlabel{fig:echo@cref}{{[figure][4][]4}{[1][9][]10}}
+\citation{Mazoyer96}
+\citation{Balzer67,Mazoyer87}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Left: the five states of a five-state rule, drawn as soldiers. Right: one step of one cell. The cell in the middle sees its left neighbour in state $\mathsf  G$, itself in state $\mathsf  L$ and its right neighbour in state $\mathsf  L$, looks up the entry $\mathsf  G\,\mathsf  L\,\mathsf  L$ of the rule and becomes $\mathsf  A$. The four entries shown belong to the rule $\delta _{14}$ of \cref  {tab:delta14}.}}{8}{figure.3}\protected@file@percent }
+\newlabel{fig:moods}{{3}{8}{Left: the five states of a five-state rule, drawn as soldiers. Right: one step of one cell. The cell in the middle sees its left neighbour in state $\mathsf G$, itself in state $\mathsf L$ and its right neighbour in state $\mathsf L$, looks up the entry $\mathsf G\,\mathsf L\,\mathsf L$ of the rule and becomes $\mathsf A$. The four entries shown belong to the rule $\delta _{14}$ of \cref {tab:delta14}}{figure.3}{}}
+\newlabel{fig:moods@cref}{{[figure][3][]3}{[1][8][]8}}
+\newlabel{eq:quiescence}{{1}{8}{The problem}{equation.2.1}{}}
+\newlabel{eq:quiescence@cref}{{[equation][1][]1}{[1][8][]8}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}The half-line and the agreement lemma}{9}{subsection.2.2}\protected@file@percent }
+\newlabel{lem:lightcone}{{2.1}{9}{light cone}{theorem.2.1}{}}
+\newlabel{lem:lightcone@cref}{{[lemma][1][2]2.1}{[1][9][]9}}
+\newlabel{lem:agree}{{2.2}{9}{agreement}{theorem.2.2}{}}
+\newlabel{lem:agree@cref}{{[lemma][2][2]2.2}{[1][9][]9}}
+\newlabel{lem:return}{{2.3}{10}{return chain}{theorem.2.3}{}}
+\newlabel{lem:return@cref}{{[lemma][3][2]2.3}{[1][10][]10}}
+\newlabel{rem:lowerbound}{{2.4}{10}{}{theorem.2.4}{}}
+\newlabel{rem:lowerbound@cref}{{[remark][4][2]2.4}{[1][10][]10}}
 \newlabel{eq:neverfire}{{2}{10}{The half-line and the agreement lemma}{equation.2.2}{}}
 \newlabel{eq:neverfire@cref}{{[equation][2][]2}{[1][10][]10}}
-\@writefile{toc}{\contentsline {section}{\numberline {3}Two barriers on the half-line}{10}{section.3}\protected@file@percent }
-\newlabel{sec:pumping}{{3}{10}{Two barriers on the half-line}{section.3}{}}
-\newlabel{sec:pumping@cref}{{[section][3][]3}{[1][10][]10}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Space-time diagrams (time runs downwards, one square per cell and time step) of the lines of lengths $6$ and $9$, coloured by what each cell can know. On the cells with $t+i\le 10$ (light blue, bounded by the dashed anti-diagonal) the two diagrams coincide for every rule (\cref  {lem:agree}); the right border acts only in the reflected triangle $R_n$, below the return chain. The colours show regions, not states.}}{11}{figure.4}\protected@file@percent }
+\newlabel{fig:echo}{{4}{11}{Space-time diagrams (time runs downwards, one square per cell and time step) of the lines of lengths $6$ and $9$, coloured by what each cell can know. On the cells with $t+i\le 10$ (light blue, bounded by the dashed anti-diagonal) the two diagrams coincide for every rule (\cref {lem:agree}); the right border acts only in the reflected triangle $R_n$, below the return chain. The colours show regions, not states}{figure.4}{}}
+\newlabel{fig:echo@cref}{{[figure][4][]4}{[1][10][]11}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Two barriers on the half-line}{11}{section.3}\protected@file@percent }
+\newlabel{sec:pumping}{{3}{11}{Two barriers on the half-line}{section.3}{}}
+\newlabel{sec:pumping@cref}{{[section][3][]3}{[1][10][]11}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Reflected triangles in relative coordinates}{11}{subsection.3.1}\protected@file@percent }
 \newlabel{sec:coords}{{3.1}{11}{Reflected triangles in relative coordinates}{subsection.3.1}{}}
 \newlabel{sec:coords@cref}{{[subsection][1][3]3.1}{[1][11][]11}}
-\newlabel{lem:determinacy}{{3.1}{11}{determinacy}{theorem.3.1}{}}
-\newlabel{lem:determinacy@cref}{{[lemma][1][3]3.1}{[1][11][]11}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Anatomy of the line of length $n=12$ (time runs downwards, one square per cell and time step; the colours show regions, not states). Above the two input anti-diagonals the line coincides with the half-line (\cref  {lem:agree}); the reflected triangle $R_n$ below them is computed from these two anti-diagonals alone (\cref  {lem:determinacy}), in the relative coordinates $\tau $ and $\kappa $ measured from the right end. The firing of the right end ($\bigstar $) depends only on the dark input cells, its cone (\cref  {lem:cone}), which ends where the dotted line $i=t/3$ crosses the input anti-diagonals (\cref  {thm:third}).}}{12}{figure.5}\protected@file@percent }
-\newlabel{fig:anatomy}{{5}{12}{Anatomy of the line of length $n=12$ (time runs downwards, one square per cell and time step; the colours show regions, not states). Above the two input anti-diagonals the line coincides with the half-line (\cref {lem:agree}); the reflected triangle $R_n$ below them is computed from these two anti-diagonals alone (\cref {lem:determinacy}), in the relative coordinates $\tau $ and $\kappa $ measured from the right end. The firing of the right end ($\bigstar $) depends only on the dark input cells, its cone (\cref {lem:cone}), which ends where the dotted line $i=t/3$ crosses the input anti-diagonals (\cref {thm:third})}{figure.5}{}}
-\newlabel{fig:anatomy@cref}{{[figure][5][]5}{[1][12][]12}}
+\newlabel{lem:determinacy}{{3.1}{12}{determinacy}{theorem.3.1}{}}
+\newlabel{lem:determinacy@cref}{{[lemma][1][3]3.1}{[1][12][]12}}
 \newlabel{lem:cone}{{3.2}{12}{}{theorem.3.2}{}}
-\newlabel{lem:cone@cref}{{[lemma][2][3]3.2}{[1][11][]12}}
+\newlabel{lem:cone@cref}{{[lemma][2][3]3.2}{[1][12][]12}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Anatomy of the line of length $n=12$ (time runs downwards, one square per cell and time step; the colours show regions, not states). Above the two input anti-diagonals the line coincides with the half-line (\cref  {lem:agree}); the reflected triangle $R_n$ below them is computed from these two anti-diagonals alone (\cref  {lem:determinacy}), in the relative coordinates $\tau $ and $\kappa $ measured from the right end. The firing of the right end ($\bigstar $) depends only on the dark input cells, its cone (\cref  {lem:cone}), which ends where the dotted line $i=t/3$ crosses the input anti-diagonals (\cref  {thm:third}).}}{13}{figure.5}\protected@file@percent }
+\newlabel{fig:anatomy}{{5}{13}{Anatomy of the line of length $n=12$ (time runs downwards, one square per cell and time step; the colours show regions, not states). Above the two input anti-diagonals the line coincides with the half-line (\cref {lem:agree}); the reflected triangle $R_n$ below them is computed from these two anti-diagonals alone (\cref {lem:determinacy}), in the relative coordinates $\tau $ and $\kappa $ measured from the right end. The firing of the right end ($\bigstar $) depends only on the dark input cells, its cone (\cref {lem:cone}), which ends where the dotted line $i=t/3$ crosses the input anti-diagonals (\cref {thm:third})}{figure.5}{}}
+\newlabel{fig:anatomy@cref}{{[figure][5][]5}{[1][13][]13}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.2}The pumping lemma}{13}{subsection.3.2}\protected@file@percent }
 \newlabel{sec:pumplemma}{{3.2}{13}{The pumping lemma}{subsection.3.2}{}}
-\newlabel{sec:pumplemma@cref}{{[subsection][2][3]3.2}{[1][12][]13}}
+\newlabel{sec:pumplemma@cref}{{[subsection][2][3]3.2}{[1][13][]13}}
 \newlabel{lem:pumping}{{3.3}{13}{pumping}{theorem.3.3}{}}
 \newlabel{lem:pumping@cref}{{[lemma][3][3]3.3}{[1][13][]13}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}A speed-$1/3$ barrier}{13}{subsection.3.3}\protected@file@percent }
-\newlabel{sec:third}{{3.3}{13}{A speed-\texorpdfstring {$1/3$}{1/3} barrier}{subsection.3.3}{}}
-\newlabel{sec:third@cref}{{[subsection][3][3]3.3}{[1][13][]13}}
-\newlabel{eq:comoving}{{3}{13}{A speed-\texorpdfstring {$1/3$}{1/3} barrier}{equation.3.3}{}}
-\newlabel{eq:comoving@cref}{{[equation][3][]3}{[1][13][]13}}
-\citation{Waksman66,Balzer67}
+\citation{MazoyerTerrier94}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}A speed-$1/3$ barrier}{14}{subsection.3.3}\protected@file@percent }
+\newlabel{sec:third}{{3.3}{14}{A speed-\texorpdfstring {$1/3$}{1/3} barrier}{subsection.3.3}{}}
+\newlabel{sec:third@cref}{{[subsection][3][3]3.3}{[1][14][]14}}
+\newlabel{eq:comoving}{{3}{14}{A speed-\texorpdfstring {$1/3$}{1/3} barrier}{equation.3.3}{}}
+\newlabel{eq:comoving@cref}{{[equation][3][]3}{[1][14][]14}}
 \newlabel{thm:third}{{3.4}{14}{speed-$1/3$ barrier}{theorem.3.4}{}}
-\newlabel{thm:third@cref}{{[theorem][4][3]3.4}{[1][13][]14}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}A second barrier, at the left border}{14}{subsection.3.4}\protected@file@percent }
-\newlabel{sec:leftborder}{{3.4}{14}{A second barrier, at the left border}{subsection.3.4}{}}
-\newlabel{sec:leftborder@cref}{{[subsection][4][3]3.4}{[1][14][]14}}
-\newlabel{eq:chains}{{4}{15}{A second barrier, at the left border}{equation.3.4}{}}
-\newlabel{eq:chains@cref}{{[equation][4][]4}{[1][15][]15}}
-\newlabel{eq:slices}{{5}{15}{A second barrier, at the left border}{equation.3.5}{}}
-\newlabel{eq:slices@cref}{{[equation][5][]5}{[1][15][]15}}
-\newlabel{lem:left}{{3.5}{15}{left border}{theorem.3.5}{}}
-\newlabel{lem:left@cref}{{[lemma][5][3]3.5}{[1][15][]15}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces The lower left corner of the line of length $n=12$ (time runs downwards; the colours show regions, not states), with the chains of the left-border lemma and three of the slices used in its proof.}}{16}{figure.6}\protected@file@percent }
-\newlabel{fig:chains}{{6}{16}{The lower left corner of the line of length $n=12$ (time runs downwards; the colours show regions, not states), with the chains of the left-border lemma and three of the slices used in its proof}{figure.6}{}}
-\newlabel{fig:chains@cref}{{[figure][6][]6}{[1][15][]16}}
-\newlabel{thm:left}{{3.6}{17}{left-border barrier}{theorem.3.6}{}}
-\newlabel{thm:left@cref}{{[theorem][6][3]3.6}{[1][17][]17}}
-\newlabel{rem:right}{{3.7}{17}{the right end}{theorem.3.7}{}}
-\newlabel{rem:right@cref}{{[remark][7][3]3.7}{[1][17][]17}}
+\newlabel{thm:third@cref}{{[theorem][4][3]3.4}{[1][14][]14}}
+\citation{Waksman66,Balzer67}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}A second barrier, at the left border}{15}{subsection.3.4}\protected@file@percent }
+\newlabel{sec:leftborder}{{3.4}{15}{A second barrier, at the left border}{subsection.3.4}{}}
+\newlabel{sec:leftborder@cref}{{[subsection][4][3]3.4}{[1][15][]15}}
+\newlabel{eq:chains}{{4}{16}{A second barrier, at the left border}{equation.3.4}{}}
+\newlabel{eq:chains@cref}{{[equation][4][]4}{[1][16][]16}}
+\newlabel{eq:slices}{{5}{16}{A second barrier, at the left border}{equation.3.5}{}}
+\newlabel{eq:slices@cref}{{[equation][5][]5}{[1][16][]16}}
+\newlabel{lem:left}{{3.5}{16}{left border}{theorem.3.5}{}}
+\newlabel{lem:left@cref}{{[lemma][5][3]3.5}{[1][16][]16}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces The lower left corner of the line of length $n=12$ (time runs downwards; the colours show regions, not states), with the chains of the left-border lemma and three of the slices used in its proof.}}{17}{figure.6}\protected@file@percent }
+\newlabel{fig:chains}{{6}{17}{The lower left corner of the line of length $n=12$ (time runs downwards; the colours show regions, not states), with the chains of the left-border lemma and three of the slices used in its proof}{figure.6}{}}
+\newlabel{fig:chains@cref}{{[figure][6][]6}{[1][16][]17}}
+\newlabel{thm:left}{{3.6}{18}{left-border barrier}{theorem.3.6}{}}
+\newlabel{thm:left@cref}{{[theorem][6][3]3.6}{[1][18][]18}}
+\newlabel{rem:right}{{3.7}{18}{the right end}{theorem.3.7}{}}
+\newlabel{rem:right@cref}{{[remark][7][3]3.7}{[1][18][]18}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Eventually regular half-lines}{18}{subsection.3.5}\protected@file@percent }
 \newlabel{sec:regular}{{3.5}{18}{Eventually regular half-lines}{subsection.3.5}{}}
-\newlabel{sec:regular@cref}{{[subsection][5][3]3.5}{[1][17][]18}}
-\newlabel{cor:regular}{{3.8}{18}{}{theorem.3.8}{}}
-\newlabel{cor:regular@cref}{{[corollary][8][3]3.8}{[1][18][]18}}
-\newlabel{lem:certificate}{{3.9}{18}{regularity certificate}{theorem.3.9}{}}
-\newlabel{lem:certificate@cref}{{[lemma][9][3]3.9}{[1][18][]18}}
+\newlabel{sec:regular@cref}{{[subsection][5][3]3.5}{[1][18][]18}}
+\newlabel{cor:regular}{{3.8}{19}{}{theorem.3.8}{}}
+\newlabel{cor:regular@cref}{{[corollary][8][3]3.8}{[1][19][]19}}
+\newlabel{lem:certificate}{{3.9}{19}{regularity certificate}{theorem.3.9}{}}
+\newlabel{lem:certificate@cref}{{[lemma][9][3]3.9}{[1][19][]19}}
 \citation{Minsky67}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}The barriers in the classical constructions}{20}{subsection.3.6}\protected@file@percent }
-\newlabel{sec:classical}{{3.6}{20}{The barriers in the classical constructions}{subsection.3.6}{}}
-\newlabel{sec:classical@cref}{{[subsection][6][3]3.6}{[1][20][]20}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Propositional encoding}{20}{section.4}\protected@file@percent }
-\newlabel{sec:encoding}{{4}{20}{Propositional encoding}{section.4}{}}
-\newlabel{sec:encoding@cref}{{[section][4][]4}{[1][20][]20}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Space-time sketches of two classical constructions (time runs downwards; borders in red). (a) Halving: the hare (speed $1$) and the tortoise (speed $1/3$) meet in the middle, and the construction is repeated in both halves, here for $n=17$. (b) Minimal time, $n=33$: signals of speeds $1/(2^j-1)$ meet the reflected signal at $n/2$, $n/4$, $n/8,\dots  $; each piece is synchronized from one of its ends, as shown with dashes for the right half, and all pieces fire at $t=2n-2=64$.}}{21}{figure.7}\protected@file@percent }
-\newlabel{fig:hare}{{7}{21}{Space-time sketches of two classical constructions (time runs downwards; borders in red). (a) Halving: the hare (speed $1$) and the tortoise (speed $1/3$) meet in the middle, and the construction is repeated in both halves, here for $n=17$. (b) Minimal time, $n=33$: signals of speeds $1/(2^j-1)$ meet the reflected signal at $n/2$, $n/4$, $n/8,\dots $; each piece is synchronized from one of its ends, as shown with dashes for the right half, and all pieces fire at $t=2n-2=64$}{figure.7}{}}
-\newlabel{fig:hare@cref}{{[figure][7][]7}{[1][20][]21}}
-\@writefile{toc}{\contentsline {paragraph}{Variables}{21}{section*.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Transition clauses}{21}{section*.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}The barriers in the classical constructions}{21}{subsection.3.6}\protected@file@percent }
+\newlabel{sec:classical}{{3.6}{21}{The barriers in the classical constructions}{subsection.3.6}{}}
+\newlabel{sec:classical@cref}{{[subsection][6][3]3.6}{[1][21][]21}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Propositional encoding}{21}{section.4}\protected@file@percent }
+\newlabel{sec:encoding}{{4}{21}{Propositional encoding}{section.4}{}}
+\newlabel{sec:encoding@cref}{{[section][4][]4}{[1][21][]21}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Space-time sketches of two classical constructions (time runs downwards; borders in red). (a) Halving: the hare (speed $1$) and the tortoise (speed $1/3$) meet in the middle, and the construction is repeated in both halves, here for $n=17$. (b) Minimal time, $n=33$: signals of speeds $1/(2^j-1)$ meet the reflected signal at $n/2$, $n/4$, $n/8,\dots  $; each piece is synchronized from one of its ends, as shown with dashes for the right half, and all pieces fire at $t=2n-2=64$.}}{22}{figure.7}\protected@file@percent }
+\newlabel{fig:hare}{{7}{22}{Space-time sketches of two classical constructions (time runs downwards; borders in red). (a) Halving: the hare (speed $1$) and the tortoise (speed $1/3$) meet in the middle, and the construction is repeated in both halves, here for $n=17$. (b) Minimal time, $n=33$: signals of speeds $1/(2^j-1)$ meet the reflected signal at $n/2$, $n/4$, $n/8,\dots $; each piece is synchronized from one of its ends, as shown with dashes for the right half, and all pieces fire at $t=2n-2=64$}{figure.7}{}}
+\newlabel{fig:hare@cref}{{[figure][7][]7}{[1][21][]22}}
 \@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces The constraint families of $\mathrm  {MT}_k(\mathcal  N;M,N')$. Return chains, links and symmetry breaking are optional; the pumping constraints are absent when $N'$ is omitted.}}{22}{table.2}\protected@file@percent }
 \newlabel{tab:families}{{2}{22}{The constraint families of $\mathrm {MT}_k(\mathcal N;M,N')$. Return chains, links and symmetry breaking are optional; the pumping constraints are absent when $N'$ is omitted}{table.2}{}}
-\newlabel{tab:families@cref}{{[table][2][]2}{[1][21][]22}}
-\@writefile{toc}{\contentsline {paragraph}{Half-line}{22}{section*.9}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Lines}{22}{section*.10}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Return chains}{22}{section*.11}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Pumping}{22}{section*.12}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Determinacy links}{22}{section*.13}\protected@file@percent }
+\newlabel{tab:families@cref}{{[table][2][]2}{[1][22][]22}}
+\@writefile{toc}{\contentsline {paragraph}{Variables}{23}{section*.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Transition clauses}{23}{section*.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Half-line}{23}{section*.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Lines}{23}{section*.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Return chains}{23}{section*.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Pumping}{23}{section*.12}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Determinacy links}{23}{section*.13}\protected@file@percent }
 \citation{Duprat97}
 \citation{Kissat20}
 \citation{CaDiCaL2}
 \citation{PySAT18}
 \citation{CruzFilipeEtAl17}
 \citation{WetzlerHeuleHunt14}
-\@writefile{toc}{\contentsline {paragraph}{Symmetry breaking}{23}{section*.14}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Soundness checks}{23}{section*.15}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5}Four states: a certified proof}{23}{section.5}\protected@file@percent }
-\newlabel{sec:four}{{5}{23}{Four states: a certified proof}{section.5}{}}
-\newlabel{sec:four@cref}{{[section][5][]5}{[1][23][]23}}
-\newlabel{thm:four}{{5.1}{23}{}{theorem.5.1}{}}
-\newlabel{thm:four@cref}{{[theorem][1][5]5.1}{[1][23][]23}}
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Four states: number of partial rules (restricted to the transitions they use) that synchronize every line of length $2,\dots  ,N$ in minimal time, by exhaustive enumeration ($1.09\cdot 10^{8}$ search nodes).}}{24}{table.3}\protected@file@percent }
-\newlabel{tab:four}{{3}{24}{Four states: number of partial rules (restricted to the transitions they use) that synchronize every line of length $2,\dots ,N$ in minimal time, by exhaustive enumeration ($1.09\cdot 10^{8}$ search nodes)}{table.3}{}}
-\newlabel{tab:four@cref}{{[table][3][]3}{[1][24][]24}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Five states: the frontier}{24}{section.6}\protected@file@percent }
-\newlabel{sec:five}{{6}{24}{Five states: the frontier}{section.6}{}}
-\newlabel{sec:five@cref}{{[section][6][]6}{[1][24][]24}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Lucky rules}{24}{subsection.6.1}\protected@file@percent }
-\newlabel{sec:lucky}{{6.1}{24}{Lucky rules}{subsection.6.1}{}}
-\newlabel{sec:lucky@cref}{{[subsection][1][6]6.1}{[1][24][]24}}
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Five-state instances. $\mathrm  {MT}_k(\mathcal  N;M,N')$: lengths $\mathcal  N$, half-line up to anti-diagonal $M$, pumping pairs up to $N'$ (none if $N'$ is omitted).}}{25}{table.4}\protected@file@percent }
-\newlabel{tab:five}{{4}{25}{Five-state instances. $\mathrm {MT}_k(\mathcal N;M,N')$: lengths $\mathcal N$, half-line up to anti-diagonal $M$, pumping pairs up to $N'$ (none if $N'$ is omitted)}{table.4}{}}
-\newlabel{tab:five@cref}{{[table][4][]4}{[1][25][]25}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Five-state rules for all lengths up to fourteen}{25}{subsection.6.2}\protected@file@percent }
-\newlabel{sec:fourteen}{{6.2}{25}{Five-state rules for all lengths up to fourteen}{subsection.6.2}{}}
-\newlabel{sec:fourteen@cref}{{[subsection][2][6]6.2}{[1][25][]25}}
-\newlabel{thm:frontier}{{6.1}{25}{}{theorem.6.1}{}}
-\newlabel{thm:frontier@cref}{{[theorem][1][6]6.1}{[1][25][]25}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Space-time diagrams, time downwards. (a) Mazoyer's six-state solution on $n=40$ cells; the last row is the firing row. (b) Half-line of a five-state rule that synchronizes the lengths $2,\dots  ,9$ and $20$ but violates the pumping lemma: its background is periodic. (c) Half-line of a five-state rule found under the pumping constraints: the boundary between the checkered region and the diagonal background has speed $1/3$.}}{26}{figure.8}\protected@file@percent }
-\newlabel{fig:diagrams}{{8}{26}{Space-time diagrams, time downwards. (a) Mazoyer's six-state solution on $n=40$ cells; the last row is the firing row. (b) Half-line of a five-state rule that synchronizes the lengths $2,\dots ,9$ and $20$ but violates the pumping lemma: its background is periodic. (c) Half-line of a five-state rule found under the pumping constraints: the boundary between the checkered region and the diagonal background has speed $1/3$}{figure.8}{}}
-\newlabel{fig:diagrams@cref}{{[figure][8][]8}{[1][25][]26}}
+\citation{Yunes93}
+\citation{Sanders94}
+\citation{AverageUser21}
+\citation{Sanders94}
+\@writefile{toc}{\contentsline {paragraph}{Symmetry breaking}{24}{section*.14}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Soundness checks}{24}{section*.15}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Four states: a certified proof}{24}{section.5}\protected@file@percent }
+\newlabel{sec:four}{{5}{24}{Four states: a certified proof}{section.5}{}}
+\newlabel{sec:four@cref}{{[section][5][]5}{[1][24][]24}}
+\newlabel{thm:four}{{5.1}{24}{}{theorem.5.1}{}}
+\newlabel{thm:four@cref}{{[theorem][1][5]5.1}{[1][24][]24}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Four states: number of partial rules (restricted to the transitions they use) that synchronize every line of length $2,\dots  ,N$ in minimal time, by exhaustive enumeration ($1.09\cdot 10^{8}$ search nodes).}}{25}{table.3}\protected@file@percent }
+\newlabel{tab:four}{{3}{25}{Four states: number of partial rules (restricted to the transitions they use) that synchronize every line of length $2,\dots ,N$ in minimal time, by exhaustive enumeration ($1.09\cdot 10^{8}$ search nodes)}{table.3}{}}
+\newlabel{tab:four@cref}{{[table][3][]3}{[1][25][]25}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Five states: the frontier}{25}{section.6}\protected@file@percent }
+\newlabel{sec:five}{{6}{25}{Five states: the frontier}{section.6}{}}
+\newlabel{sec:five@cref}{{[section][6][]6}{[1][25][]25}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Lucky rules}{25}{subsection.6.1}\protected@file@percent }
+\newlabel{sec:lucky}{{6.1}{25}{Lucky rules}{subsection.6.1}{}}
+\newlabel{sec:lucky@cref}{{[subsection][1][6]6.1}{[1][25][]25}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Five-state instances. $\mathrm  {MT}_k(\mathcal  N;M,N')$: lengths $\mathcal  N$, half-line up to anti-diagonal $M$, pumping pairs up to $N'$ (none if $N'$ is omitted).}}{26}{table.4}\protected@file@percent }
+\newlabel{tab:five}{{4}{26}{Five-state instances. $\mathrm {MT}_k(\mathcal N;M,N')$: lengths $\mathcal N$, half-line up to anti-diagonal $M$, pumping pairs up to $N'$ (none if $N'$ is omitted)}{table.4}{}}
+\newlabel{tab:five@cref}{{[table][4][]4}{[1][26][]26}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Five-state rules for all lengths up to fourteen}{26}{subsection.6.2}\protected@file@percent }
+\newlabel{sec:fourteen}{{6.2}{26}{Five-state rules for all lengths up to fourteen}{subsection.6.2}{}}
+\newlabel{sec:fourteen@cref}{{[subsection][2][6]6.2}{[1][26][]26}}
+\newlabel{thm:frontier}{{6.1}{26}{}{theorem.6.1}{}}
+\newlabel{thm:frontier@cref}{{[theorem][1][6]6.1}{[1][26][]26}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Space-time diagrams, time downwards. (a) Mazoyer's six-state solution on $n=40$ cells; the last row is the firing row. (b) Half-line of a five-state rule that synchronizes the lengths $2,\dots  ,9$ and $20$ but violates the pumping lemma: its background is periodic. (c) Half-line of a five-state rule found under the pumping constraints: the boundary between the checkered region and the diagonal background has speed $1/3$.}}{27}{figure.8}\protected@file@percent }
+\newlabel{fig:diagrams}{{8}{27}{Space-time diagrams, time downwards. (a) Mazoyer's six-state solution on $n=40$ cells; the last row is the firing row. (b) Half-line of a five-state rule that synchronizes the lengths $2,\dots ,9$ and $20$ but violates the pumping lemma: its background is periodic. (c) Half-line of a five-state rule found under the pumping constraints: the boundary between the checkered region and the diagonal background has speed $1/3$}{figure.8}{}}
+\newlabel{fig:diagrams@cref}{{[figure][8][]8}{[1][26][]27}}
 \citation{Wolfram83}
-\newlabel{cor:germ12}{{6.2}{27}{}{theorem.6.2}{}}
-\newlabel{cor:germ12@cref}{{[corollary][2][6]6.2}{[1][26][]27}}
-\newlabel{prop:chaotic}{{6.3}{27}{}{theorem.6.3}{}}
-\newlabel{prop:chaotic@cref}{{[proposition][3][6]6.3}{[1][27][]27}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Half-lines of low complexity}{28}{subsection.6.3}\protected@file@percent }
-\newlabel{sec:germs}{{6.3}{28}{Half-lines of low complexity}{subsection.6.3}{}}
-\newlabel{sec:germs@cref}{{[subsection][3][6]6.3}{[1][28][]28}}
-\newlabel{prop:germs}{{6.4}{28}{}{theorem.6.4}{}}
-\newlabel{prop:germs@cref}{{[proposition][4][6]6.4}{[1][28][]28}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces The rule $\delta _{14}$ on the lines of lengths $14$ and $15$ (time runs downwards, one square per cell and time step, coloured by state). (a) All $14$ cells fire at $t=26=2n-2$. (b) The cells $13$, $14$ and $15$ fire at $t=22$, before the correct firing time $t=28$.}}{29}{figure.9}\protected@file@percent }
-\newlabel{fig:squads14}{{9}{29}{The rule $\delta _{14}$ on the lines of lengths $14$ and $15$ (time runs downwards, one square per cell and time step, coloured by state). (a) All $14$ cells fire at $t=26=2n-2$. (b) The cells $13$, $14$ and $15$ fire at $t=22$, before the correct firing time $t=28$}{figure.9}{}}
-\newlabel{fig:squads14@cref}{{[figure][9][]9}{[1][28][]29}}
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Half-lines of the two frontier architectures (time downwards, $0\le t\le 120$). (a) The common half-line of $\delta _{12}$ and $\delta _{13}$: a front and a solid wake of $\mathsf  G$'s and a checkered region of $\mathsf  A$'s and $\mathsf  L$'s behind a boundary of speed $1/3$; the checkered region is excluded by \cref  {lem:left} (\cref  {cor:germ12}). (b) The half-line of $\delta _{14}$, determined by $16$ neighbourhoods; its irregular pattern escapes both barriers.}}{30}{figure.10}\protected@file@percent }
-\newlabel{fig:halflines}{{10}{30}{Half-lines of the two frontier architectures (time downwards, $0\le t\le 120$). (a) The common half-line of $\delta _{12}$ and $\delta _{13}$: a front and a solid wake of $\mathsf G$'s and a checkered region of $\mathsf A$'s and $\mathsf L$'s behind a boundary of speed $1/3$; the checkered region is excluded by \cref {lem:left} (\cref {cor:germ12}). (b) The half-line of $\delta _{14}$, determined by $16$ neighbourhoods; its irregular pattern escapes both barriers}{figure.10}{}}
-\newlabel{fig:halflines@cref}{{[figure][10][]10}{[1][28][]30}}
+\newlabel{cor:germ12}{{6.2}{28}{}{theorem.6.2}{}}
+\newlabel{cor:germ12@cref}{{[corollary][2][6]6.2}{[1][28][]28}}
+\newlabel{prop:chaotic}{{6.3}{28}{}{theorem.6.3}{}}
+\newlabel{prop:chaotic@cref}{{[proposition][3][6]6.3}{[1][28][]28}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Half-lines of low complexity}{29}{subsection.6.3}\protected@file@percent }
+\newlabel{sec:germs}{{6.3}{29}{Half-lines of low complexity}{subsection.6.3}{}}
+\newlabel{sec:germs@cref}{{[subsection][3][6]6.3}{[1][29][]29}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces The rule $\delta _{14}$ on the lines of lengths $14$ and $15$ (time runs downwards, one square per cell and time step, coloured by state). (a) All $14$ cells fire at $t=26=2n-2$. (b) The cells $13$, $14$ and $15$ fire at $t=22$, before the correct firing time $t=28$.}}{30}{figure.9}\protected@file@percent }
+\newlabel{fig:squads14}{{9}{30}{The rule $\delta _{14}$ on the lines of lengths $14$ and $15$ (time runs downwards, one square per cell and time step, coloured by state). (a) All $14$ cells fire at $t=26=2n-2$. (b) The cells $13$, $14$ and $15$ fire at $t=22$, before the correct firing time $t=28$}{figure.9}{}}
+\newlabel{fig:squads14@cref}{{[figure][9][]9}{[1][29][]30}}
+\newlabel{prop:germs}{{6.4}{30}{}{theorem.6.4}{}}
+\newlabel{prop:germs@cref}{{[proposition][4][6]6.4}{[1][30][]30}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Half-lines of the two frontier architectures (time downwards, $0\le t\le 120$). (a) The common half-line of $\delta _{12}$ and $\delta _{13}$: a front and a solid wake of $\mathsf  G$'s and a checkered region of $\mathsf  A$'s and $\mathsf  L$'s behind a boundary of speed $1/3$; the checkered region is excluded by \cref  {lem:left} (\cref  {cor:germ12}). (b) The half-line of $\delta _{14}$, determined by $16$ neighbourhoods; its irregular pattern escapes both barriers.}}{31}{figure.10}\protected@file@percent }
+\newlabel{fig:halflines}{{10}{31}{Half-lines of the two frontier architectures (time downwards, $0\le t\le 120$). (a) The common half-line of $\delta _{12}$ and $\delta _{13}$: a front and a solid wake of $\mathsf G$'s and a checkered region of $\mathsf A$'s and $\mathsf L$'s behind a boundary of speed $1/3$; the checkered region is excluded by \cref {lem:left} (\cref {cor:germ12}). (b) The half-line of $\delta _{14}$, determined by $16$ neighbourhoods; its irregular pattern escapes both barriers}{figure.10}{}}
+\newlabel{fig:halflines@cref}{{[figure][10][]10}{[1][29][]31}}
+\citation{Balzer67}
+\citation{Mazoyer86Lyon}
+\citation{Yunes93}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Classification of the half-line germs of low complexity (\cref  {sec:germs}). The last row applies the half-line arguments to all germs, without completion tests (half-lines simulated up to anti-diagonal $3300$ for $c_{78}\le 14$ and $1300$ for $c_{78}\le 16$).}}{32}{table.5}\protected@file@percent }
+\newlabel{tab:germs}{{5}{32}{Classification of the half-line germs of low complexity (\cref {sec:germs}). The last row applies the half-line arguments to all germs, without completion tests (half-lines simulated up to anti-diagonal $3300$ for $c_{78}\le 14$ and $1300$ for $c_{78}\le 16$)}{table.5}{}}
+\newlabel{tab:germs@cref}{{[table][5][]5}{[1][32][]32}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Balzer's conditions}{32}{subsection.6.4}\protected@file@percent }
+\newlabel{sec:balzer}{{6.4}{32}{Balzer's conditions}{subsection.6.4}{}}
+\newlabel{sec:balzer@cref}{{[subsection][4][6]6.4}{[1][32][]32}}
+\citation{Mazoyer86Lyon}
+\citation{Sanders94}
+\newlabel{prop:balzer}{{6.5}{33}{}{theorem.6.5}{}}
+\newlabel{prop:balzer@cref}{{[proposition][5][6]6.5}{[1][33][]33}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5}Where the difficulty lies}{33}{subsection.6.5}\protected@file@percent }
+\newlabel{sec:difficulty}{{6.5}{33}{Where the difficulty lies}{subsection.6.5}{}}
+\newlabel{sec:difficulty@cref}{{[subsection][5][6]6.5}{[1][33][]33}}
 \citation{Knuth75}
 \citation{HeuleEtAl11}
-\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Classification of the half-line germs of low complexity (\cref  {sec:germs}). The last row applies the half-line arguments to all germs, without completion tests (half-lines simulated up to anti-diagonal $3300$ for $c_{78}\le 14$ and $1300$ for $c_{78}\le 16$).}}{31}{table.5}\protected@file@percent }
-\newlabel{tab:germs}{{5}{31}{Classification of the half-line germs of low complexity (\cref {sec:germs}). The last row applies the half-line arguments to all germs, without completion tests (half-lines simulated up to anti-diagonal $3300$ for $c_{78}\le 14$ and $1300$ for $c_{78}\le 16$)}{table.5}{}}
-\newlabel{tab:germs@cref}{{[table][5][]5}{[1][31][]31}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Where the difficulty lies}{31}{subsection.6.4}\protected@file@percent }
-\newlabel{sec:difficulty}{{6.4}{31}{Where the difficulty lies}{subsection.6.4}{}}
-\newlabel{sec:difficulty@cref}{{[subsection][4][6]6.4}{[1][31][]31}}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Discussion}{32}{section.7}\protected@file@percent }
-\newlabel{sec:discussion}{{7}{32}{Discussion}{section.7}{}}
-\newlabel{sec:discussion@cref}{{[section][7][]7}{[1][32][]32}}
-\@writefile{toc}{\contentsline {paragraph}{What the pumping lemma buys}{32}{section*.16}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Why lucky rules are hard to kill}{32}{section*.17}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{The mirrored construction}{33}{section*.18}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{The left half}{33}{section*.19}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Chaotic half-lines}{34}{section*.20}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Open problems}{34}{section*.21}\protected@file@percent }
+\citation{Yunes93}
+\citation{Sanders94}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Discussion}{34}{section.7}\protected@file@percent }
+\newlabel{sec:discussion}{{7}{34}{Discussion}{section.7}{}}
+\newlabel{sec:discussion@cref}{{[section][7][]7}{[1][34][]34}}
+\@writefile{toc}{\contentsline {paragraph}{What the pumping lemma buys}{34}{section*.16}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Why lucky rules are hard to kill}{35}{section*.17}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{The mirrored construction}{35}{section*.18}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{The left half}{36}{section*.19}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Chaotic half-lines}{36}{section*.20}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Open problems}{36}{section*.21}\protected@file@percent }
 \bibstyle{elsarticle-num}
 \bibdata{refs}
 \bibcite{Moore64}{{1}{}{{}}{{}}}
@@ -216,57 +241,66 @@
 \bibcite{Balzer67}{{6}{}{{}}{{}}}
 \bibcite{Gerken87}{{7}{}{{}}{{}}}
 \bibcite{Mazoyer87}{{8}{}{{}}{{}}}
-\bibcite{Sanders94}{{9}{}{{}}{{}}}
-\bibcite{Correa17}{{10}{}{{}}{{}}}
-\bibcite{Clergue18}{{11}{}{{}}{{}}}
-\bibcite{NguyenMaignan20}{{12}{}{{}}{{}}}
-\bibcite{UmeoYanagihara07}{{13}{}{{}}{{}}}
-\bibcite{Yunes08}{{14}{}{{}}{{}}}
-\bibcite{UmeoKamikawaYunes09}{{15}{}{{}}{{}}}
-\bibcite{Duprat97}{{16}{}{{}}{{}}}
-\bibcite{Minsky67}{{17}{}{{}}{{}}}
-\bibcite{Mazoyer96}{{18}{}{{}}{{}}}
-\bibcite{SettleSimon02}{{19}{}{{}}{{}}}
-\bibcite{BerthiaumeEtAl04}{{20}{}{{}}{{}}}
-\bibcite{HeuleKullmannMarek16}{{21}{}{{}}{{}}}
-\bibcite{Heule18}{{22}{}{{}}{{}}}
-\bibcite{Kissat20}{{23}{}{{}}{{}}}
-\bibcite{CaDiCaL2}{{24}{}{{}}{{}}}
-\bibcite{PySAT18}{{25}{}{{}}{{}}}
-\bibcite{CruzFilipeEtAl17}{{26}{}{{}}{{}}}
-\bibcite{WetzlerHeuleHunt14}{{27}{}{{}}{{}}}
-\bibcite{Wolfram83}{{28}{}{{}}{{}}}
-\bibcite{Knuth75}{{29}{}{{}}{{}}}
-\bibcite{HeuleEtAl11}{{30}{}{{}}{{}}}
+\bibcite{Yunes93}{{9}{}{{}}{{}}}
+\bibcite{Sanders94}{{10}{}{{}}{{}}}
+\bibcite{Correa17}{{11}{}{{}}{{}}}
+\bibcite{Clergue18}{{12}{}{{}}{{}}}
+\bibcite{NguyenMaignan20}{{13}{}{{}}{{}}}
+\bibcite{UmeoYanagihara07}{{14}{}{{}}{{}}}
+\bibcite{Yunes08}{{15}{}{{}}{{}}}
+\bibcite{UmeoKamikawaYunes09}{{16}{}{{}}{{}}}
+\bibcite{Duprat97}{{17}{}{{}}{{}}}
+\bibcite{Minsky67}{{18}{}{{}}{{}}}
+\bibcite{Mazoyer96}{{19}{}{{}}{{}}}
+\bibcite{SettleSimon02}{{20}{}{{}}{{}}}
+\bibcite{BerthiaumeEtAl04}{{21}{}{{}}{{}}}
+\bibcite{Settle99}{{22}{}{{}}{{}}}
+\bibcite{YamashitaEtAl14}{{23}{}{{}}{{}}}
+\bibcite{Kobayashi19}{{24}{}{{}}{{}}}
+\bibcite{MazoyerTerrier94}{{25}{}{{}}{{}}}
+\bibcite{MazoyerTerrier99}{{26}{}{{}}{{}}}
+\bibcite{DAntonioDelzanno04}{{27}{}{{}}{{}}}
+\bibcite{HeuleKullmannMarek16}{{28}{}{{}}{{}}}
+\bibcite{Heule18}{{29}{}{{}}{{}}}
+\bibcite{Kissat20}{{30}{}{{}}{{}}}
+\bibcite{CaDiCaL2}{{31}{}{{}}{{}}}
+\bibcite{PySAT18}{{32}{}{{}}{{}}}
+\bibcite{CruzFilipeEtAl17}{{33}{}{{}}{{}}}
+\bibcite{WetzlerHeuleHunt14}{{34}{}{{}}{{}}}
+\bibcite{AverageUser21}{{35}{}{{}}{{}}}
+\bibcite{Wolfram83}{{36}{}{{}}{{}}}
+\bibcite{Mazoyer86Lyon}{{37}{}{{}}{{}}}
+\bibcite{Knuth75}{{38}{}{{}}{{}}}
+\bibcite{HeuleEtAl11}{{39}{}{{}}{{}}}
 \@writefile{toc}{\let\numberline\tmptocnumberline}
-\@writefile{toc}{\contentsline {section}{\numberline {Appendix~A}Glossary of terms and symbols}{38}{appendix.A}\protected@file@percent }
-\newlabel{app:glossary}{{Appendix~A}{38}{Glossary of terms and symbols}{appendix.A}{}}
-\newlabel{app:glossary@cref}{{[appendix][1][2147483647]Appendix~A}{[1][38][]38}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {Appendix~A.1}General conventions}{39}{subsection.A.1}\protected@file@percent }
-\newlabel{app:gl-general}{{Appendix~A.1}{39}{General conventions}{subsection.A.1}{}}
-\newlabel{app:gl-general@cref}{{[subappendix][1][2147483647,1]Appendix~A.1}{[1][39][]39}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {Appendix~A.2}The firing squad}{39}{subsection.A.2}\protected@file@percent }
-\newlabel{app:gl-squad}{{Appendix~A.2}{39}{The firing squad}{subsection.A.2}{}}
-\newlabel{app:gl-squad@cref}{{[subappendix][2][2147483647,1]Appendix~A.2}{[1][39][]39}}
+\@writefile{toc}{\contentsline {section}{\numberline {Appendix~A}Glossary of terms and symbols}{42}{appendix.A}\protected@file@percent }
+\newlabel{app:glossary}{{Appendix~A}{42}{Glossary of terms and symbols}{appendix.A}{}}
+\newlabel{app:glossary@cref}{{[appendix][1][2147483647]Appendix~A}{[1][42][]42}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {Appendix~A.1}General conventions}{42}{subsection.A.1}\protected@file@percent }
+\newlabel{app:gl-general}{{Appendix~A.1}{42}{General conventions}{subsection.A.1}{}}
+\newlabel{app:gl-general@cref}{{[subappendix][1][2147483647,1]Appendix~A.1}{[1][42][]42}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {Appendix~A.2}The firing squad}{43}{subsection.A.2}\protected@file@percent }
+\newlabel{app:gl-squad}{{Appendix~A.2}{43}{The firing squad}{subsection.A.2}{}}
+\newlabel{app:gl-squad@cref}{{[subappendix][2][2147483647,1]Appendix~A.2}{[1][43][]43}}
 \citation{Wolfram83}
 \citation{NguyenMaignan20}
 \citation{Mazoyer87}
 \citation{Duprat97}
-\@writefile{toc}{\contentsline {subsection}{\numberline {Appendix~A.3}Geometry of space-time diagrams}{42}{subsection.A.3}\protected@file@percent }
-\newlabel{app:gl-geometry}{{Appendix~A.3}{42}{Geometry of space-time diagrams}{subsection.A.3}{}}
-\newlabel{app:gl-geometry@cref}{{[subappendix][3][2147483647,1]Appendix~A.3}{[1][42][]42}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {Appendix~A.4}The two barriers}{44}{subsection.A.4}\protected@file@percent }
-\newlabel{app:gl-barriers}{{Appendix~A.4}{44}{The two barriers}{subsection.A.4}{}}
-\newlabel{app:gl-barriers@cref}{{[subappendix][4][2147483647,1]Appendix~A.4}{[1][44][]44}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {Appendix~A.5}Germs}{44}{subsection.A.5}\protected@file@percent }
-\newlabel{app:gl-germs}{{Appendix~A.5}{44}{Germs}{subsection.A.5}{}}
-\newlabel{app:gl-germs@cref}{{[subappendix][5][2147483647,1]Appendix~A.5}{[1][44][]44}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {Appendix~A.3}Geometry of space-time diagrams}{45}{subsection.A.3}\protected@file@percent }
+\newlabel{app:gl-geometry}{{Appendix~A.3}{45}{Geometry of space-time diagrams}{subsection.A.3}{}}
+\newlabel{app:gl-geometry@cref}{{[subappendix][3][2147483647,1]Appendix~A.3}{[1][45][]45}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {Appendix~A.4}The two barriers}{47}{subsection.A.4}\protected@file@percent }
+\newlabel{app:gl-barriers}{{Appendix~A.4}{47}{The two barriers}{subsection.A.4}{}}
+\newlabel{app:gl-barriers@cref}{{[subappendix][4][2147483647,1]Appendix~A.4}{[1][47][]47}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {Appendix~A.5}Germs}{48}{subsection.A.5}\protected@file@percent }
+\newlabel{app:gl-germs}{{Appendix~A.5}{48}{Germs}{subsection.A.5}{}}
+\newlabel{app:gl-germs@cref}{{[subappendix][5][2147483647,1]Appendix~A.5}{[1][48][]48}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {Appendix~A.6}Propositional logic, solvers and certificates}{48}{subsection.A.6}\protected@file@percent }
+\newlabel{app:gl-logic}{{Appendix~A.6}{48}{Propositional logic, solvers and certificates}{subsection.A.6}{}}
+\newlabel{app:gl-logic@cref}{{[subappendix][6][2147483647,1]Appendix~A.6}{[1][48][]48}}
 \citation{Kissat20}
 \citation{CaDiCaL2}
 \citation{PySAT18}
-\@writefile{toc}{\contentsline {subsection}{\numberline {Appendix~A.6}Propositional logic, solvers and certificates}{45}{subsection.A.6}\protected@file@percent }
-\newlabel{app:gl-logic}{{Appendix~A.6}{45}{Propositional logic, solvers and certificates}{subsection.A.6}{}}
-\newlabel{app:gl-logic@cref}{{[subappendix][6][2147483647,1]Appendix~A.6}{[1][45][]45}}
 \citation{CruzFilipeEtAl17}
 \citation{WetzlerHeuleHunt14}
 \citation{Knuth75}
@@ -275,51 +309,51 @@
     {1}{85.20044pt}\LT@entry 
     {1}{199.20154pt}\LT@entry 
     {1}{70.79736pt}}
-\@writefile{lot}{\contentsline {table}{\numberline {A.6}{Symbols, in order of first use.}}{47}{table.6}\protected@file@percent }
-\newlabel{tab:symbols}{{A.6}{47}{Symbols, in order of first use}{table.6}{}}
-\newlabel{tab:symbols@cref}{{[table][6][2147483647]A.6}{[1][47][]47}}
-\@writefile{toc}{\contentsline {section}{\numberline {Appendix~B}Further experiments}{48}{appendix.B}\protected@file@percent }
-\newlabel{app:further}{{Appendix~B}{48}{Further experiments}{appendix.B}{}}
-\newlabel{app:further@cref}{{[appendix][2][2147483647]Appendix~B}{[1][48][]48}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {Appendix~B.1}Four more rules for all lengths up to fourteen}{48}{subsection.B.1}\protected@file@percent }
-\newlabel{app:more14}{{Appendix~B.1}{48}{Four more rules for all lengths up to fourteen}{subsection.B.1}{}}
-\newlabel{app:more14@cref}{{[subappendix][1][2147483647,2]Appendix~B.1}{[1][48][]48}}
-\@writefile{lot}{\contentsline {table}{\numberline {B.7}{\ignorespaces The five rules that synchronize every line of length at most $14$ in minimal time. The correct firing time for $n=15$ is $t=28$.}}{49}{table.7}\protected@file@percent }
-\newlabel{tab:more14}{{B.7}{49}{The five rules that synchronize every line of length at most $14$ in minimal time. The correct firing time for $n=15$ is $t=28$}{table.7}{}}
-\newlabel{tab:more14@cref}{{[table][7][2147483647]B.7}{[1][49][]49}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {Appendix~B.2}Germs of complexity at most sixteen}{49}{subsection.B.2}\protected@file@percent }
-\newlabel{app:k16}{{Appendix~B.2}{49}{Germs of complexity at most sixteen}{subsection.B.2}{}}
-\newlabel{app:k16@cref}{{[subappendix][2][2147483647,2]Appendix~B.2}{[1][49][]49}}
+\@writefile{lot}{\contentsline {table}{\numberline {A.6}{Symbols, in order of first use.}}{50}{table.6}\protected@file@percent }
+\newlabel{tab:symbols}{{A.6}{50}{Symbols, in order of first use}{table.6}{}}
+\newlabel{tab:symbols@cref}{{[table][6][2147483647]A.6}{[1][50][]50}}
+\@writefile{toc}{\contentsline {section}{\numberline {Appendix~B}Further experiments}{51}{appendix.B}\protected@file@percent }
+\newlabel{app:further}{{Appendix~B}{51}{Further experiments}{appendix.B}{}}
+\newlabel{app:further@cref}{{[appendix][2][2147483647]Appendix~B}{[1][51][]51}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {Appendix~B.1}Four more rules for all lengths up to fourteen}{52}{subsection.B.1}\protected@file@percent }
+\newlabel{app:more14}{{Appendix~B.1}{52}{Four more rules for all lengths up to fourteen}{subsection.B.1}{}}
+\newlabel{app:more14@cref}{{[subappendix][1][2147483647,2]Appendix~B.1}{[1][52][]52}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {Appendix~B.2}Germs of complexity at most sixteen}{52}{subsection.B.2}\protected@file@percent }
+\newlabel{app:k16}{{Appendix~B.2}{52}{Germs of complexity at most sixteen}{subsection.B.2}{}}
+\newlabel{app:k16@cref}{{[subappendix][2][2147483647,2]Appendix~B.2}{[1][52][]52}}
+\@writefile{lot}{\contentsline {table}{\numberline {B.7}{\ignorespaces The five rules that synchronize every line of length at most $14$ in minimal time. The correct firing time for $n=15$ is $t=28$.}}{53}{table.7}\protected@file@percent }
+\newlabel{tab:more14}{{B.7}{53}{The five rules that synchronize every line of length at most $14$ in minimal time. The correct firing time for $n=15$ is $t=28$}{table.7}{}}
+\newlabel{tab:more14@cref}{{[table][7][2147483647]B.7}{[1][52][]53}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {Appendix~B.3}Germs of complexity seventeen}{53}{subsection.B.3}\protected@file@percent }
+\newlabel{app:k17}{{Appendix~B.3}{53}{Germs of complexity seventeen}{subsection.B.3}{}}
+\newlabel{app:k17@cref}{{[subappendix][3][2147483647,2]Appendix~B.3}{[1][53][]53}}
 \citation{HeuleEtAl11}
-\@writefile{toc}{\contentsline {subsection}{\numberline {Appendix~B.3}Germs of complexity seventeen}{50}{subsection.B.3}\protected@file@percent }
-\newlabel{app:k17}{{Appendix~B.3}{50}{Germs of complexity seventeen}{subsection.B.3}{}}
-\newlabel{app:k17@cref}{{[subappendix][3][2147483647,2]Appendix~B.3}{[1][50][]50}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {Appendix~B.4}Lines of length fifteen for the complexity-15 half-line}{50}{subsection.B.4}\protected@file@percent }
-\newlabel{app:cube}{{Appendix~B.4}{50}{Lines of length fifteen for the complexity-15 half-line}{subsection.B.4}{}}
-\newlabel{app:cube@cref}{{[subappendix][4][2147483647,2]Appendix~B.4}{[1][50][]50}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {Appendix~B.4}Lines of length fifteen for the complexity-15 half-line}{54}{subsection.B.4}\protected@file@percent }
+\newlabel{app:cube}{{Appendix~B.4}{54}{Lines of length fifteen for the complexity-15 half-line}{subsection.B.4}{}}
+\newlabel{app:cube@cref}{{[subappendix][4][2147483647,2]Appendix~B.4}{[1][54][]54}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {Appendix~B.5}Unsatisfiable cores}{54}{subsection.B.5}\protected@file@percent }
+\newlabel{app:cores}{{Appendix~B.5}{54}{Unsatisfiable cores}{subsection.B.5}{}}
+\newlabel{app:cores@cref}{{[subappendix][5][2147483647,2]Appendix~B.5}{[1][54][]54}}
+\@writefile{toc}{\contentsline {section}{\numberline {Appendix~C}Rule tables}{54}{appendix.C}\protected@file@percent }
+\newlabel{app:delta12}{{Appendix~C}{54}{Rule tables}{appendix.C}{}}
+\newlabel{app:delta12@cref}{{[appendix][3][2147483647]Appendix~C}{[1][54][]54}}
 \citation{Duprat97}
-\@writefile{toc}{\contentsline {subsection}{\numberline {Appendix~B.5}Unsatisfiable cores}{51}{subsection.B.5}\protected@file@percent }
-\newlabel{app:cores}{{Appendix~B.5}{51}{Unsatisfiable cores}{subsection.B.5}{}}
-\newlabel{app:cores@cref}{{[subappendix][5][2147483647,2]Appendix~B.5}{[1][51][]51}}
-\@writefile{toc}{\contentsline {section}{\numberline {Appendix~C}Rule tables}{51}{appendix.C}\protected@file@percent }
-\newlabel{app:delta12}{{Appendix~C}{51}{Rule tables}{appendix.C}{}}
-\newlabel{app:delta12@cref}{{[appendix][3][2147483647]Appendix~C}{[1][51][]51}}
-\@writefile{toc}{\contentsline {section}{\numberline {Appendix~D}Reproducibility}{51}{appendix.D}\protected@file@percent }
-\newlabel{app:repro}{{Appendix~D}{51}{Reproducibility}{appendix.D}{}}
-\newlabel{app:repro@cref}{{[appendix][4][2147483647]Appendix~D}{[1][51][]51}}
-\@writefile{toc}{\contentsline {paragraph}{Certificate for \cref  {thm:four}}{52}{section*.28}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Checking \cref  {thm:frontier}}{53}{section*.29}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Checking \cref  {cor:germ12,prop:chaotic,prop:germs}}{53}{section*.30}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {Appendix~D}Reproducibility}{55}{appendix.D}\protected@file@percent }
+\newlabel{app:repro}{{Appendix~D}{55}{Reproducibility}{appendix.D}{}}
+\newlabel{app:repro@cref}{{[appendix][4][2147483647]Appendix~D}{[1][54][]55}}
+\@writefile{toc}{\contentsline {paragraph}{Certificate for \cref  {thm:four}}{56}{section*.28}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Checking \cref  {thm:frontier}}{56}{section*.29}\protected@file@percent }
 \providecommand\NAT@force@numbers{}\NAT@force@numbers
-\@writefile{toc}{\contentsline {paragraph}{Search-size estimates (\cref  {sec:difficulty})}{54}{section*.31}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Validation against Mazoyer's solution}{54}{section*.32}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {C.8}{\ignorespaces The five-state rule $\delta _{12}$ of \cref  {thm:frontier}: entry $\delta (\text  {left},\text  {centre},\text  {right})$. The entries $\delta (\mathsf  L,\mathsf  L,\mathsf  L)=\delta (\mathsf  L,\mathsf  L,\ast )=\mathsf  L$ are the quiescence conditions; ``--'' marks the unused neighbourhoods $(\ast ,y,\ast )$. Machine-readable copy: \texttt  {results/uniformA\_2-12.txt}.}}{55}{table.8}\protected@file@percent }
-\newlabel{tab:delta12}{{C.8}{55}{The five-state rule $\delta _{12}$ of \cref {thm:frontier}: entry $\delta (\text {left},\text {centre},\text {right})$. The entries $\delta (\mathsf L,\mathsf L,\mathsf L)=\delta (\mathsf L,\mathsf L,\ast )=\mathsf L$ are the quiescence conditions; ``--'' marks the unused neighbourhoods $(\ast ,y,\ast )$. Machine-readable copy: \texttt {results/uniformA\_2-12.txt}}{table.8}{}}
-\newlabel{tab:delta12@cref}{{[table][8][2147483647]C.8}{[1][51][]55}}
-\@writefile{lot}{\contentsline {table}{\numberline {C.9}{\ignorespaces The five-state rule $\delta _{13}$ of \cref  {thm:frontier}: entry $\delta (\text  {left},\text  {centre},\text  {right})$. The entries $\delta (\mathsf  L,\mathsf  L,\mathsf  L)=\delta (\mathsf  L,\mathsf  L,\ast )=\mathsf  L$ are the quiescence conditions; ``--'' marks the unused neighbourhoods $(\ast ,y,\ast )$. Machine-readable copy: \texttt  {results/delta13.txt}.}}{56}{table.9}\protected@file@percent }
-\newlabel{tab:delta13}{{C.9}{56}{The five-state rule $\delta _{13}$ of \cref {thm:frontier}: entry $\delta (\text {left},\text {centre},\text {right})$. The entries $\delta (\mathsf L,\mathsf L,\mathsf L)=\delta (\mathsf L,\mathsf L,\ast )=\mathsf L$ are the quiescence conditions; ``--'' marks the unused neighbourhoods $(\ast ,y,\ast )$. Machine-readable copy: \texttt {results/delta13.txt}}{table.9}{}}
-\newlabel{tab:delta13@cref}{{[table][9][2147483647]C.9}{[1][51][]56}}
-\@writefile{lot}{\contentsline {table}{\numberline {C.10}{\ignorespaces The five-state rule $\delta _{14}$ of \cref  {prop:chaotic}: entry $\delta (\text  {left},\text  {centre},\text  {right})$. The entries $\delta (\mathsf  L,\mathsf  L,\mathsf  L)=\delta (\mathsf  L,\mathsf  L,\ast )=\mathsf  L$ are the quiescence conditions; ``--'' marks the unused neighbourhoods $(\ast ,y,\ast )$. Machine-readable copy: \texttt  {results/delta14.txt}.}}{57}{table.10}\protected@file@percent }
-\newlabel{tab:delta14}{{C.10}{57}{The five-state rule $\delta _{14}$ of \cref {prop:chaotic}: entry $\delta (\text {left},\text {centre},\text {right})$. The entries $\delta (\mathsf L,\mathsf L,\mathsf L)=\delta (\mathsf L,\mathsf L,\ast )=\mathsf L$ are the quiescence conditions; ``--'' marks the unused neighbourhoods $(\ast ,y,\ast )$. Machine-readable copy: \texttt {results/delta14.txt}}{table.10}{}}
-\newlabel{tab:delta14@cref}{{[table][10][2147483647]C.10}{[1][51][]57}}
-\gdef \@abspage@last{57}
+\@writefile{toc}{\contentsline {paragraph}{Checking \cref  {cor:germ12,prop:chaotic,prop:germs}}{57}{section*.30}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Search-size estimates (\cref  {sec:difficulty})}{57}{section*.31}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Validation against Mazoyer's solution}{57}{section*.32}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {C.8}{\ignorespaces The five-state rule $\delta _{12}$ of \cref  {thm:frontier}: entry $\delta (\text  {left},\text  {centre},\text  {right})$. The entries $\delta (\mathsf  L,\mathsf  L,\mathsf  L)=\delta (\mathsf  L,\mathsf  L,\ast )=\mathsf  L$ are the quiescence conditions; ``--'' marks the unused neighbourhoods $(\ast ,y,\ast )$. Machine-readable copy: \texttt  {results/uniformA\_2-12.txt}.}}{58}{table.8}\protected@file@percent }
+\newlabel{tab:delta12}{{C.8}{58}{The five-state rule $\delta _{12}$ of \cref {thm:frontier}: entry $\delta (\text {left},\text {centre},\text {right})$. The entries $\delta (\mathsf L,\mathsf L,\mathsf L)=\delta (\mathsf L,\mathsf L,\ast )=\mathsf L$ are the quiescence conditions; ``--'' marks the unused neighbourhoods $(\ast ,y,\ast )$. Machine-readable copy: \texttt {results/uniformA\_2-12.txt}}{table.8}{}}
+\newlabel{tab:delta12@cref}{{[table][8][2147483647]C.8}{[1][54][]58}}
+\@writefile{lot}{\contentsline {table}{\numberline {C.9}{\ignorespaces The five-state rule $\delta _{13}$ of \cref  {thm:frontier}: entry $\delta (\text  {left},\text  {centre},\text  {right})$. The entries $\delta (\mathsf  L,\mathsf  L,\mathsf  L)=\delta (\mathsf  L,\mathsf  L,\ast )=\mathsf  L$ are the quiescence conditions; ``--'' marks the unused neighbourhoods $(\ast ,y,\ast )$. Machine-readable copy: \texttt  {results/delta13.txt}.}}{59}{table.9}\protected@file@percent }
+\newlabel{tab:delta13}{{C.9}{59}{The five-state rule $\delta _{13}$ of \cref {thm:frontier}: entry $\delta (\text {left},\text {centre},\text {right})$. The entries $\delta (\mathsf L,\mathsf L,\mathsf L)=\delta (\mathsf L,\mathsf L,\ast )=\mathsf L$ are the quiescence conditions; ``--'' marks the unused neighbourhoods $(\ast ,y,\ast )$. Machine-readable copy: \texttt {results/delta13.txt}}{table.9}{}}
+\newlabel{tab:delta13@cref}{{[table][9][2147483647]C.9}{[1][54][]59}}
+\@writefile{lot}{\contentsline {table}{\numberline {C.10}{\ignorespaces The five-state rule $\delta _{14}$ of \cref  {prop:chaotic}: entry $\delta (\text  {left},\text  {centre},\text  {right})$. The entries $\delta (\mathsf  L,\mathsf  L,\mathsf  L)=\delta (\mathsf  L,\mathsf  L,\ast )=\mathsf  L$ are the quiescence conditions; ``--'' marks the unused neighbourhoods $(\ast ,y,\ast )$. Machine-readable copy: \texttt  {results/delta14.txt}.}}{60}{table.10}\protected@file@percent }
+\newlabel{tab:delta14}{{C.10}{60}{The five-state rule $\delta _{14}$ of \cref {prop:chaotic}: entry $\delta (\text {left},\text {centre},\text {right})$. The entries $\delta (\mathsf L,\mathsf L,\mathsf L)=\delta (\mathsf L,\mathsf L,\ast )=\mathsf L$ are the quiescence conditions; ``--'' marks the unused neighbourhoods $(\ast ,y,\ast )$. Machine-readable copy: \texttt {results/delta14.txt}}{table.10}{}}
+\newlabel{tab:delta14@cref}{{[table][10][2147483647]C.10}{[1][54][]60}}
+\gdef \@abspage@last{60}
