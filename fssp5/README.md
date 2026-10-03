@@ -57,6 +57,10 @@ src/germcompare.py       half-line neighbourhoods of rules below an anti-diagona
 src/germpipe.sh          the classification pipeline
 src/germlong.py, germband.py, equiv.py, reflsym.py   further (inconclusive) experiments
 src/balzer.py            five-state rules under Balzer's extra conditions (Section 6.4, results/balzer.log)
+src/balzer_k.py          the same for k states (identical formulas for k = 5; --cnf writes a formula)
+src/balzer_mazoyer.py    Balzer's conditions on the transitions used by Mazoyer's rule (only B3 holds)
+src/germdfs_check.py     independent Python re-implementation of germdfs.c (cross-check of Prop. 6.4)
+src/germ_k14_check.py    independent check of the Lemma 3.5 refutations in Prop. 6.4
 src/ruletable.py         LaTeX tables of rules
 src/figures.py           Figures 8-10 (space-time diagrams)
 results/                 rule tables (Mazoyer; partial 5-state rules; delta13), logs
