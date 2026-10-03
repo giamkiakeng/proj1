@@ -177,6 +177,14 @@ done
 
 (the PDFs belong in the scratch directory or in `fssp5/literature/`, never in a public commit).
 
+Attempt with an Elsevier API key (2026-10-03): the key supplied by the corresponding author is
+a basic Scopus key. It works for Scopus Search and the standard view of Scopus Abstract Retrieval
+(metadata only, no abstract: 49 Scopus citations of Mazoyer 1996, 159 of Balzer 1967), but the
+ScienceDirect article API answers every request for either paper with
+`AUTHENTICATION_ERROR - Requestor configuration settings insufficient` and the entitlement view
+with `NOT_ENTITLED`. Full-text API access requires institutional entitlement, so this route cannot
+deliver the two papers either. The key is not stored anywhere in the repository.
+
 CORE also holds Balzer 1967 (its discovery API returns record 82657788 for the DOI); the
 download link `https://core.ac.uk/download/pdf/82657788.pdf` is behind a Cloudflare bot check that
 also stops a plain browser, and the discovery call for Mazoyer 1996 was rate-limited. With a free
