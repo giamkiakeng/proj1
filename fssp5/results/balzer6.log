@@ -5,7 +5,7 @@
 # I      SAT for N =     first undecided N (1800 s)
 # id     3..14           15
 # AB     3..13           14
-# LA     3..14           15 (run in progress when this log was written)
+# LA     3..14           15
 # LA_BC  3..13           14
 #
 # Rules for the lengths 2..14 (checked with fsspcheck; both fail at n = 15; both satisfy

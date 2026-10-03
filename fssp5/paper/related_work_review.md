@@ -143,7 +143,13 @@ recorded):
 | identity (symmetric rules) | SAT up to N = 11, **UNSAT at N = 12** (Kissat; LRAT of 3.1 GB via drat-trim, lrat-check 66 s) | SAT up to N = 11, **UNSAT at N = 12** (LRAT, 477 MB, lrat-check 8.5 s) |
 
 Check of the formalization: on the transitions Mazoyer's solution uses, only (B3) holds, as
-Mazoyer states. Proposition 6.5: no five-state rule satisfying Balzer's conditions, even in the
+Mazoyer states.
+
+Six states (`src/balzer_k.py`, strong reading, `results/balzer6.log`): for each of the four
+involution types of {L,A,B,C}, rules satisfying (B1)–(B4) exist for all lengths up to 13 (up to 14
+for I = id and (L A); files `results/balzer6_sym14.txt`, `results/balzer6_LA14.txt`); the next
+length was undecided within 30 minutes in every case. As for Balzer, the conditions are not known to
+exclude six states; this is now open problem (5) of the manuscript. Proposition 6.5: no five-state rule satisfying Balzer's conditions, even in the
 weak form, synchronizes the lengths 2..12; lengths up to 11 do not suffice. This is the first
 independent check of Balzer's 1967 conditional claim, whose original search was incomplete
 (Sanders).

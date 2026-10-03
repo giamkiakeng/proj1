@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.9.24)  3 OCT 2026 14:05
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.9.24)  3 OCT 2026 14:18
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1051,8 +1051,8 @@ File: fig_halflines.pdf Graphic file (type pdf)
 <use fig_halflines.pdf>
 Package pdftex.def Info: fig_halflines.pdf  used on input line 295.
 (pdftex.def)             Requested size: 360.0pt x 203.17833pt.
- [30 <./fig_squads14.pdf>] [31 <./fig_halflines.pdf>] [32] [33]) (./sections/di
-scussion.tex [34] [35] [36] [37])
+ [30 <./fig_squads14.pdf>] [31 <./fig_halflines.pdf>] [32] [33] [34]) (./sectio
+ns/discussion.tex [35] [36] [37])
 [38] (./main.bbl [39] [40] [41]
 Underfull \hbox (badness 2790) in paragraph at lines 178--182
 []\T1/lmr/m/n/10.95 (+20) Average-user, Search to prove the nonex-is-tence of a
@@ -1066,9 +1066,9 @@ Underfull \hbox (badness 5490) in paragraph at lines 178--182
  []
 
 [42]) (./sections/appendix.tex (./sections/terms.tex [43] [44] [45] [46]
-[47] [48] [49] [50] [51]) (./sections/further.tex [52] [53] [54])
+[47] [48] [49] [50] [51] [52]) (./sections/further.tex [53] [54]) [55]
 (./sections/delta12.tex) (./sections/delta13.tex) (./sections/delta14.tex)
-[55] [56] [57] [58]) [59] [60] [61] [62] (./main.aux)
+[56] [57] [58]) [59] [60] [61] [62] (./main.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
@@ -1077,8 +1077,8 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 8371816093E12013497254D8BAE620C6;6650.
  ) 
 Here is how much of TeX's memory you used:
- 30209 strings out of 476106
- 571828 string characters out of 5793933
+ 30210 strings out of 476106
+ 571835 string characters out of 5793933
  1985975 words of memory out of 5000000
  50671 multiletter control sequences out of 15000+600000
  743485 words of font info for 491 fonts, out of 8000000 for 9000
@@ -1106,10 +1106,10 @@ f/fonts/type1/public/lm/lmsy9.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt1
 0.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt9.pfb></usr/share/texlive/tex
 mf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on main.pdf (62 pages, 918082 bytes).
+Output written on main.pdf (62 pages, 919139 bytes).
 PDF statistics:
- 1509 PDF objects out of 1728 (max. 8388607)
- 1203 compressed objects within 13 object streams
- 233 named destinations out of 1000 (max. 500000)
+ 1512 PDF objects out of 1728 (max. 8388607)
+ 1206 compressed objects within 13 object streams
+ 234 named destinations out of 1000 (max. 500000)
  96052 words of extra memory for PDF output out of 106986 (max. 10000000)
 
