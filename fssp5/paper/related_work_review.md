@@ -189,6 +189,13 @@ ScienceDirect article API answers every request for either paper with
 with `NOT_ENTITLED`. Full-text API access requires institutional entitlement, so this route cannot
 deliver the two papers either. The key is not stored anywhere in the repository.
 
+Further checks on 2026-10-03 found no other copy: web searches for PDF copies on academic
+sites, the open HAL theses that discuss the FSSP (Nguyen 2021, Penet de Monterno 2023; neither
+describes Mazoyer 1996), and the Internet Archive scholarly index (still rate-limited for this
+network). The two papers can only be obtained by a person passing ScienceDirect's check in a
+browser; they must not be committed to this public repository (a private repository attached to
+the session works).
+
 CORE also holds Balzer 1967 (its discovery API returns record 82657788 for the DOI); the
 download link `https://core.ac.uk/download/pdf/82657788.pdf` is behind a Cloudflare bot check that
 also stops a plain browser, and the discovery call for Mazoyer 1996 was rate-limited. With a free
