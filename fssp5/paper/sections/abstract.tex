@@ -11,12 +11,13 @@ forces its non-periodic part to reach the line $i=t/3$, and a left-border
 lemma, which forbids periodic behaviour in any wedge at the border; in
 particular the half-line of a minimal-time solution is never eventually
 regular. A propositional encoding, validated against Mazoyer's solution,
-gives an LRAT-certified proof, checked in six seconds, of the known fact
-that no four-state minimal-time solution exists. For five states we exhibit rules that
+gives an LRAT-certified proof of the known fact that no four-state
+minimal-time solution exists. For five states we exhibit rules that
 synchronize every line of length at most $14$ in minimal time, and we show
 with certified solver calls that every five-state minimal-time solution
 uses at least $15$ distinct neighbourhoods on its half-line below the
-anti-diagonal $t+i=78$. The half-lines of low complexity that survive all
+anti-diagonal $t+i=78$ and, confirming a claim of Balzer from 1967, that none
+satisfies his four additional conditions. The half-lines of low complexity that survive all
 our tests are irregular, and search-size estimates of about $25$ nodes for
 four states against $10^{11}$ to $10^{19}$ for five quantify why the question
 remains open.

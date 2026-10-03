@@ -51,8 +51,26 @@ borders in the backward dependency cone of $(\tau,\kappa)$.
 \end{lemma}
 
 \begin{proof}
-The recurrence in relative coordinates does not mention $n$; only the
-position of the left border does.
+For a sequence $J=(J(\kappa))_{\kappa\ge0}$ of pairs of states and an
+integer $N\ge1$, define $\Psi(J,N;\tau,\kappa)$ for $0\le\kappa\le\tau\le N-1$
+by induction on $\tau$ as $\delta(x_{\kappa+1},x_\kappa,x_{\kappa-1})$,
+where, for $\kappa'\in\{\kappa-1,\kappa,\kappa+1\}$, the symbol $x_{\kappa'}$
+is $\ast$ if $\kappa'\in\{-1,N\}$, the lower or the upper component of
+$J(\kappa')$ if $\tau-1=\kappa'-2$ or $\tau-1=\kappa'-1$, respectively, and
+$\Psi(J,N;\tau-1,\kappa')$ otherwise; $\Psi$ is undefined when $\delta$
+would be applied to $\mathsf F$. The cases are exhaustive: $-1\le\kappa'\le
+\tau+1$, and in the last case $0\le\kappa'\le\tau-1$. In the coordinates
+$(t,i)=(n-1+\tau,\,n-\kappa)$, the cells $(\tau-1,\kappa+1)$,
+$(\tau-1,\kappa)$ and $(\tau-1,\kappa-1)$ are the left, middle and right
+predecessors of $(t,i)$; the positions $\kappa'=-1$ and $\kappa'=n$ are the
+right and the left border; and the cells with $\tau-1=\kappa'-2$ and
+$\tau-1=\kappa'-1$ are the lower and the upper input cells, on which
+$C_n=C_\infty$ by \cref{lem:agree}. Induction on $\tau$ therefore gives
+$C_n(n-1+\tau,n-\kappa)=\Psi(J_n,n;\tau,\kappa)$ for all
+$(\tau,\kappa)\in R_n$. Unfolding the definition, $\Psi(J,N;\tau,\kappa)$
+depends on $J$ only through its values at the input cells of the backward
+dependency cone of $(\tau,\kappa)$, and on $N$ only through whether this
+cone reaches the position $N$.
 \end{proof}
 
 For $(\tau,\kappa)\in R_n$ let $\mathrm{cone}_n(\tau,\kappa)$ be the set
@@ -322,13 +340,17 @@ $\Omega:=\{(t,i):\ s\le i\le\alpha t,\ t\ge t_0\}$.
 
 \begin{proof}
 Suppose the contrary and put $L:=pq$. If $(t,i)$ and $(t-L,i+L)$ lie in
-$\Omega$, then so do the intermediate cells $(t-L,i+jq)$ and
-$(t-L+jp,i)$, and $C_\infty(t-L,i+L)=C_\infty(t-L,i)=C_\infty(t,i)$. For
-the anti-diagonals $t+i=2n-2$ and $t+i=2n-3$ this makes the words of
-\cref{lem:left} $L$-periodic on $[s,Y_n]$ for some $Y_n$ with
-$Y_n\ge \tfrac{\alpha}{1+\alpha}\,2n-\gamma$, where $\gamma$ depends on
-$\alpha,L,t_0$ only. For $n$ large, $\min(Y_n,n-s)-s>(k-1)^{2s}L$,
-contradicting \cref{lem:left}.
+$\Omega$, then so do the intermediate cells $(t-L,i+jq)$, $0\le j\le p$,
+and $(t-L+jp,i)$, $0\le j\le q$, hence
+$C_\infty(t-L,i+L)=C_\infty(t-L,i)=C_\infty(t,i)$. Let
+$Y_n:=\lfloor\alpha(2n-3)/(1+\alpha)\rfloor$. For $s\le y\le Y_n$ the cells
+$(2n-2-y,y)$ and $(2n-3-y,y)$ satisfy $y\le\alpha(2n-3-y)$, so they lie in
+$\Omega$ as soon as $2n-3-Y_n\ge t_0$, which holds for $n$ large. Moving
+along an anti-diagonal by $L$ positions is the step from $(t,i)$ to
+$(t-L,i+L)$, so the words of \cref{lem:left} are $L$-periodic on $[s,Y_n]$
+and on $[s,Y_n-1]$, respectively. Since $Y_n\ge\frac{2\alpha}{1+\alpha}n-4$,
+for $n$ large the number $Y:=\min(Y_n,n-s)$ satisfies $Y\ge s+L$ and
+$Y-s>(k-1)^{2s}L$, contradicting \cref{lem:left}.
 \end{proof}
 
 \begin{remark}[the right end]\label{rem:right}
@@ -345,7 +367,7 @@ if $\delta$ synchronizes the line of length $n$ at time $2n-2$, the words
 &y\mapsto C_n(2n-3-y,\,n+1-y)\qquad(s\le y\le Y-1),
 \end{align*}
 read along the diagonals $t-i=n-3$ and $t-i=n-4$ from the right end, are
-not $L$-periodic when $Y-s>(k-1)^{2s}L$ and $Y\le n-s$. For $y\le n/2$
+not $L$-periodic when $Y-s>(k-1)^{2s}L$ and $Y\le n-s$. For $2y<n$
 these cells lie in $R_n$: seen from the right end, the reflected triangles
 cannot be periodic over long stretches either. Unlike \cref{lem:left},
 this is a constraint on the reflected part of the rule, not on the

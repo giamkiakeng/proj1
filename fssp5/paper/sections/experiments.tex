@@ -17,9 +17,14 @@ even without the condition $\delta(\ast,\mathsf L,\mathsf L)=\mathsf L$.
 \end{theorem}
 
 \begin{proof}
-By \cref{lem:agree,lem:return} and \eqref{eq:neverfire} every such rule
-yields a model of $\mathrm{MT}_4(\{2,\dots,9\};16)$ (for $k=4$ there is a
-single auxiliary state and no symmetry breaking). CaDiCaL proves this
+Every such rule yields a model of $\mathrm{MT}_4(\{2,\dots,9\};16)$ (for
+$k=4$ there is a single auxiliary state and no symmetry breaking). Indeed, a
+half-line cell $(t,i)$ with $t+i\le16$ is quiescent if $i\ge10$
+(\cref{lem:lightcone}) and coincides with the cell $(t,i)$ of the line of
+length $9$, at a time $t<16$, if $i\le9$ (\cref{lem:agree}), so none of
+them fires; the lines are synchronized by assumption; and the return-chain
+constraints hold by \cref{lem:return}, applied to the lengths $n$ and $n+1$
+for $2\le n\le8$. CaDiCaL proves this
 formula unsatisfiable in $51$\,s and emits an LRAT proof
 \cite{CruzFilipeEtAl17} of $177$\,MB, which \texttt{lrat-check} of the \textsf{drat-trim}
 suite \cite{WetzlerHeuleHunt14} verifies in $5.7$\,s. The SHA-256 digests of

@@ -182,7 +182,9 @@ is a certificate of a known result; claim 6 is a small certified addition.
 
 ## 6. Remaining items
 
-1. Remove the two Elsevier PDFs from the public repository (see the note in Section 1).
+1. The two Elsevier PDFs were removed from the current tree (commit c13aa25) and
+   `fssp5/literature/` is ignored; they remain in the history (commit ffcd4c4), from which only a
+   history rewrite by the repository owner can remove them.
 2. Optional: Settle's thesis and the journal version of Mazoyer–Terrier, to cite section numbers of
    the published versions; Mazoyer's 1989 habilitation (a catalogue of constructed solutions,
    low risk for the necessity theorems).
