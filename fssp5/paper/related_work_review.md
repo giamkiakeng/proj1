@@ -140,7 +140,7 @@ recorded):
 |---|---|---|
 | (A B) | UNSAT at N = 10 (LRAT) | UNSAT at N ≤ 10 (implied) |
 | (L A), (L B) | UNSAT at N = 9 (LRAT) | UNSAT at N ≤ 9 (implied) |
-| identity (symmetric rules) | SAT up to N = 11, **UNSAT at N = 12** (DRAT, 958 MB, drat-trim 31 min) | SAT up to N = 11, **UNSAT at N = 12** (LRAT, 477 MB, lrat-check 8.5 s) |
+| identity (symmetric rules) | SAT up to N = 11, **UNSAT at N = 12** (Kissat; LRAT of 3.1 GB via drat-trim, lrat-check 66 s) | SAT up to N = 11, **UNSAT at N = 12** (LRAT, 477 MB, lrat-check 8.5 s) |
 
 Check of the formalization: on the transitions Mazoyer's solution uses, only (B3) holds, as
 Mazoyer states. Proposition 6.5: no five-state rule satisfying Balzer's conditions, even in the

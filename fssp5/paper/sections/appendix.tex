@@ -133,6 +133,23 @@ The files \texttt{results/germs/germ\_delta12.txt} and
 \texttt{germdfs.c}, as printed by \texttt{germcompare.py --germline}; the
 complete pipeline for complexity at most $16$ is \texttt{germpipe.sh}.
 
+\paragraph{Checking \cref{prop:balzer}}
+{\footnotesize
+\begin{verbatim}
+python3 balzer_mazoyer.py 150          # only (B3) holds (Mazoyer)
+python3 balzer.py 10 1234 AB --lrat    # UNSAT, VERIFIED
+python3 balzer.py 9 1234 LA --lrat     # UNSAT, VERIFIED
+python3 balzer.py 9 1234 LB --lrat     # UNSAT, VERIFIED
+python3 balzer.py 11 1234s id          # SAT (balzer_sym11.txt)
+python3 balzer_k.py 5 12 1234 id --cnf=w.cnf
+kissat w.cnf w.drat                    # UNSAT
+drat-trim w.cnf w.drat -L w.lrat       # VERIFIED
+lrat-check w.cnf w.lrat                # VERIFIED
+python3 balzer.py 12 1234s id --lrat   # UNSAT, VERIFIED
+\end{verbatim}}
+The digests of the formulas and of the certificates are listed in
+\path{results/balzer.log}.
+
 \paragraph{Search-size estimates (\cref{sec:difficulty})}
 {\footnotesize
 \begin{verbatim}

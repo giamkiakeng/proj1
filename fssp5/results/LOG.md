@@ -172,3 +172,5 @@ All times single core (Intel/AMD cloud vCPU), kissat 4.x (git HEAD 2026-09) unle
   pumping.py) finds the same 244 germs as germdfs.c (99,527,730 nodes, 3 min 14 s); germ_k14_check.py
   (independent simulation) confirms that each of the 14 completion-test survivors determines its half-line below
   anti-diagonal 330 and that Lemma 3.5 applies with s=1 at some n <= 163, L <= 5 (e.g. 28/1/19, 163/5/83).
+- Proposition 6.5, weak reading, I=id, N=12: LRAT certificate obtained (kissat DRAT 958 MB -> drat-trim -L, 28 min,
+  LRAT 3.08 GB; lrat-check "c VERIFIED" in 65.7 s).  All cases of Proposition 6.5 are now LRAT-certified.

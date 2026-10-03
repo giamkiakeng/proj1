@@ -7,6 +7,9 @@ N=12    conds=1234 I=id  CaDiCaL with LRAT output stopped after 15 min (proof fi
         Kissat 4.0.4: UNSATISFIABLE in 16 min 6 s without proof (2148 vars, 114965 clauses);
         with proof: UNSATISFIABLE in 16 min 29 s, binary DRAT 958,390,731 bytes,
         drat-trim (-t 40000) "s VERIFIED" in 30 min 57 s
+        LRAT (2026-10-03): kissat again (14 min 45 s, DRAT of the same size), then
+        drat-trim -L: "s VERIFIED" in 28 min 35 s, LRAT 3,078,078,538 bytes;
+        lrat-check: "c VERIFIED" in 65.7 s
 # strong reading (conds 1234s): B1 also for border neighbours; no other neighbourhood produces F.
 # I(*)=*, I(F)=F, hence I(G)=G; I in {id, (A B), (L A), (L B)}.  Solver: CaDiCaL 3.0.1,
 # certificates: LRAT (--lrat --binary=false), checked with lrat-check (drat-trim suite).
@@ -43,3 +46,4 @@ id N=12 weak    cnf 023b99e247f9a1616a926d70e03e85f2ad54ad63e498df79b9cc87f3d3ac
 # e.g. (A,G,L), (B,G,L), (C,G,G), (C,G,L)); B2 holds for no involution; B3 holds in the strong
 # reading (no other neighbourhood produces F); B4 violated by (G,A,G), (G,C,G), (G,L,G).
 # This is exactly Mazoyer's own statement (Publ. Dept. Math. Lyon 1A, 1986, Sect. 7).
+id N=12 weak    lrat e0231f2f50b4278948e832b78a33f295f4df9792789f63af744818be7f3e873e (drat-trim -L)
