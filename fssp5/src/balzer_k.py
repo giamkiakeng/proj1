@@ -15,7 +15,8 @@ take one involution of {L, aux} per type up to renaming of the auxiliary states:
 balzer.py remains the program behind the five-state results of the paper (its formulas are
 the ones whose digests are recorded); this script is used for six states.
 
-usage: balzer_k.py k N CONDS [I] [--lrat] [--timeout=SECONDS]
+usage: balzer_k.py k N CONDS [I] [--lrat] [--timeout=SECONDS] [--cnf=PATH]
+   --cnf=PATH writes the formula to PATH and exits without solving.
 """
 import os
 import subprocess
@@ -88,6 +89,13 @@ def main():
             timeout = int(a.split('=')[1])
     E = gencnf.build(k, N, symbreak=False)
     add_conditions(E, conds, inv)
+    for a in sys.argv[1:]:
+        if a.startswith('--cnf='):
+            with open(a.split('=', 1)[1], 'w') as fh:
+                gencnf.write_dimacs(E, fh)
+            print('k=%d N=%d conds=%s I=%s vars=%d clauses=%d written to %s' % (
+                k, N, conds, inv, E.nv, len(E.clauses), a.split('=', 1)[1]))
+            return
     tmp = tempfile.mkdtemp(prefix='balzerk_', dir=os.environ.get('TMPDIR', '/tmp'))
     cnf = os.path.join(tmp, 'f.cnf')
     with open(cnf, 'w') as fh:

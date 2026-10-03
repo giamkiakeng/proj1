@@ -341,7 +341,9 @@ with these properties, with at most $14$ neighbourhoods besides
 $(\mathsf L,\mathsf L,\mathsf L)$ and with $\mathsf A$ before $\mathsf B$,
 by a depth-first search over the cells in the above order in which the
 value of a neighbourhood is chosen when it first occurs: $1.0\cdot10^8$
-nodes, $244$ germs.
+nodes, $244$ germs. An independent re-implementation in Python
+(\texttt{germdfs\_check.py}), which recomputes the cones of \cref{lem:cone}
+by breadth-first search, finds the same $244$ germs.
 
 \emph{Completion test.} For $230$ of them the formula $\mathrm{MT}_5(\{2,\dots,10\};78,39)$ (without symmetry breaking,
 which the enumeration has already performed) together with the germ is
@@ -354,6 +356,8 @@ occurs up to anti-diagonal $3300$), and on these extended diagrams
 \cref{lem:left} applies with $s=1$: for each germ there are $n\le163$ and
 $L\le5$ such that the two input anti-diagonals of the line of length $n$ are
 $L$-periodic on $[1,Y]$ with $Y-1>16L$ (for instance $n=28$, $L=1$, $Y=19$).
+An independent simulation (\texttt{germ\_k14\_check.py}) confirms both facts
+for each of the $14$ germs, below anti-diagonal $330$.
 Hence no rule containing one of the $244$ germs is a minimal-time solution.
 \end{proof}
 

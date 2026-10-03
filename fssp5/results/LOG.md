@@ -168,3 +168,7 @@ All times single core (Intel/AMD cloud vCPU), kissat 4.x (git HEAD 2026-09) unle
   minimal-time solution), Prop. 2 / Theorem 3 (one-way channels; lengths 2, 3, 4 compared), Theorems 4-5 (2 states
   impossible, 3 states suffice with separate messages).  No overlap with Lemma 3.3, Theorem 3.4, Lemma 3.5,
   Theorem 3.6.  Paper updated (introduction, Section 6.4, 6.5, glossary); review rewritten.
+- Proposition 6.4 cross-checks (2026-10-03): germdfs_check.py 14 78 40 (independent Python enumerator, cones from
+  pumping.py) finds the same 244 germs as germdfs.c (99,527,730 nodes, 3 min 14 s); germ_k14_check.py
+  (independent simulation) confirms that each of the 14 completion-test survivors determines its half-line below
+  anti-diagonal 330 and that Lemma 3.5 applies with s=1 at some n <= 163, L <= 5 (e.g. 28/1/19, 163/5/83).
