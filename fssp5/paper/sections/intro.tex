@@ -116,8 +116,8 @@ five states.
   $78$ (\cref{prop:germs}); of the $9{,}787$ half-lines with at most $16$
   neighbourhoods, only $16$ irregular ones survive.
   With certificates we also confirm Balzer's conditional five-state result,
-  in both readings of his conditions found in the literature; lines of
-  length $12$ are needed for it (\cref{prop:balzer}).
+  even for a weaker form of his conditions; lines of length $12$ are needed
+  for it (\cref{prop:balzer}).
 \end{enumerate}
 \Cref{tab:results} lists the results with the kind of evidence behind each
 of them.
@@ -157,10 +157,14 @@ unsatisfiability claims with LRAT proofs checked by \texttt{lrat-check};
 
 \paragraph{Related work}
 Surveys of the FSSP are \cite{Mazoyer86,Umeo09}; a classical textbook
-exposition is \cite{Minsky67}. Mazoyer \cite{Mazoyer96} proved that the
-sets of all solutions and of all minimal-time solutions are not recursively
-enumerable, and constructed minimal-time solutions in which neighbouring
-cells exchange a single bit per step; Settle and Simon \cite{SettleSimon02}
+exposition is \cite{Minsky67}. Mazoyer \cite{Mazoyer96}, who explicitly
+leaves the five-state question aside, proved that the sets of all solutions
+and of all minimal-time solutions are not recursively enumerable,
+constructed a minimal-time solution in which neighbouring cells exchange a
+single bit per step, and showed that three states suffice for minimal time
+if the cells exchange messages that are separate from their states; he also
+observed that all the solutions he had described divide the line
+recursively, at ratios in $[\frac12,1)$. Settle and Simon \cite{SettleSimon02}
 obtained small non-minimal-time solutions. Beyond Balzer, Yun\`es and
 Sanders, lower bounds on the number of states are known for variants and
 restricted classes: no three-state solution and no four-state symmetric
@@ -170,8 +174,11 @@ additional constraints (see the survey \cite{Correa17}). The non-existence
 of minimal-time solutions has been proved for variants with sub-generals
 and for some geometric configurations \cite{YamashitaEtAl14,Kobayashi19}:
 a repetition of a pair of states, forced by the pigeonhole principle, would
-make some cell fire too early. Our pumping lemma (\cref{lem:pumping}) uses
-the same mechanism on the original problem, where it cannot exclude all
+make some cell fire too early, and Mazoyer \cite[Prop.~2]{Mazoyer96}
+compares the lines of lengths $2$, $3$ and $4$ in this way to show that
+solutions with one-way channels cannot synchronize every line in time
+$2n-2$. Our pumping lemma (\cref{lem:pumping}) uses the same mechanism on
+the original problem and for all lengths, where it cannot exclude all
 solutions but constrains them. Mazoyer and Terrier
 \cite{MazoyerTerrier94,MazoyerTerrier99} study which signals a
 one-dimensional automaton can generate from a single initial impulse and

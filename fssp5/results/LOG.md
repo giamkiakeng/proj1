@@ -160,3 +160,11 @@ All times single core (Intel/AMD cloud vCPU), kissat 4.x (git HEAD 2026-09) unle
 - Elsevier API key supplied by the author (2026-10-03): Scopus-level only; the ScienceDirect article API answers
   AUTHENTICATION_ERROR / NOT_ENTITLED for Balzer 1967 and Mazoyer 1996, so the full texts are still missing.
   The key is not stored anywhere in the repository.
+- Full texts of Balzer 1967 and Mazoyer 1996 supplied by the corresponding author (fssp5/literature/, 2026-10-03).
+  Balzer p. 37: the four conditions verbatim = the strong reading of Section 6.4 (his order: image, resident G,
+  get-ready-to-fire G with "the only productions" giving F, (G,V,G) -> G); his 8-state solution satisfies all four;
+  4-state search: about 60,000 possibilities in 15 min; 5-state run stopped after 3 h and 570,000 possibilities.
+  Mazoyer 1996: leaves Balzer's question aside; Theorem 1 (solution sets not r.e.), Theorem 2 (one-bit two-way
+  minimal-time solution), Prop. 2 / Theorem 3 (one-way channels; lengths 2, 3, 4 compared), Theorems 4-5 (2 states
+  impossible, 3 states suffice with separate messages).  No overlap with Lemma 3.3, Theorem 3.4, Lemma 3.5,
+  Theorem 3.6.  Paper updated (introduction, Section 6.4, 6.5, glossary); review rewritten.

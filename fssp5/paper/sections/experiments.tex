@@ -402,28 +402,35 @@ $3300$ for $c_{78}\le14$ and $1300$ for $c_{78}\le16$).}
 
 \subsection{Balzer's conditions}\label{sec:balzer}
 
-Balzer \cite{Balzer67} also reported that no five-state minimal-time
-solution satisfies four additional conditions. We could not consult this
-part of his paper, and we take the conditions from Mazoyer
-\cite[\S7]{Mazoyer86Lyon}, who states them for the general $\mathsf G$; Yun\`es
-\cite[\S2.7]{Yunes93} states them for arbitrary states. In our notation:
+Balzer \cite[p.~37]{Balzer67} also reported that no five-state minimal-time
+solution satisfies four additional conditions, ``the weakest conditions we
+found which enabled the program to prove that no five state minimal time
+solution existed''. In our notation, and numbered as in Mazoyer's account
+\cite[\S7]{Mazoyer86Lyon} (Balzer lists (B2) first and (B1) second), they
+read:
 \begin{enumerate}[label=(B\arabic*)]
-\item $\mathsf G$ is stable: $\delta(x,\mathsf G,y)=\mathsf G$ unless both
-  $x$ and $y$ belong to $\{\mathsf G,\ast\}$;
+\item $\mathsf G$ is stable (Balzer: a ``resident state''):
+  $\delta(x,\mathsf G,y)=\mathsf G$ unless both $x$ and $y$ belong to
+  $\{\mathsf G,\ast\}$;
 \item the rule is an image solution (\cref{app:gl-squad}) for some
-  involution $I$;
+  involution $I$ \cite[p.~32]{Balzer67};
 \item $\delta(\mathsf G,\mathsf G,\mathsf G)=\delta(\ast,\mathsf G,\mathsf
   G)=\delta(\mathsf G,\mathsf G,\ast)=\mathsf F$, and no other
-  neighbourhood is mapped to $\mathsf F$;
+  neighbourhood is mapped to $\mathsf F$ (Balzer: $\mathsf G$ is the
+  ``get-ready-to-fire'' state);
 \item $\delta(\mathsf G,v,\mathsf G)=\mathsf G$ for every working state
   $v\neq\mathsf G$.
 \end{enumerate}
-The two sources differ in details: Yun\`es requires (B1) only when $x$ and
-$y$ are working states and does not require that no other neighbourhood
-produces $\mathsf F$. We call (B1)--(B4) as displayed the \emph{strong
-reading} and the version with these two restrictions dropped the
-\emph{weak reading}. Mazoyer's six-state solution satisfies only (B3)
-\cite{Mazoyer86Lyon}, and our formalization gives the same verdict: on the
+Balzer places the general at the right end of the line; all four conditions
+are invariant under reflection. We call (B1)--(B4), which is Balzer's
+wording, the \emph{strong reading}. Yun\`es \cite[\S2.7]{Yunes93} restates
+the conditions for arbitrary states and in a weaker form, with (B1) only
+for working states $x,y$ and without the requirement that no other
+neighbourhood produces $\mathsf F$; we call this the \emph{weak reading}.
+Balzer adds that the conditions do not suffice to exclude six states and
+that his eight-state solution satisfies all four. Mazoyer's six-state
+solution satisfies only (B3) \cite{Mazoyer86Lyon}, and our formalization
+gives the same verdict: on the
 $117$ transitions that it uses on the lines of lengths $3,\dots,150$, (B1)
 and (B4) fail, (B2) fails for every involution, and (B3) holds in the strong
 reading (program \texttt{balzer\_mazoyer.py}). Sanders \cite{Sanders94}
@@ -453,8 +460,9 @@ reading only adds conditions, this gives:
 No five-state rule satisfying (B1)--(B4) in the weak reading, with an
 involution $I$ that fixes $\mathsf F$, synchronizes all lines of lengths
 $2,\dots,12$ in minimal time; a fortiori none satisfying the strong reading
-does. In particular Balzer's conditional result holds in both readings, and
-the lengths up to $11$ do not suffice to prove it.
+does. In particular Balzer's conditional result holds, even for the weaker
+form of the conditions, and the lengths up to $11$ do not suffice to prove
+it.
 \end{proposition}
 
 \subsection{Where the difficulty lies}\label{sec:difficulty}
@@ -501,8 +509,10 @@ about $1.5$ CPU-hours each) did not terminate. Clause learning compresses
 such trees considerably, and cube-and-conquer \cite{HeuleEtAl11}
 parallelizes them well, but a complete five-state search along these lines
 is a computation of a much larger scale than the ones reported here.
-Earlier attempts give the same picture. Yun\`es \cite[\S3.1]{Yunes93} could
-not complete Balzer's search for five states, and Sanders \cite{Sanders94},
+Earlier attempts give the same picture. Balzer stopped his five-state
+search after three hours and about $570{,}000$ partial rules
+\cite[p.~36]{Balzer67}, Yun\`es \cite[\S3.1]{Yunes93} could not complete
+it either, and Sanders \cite{Sanders94},
 whose program proves the four-state bound in less than $11$ seconds on a
 MasPar with $16384$ processors, estimated that a five-state search would
 take about $10^{16}$ times the age of the universe on that machine; a
