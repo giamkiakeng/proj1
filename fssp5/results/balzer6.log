@@ -1,0 +1,15 @@
+# Six-state rules under Balzer's conditions, strong reading (src/balzer_k.py 6 N 1234s I),
+# CaDiCaL 3.0.1 with a time limit of 1800 s per run, no symmetry breaking.
+# Involution types of {L,A,B,C} up to renaming of the auxiliary states: id, AB, LA, LA_BC.
+#
+# I      SAT for N =     first undecided N (1800 s)
+# id     3..14           15
+# AB     3..13           14
+# LA     3..14           15 (run in progress when this log was written)
+# LA_BC  3..13           14
+#
+# Rules for the lengths 2..14 (checked with fsspcheck; both fail at n = 15; both satisfy
+# B1-B4 in the strong reading, checked by a separate script):
+#   results/balzer6_sym14.txt   (I = id)
+#   results/balzer6_LA14.txt    (I = (L A))
+# Conclusion: as for Balzer's own program, these conditions are not known to exclude six states.
