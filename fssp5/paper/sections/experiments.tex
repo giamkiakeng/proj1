@@ -423,8 +423,12 @@ $y$ are working states and does not require that no other neighbourhood
 produces $\mathsf F$. We call (B1)--(B4) as displayed the \emph{strong
 reading} and the version with these two restrictions dropped the
 \emph{weak reading}. Mazoyer's six-state solution satisfies only (B3)
-\cite{Mazoyer86Lyon}, and Sanders \cite{Sanders94} notes that the error in
-Balzer's search ``made this approach look better than it is''.
+\cite{Mazoyer86Lyon}, and our formalization gives the same verdict: on the
+$117$ transitions that it uses on the lines of lengths $3,\dots,150$, (B1)
+and (B4) fail, (B2) fails for every involution, and (B3) holds in the strong
+reading (program \texttt{balzer\_mazoyer.py}). Sanders \cite{Sanders94}
+notes that the error in Balzer's search ``made this approach look better
+than it is''.
 
 All four conditions fix transitions or relate pairs of transitions, so they
 are added to $\mathrm{MT}_5(\{2,\dots,N\})$ as unit and binary clauses (program

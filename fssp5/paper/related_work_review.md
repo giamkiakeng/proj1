@@ -121,6 +121,10 @@ symmetry breaking, for each involution I of {L,A,B} (I(F) = F forces I(G) = G). 
 | (L A), (L B) | UNSAT at N = 9 (LRAT) | UNSAT at N ≤ 9 (implied) |
 | identity (symmetric rules) | SAT up to N = 11, **UNSAT at N = 12** (Kissat 16 min; DRAT 958 MB verified by drat-trim in 31 min) | SAT up to N = 11, **UNSAT at N = 12** (LRAT, 477 MB, checked in 8.5 s) |
 
+Check of the formalization: on the 117 transitions that Mazoyer's six-state solution uses on the
+lines of lengths 3..150, (B1) and (B4) fail, (B2) fails for every involution and (B3) holds in the
+strong reading (`src/balzer_mazoyer.py`), which is exactly Mazoyer's own statement (1986, §7).
+
 Hence the new Proposition 6.5: no five-state rule satisfying Balzer's conditions, in either
 reading, synchronizes the lengths 2..12 — a certified version of Balzer's conditional
 five-state result, whose original search was incomplete (Sanders); lengths up to 11 do not

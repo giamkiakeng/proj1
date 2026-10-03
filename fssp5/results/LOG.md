@@ -154,3 +154,9 @@ All times single core (Intel/AMD cloud vCPU), kissat 4.x (git HEAD 2026-09) unle
 - Weak reading, I=id, N=12: Kissat UNSATISFIABLE in 16 min; with a binary DRAT proof (958 MB) verified by
   drat-trim in 31 min.  So all four involutions are refuted, with certificates, in both readings for the lengths
   2..12 (paper Proposition 6.5 now stated for the weak reading).
+- Balzer's conditions on Mazoyer's rule (src/balzer_mazoyer.py 150): on the 117 transitions used on the lines 3..150,
+  B1 and B4 fail, B2 fails for every involution, B3 holds in the strong reading -- exactly Mazoyer's statement in
+  his 1986 Sect. 7, which supports the formalization of Section 6.4.
+- Elsevier API key supplied by the author (2026-10-03): Scopus-level only; the ScienceDirect article API answers
+  AUTHENTICATION_ERROR / NOT_ENTITLED for Balzer 1967 and Mazoyer 1996, so the full texts are still missing.
+  The key is not stored anywhere in the repository.

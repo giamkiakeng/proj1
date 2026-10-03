@@ -37,3 +37,9 @@ id N=12 strong  cnf 18c288e34ae749c162ef23611f36cfb98a5a77d5c34b50c6a42c7e8fcee2
                 lrat eac101e2118ff551c8359e5cdc989ac4c1bc80e1fa5da2865ffb0483ab3bb337
 id N=12 weak    cnf 023b99e247f9a1616a926d70e03e85f2ad54ad63e498df79b9cc87f3d3acb778
                 drat 2dd3e052df34254c391030c24e49425030cc88af8aef81d23ecafe03f93e649e (binary, Kissat)
+#
+# Check of the formalization on Mazoyer's six-state solution (src/balzer_mazoyer.py 150):
+# 117 transitions used on the lines of lengths 3..150; B1 violated (strong 7, weak 5 transitions,
+# e.g. (A,G,L), (B,G,L), (C,G,G), (C,G,L)); B2 holds for no involution; B3 holds in the strong
+# reading (no other neighbourhood produces F); B4 violated by (G,A,G), (G,C,G), (G,L,G).
+# This is exactly Mazoyer's own statement (Publ. Dept. Math. Lyon 1A, 1986, Sect. 7).
