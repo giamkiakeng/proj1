@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.9.24)  3 OCT 2026 13:16
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.9.24)  3 OCT 2026 13:18
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1077,11 +1077,11 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 8371816093E12013497254D8BAE620C6;6650.
  ) 
 Here is how much of TeX's memory you used:
- 30209 strings out of 476106
- 571838 string characters out of 5793933
+ 30207 strings out of 476106
+ 571814 string characters out of 5793933
  1985975 words of memory out of 5000000
  50671 multiletter control sequences out of 15000+600000
- 743630 words of font info for 492 fonts, out of 8000000 for 9000
+ 743500 words of font info for 491 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
  84i,13n,87p,1001b,930s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/ty
@@ -1106,7 +1106,7 @@ f/fonts/type1/public/lm/lmsy9.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt1
 0.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt9.pfb></usr/share/texlive/tex
 mf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on main.pdf (61 pages, 916093 bytes).
+Output written on main.pdf (61 pages, 916135 bytes).
 PDF statistics:
  1501 PDF objects out of 1728 (max. 8388607)
  1197 compressed objects within 12 object streams
