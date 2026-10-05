@@ -69,6 +69,7 @@ paper/                   LaTeX sources, figures, bibliography
 paper/sections/terms.tex glossary of all terms and symbols (Appendix A); notation.tex the one-page summary
 paper/sections/pic_*.tex, tikzdefs.tex   TikZ drawings (Figures 1-7); further.tex Appendix B
 paper/highlights.docx (.txt)   optional highlights for the submission (5 bullets, at most 85 characters each)
+video/                   24-minute narrated explainer (Manim + local Kokoro voice); see video/README.md
 ```
 
 ## Reproducing the main certificates

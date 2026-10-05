@@ -174,3 +174,18 @@ All times single core (Intel/AMD cloud vCPU), kissat 4.x (git HEAD 2026-09) unle
   anti-diagonal 330 and that Lemma 3.5 applies with s=1 at some n <= 163, L <= 5 (e.g. 28/1/19, 163/5/83).
 - Proposition 6.5, weak reading, I=id, N=12: LRAT certificate obtained (kissat DRAT 958 MB -> drat-trim -L, 28 min,
   LRAT 3.08 GB; lrat-check "c VERIFIED" in 65.7 s).  All cases of Proposition 6.5 are now LRAT-certified.
+
+## Session 6 (2026-10-05): explainer video
+
+- fssp5/video: a 24-minute narrated explainer in the style of 3Blue1Brown (Manim Community 0.21, voice Kokoro-82M
+  on CPU, af_heart). 14 scenes / 75 narration blocks; every diagram is simulated from the rule tables in results/
+  by video/fsspsim.py, and every statement of the narration (video/script.md) is taken from the paper.
+- Facts recomputed for the video, all in agreement with the paper: delta14 synchronizes 2..14 and fires cells
+  13-15 at time 22 on the line of length 15; delta13 fires cell 11 at time 21 on n = 14; delta12 fires cell 5 at
+  time 23 on n = 13; the half-lines of delta12 and delta13 agree below anti-diagonal 78; on the delta12 half-line
+  the anti-diagonal 1034 is A on the cells 2..259 and 1033 is L on 2..258 (Corollary 6.2); the depth-rows j < 120
+  of Mazoyer's half-line are 3-periodic from time 2j+1 or 2j+2 (j >= 1); c78 = 57 (Mazoyer), 22 (delta12, delta13),
+  16 (delta14, delta14b), 15 (delta14c, delta14d), 17 (delta14e); the cone of the right end for n = 12 covers the
+  input positions kappa = 0..6.
+- Build: video/narration.py, video/render.sh hd, video/assemble.py (H.264 1080p30 + AAC, soft English
+  subtitles, 14 chapters, -16 LUFS). Renders and audio are not committed (video/build/ is ignored).
