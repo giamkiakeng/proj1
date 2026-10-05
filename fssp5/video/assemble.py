@@ -6,7 +6,8 @@ Reads build/media_<Scene>/videos/<file>/<quality>/<Scene>.mp4, the narration man
 Writes build/five_state_question.mp4 (H.264 + AAC, soft English subtitles, chapters) and
 build/five_state_question.srt.
 
-usage: assemble.py [--quality=1080p30] [--crf=23] [--out=build/five_state_question]
+usage: assemble.py [--quality=1080p30] [--crf=23] [--out=build/five_state_question] [--scenes=S06:S10]
+   --scenes=FIRST:LAST assembles only that range of scenes (e.g. to stay below an upload size limit)
 """
 import glob
 import json
@@ -41,7 +42,7 @@ def ts(x):
 
 
 def main():
-    q, crf, out = '1080p30', None, os.path.join(B, 'five_state_question')
+    q, crf, out, scenes = '1080p30', None, os.path.join(B, 'five_state_question'), SCENES
     for a in sys.argv[1:]:
         if a.startswith('--quality='):
             q = a.split('=', 1)[1]
@@ -49,9 +50,15 @@ def main():
             crf = a.split('=', 1)[1]
         elif a.startswith('--out='):
             out = a.split('=', 1)[1]
+        elif a.startswith('--scenes='):
+            lo, hi = a.split('=', 1)[1].split(':')
+            names = [s for s, _ in SCENES]
+            first = next(k for k, s in enumerate(names) if s.startswith(lo))
+            last = next(k for k, s in enumerate(names) if s.startswith(hi))
+            scenes = SCENES[first:last + 1]
     manifest = json.load(open(os.path.join(B, 'audio', 'manifest.json')))
     files, cues, chapters, t = [], [], [], 0.0
-    for scene, title in SCENES:
+    for scene, title in scenes:
         mp4 = glob.glob(os.path.join(B, 'media_' + scene, 'videos', '*', q, scene + '.mp4'))
         if not mp4:
             sys.exit('missing render of %s at %s' % (scene, q))

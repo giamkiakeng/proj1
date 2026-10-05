@@ -40,6 +40,8 @@ python3 assemble.py --crf=24            # -> build/five_state_question.mp4 and .
 ```
 
 Re-rendering one scene: `./render.sh hd S08_Pumping`, then `python3 assemble.py` again.
+`python3 assemble.py --scenes=S06:S10 --out=build/part2` builds a self-contained part (subtitles and
+chapters rebased); the three parts S01:S05, S06:S10, S11:S14 are each below 30 MiB at 1080p.
 The scenes read the narration durations from `build/audio/manifest.json`, so re-synthesizing the
 narration (for instance with another voice) re-times all animations automatically.
 
