@@ -10,7 +10,7 @@ The first version of the note was commit 6603276, titled "Two barriers for minim
   - four statements that were wrong or unsupported as written;
   - the literature.
 
-The report is reproduced at the end of this file. Line numbers in it refer to `note.tex` at commit 6603276.
+The report is reproduced at the end of this file. Line numbers in it refer to `note.tex` at commit 6603276. The report also mentions files of the earlier manuscript, such as `paper/` and `related_work_review.md`. These were removed when the repository was reduced to what the note needs; commit cdf33e2 is the last one that contains them.
 
 ## Response: what changed
 
@@ -45,7 +45,7 @@ The report is reproduced at the end of this file. Line numbers in it refer to `n
 | 17 | **Rule 22:** cells i ≥ 3 are described as "rule 22 driven at its left end by the cells 1 and 2"; cell 3 sees cell 2.<br>**Wording:** "chaotic" is replaced by "irregular". |
 | 18 | The files are named, and the 22 transitions are printed. |
 | 19 | **Selectors:** now described as one selector per germ plus an at-least-one clause.<br>**Intervals:** upper on [1,Y], lower on [1,Y−1].<br>**No change:**<br>• N′ = 39: with the germ fixed, C∞ below 78 is determined and was checked for PUMP up to 40 during the enumeration.<br>• "anti-diagonal 3300": this is the range actually computed (`results/germs/K14_ext3300.txt`). |
-| 20 | The sentence that relied on the extended version (9,787 germs) is removed. The extended version is mentioned only under data availability. |
+| 20 | The sentence that relied on the extended version (9,787 germs) is removed, and the note no longer mentions the extended version. |
 | 21 | Proposition 5.5 now has a proof block that gives the base formula, the solvers and the checking times. |
 | 22 | The legend inside Figure 2 is removed; its content is in the caption. |
 | 23 | The path length in the proof of Lemma 3.2 is r, and the length argument of Ψ is m. "Partial rules" is defined. |
