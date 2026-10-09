@@ -1,0 +1,115 @@
+\begin{thebibliography}{10}
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\expandafter\ifx\csname href\endcsname\relax
+  \def\href#1#2{#2} \def\path#1{#1}\fi
+
+\bibitem{Moore64}
+E.~F. Moore, The firing squad synchronization problem, in: E.~F. Moore (Ed.),
+  Sequential Machines: Selected Papers, Addison-Wesley, Reading, MA, 1964, pp.
+  213--214.
+
+\bibitem{Goto62}
+E.~Goto, A minimal time solution of the firing squad problem, Dittoed course
+  notes for Applied Mathematics 298, Harvard University, pp.~52--59 (1962).
+
+\bibitem{Waksman66}
+A.~Waksman, An optimum solution to the firing squad synchronization problem,
+  Information and Control 9~(1) (1966) 66--78.
+
+\bibitem{Umeo09}
+H.~Umeo, Firing squad synchronization problem in cellular automata, in: R.~A.
+  Meyers (Ed.), Encyclopedia of Complexity and Systems Science, Springer, 2009,
+  pp. 3537--3574.
+
+\bibitem{Balzer67}
+R.~Balzer, An 8-state minimal time solution to the firing squad synchronization
+  problem, Information and Control 10~(1) (1967) 22--42.
+
+\bibitem{Gerken87}
+H.-D. Gerken, {\"U}ber {S}ynchronisationsprobleme bei {Z}ellularautomaten,
+  Diplomarbeit, Institut f{\"u}r Theoretische Informatik, Technische
+  Universit{\"a}t Braunschweig (1987).
+
+\bibitem{Mazoyer87}
+J.~Mazoyer, A six-state minimal time solution to the firing squad
+  synchronization problem, Theoretical Computer Science 50~(2) (1987) 183--238.
+
+\bibitem{Yunes93}
+J.-B. Yun{\`e}s, Synchronisation et automates cellulaires: la ligne de
+  fusiliers, Ph.D. thesis, Universit{\'e} Paris~7, available from HAL,
+  \texttt{tel-00139049} (1993).
+
+\bibitem{Sanders94}
+P.~Sanders, Massively parallel search for transition-tables of polyautomata,
+  in: Parcella '94: Proceedings of the VI International Workshop on Parallel
+  Processing by Cellular Automata and Arrays, Akademie Verlag, Berlin, 1994,
+  pp. 99--108.
+
+\bibitem{Correa17}
+T.~Correa, B.~Gustavo, L.~Lemos, A.~Settle, An overview of recent solutions to
+  and lower bounds for the firing synchronization problem, arXiv:1701.01045
+  (2017).
+
+\bibitem{Mazoyer96}
+J.~Mazoyer, On optimal solutions to the firing squad synchronization problem,
+  Theoretical Computer Science 168~(2) (1996) 367--404.
+
+\bibitem{YamashitaEtAl14}
+K.~Yamashita, Y.~Nishitani, S.~Hirose, S.~Okawa, N.~Osato, The firing squad
+  synchronization problem with sub-generals, Information Processing Letters
+  114~(1--2) (2014) 60--65.
+
+\bibitem{MazoyerTerrier94}
+J.~Mazoyer, V.~Terrier, Signals in one dimensional cellular automata, Research
+  Report 94-50, Laboratoire de l'Informatique du Parall{\'e}lisme, ENS Lyon,
+  available from HAL, \texttt{hal-02101868} (1994).
+
+\bibitem{Settle99}
+A.~Settle, New bounds for the distributed firing synchronization problem, Ph.D.
+  thesis, University of Chicago (1999).
+
+\bibitem{Duprat97}
+J.~Duprat, Firing {S}quad {S}ynchronization {P}roblem, Coq user contribution
+  \texttt{FiringSquad} (formal proof of the correctness of Mazoyer's six-state
+  solution), LIP, ENS Lyon; archived at
+  \url{https://github.com/rocq-archive/firing-squad} (1997).
+
+\bibitem{CruzFilipeEtAl17}
+L.~Cruz-Filipe, M.~J.~H. Heule, W.~A. Hunt, Jr., M.~Kaufmann,
+  P.~Schneider-Kamp, Efficient certified {RAT} verification, in: Automated
+  Deduction -- CADE 26, Vol. 10395 of Lecture Notes in Computer Science,
+  Springer, 2017, pp. 220--236.
+
+\bibitem{CaDiCaL2}
+A.~Biere, T.~Faller, K.~Fazekas, M.~Fleury, N.~Froleyks, F.~Pollitt, {CaDiCaL}
+  2.0, in: Computer Aided Verification (CAV 2024), Vol. 14681 of Lecture Notes
+  in Computer Science, Springer, 2024, pp. 133--152.
+
+\bibitem{Kissat20}
+A.~Biere, K.~Fazekas, M.~Fleury, M.~Heisinger, {CaDiCaL}, {Kissat},
+  {Paracooba}, {Plingeling} and {Treengeling} entering the {SAT} {C}ompetition
+  2020, in: Proceedings of SAT Competition 2020: Solver and Benchmark
+  Descriptions, Vol. B-2020-1 of Department of Computer Science Report Series
+  B, University of Helsinki, 2020, pp. 51--53.
+
+\bibitem{WetzlerHeuleHunt14}
+N.~Wetzler, M.~J.~H. Heule, J.~Hunt, Warren~A., {DRAT-trim}: efficient checking
+  and trimming using expressive clausal proofs, in: Theory and Applications of
+  Satisfiability Testing (SAT 2014), Vol. 8561 of Lecture Notes in Computer
+  Science, Springer, 2014, pp. 422--429.
+
+\bibitem{Wolfram83}
+S.~Wolfram, Statistical mechanics of cellular automata, Reviews of Modern
+  Physics 55~(3) (1983) 601--644.
+\newblock \href {https://doi.org/10.1103/RevModPhys.55.601}
+  {\path{doi:10.1103/RevModPhys.55.601}}.
+
+\bibitem{Mazoyer86Lyon}
+J.~Mazoyer, A six states minimal time solution to the firing squad
+  synchronization problem, Publications du D{\'e}partement de Math{\'e}matiques
+  de Lyon 1A (1986) 1--92, preprint version of the paper in Theoret.\ Comput.\
+  Sci.\ 50 (1987); available from Numdam.
+
+\end{thebibliography}

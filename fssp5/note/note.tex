@@ -1,0 +1,683 @@
+\documentclass[3p]{elsarticle}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage[shortlabels]{enumitem}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage[capitalise,noabbrev]{cleveref}
+\pdfstringdefDisableCommands{\def\corref#1{}}
+\usepackage{microtype}
+\usepackage{url}
+\usepackage{tikz}
+\input{tikzdefs}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Two barriers for minimal-time firing squads,\\
+and certified bounds for four and five states}
+
+\author[tjc]{Kia Keng Giam\corref{cor1}}
+\ead{giamkiakeng@gmail.com}
+\cortext[cor1]{Corresponding author.}
+\author[hci]{Beichen Sun}
+\author[hci]{Yaoqi Zhao}
+
+\affiliation[tjc]{organization={Temasek Junior College},
+            country={Singapore}}
+\affiliation[hci]{organization={Hwa Chong Institution},
+            country={Singapore}}
+
+\begin{abstract}
+A minimal-time solution of the firing squad synchronization problem fires
+every line of length $n$ at time $2n-2$. Every line agrees with the infinite
+half-line until the echo of its right end returns, and the rest of the line
+is a function of two anti-diagonals of the half-line. We prove two necessary
+conditions on the half-line of every minimal-time solution, whatever its
+number of states: its non-periodic part reaches the line $i=t/3$, and it is
+not periodic in any wedge at the left border; in particular it is never
+eventually regular. With a validated propositional encoding and LRAT-checked
+solver runs we obtain a certified proof that four states do not suffice,
+show that every five-state solution uses at least $15$ distinct
+neighbourhoods on its half-line below the anti-diagonal $t+i=78$, and
+confirm a conditional five-state result of Balzer (1967). A five-state rule
+that synchronizes all lines of length at most $14$ shows that refutations
+along these lines need longer lines.
+\end{abstract}
+
+\begin{keyword}
+firing squad synchronization problem \sep cellular automata \sep state
+complexity \sep minimal time \sep pumping lemma \sep proof certificates
+\end{keyword}
+
+\end{frontmatter}
+
+%% ---------------------------------------------------------------------
+\section{Introduction}\label{sec:intro}
+
+The firing squad synchronization problem, posed by Myhill in 1957 and
+popularised by Moore \cite{Moore64}, asks for a finite automaton that,
+placed in every cell of a line of arbitrary length $n$ and started with all
+cells quiescent except a \emph{general} at one end, drives all cells into a
+firing state for the first time at the same instant. Goto \cite{Goto62} and
+Waksman \cite{Waksman66} solved it in time $2n-2$, which is optimal. The
+least number of states of a minimal-time solution is a benchmark question
+\cite{Umeo09}: Waksman used $16$ states, Balzer $8$ \cite{Balzer67}, Gerken
+$7$ \cite{Gerken87} and Mazoyer $6$ \cite{Mazoyer87}. Balzer reported a
+computer search excluding four states \cite{Balzer67}; Yun\`es
+\cite{Yunes93} repeated it and observed that the lines of lengths
+$2,\dots,9$ suffice, and Sanders \cite{Sanders94} found Balzer's
+backtracking incomplete and confirmed the result with a corrected search.
+Whether five states suffice has been open since 1987 \cite{Umeo09,Correa17}.
+Since the set of minimal-time solutions is not recursively enumerable
+\cite{Mazoyer96}, a negative answer would consist of necessary conditions
+that no five-state rule satisfies.
+
+This note develops such conditions for any number of states and measures
+how far they reach. Until the echo of its right border returns, the line of
+length $n$ behaves exactly like the infinite half-line, so a solution
+consists of one half-line diagram $C_\infty$ and, for each $n$, a triangle
+$R_n$ that is a function of two anti-diagonals of $C_\infty$
+(\cref{sec:prelim}). Our results are:
+(i)~a \emph{pumping lemma} at the right end, which forces the non-periodic
+part of $C_\infty$ to reach the line $i=t/3$ (\cref{thm:third}) and explains
+a priori the speed-$1/3$ signal of the classical constructions; (ii)~a
+\emph{left-border lemma} with an explicit bound (\cref{lem:left}), by which
+$C_\infty$ is not periodic in any wedge at the left border (\cref{thm:left})
+and never eventually regular (\cref{cor:regular}); (iii)~\emph{certified
+bounds}: an LRAT certificate for the known fact that four states do not
+suffice (\cref{thm:four}), whose earlier proofs rest on search programs, and
+for five states the bound $c_{78}\ge15$ (\cref{prop:germs}) and Balzer's
+conditional result (\cref{prop:balzer}); (iv)~a five-state rule for all
+lengths up to $14$ (\cref{prop:chaotic}) and a left-border refutation of the
+half-line of rules for the lengths up to $12$ and $13$ (\cref{cor:germ12}).
+Items (i) and (ii) are theorems, (iii) are unsatisfiability claims with
+independently checked LRAT proofs, (iv) are finite simulations.
+
+\paragraph{Related work} Pigeonhole arguments on repeated pairs of states
+exclude minimal-time solutions of variants of the problem
+\cite{YamashitaEtAl14} and with one-way channels \cite[Prop.~2]{Mazoyer96};
+our pumping lemma applies this mechanism to the original problem, where it
+constrains solutions instead of excluding them. The periodicity behind the
+front used in \cref{thm:third} also underlies the work of Mazoyer and
+Terrier on signals \cite{MazoyerTerrier94}. Settle \cite{Settle99} excludes
+four- and five-state solutions under additional constraints.
+
+%% ---------------------------------------------------------------------
+\section{Lines and the half-line}\label{sec:prelim}
+
+Let $S$ be a finite set of \emph{states} containing the quiescent state
+$\mathsf L$, the general $\mathsf G$ and the firing state $\mathsf F$; put
+$W:=S\setminus\{\mathsf F\}$ and let $\ast\notin S$ be the border. A
+\emph{rule} is a map $\delta:(W\cup\{\ast\})\times W\times(W\cup\{\ast\})\to
+S$ with
+\begin{equation}\label{eq:quiescence}
+\delta(\mathsf L,\mathsf L,\mathsf L)=\delta(\mathsf L,\mathsf L,\ast)=\mathsf L .
+\end{equation}
+The \emph{line of length $n$} is $C_n:\mathbb N\times\{1,\dots,n\}\to S$ with
+$C_n(0,1)=\mathsf G$, $C_n(0,i)=\mathsf L$ for $i\ge2$ and
+$C_n(t+1,i)=\delta(C_n(t,i-1),C_n(t,i),C_n(t,i+1))$, where
+$C_n(t,0)=C_n(t,n+1)=\ast$, considered up to the first time at which some
+cell is $\mathsf F$. The rule \emph{synchronizes} it at time $T$ if all
+cells are $\mathsf F$ at time $T$ and none before. A \emph{minimal-time
+solution} synchronizes the line of length $n$ at time $2n-2$ for every
+$n\ge2$; it has $k$ states if $|S|=k$. The \emph{half-line}
+$C_\infty:\mathbb N\times\{1,2,\dots\}\to S$ is defined in the same way with
+a border on the left only.
+
+\begin{lemma}\label{lem:lightcone}
+For every rule, $C_n(t,i)=C_\infty(t,i)=\mathsf L$ whenever $t<i-1$ (and
+$i\le n$ for $C_n$).
+\end{lemma}
+
+\begin{proof}
+Induction on $t$; for $t=0$ this is the initial condition. For $t\ge1$ the
+predecessors $(t-1,i')$, $i'\in\{i-1,i,i+1\}$, satisfy $t-1<i'-1$, so they
+are $\mathsf L$ or the right border, and \eqref{eq:quiescence} gives
+$\mathsf L$.
+\end{proof}
+
+\begin{lemma}[agreement]\label{lem:agree}
+For every rule and $n\ge2$: $C_n(t,i)=C_\infty(t,i)$ whenever $1\le i\le n$
+and $t+i\le 2n-2$.
+\end{lemma}
+
+\begin{proof}
+Induction on $t$, the case $t=0$ being clear. If $i=n$, then $t\le n-2<i-1$
+and both sides are $\mathsf L$ by \cref{lem:lightcone}. If $i<n$, the
+predecessors $(t-1,j)$, $j\in\{i-1,i,i+1\}$, satisfy $(t-1)+j\le 2n-2$ and
+$j\le n$, so they agree by induction (for $j=0$ both are the border).
+\end{proof}
+
+The border is felt only in the \emph{reflected triangle}
+$R_n:=\{(t,i):1\le i\le n,\ t+i\ge 2n-1,\ t\le 2n-2\}$.
+
+\begin{lemma}[return chain]\label{lem:return}
+If $\delta$ synchronizes the lines of lengths $n$ and $n+1$ at times $2n-2$
+and $2n$, then $C_n(2n-1-i,i)\ne C_\infty(2n-1-i,i)$ for $1\le i\le n$, and
+the \emph{front} $f_i:=C_\infty(i-1,i)$ satisfies $f_{n-1}\ne\mathsf L$.
+\end{lemma}
+
+\begin{proof}
+For $i=1$, $C_n(2n-2,1)=\mathsf F$, whereas $C_\infty(2n-2,1)=C_{n+1}(2n-2,1)
+\ne\mathsf F$ by \cref{lem:agree} and since $2n-2<2n$. If the claim holds for
+$i<n$, then the left and middle predecessors of $(2n-1-i,i)$ have coordinate
+sums $2n-3$ and $2n-2$ and agree in $C_n$ and $C_\infty$ (for $i=1$ the left
+one is the border), so the right ones differ: this is the claim for $i+1$.
+For $i=n$ it reads $\delta(f_{n-1},\mathsf L,\ast)\ne\delta(f_{n-1},\mathsf
+L,\mathsf L)$ (by \cref{lem:agree,lem:lightcone}), which is impossible if
+$f_{n-1}=\mathsf L$ by \eqref{eq:quiescence}.
+\end{proof}
+
+By \cref{lem:agree,lem:lightcone}, a rule that synchronizes every line cannot
+synchronize the line of length $n$ before time $2n-2$ \cite{Waksman66}. In a
+minimal-time solution every cell $i$ leaves $\mathsf L$ exactly at time $i-1$
+(\cref{lem:return}), and since $C_\infty(t,i)=C_n(t,i)$ for $n$ large and the
+line of length $n$ does not fire before time $2n-2$,
+\begin{equation}\label{eq:neverfire}
+C_\infty(t,i)\neq\mathsf F\qquad\text{for all }t\ge0,\ i\ge1 .
+\end{equation}
+
+%% ---------------------------------------------------------------------
+\section{The right end: a speed-\texorpdfstring{$1/3$}{1/3} barrier}\label{sec:right}
+
+Fix $n\ge2$ and use the relative coordinates $\tau:=t-(n-1)$,
+$\kappa:=n-i$, in which $R_n=\{(\tau,\kappa):0\le\kappa\le\tau\le n-1\}$, with
+the right border at $\kappa=-1$ and the left border at $\kappa=n$. The
+predecessors of a cell of $R_n$ lie in $R_n$, on a border, or on one of the
+anti-diagonals $t+i=2n-3$, $t+i=2n-2$, where $C_n=C_\infty$. The \emph{input
+word} of $R_n$ is
+\[
+J_n(\kappa):=\bigl(C_\infty(n-3+\kappa,\,n-\kappa),\;C_\infty(n-2+\kappa,\,n-\kappa)\bigr),
+\qquad 0\le\kappa\le n-1,
+\]
+with \emph{lower} and \emph{upper input cells} on $t+i=2n-3$ and $2n-2$ (for
+$n=2$, $\kappa=0$ the lower cell lies at time $-1$, is a predecessor of no
+cell of $R_n$, and is set to $\mathsf L$); see \cref{fig:anatomy}.
+
+\begin{lemma}[determinacy]\label{lem:determinacy}
+There is a partial map $\Psi$, depending on $\delta$ only, such that
+$C_n(n-1+\tau,n-\kappa)=\Psi(J_n,n;\tau,\kappa)$ for all $n\ge2$ and
+$(\tau,\kappa)\in R_n$, and $\Psi(J,N;\tau,\kappa)$ depends only on the input
+cells and borders in the backward dependency cone of $(\tau,\kappa)$.
+\end{lemma}
+
+\begin{proof}
+Define $\Psi(J,N;\tau,\kappa)$ for $0\le\kappa\le\tau\le N-1$ by induction on
+$\tau$ as $\delta(x_{\kappa+1},x_\kappa,x_{\kappa-1})$, where $x_{\kappa'}$ is
+$\ast$ if $\kappa'\in\{-1,N\}$, the lower or upper component of $J(\kappa')$
+if $\tau-1=\kappa'-2$ or $\tau-1=\kappa'-1$, and $\Psi(J,N;\tau-1,\kappa')$
+otherwise (then $0\le\kappa'\le\tau-1$). When $N=n$, these are exactly the
+left, middle and right predecessors of the cell $(n-1+\tau,n-\kappa)$, with
+$C_n=C_\infty$ on the input cells, so induction on $\tau$ gives the first
+claim; unfolding the definition gives the second.
+\end{proof}
+
+For $(\tau,\kappa)\in R_n$ let $\mathrm{cone}_n(\tau,\kappa)$ be the set of
+input cells reached from $(\tau,\kappa)$ by repeatedly passing to
+predecessors, stopping at input cells and borders.
+
+\begin{lemma}\label{lem:cone}
+For $n\ge4$, $\mathrm{cone}_n(n-1,0)$ avoids the left border and consists of
+the upper input cell at $\kappa'=0$, both input cells at
+$1\le\kappa'\le\lfloor n/2\rfloor$ and, if $n$ is odd, the lower one at
+$\kappa'=(n+1)/2$.
+\end{lemma}
+
+\begin{proof}
+A step changes $\tau$ by $-1$ and $\kappa$ by at most one, and input cells
+satisfy $\tau'\in\{\kappa'-1,\kappa'-2\}$; a path from $(n-1,0)$ reaching an
+input cell at $\kappa'$ after $s$ steps has $\kappa'\le s$ and
+$n-1-s\in\{\kappa'-1,\kappa'-2\}$, so $2\kappa'\le n+1$, and $2\kappa'\le n$
+for upper cells. Conversely, the upper cell at $\kappa'\le n/2$ is reached by
+$\kappa'$ left moves followed by vertical moves, and the lower cell at
+$1\le\kappa'\le(n+1)/2$ by $\kappa'-1$ left moves, vertical moves down to
+$(\kappa'-1,\kappa'-1)$ and one more left move, through cells of $R_n$. The
+lower cell at $\kappa'=0$ is a predecessor of no cell of $R_n$, and
+$\kappa=n$ would require $n$ left moves, i.e.\ a negative time.
+\end{proof}
+
+\begin{figure}[t]
+\centering
+\scalebox{0.9}{\input{fig_anatomy}}
+\caption{The line of length $n=12$ (time downwards; colours show regions,
+not states). $R_n$ is computed from the two input anti-diagonals
+(\cref{lem:determinacy}); the firing of the right end ($\bigstar$) depends
+only on the dark input cells (\cref{lem:cone}), which end where the line
+$i=t/3$ crosses the input anti-diagonals (\cref{thm:third}).}
+\label{fig:anatomy}
+\end{figure}
+
+\begin{lemma}[pumping]\label{lem:pumping}
+Let $\delta$ be a minimal-time solution and $4\le n<n'$. Then $J_n$ and
+$J_{n'}$ differ on $\mathrm{cone}_n(n-1,0)$.
+\end{lemma}
+
+\begin{proof}
+Otherwise, by \cref{lem:determinacy,lem:cone}, the relative cell $(n-1,0)$ of
+$R_{n'}$ (it lies in $R_{n'}$, and its cone has the same positions, far from
+the left border $\kappa=n'$) has the value of the relative cell $(n-1,0)$ of
+$R_n$, namely $C_n(2n-2,n)=\mathsf F$. Thus $C_{n'}(n'+n-2,n')=\mathsf F$
+although $n'+n-2<2n'-2$.
+\end{proof}
+
+The lemma constrains $C_\infty$ alone. In the frame of the front,
+$\Phi_t(j):=C_\infty(t,t+1-j)$ ($0\le j\le t$) is the cell at \emph{depth}
+$j$ behind the front, and the recurrence becomes
+\begin{equation}\label{eq:comoving}
+\Phi_{t+1}(j)=\delta\bigl(\Phi_t(j),\,\Phi_t(j-1),\,\Phi_t(j-2)\bigr),
+\qquad\Phi_t(-1)=\Phi_t(-2)=\mathsf L,
+\end{equation}
+so information only travels to larger depths. In these coordinates
+$J_n(\kappa)=(\Phi_{n-3+\kappa}(2\kappa-2),\Phi_{n-2+\kappa}(2\kappa-1))$.
+
+\begin{theorem}[speed-$1/3$ barrier]\label{thm:third}
+Let $\delta$ be a minimal-time solution. Every depth-row
+$t\mapsto\Phi_t(j)$ is eventually periodic; let $\theta(j)$ be the time from
+which it is periodic. For every $n\ge4$ there is a depth $j\le n$ with
+$\theta(j)>n+\tfrac{j}{2}-\tfrac52$. Hence $\limsup_{j\to\infty}
+\theta(j)/j\ge 3/2$: along infinitely many depth-rows the transient part
+extends, up to an arbitrarily small angle, to the line $i=t/3$.
+\end{theorem}
+
+\begin{proof}
+Row $0$ satisfies $\Phi_{t+1}(0)=\delta(\Phi_t(0),\mathsf L,\mathsf L)$ and is
+eventually periodic; by \eqref{eq:comoving}, row $j$ is a finite-state system
+driven by the eventually periodic rows $j-1,j-2$, hence eventually periodic,
+with some period $P_j$ (cf.\ \cite[\S4]{MazoyerTerrier94}). Fix $n\ge4$ and
+a common multiple $P$ of $P_0,\dots,P_{n+1}$. At $\kappa=0$ the input cells
+of $R_n$ and $R_{n+P}$ are quiescent (\cref{lem:lightcone}). If
+$n-3+\kappa\ge \theta(2\kappa-2)$ and $n-2+\kappa\ge \theta(2\kappa-1)$ for all
+cone positions $\kappa\ge1$, then $J_{n+P}=J_n$ on the cone, contradicting
+\cref{lem:pumping}. Since cone positions satisfy $\kappa\le\lceil n/2\rceil$,
+the violated inequality concerns a depth $j\in\{2\kappa-2,2\kappa-1\}$ with
+$j\le n$ and $\theta(j)>n-3+\kappa\ge n+\frac{j}{2}-\frac52$. If
+$\limsup\theta(j)/j<3/2$, then $\theta(j)\le\alpha j+\beta$ for all $j$ with
+some $\tfrac12\le\alpha<\tfrac32$ and $\beta$, and for $n$ large and all
+$j\le n$ we get $(\alpha-\tfrac12)j\le(\alpha-\tfrac12)n<n-\beta-\tfrac52$,
+i.e.\ $\theta(j)\le n+\tfrac j2-\tfrac52$, a contradiction. Finally, the
+cell of depth $j$ at time $\theta(j)$ is at position $\theta(j)+1-j$, which
+is at least $\theta(j)/3+1$ when $\theta(j)\ge 3j/2$.
+\end{proof}
+
+The speed-$1/3$ signal of Waksman's and Balzer's constructions runs along
+the line $i=t/3$; in Mazoyer's solution the periodic zone behind the front
+ends at speed $1/2$ (for $1\le j<700$, $\theta(j)\in\{2j+1,2j+2\}$ with
+period $3$).
+
+%% ---------------------------------------------------------------------
+\section{The left end: a second barrier}\label{sec:left}
+
+Near the left border the reflected triangle is produced by a band of
+anti-diagonals behind the reflected wave, which acts like a finite automaton
+reading the half-line and must fire each cell exactly when it arrives there.
+For $c\ge-1$ and $\max(1,c)\le i\le n$ put $v_c(i):=C_n(2n-2+c-i,\,i)$, the cell of
+the \emph{chain} $t+i=2n-2+c$ at position $i$; chains $-1$ and $0$ are the
+input anti-diagonals and chain $1$ is the return chain. The predecessors of
+$(2n-2+c-i,i)$ lie on the chains $c-2$, $c-1$, $c$, so
+\begin{equation}\label{eq:chains}
+v_c(i)=\delta\bigl(v_{c-2}(i-1),\,v_{c-1}(i),\,v_c(i+1)\bigr)\qquad(c\ge1),
+\end{equation}
+with $v_{c-2}(0)$ and $v_c(n+1)$ standing for the border. If the line of
+length $n$ is synchronized at time $2n-2$, then $v_i(i)=\mathsf F$ and
+$v_c(i)\ne\mathsf F$ for $-1\le c<i$. In the skewed coordinates
+$u_c(y):=v_c(y+\lfloor c/2\rfloor)$ this becomes
+\begin{equation}\label{eq:slices}
+u_c(y)=\delta\bigl(u_{c-2}(y),\,u_{c-1}(y+\varepsilon_c),\,u_c(y+1)\bigr),
+\qquad \varepsilon_c=1\text{ for even }c,\ \varepsilon_c=0\text{ for odd }c,
+\end{equation}
+with $u_0(y)=C_\infty(2n-2-y,y)$ and $u_{-1}(y)=C_\infty(2n-2-y,y-1)$; here
+$u_c(y)$ is the cell $y+\lfloor c/2\rfloor$ at time $2n-2+\lceil
+c/2\rceil-y$, which is $\mathsf F$ if $\lceil c/2\rceil=y$ and not $\mathsf F$
+if $\lceil c/2\rceil<y$. Each slice $(u_1(y),u_2(y),\dots)$ is thus computed
+from the slice $y+1$ and the two input cells $u_{-1}(y),u_0(y)$
+(\cref{fig:chains}).
+
+\begin{figure}[t]
+\centering
+\scalebox{0.92}{\input{fig_chains}}
+\caption{The lower left corner of the line of length $n=12$ (time downwards;
+colours show regions, not states), with the chains and three of the slices
+used in the proof of \cref{lem:left}.}
+\label{fig:chains}
+\end{figure}
+
+\begin{lemma}[left border]\label{lem:left}
+Let $\delta$ have $k$ states and synchronize the line of length $n$ at time
+$2n-2$. Let $s\ge1$, $L\ge1$, $s+L\le Y\le n-s$, and suppose that the words
+$y\mapsto C_\infty(2n-2-y,y)$ $(s\le y\le Y)$ and $y\mapsto
+C_\infty(2n-3-y,y)$ $(s\le y\le Y-1)$ are $L$-periodic. Then
+$Y-s\le(k-1)^{2s}L$.
+\end{lemma}
+
+\begin{proof}
+For $s\le y\le Y$ let $\mathbf u(y):=(u_1(y),\dots,u_{2s}(y))$; these are
+cells $y+\lfloor c/2\rfloor\le n$ with $\lceil c/2\rceil\le s\le y$, so they
+are defined, and none is $\mathsf F$ when $y>s$. By \eqref{eq:slices},
+$u_c(y)$, $1\le c\le 2s$, is computed from components of index $<c$ of
+$\mathbf u(y)$, of index $\le c$ of $\mathbf u(y+1)$, and from
+$u_{-1}(y),u_0(y)$; hence $\mathbf u(y)=\Gamma(\mathbf
+u(y+1),u_{-1}(y),u_0(y))$ for $s+1\le y\le Y-1$, with $\Gamma$ depending on
+$\delta$ only. Unfolding \eqref{eq:slices} for even $c$,
+$u_{2j}(y)=\delta(u_{2j-2}(y),u_{2j-1}(y+1),u_{2j}(y+1))$, shows that
+$u_{2s}(y)=\Gamma'(\mathbf u(y+1),u_0(y))$ for $s\le y\le Y-1$. By
+hypothesis, $u_0$ is $L$-periodic on $[s,Y]$ and $u_{-1}$ on $[s+1,Y]$.
+
+Suppose $Y-s>(k-1)^{2s}L$. The pairs $(\mathbf u(y),y\bmod L)$,
+$s+1\le y\le Y$, take at most $(k-1)^{2s}L$ values, so there are
+$s+1\le y_1<y_2\le Y$ with $\mathbf u(y_1)=\mathbf u(y_2)$ and $L\mid
+h:=y_2-y_1$. By downward induction, $\mathbf u(y)=\mathbf u(y+h)$ for
+$s+1\le y\le y_1$: if it holds for $y+1\le y_1$, then $\mathbf
+u(y)=\Gamma(\mathbf u(y+1),u_{-1}(y),u_0(y))=\Gamma(\mathbf
+u(y+1+h),u_{-1}(y+h),u_0(y+h))=\mathbf u(y+h)$, as $y+h<y_2\le Y$. Since
+$s+h\le Y-1$ and $u_0(s+h)=u_0(s)$,
+\[
+u_{2s}(s+h)=\Gamma'(\mathbf u(s+1+h),u_0(s+h))=\Gamma'(\mathbf u(s+1),u_0(s))=u_{2s}(s)=\mathsf F,
+\]
+although $\lceil 2s/2\rceil=s<s+h$, so that $u_{2s}(s+h)$, the cell $2s+h$
+at time $2n-2-h$, is not $\mathsf F$: a contradiction.
+\end{proof}
+
+\begin{theorem}[left-border barrier]\label{thm:left}
+Let $\delta$ be a minimal-time solution. There are no $s\ge1$, $\alpha>0$,
+$t_0$ and $p,q\ge1$ such that $C_\infty(t+p,i)=C_\infty(t,i)$ and
+$C_\infty(t,i+q)=C_\infty(t,i)$ whenever the cells involved lie in the wedge
+$\Omega:=\{(t,i):\ s\le i\le\alpha t,\ t\ge t_0\}$.
+\end{theorem}
+
+\begin{proof}
+Suppose otherwise and put $L:=pq$. If $(t,i)$ and $(t-L,i+L)$ lie in
+$\Omega$, so do the cells $(t-L,i+jq)$, $0\le j\le p$, and $(t-L+jp,i)$,
+$0\le j\le q$, hence $C_\infty(t-L,i+L)=C_\infty(t-L,i)=C_\infty(t,i)$. Let
+$Y_n:=\lfloor\alpha(2n-3)/(1+\alpha)\rfloor$. For $s\le y\le Y_n$ the cells
+$(2n-2-y,y)$ and $(2n-3-y,y)$ satisfy $y\le\alpha(2n-3-y)$, so they lie in
+$\Omega$ once $2n-3-Y_n\ge t_0$, i.e.\ for $n$ large; since a step of $L$
+positions along an anti-diagonal is the step from $(t,i)$ to $(t-L,i+L)$,
+the words of \cref{lem:left} are $L$-periodic on $[s,Y_n]$ and $[s,Y_n-1]$.
+As $Y_n\ge\frac{2\alpha}{1+\alpha}n-4$, for $n$ large $Y:=\min(Y_n,n-s)$
+satisfies $Y\ge s+L$ and $Y-s>(k-1)^{2s}L$, contradicting \cref{lem:left}.
+\end{proof}
+
+The half-line of a rule is \emph{eventually regular} if there are $t_1$,
+$P\ge1$ and, for each residue $r\in\{0,\dots,P-1\}$, words $w_0,\dots,w_m$,
+nonempty words $z_1,\dots,z_m$ over $W$ and integers $a_j,D_j\ge0$ such that
+for all $\nu\ge0$ the configuration $C_\infty(t,1)\cdots C_\infty(t,t+1)$ at
+time $t=t_1+r+\nu P$ is $w_0z_1^{a_1+\nu D_1}w_1\cdots z_m^{a_m+\nu
+D_m}w_m$: finitely many periodic regions separated by signals of rational
+speeds.
+
+\begin{corollary}\label{cor:regular}
+The half-line of a minimal-time solution is not eventually regular.
+\end{corollary}
+
+\begin{proof}
+Suppose it is. For each residue $r$ some $D_j$ is positive, because the
+configuration grows by $P$ cells per period; let $j(r)$ be the least such
+index. The blocks and junctions left of $z_{j(r)}$ have constant lengths,
+so the block $z_{j(r)}^{a_{j(r)}+\nu D_{j(r)}}$ starts at a fixed cell $s_r$
+and its length grows at least like $\beta t$, for some $\beta>0$ and $t$
+large. Inside it the state of a cell depends only on its distance to $s_r$
+modulo $|z_{j(r)}|$, and is the same at the times $t$ and $t+P$. With
+$s:=\max_r s_r$, $q:=\prod_r|z_{j(r)}|$, $\alpha:=\beta/2$ and $t_0$ large,
+every cell of $\{(t,i):s\le i\le\alpha t,\ t\ge t_0\}$ lies in the block of
+index $j(r)$ of its residue class, so $C_\infty$ is periodic with periods $P$
+in time and $q$ in space on this wedge, contradicting \cref{thm:left}.
+\end{proof}
+
+\begin{remark}\label{rem:left}
+The proof of \cref{lem:left} uses only \eqref{eq:chains} for $c\ge1$, the
+firing condition and the periodicity of the chains $c=-1,0$. Applied to the
+mirror image of the line, it shows: if $\delta$ synchronizes the line of
+length $n$ at time $2n-2$, $s+L\le Y\le n-s$ and $Y-s>(k-1)^{2s}L$, then
+the words $y\mapsto C_n(2n-2-y,n+1-y)$ $(s\le y\le Y)$ and $y\mapsto
+C_n(2n-3-y,n+1-y)$ $(s\le y\le Y-1)$ are not both $L$-periodic; for
+$2y<n$ these cells lie in $R_n$. In the classical constructions the
+structure required by \cref{thm:left} is the family of signals of speeds
+$1/(2^j-1)$ accumulating at the border \cite{Waksman66,Balzer67}, or the
+recursive division points \cite{Mazoyer87}.
+\end{remark}
+
+%% ---------------------------------------------------------------------
+\section{Certified bounds for four and five states}\label{sec:computations}
+
+The CNF formula $\mathrm{MT}_k(\mathcal N;M,N')$ has one-hot variables for
+the entries of a $k$-state rule table, for the cells of $C_\infty$ with
+$t+i\le M$ and for the cells of $R_n$, $n\in\mathcal N$. Its clauses say
+that these cells follow the rule, that no half-line cell fires
+\eqref{eq:neverfire}, and that the line of length $n\in\mathcal N$ fires at
+time $2n-2$ and not before; they add the return chains (\cref{lem:return}),
+the constraints $\mathrm{PUMP}(n,n')$ of \cref{lem:pumping} for $4\le
+n<n'\le N'$, clauses implied by \cref{lem:determinacy} and a symmetry
+breaking on the auxiliary states. All families follow from the definition
+of minimality and the lemmas above, so the formula is satisfiable if a
+$k$-state minimal-time solution exists. Mazoyer's solution, extracted from Duprat's Coq proof of its
+correctness \cite{Duprat97}, satisfies $\mathrm{MT}_6(\{3,\dots,12\};78,40)$,
+and all models were re-simulated by an independent checker. Every
+unsatisfiability claim below comes with an LRAT proof \cite{CruzFilipeEtAl17}
+from CaDiCaL \cite{CaDiCaL2}, or from Kissat \cite{Kissat20} via
+\textsf{drat-trim}, checked by \texttt{lrat-check} \cite{WetzlerHeuleHunt14}.
+
+\begin{theorem}\label{thm:four}
+No four-state rule satisfying \eqref{eq:quiescence} synchronizes all lines
+of lengths $2,\dots,9$ in minimal time; in particular no four-state
+minimal-time solution exists.
+\end{theorem}
+
+\begin{proof}
+Such a rule yields a model of $\mathrm{MT}_4(\{2,\dots,9\};16)$: a half-line
+cell with $t+i\le16$ is quiescent if $i\ge10$ (\cref{lem:lightcone}) and
+equals a cell of the line of length $9$ at a time $t<16$ if $i\le9$
+(\cref{lem:agree}), so it does not fire, and the return chains hold by
+\cref{lem:return} for $2\le n\le8$. CaDiCaL refutes the formula ($753$
+variables, $17{,}605$ clauses) in $51$\,s with an LRAT proof of $177$\,MB,
+which \texttt{lrat-check} verifies in $5.7$\,s.
+\end{proof}
+
+The bound $9$ is sharp: an exhaustive enumeration finds $27$ partial rules,
+counted on the transitions they use, for the lengths $2,\dots,8$, in
+agreement with \cite{Yunes93,Sanders94}.
+
+\paragraph{The five-state frontier} A five-state table has $94$ free entries
+with five values (four states: $43$ with four values). Every instance
+$\mathrm{MT}_5(\mathcal N;M,N')$ that our solvers decided was satisfiable, and
+each rule returned failed at the first length not in $\mathcal N$.
+
+\begin{proposition}\label{prop:chaotic}
+The five-state rule $\delta_{14}$ of \cref{tab:delta14} synchronizes the line of length $n$ at time $2n-2$ for every
+$2\le n\le14$; on the line of length $15$ the cells $13,14,15$ fire at time
+$22$. Its half-line uses $16$ neighbourhoods besides $(\mathsf L,\mathsf
+L,\mathsf L)$ on the cells with $t+i\le10^4$, none of them firing, and
+satisfies $\mathrm{PUMP}(n,n')$ for $4\le n<n'\le800$; for $n\le5000$,
+$s\le3$ and $L\le24$, \cref{lem:left} does not apply to its input
+anti-diagonals.
+\end{proposition}
+
+\begin{proof}
+Direct simulation, by programs independent of the encoder.
+\end{proof}
+
+\begin{table}[t]
+\centering\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}cc|ccccc@{\hspace{1.4em}}cc|ccccc@{}}
+\toprule
+$x$ & $y$ & $\ast$ & $\mathsf L$ & $\mathsf G$ & $\mathsf A$ & $\mathsf B$ &
+$x$ & $y$ & $\ast$ & $\mathsf L$ & $\mathsf G$ & $\mathsf A$ & $\mathsf B$\\
+\midrule
+$\ast$ & $\mathsf L$ & -- & $\mathsf F$ & $\mathsf F$ & $\mathsf L$ & $\mathsf G$ &
+$\ast$ & $\mathsf A$ & -- & $\mathsf G$ & $\mathsf G$ & $\mathsf L$ & $\mathsf G$\\
+$\mathsf L$ & $\mathsf L$ & $\mathsf L$ & $\mathsf L$ & $\mathsf G$ & $\mathsf G$ & $\mathsf B$ &
+$\mathsf L$ & $\mathsf A$ & $\mathsf A$ & $\mathsf B$ & $\mathsf G$ & $\mathsf B$ & $\mathsf A$\\
+$\mathsf G$ & $\mathsf L$ & $\mathsf G$ & $\mathsf A$ & $\mathsf B$ & $\mathsf A$ & $\mathsf B$ &
+$\mathsf G$ & $\mathsf A$ & $\mathsf B$ & $\mathsf A$ & $\mathsf G$ & $\mathsf L$ & $\mathsf A$\\
+$\mathsf A$ & $\mathsf L$ & $\mathsf G$ & $\mathsf B$ & $\mathsf G$ & $\mathsf G$ & $\mathsf G$ &
+$\mathsf A$ & $\mathsf A$ & $\mathsf B$ & $\mathsf L$ & $\mathsf A$ & $\mathsf G$ & $\mathsf A$\\
+$\mathsf B$ & $\mathsf L$ & $\mathsf A$ & $\mathsf B$ & $\mathsf A$ & $\mathsf A$ & $\mathsf L$ &
+$\mathsf B$ & $\mathsf A$ & $\mathsf L$ & $\mathsf A$ & $\mathsf A$ & $\mathsf G$ & $\mathsf A$\\
+\midrule
+$\ast$ & $\mathsf G$ & -- & $\mathsf L$ & $\mathsf F$ & $\mathsf L$ & $\mathsf L$ &
+$\ast$ & $\mathsf B$ & -- & $\mathsf G$ & $\mathsf G$ & $\mathsf G$ & $\mathsf G$\\
+$\mathsf L$ & $\mathsf G$ & $\mathsf F$ & $\mathsf A$ & $\mathsf F$ & $\mathsf B$ & $\mathsf A$ &
+$\mathsf L$ & $\mathsf B$ & $\mathsf G$ & $\mathsf B$ & $\mathsf G$ & $\mathsf A$ & $\mathsf L$\\
+$\mathsf G$ & $\mathsf G$ & $\mathsf B$ & $\mathsf B$ & $\mathsf F$ & $\mathsf G$ & $\mathsf F$ &
+$\mathsf G$ & $\mathsf B$ & $\mathsf F$ & $\mathsf B$ & $\mathsf A$ & $\mathsf B$ & $\mathsf B$\\
+$\mathsf A$ & $\mathsf G$ & $\mathsf B$ & $\mathsf A$ & $\mathsf G$ & $\mathsf G$ & $\mathsf A$ &
+$\mathsf A$ & $\mathsf B$ & $\mathsf G$ & $\mathsf B$ & $\mathsf B$ & $\mathsf G$ & $\mathsf B$\\
+$\mathsf B$ & $\mathsf G$ & $\mathsf B$ & $\mathsf A$ & $\mathsf G$ & $\mathsf A$ & $\mathsf L$ &
+$\mathsf B$ & $\mathsf B$ & $\mathsf A$ & $\mathsf L$ & $\mathsf A$ & $\mathsf A$ & $\mathsf L$\\
+\bottomrule
+\end{tabular}
+\caption{The rule $\delta_{14}$ of \cref{prop:chaotic}: the entry in row
+$(x,y)$ and column $z$ is $\delta(x,y,z)$; ``--'' marks the unused
+neighbourhoods $(\ast,y,\ast)$. Machine-readable copy:
+\texttt{results/delta14.txt} in the repository.}
+\label{tab:delta14}
+\end{table}
+
+For $3\le t<1500$ the half-line of $\delta_{14}$ is in states $\mathsf
+L,\mathsf G$ at cell $1$, $\mathsf L,\mathsf A$ at cell $2$ and $\mathsf
+L,\mathsf B$ elsewhere, where it follows the elementary cellular automaton
+rule $22$ \cite{Wolfram83}: it is chaotic. Four further rules, on other
+half-lines, also synchronize all lengths up to $14$ and fail at $15$. Hence
+our necessary conditions restricted to the lengths up to $14$ are
+satisfiable, and refutations along these lines need lines of length at
+least $15$.
+
+The left-border lemma does refute a more regular architecture. The rules
+$\delta_{12}$, $\delta_{13}$ of the repository synchronize every line of
+length at most $12$, resp.\ $13$; their half-lines coincide for $t+i\le78$,
+use there $22$ neighbourhoods besides $(\mathsf L,\mathsf L,\mathsf L)$, and
+consist of a front and a wake of $\mathsf G$'s and, behind a boundary of
+speed $1/3$ (where \cref{thm:third} allows the transient part to end), a
+region $\mathsf A\,\mathsf L\,\mathsf A\,\mathsf L\cdots$ periodic in
+time and space.
+
+\begin{corollary}\label{cor:germ12}
+No rule that agrees with $\delta_{12}$ on these $22$ neighbourhoods
+synchronizes the line of length $518$ in minimal time.
+\end{corollary}
+
+\begin{proof}
+With these neighbourhoods and $(\mathsf L,\mathsf L,\mathsf L)$ only, no new
+neighbourhood occurs on the cells with $t+i\le1034$, so every such rule has
+the same diagram $C_\infty$ there. On $t+i=1034$ the cells $2,\dots,259$ are
+in state $\mathsf A$, and on $t+i=1033$ the cells $2,\dots,258$ are in state
+$\mathsf L$. \Cref{lem:left} with $k=5$, $n=518$, $s=2$, $L=1$, $Y=259$
+would give $257\le4^4=256$.
+\end{proof}
+
+\paragraph{Half-lines of low complexity} The \emph{germ} below $M$ of a rule
+is its restriction to the neighbourhoods of the cells $(t,i)$, $t\ge1$,
+$t+i\le M$, of its half-line, and its \emph{complexity} $c_M(\delta)$ is the
+number of these neighbourhoods other than $(\mathsf L,\mathsf L,\mathsf L)$:
+$c_{78}=57$ for Mazoyer's rule, $22$ for $\delta_{12}$ and $16$ for
+$\delta_{14}$.
+
+\begin{proposition}\label{prop:germs}
+Every five-state minimal-time solution $\delta$ satisfies $c_{78}(\delta)\ge15$.
+\end{proposition}
+
+\begin{proof}[Proof (computer-assisted)]
+Suppose $c_{78}(\delta)\le14$. After exchanging $\mathsf A$ and $\mathsf B$
+if necessary, $\mathsf A$ occurs before $\mathsf B$ (if at all) when the
+cells are ordered by anti-diagonal and, within an anti-diagonal, by time. By
+\eqref{eq:neverfire} and \cref{lem:return,lem:pumping}, the germ of $\delta$
+below $78$ produces no firing cell, never produces $\mathsf L$ at the
+front, and satisfies $\mathrm{PUMP}(n,n')$ for $4\le n<n'\le40$. A
+depth-first search that chooses the value of a neighbourhood when it first
+occurs enumerates all such germs: $1.0\cdot10^8$ nodes, $244$ germs, and an
+independent re-implementation finds the same $244$. For $230$ of them,
+$\mathrm{MT}_5(\{2,\dots,10\};78,39)$ with the germ is unsatisfiable (one
+formula with a selector variable, refuted in $4$\,s with an LRAT proof of
+$11$\,MB). Each of the other $14$ determines $C_\infty$ up to the
+anti-diagonal $3300$, and on these diagrams \cref{lem:left} applies with
+$s=1$: there are $n\le163$ and $L\le5$ such that the input anti-diagonals of
+the line of length $n$ are $L$-periodic on $[1,Y]$ with $Y-1>16L$ (e.g.\
+$n=28$, $L=1$, $Y=19$), as an independent simulation confirms. Hence no rule
+containing one of the $244$ germs, in particular $\delta$, is a minimal-time
+solution.
+\end{proof}
+
+Of the $9{,}787$ germs with $c_{78}\le16$, the same pipeline (completed by a
+test for the lengths $2,\dots,13$ and by \cref{cor:regular} applied through a
+finite certificate of eventual regularity, see the extended version) leaves
+$16$, among them that of $\delta_{14}$, irregular as far as we can tell.
+
+\paragraph{Balzer's conditions} Balzer \cite[p.~37]{Balzer67} reported that
+no five-state minimal-time solution satisfies the four conditions
+(B1) $\delta(x,\mathsf G,y)=\mathsf G$ unless $x,y\in\{\mathsf G,\ast\}$;
+(B2) $\delta(I(z),I(y),I(x))=I(\delta(x,y,z))$ for an involution $I$ of the
+states with $I(\ast)=\ast$ (an \emph{image solution});
+(B3) $\delta(\mathsf G,\mathsf G,\mathsf G)=\delta(\ast,\mathsf G,\mathsf
+G)=\delta(\mathsf G,\mathsf G,\ast)=\mathsf F$ and no other neighbourhood
+gives $\mathsf F$;
+(B4) $\delta(\mathsf G,v,\mathsf G)=\mathsf G$ for all $v\in W\setminus\{\mathsf G\}$.
+His eight-state solution satisfies them, Mazoyer's only (B3)
+\cite{Mazoyer86Lyon}. In the
+\emph{weak reading} \cite{Yunes93}, (B1) is required only for working states
+$x,y$ and (B3) without its last clause. Taking $I(\mathsf F)=\mathsf F$,
+(B3) forces $I(\mathsf G)=\mathsf G$, so $I$ is one of the four involutions
+of $\{\mathsf L,\mathsf A,\mathsf B\}$, and (B1)--(B4) become unit and binary
+clauses. In the weak reading, no rule with $I=(\mathsf A\,\mathsf B)$
+synchronizes the lengths $2,\dots,10$, none with $I=(\mathsf L\,\mathsf A)$
+or $(\mathsf L\,\mathsf B)$ the lengths $2,\dots,9$, and none with $I$ the
+identity the lengths $2,\dots,12$; the largest LRAT proof, obtained from a
+Kissat proof by \textsf{drat-trim}, has $3.1$\,GB and is verified in
+$66$\,s. Rules with $I$ the identity satisfying (B1)--(B4) in both readings
+synchronize every line of length at most $11$.
+
+\begin{proposition}\label{prop:balzer}
+No five-state rule satisfying (B1)--(B4) in the weak reading, with $I(\mathsf
+F)=\mathsf F$, synchronizes all lines of lengths $2,\dots,12$ in minimal time;
+a fortiori none satisfying Balzer's (strong) form does. The lengths up to
+$11$ do not suffice to prove this.
+\end{proposition}
+
+With six states, rules satisfying (B1)--(B4) in the strong reading exist
+for all lengths up to $13$ for every type of involution, so Balzer's conditions do not lead to a
+refutation of this kind there.
+
+%% ---------------------------------------------------------------------
+\section{Concluding remarks}\label{sec:conclusion}
+
+A minimal-time solution needs non-periodic structure along the line $i=t/3$
+and in every wedge at the left border; the known constructions provide it
+with hierarchies of slow signals or division points, and the five-state
+half-lines that survive our tests are chaotic. Natural questions are:
+(1) Does a five-state minimal-time solution exist? A refutation along the
+lines of \cref{thm:four} needs lines of length at least $15$. (2) Is there a
+necessary condition like \cref{lem:pumping} on the reflected triangles
+themselves, beyond \cref{rem:left}? (3) Can the bound $(k-1)^{2s}L$ of
+\cref{lem:left} be made polynomial in $s$, or extended to anti-diagonals
+that are periodic up to a bounded number of defects? (4) Do Balzer's
+conditions exclude six states?
+
+\section*{Declarations}
+\noindent\emph{CRediT.} All authors: Conceptualization, Methodology,
+Formal analysis, Investigation, Validation, Writing -- review \& editing. \emph{Competing interests.} None. \emph{Funding.} None.
+\emph{Data availability.} Programs, formula generators, rule tables, logs, the
+SHA-256 digests of the formulas and certificates, the commands that
+regenerate the certificates, and an extended version of this note are at
+\url{https://github.com/giamkiakeng/proj1} (directory \texttt{fssp5}).
+\emph{Use of generative AI.} The authors used Claude (Anthropic) to develop
+and check the mathematical arguments, to write and run the programs, to
+carry out the experiments and to draft and proofread the text; they reviewed
+and edited the content and take full responsibility for it.
+
+\renewcommand{\bibfont}{\small}
+\bibliographystyle{elsarticle-num}
+\bibliography{refs}
+
+\end{document}
