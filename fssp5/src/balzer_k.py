@@ -5,20 +5,22 @@ Same conditions as balzer.py (Balzer, Inform. Control 10 (1967), p. 37; numbered
 Mazoyer's account): B1 G stable, B2 image solution for an involution I, B3 GGG, *GG, GG* -> F,
 B4 (G,V,G) -> G.  CONDS is a subset of 1234, with 's' for the strong reading (Balzer's
 wording: B1 also for border neighbours, and no other neighbourhood produces F).
-States: L=0, G=1, auxiliary 2..k-2, F=k-1.  I fixes the border, F and G (B3 forces I(G)=G
-when I(F)=F); since the conditions treat the auxiliary states symmetrically, it suffices to
+States: L=0, G=1, auxiliary 2..k-2, F=k-1.  I fixes the border, F and G (I(F)=F implies
+I(G)=G by B1, B2 and B4; note, Section 5); since the conditions treat the auxiliary states symmetrically, it suffices to
 take one involution of {L, aux} per type up to renaming of the auxiliary states:
   id         identity
   AB         (A B)
   LA         (L A)
   LA_BC      (L A)(B C)          (k >= 6)
-balzer.py remains the program behind the five-state results of the paper (its formulas are
-the ones whose digests are recorded); this script is used for six states.
+balzer.py is the program behind the five-state results of the note (its formulas are the
+ones whose digests are recorded in results/balzer.log); this script is used for six states and
+writes the formula of the five-state weak-reading case I = id, N = 12 for Kissat (--cnf).
 
 usage: balzer_k.py k N CONDS [I] [--lrat] [--timeout=SECONDS] [--cnf=PATH]
    --cnf=PATH writes the formula to PATH and exits without solving.
 """
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -27,8 +29,9 @@ import time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import gencnf  # noqa: E402
 
-CADICAL = '/home/user/tools/cadical/build/cadical'
-LRATCHECK = '/home/user/tools/drat-trim/lrat-check'
+# solver binaries: environment variables CADICAL and LRATCHECK, else the PATH, else the paths of the runs
+CADICAL = os.environ.get('CADICAL') or shutil.which('cadical') or '/home/user/tools/cadical/build/cadical'
+LRATCHECK = os.environ.get('LRATCHECK') or shutil.which('lrat-check') or '/home/user/tools/drat-trim/lrat-check'
 BND, L, G = -1, 0, 1
 
 

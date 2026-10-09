@@ -14,7 +14,8 @@ section 7; Balzer lists C2 first and C1 second):
 Without 's', C1 and C3 are used in the weaker form of Yunes (thesis, Paris 7, 1993, section
 2.7): C1 only for working neighbours, C3 without "only these neighbourhoods produce F".  With
 's' they are used in Balzer's own wording (the strong reading).  For C2 we take I(*) = *,
-I(F) = F; then C3 forces I(G) = G, and I is one of the four involutions of {L, A, B}.  States:
+I(F) = F; then I(G) = G by C1, C2 and C4 (note, Section 5), so I is one of the four
+involutions of {L, A, B}.  States:
 L=0, G=1, A=2, B=3, F=4.  (balzer_k.py generalizes this to k states and produces identical
 formulas for k = 5.)
 
@@ -25,6 +26,7 @@ usage: balzer.py N CONDS [I] [--lrat]
    produces F);  I: id, AB, LA, LB (for C2)
 """
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -33,8 +35,9 @@ import time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import gencnf  # noqa: E402
 
-CADICAL = '/home/user/tools/cadical/build/cadical'
-LRATCHECK = '/home/user/tools/drat-trim/lrat-check'
+# solver binaries: environment variables CADICAL and LRATCHECK, else the PATH, else the paths of the runs
+CADICAL = os.environ.get('CADICAL') or shutil.which('cadical') or '/home/user/tools/cadical/build/cadical'
+LRATCHECK = os.environ.get('LRATCHECK') or shutil.which('lrat-check') or '/home/user/tools/drat-trim/lrat-check'
 BND, L, G, A, B, F = -1, 0, 1, 2, 3, 4
 INVOLUTIONS = {'id': {}, 'AB': {A: B, B: A}, 'LA': {L: A, A: L}, 'LB': {L: B, B: L}}
 

@@ -58,6 +58,10 @@ Further changes in the revision:
   - the six-state sentence.
 - Remark 3.5: the observation horizons are stated.
 
+After the revision, two claims the referee could not verify were checked with `src/halflines.py`:
+- **The four further rules.** All four lie on half-lines other than δ14's, and δ14c and δ14d share a half-line up to renaming of states. §5 now says "on three other half-lines (up to renaming of states)".
+- **The rule-22 description of δ14.** It was re-checked for 3 ≤ t < 1500.
+
 ## Referee report: "Two barriers for minimal-time firing squads, and certified bounds for four and five states"
 
 Files reviewed: `note/note.tex` at commit 6603276 (9 pp., 3p layout), cross-checked against `paper/` and `results/`. I changed no repository files. [The referee's own scripts (`sim.py`, `lemmas.py`, `refdfs.c`, `ref4.c`, `check_*.py`) were kept in a temporary directory and are not part of the repository.]

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""germ_k14_check.py -- independent check of the half-line part of Proposition 6.4.
+"""germ_k14_check.py -- independent check of the half-line part of Proposition 5.4 of the note.
 
 For each of the 14 germs of complexity <= 14 that survive the completion test (the germs of
 results/germs/germs_K14.txt not in K14_refuted10.txt), simulate the half-line from the germ alone
 (no neighbourhood outside the germ may occur below anti-diagonal 330) and find a length n <= 163
-and a period L <= 5 for which Lemma 3.5 applies with s = 1 and k = 5, i.e. both input
+and a period L <= 5 for which Lemma 4.1 applies with s = 1 and k = 5, i.e. both input
 anti-diagonals of the line of length n are L-periodic on [1, Y] (resp. [1, Y-1]) with
 Y <= n - 1, Y >= 1 + L and Y - 1 > 16 L.  Written independently of germext.c.
 
@@ -69,4 +69,4 @@ for g in surv:
                 break
         if found:
             break
-    print(len(g), 'neighbourhoods; Lemma 3.5 applies at (n, L, Y) =', found)
+    print(len(g), 'neighbourhoods; Lemma 4.1 applies at (n, L, Y) =', found)

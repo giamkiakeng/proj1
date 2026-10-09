@@ -16,7 +16,7 @@ triangle  R_n = {(t,i) : 1<=i<=n, 2n-1-i <= t <= 2n-3}  carry variables.
 State codes: L=0, G=1, aux=2..k-2, F=k-1.  Working states W = {0..k-2}.
 The border symbol is coded BND = -1.
 
-Optional extras (all logically implied or symmetry breaking, see paper):
+Optional extras (all logically implied or symmetry breaking; see Section 5 of the note):
   --diff       C_n(2n-1-i,i) != C_inf(2n-1-i,i)            (implied)
   --symbreak   auxiliary states appear in C_inf in increasing order
                of first occurrence (time-major, left to right)

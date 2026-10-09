@@ -10,6 +10,7 @@ LRAT proof that is checked with lrat-check.
 usage: germcert.py germfile N out_prefix [M]
 """
 import os
+import shutil
 import subprocess
 import sys
 import time
@@ -18,8 +19,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import gencnf  # noqa: E402
 
 CODE = {'*': gencnf.BND, 'L': 0, 'G': 1, 'A': 2, 'B': 3, 'F': 4}
-CADICAL = '/home/user/tools/cadical/build/cadical'
-LRATCHECK = '/home/user/tools/drat-trim/lrat-check'
+# solver binaries: environment variables CADICAL and LRATCHECK, else the PATH, else the paths of the runs
+CADICAL = os.environ.get('CADICAL') or shutil.which('cadical') or '/home/user/tools/cadical/build/cadical'
+LRATCHECK = os.environ.get('LRATCHECK') or shutil.which('lrat-check') or '/home/user/tools/drat-trim/lrat-check'
 
 
 def main():

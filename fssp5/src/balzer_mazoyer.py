@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""balzer_mazoyer.py -- check Balzer's conditions (B1)-(B4), as formalized in Section 6.4 (and in
-balzer.py), on the transitions that Mazoyer's six-state solution actually uses on the lines of
+"""balzer_mazoyer.py -- check Balzer's conditions (B1)-(B4), as formalized in Section 5 of the note
+(and in balzer.py), on the transitions that Mazoyer's six-state solution actually uses on the lines of
 lengths 3..NMAX (the table extracted from Duprat's Coq file is total and emulates the borders, so
 only used transitions are meaningful; it synchronizes the lengths n >= 3).  Mazoyer (1986, Sect. 7)
 states that his solution satisfies only condition (B3).
 
-usage: balzer_mazoyer.py [NMAX]   (run from fssp5/)"""
-import itertools, sys
+usage: balzer_mazoyer.py [NMAX]"""
+import itertools, os, sys
 rule = {}
-for ln in open('results/mazoyer6.txt'):
+for ln in open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'results', 'mazoyer6.txt')):
     p = ln.split()
     if len(p) == 4 and not ln.startswith('#'):
         rule[tuple(p[:3])] = p[3]

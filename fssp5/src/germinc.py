@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """germinc.py -- incremental completion test for a list of half-line germs.
 
-Same question as germbatch.py (can the fixed half-line transitions be
-completed so that every length 2..N synchronizes in minimal time, with the
-half-line to anti-diagonal M and the pumping pairs up to M/2?), but the base
-formula is loaded once into CaDiCaL (PySAT) and every germ is tested under
+Can the fixed half-line transitions of a germ be completed so that every
+length 2..N synchronizes in minimal time, with the half-line to anti-diagonal M
+and the pumping pairs up to M/2 (no symmetry breaking)?  The base formula is
+loaded once into CaDiCaL (PySAT) and every germ is tested under
 assumptions.  Learned clauses are consequences of the base formula alone, so
 they remain valid from one germ to the next.  Germs whose status is UNKNOWN
 (conflict budget exhausted) are reported as such and must be re-tested.
