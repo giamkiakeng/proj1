@@ -23,6 +23,11 @@ H.~Umeo, Firing squad synchronization problem in cellular automata, in: R.~A.
   Meyers (Ed.), Encyclopedia of Complexity and Systems Science, Springer, 2009,
   pp. 3537--3574.
 
+\bibitem{Correa17}
+T.~Correa, B.~Gustavo, L.~Lemos, A.~Settle, An overview of recent solutions to
+  and lower bounds for the firing synchronization problem, arXiv:1701.01045
+  (2017).
+
 \bibitem{Balzer67}
 R.~Balzer, An 8-state minimal time solution to the firing squad synchronization
   problem, Information and Control 10~(1) (1967) 22--42.
@@ -47,11 +52,6 @@ P.~Sanders, Massively parallel search for transition-tables of polyautomata,
   Processing by Cellular Automata and Arrays, Akademie Verlag, Berlin, 1994,
   pp. 99--108.
 
-\bibitem{Correa17}
-T.~Correa, B.~Gustavo, L.~Lemos, A.~Settle, An overview of recent solutions to
-  and lower bounds for the firing synchronization problem, arXiv:1701.01045
-  (2017).
-
 \bibitem{Mazoyer96}
 J.~Mazoyer, On optimal solutions to the firing squad synchronization problem,
   Theoretical Computer Science 168~(2) (1996) 367--404.
@@ -61,20 +61,55 @@ K.~Yamashita, Y.~Nishitani, S.~Hirose, S.~Okawa, N.~Osato, The firing squad
   synchronization problem with sub-generals, Information Processing Letters
   114~(1--2) (2014) 60--65.
 
+\bibitem{Kobayashi19}
+K.~Kobayashi, Nonexistence of minimal-time solutions for some variations of the
+  firing squad synchronization problem having simple geometric configurations,
+  arXiv:1909.10125 (2019).
+
 \bibitem{MazoyerTerrier94}
 J.~Mazoyer, V.~Terrier, Signals in one dimensional cellular automata, Research
   Report 94-50, Laboratoire de l'Informatique du Parall{\'e}lisme, ENS Lyon,
   available from HAL, \texttt{hal-02101868} (1994).
 
+\bibitem{MazoyerTerrier99}
+J.~Mazoyer, V.~Terrier, Signals in one-dimensional cellular automata,
+  Theoretical Computer Science 217~(1) (1999) 53--80.
+
+\bibitem{BerthiaumeEtAl04}
+A.~Berthiaume, T.~Bittner, L.~Perkovi{\'c}, A.~Settle, J.~Simon, Bounding the
+  firing synchronization problem on a ring, Theoretical Computer Science
+  320~(2--3) (2004) 213--228.
+
 \bibitem{Settle99}
 A.~Settle, New bounds for the distributed firing synchronization problem, Ph.D.
   thesis, University of Chicago (1999).
+
+\bibitem{UmeoYanagihara07}
+H.~Umeo, T.~Yanagihara, A smallest five-state solution to the firing squad
+  synchronization problem, in: Machines, Computations, and Universality (MCU
+  2007), Vol. 4664 of Lecture Notes in Computer Science, Springer, 2007, pp.
+  291--302.
+
+\bibitem{Yunes08}
+J.-B. Yun{\`e}s, A 4-states algebraic solution to linear cellular automata
+  synchronization, Information Processing Letters 107~(2) (2008) 71--75.
+
+\bibitem{DAntonioDelzanno04}
+M.~D'Antonio, G.~Delzanno, {SAT}-based analysis of cellular automata, in:
+  Cellular Automata (ACRI 2004), Vol. 3305 of Lecture Notes in Computer
+  Science, Springer, 2004, pp. 745--754.
 
 \bibitem{Duprat97}
 J.~Duprat, Firing {S}quad {S}ynchronization {P}roblem, Coq user contribution
   \texttt{FiringSquad} (formal proof of the correctness of Mazoyer's six-state
   solution), LIP, ENS Lyon; archived at
   \url{https://github.com/rocq-archive/firing-squad} (1997).
+
+\bibitem{Duprat02}
+J.~Duprat, Proof of correctness of the {M}azoyer's solution of the firing squad
+  problem in {C}oq, Research Report LIP RR-2002-14, Laboratoire de
+  l'Informatique du Parall{\'e}lisme (LIP), available from HAL,
+  \texttt{hal-02101837} (2002).
 
 \bibitem{CruzFilipeEtAl17}
 L.~Cruz-Filipe, M.~J.~H. Heule, W.~A. Hunt, Jr., M.~Kaufmann,
@@ -95,7 +130,7 @@ A.~Biere, K.~Fazekas, M.~Fleury, M.~Heisinger, {CaDiCaL}, {Kissat},
   B, University of Helsinki, 2020, pp. 51--53.
 
 \bibitem{WetzlerHeuleHunt14}
-N.~Wetzler, M.~J.~H. Heule, J.~Hunt, Warren~A., {DRAT-trim}: efficient checking
+N.~Wetzler, M.~J.~H. Heule, W.~A. Hunt, Jr., {DRAT-trim}: efficient checking
   and trimming using expressive clausal proofs, in: Theory and Applications of
   Satisfiability Testing (SAT 2014), Vol. 8561 of Lecture Notes in Computer
   Science, Springer, 2014, pp. 422--429.

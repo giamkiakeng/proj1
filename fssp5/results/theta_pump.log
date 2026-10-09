@@ -1,0 +1,17 @@
+# Remark 3.5 of the note (note/note.tex): theta(j) and PUMP on the half-lines of Mazoyer's rule and of delta12.
+# theta_T(j) is observed on a finite horizon T (see src/theta.py); PUMP is checked by src/pumping.py.
+
+$ python3 src/theta.py results/mazoyer6.txt 2600 699 1
+results/mazoyer6.txt, horizon T=2600, depths 1..699:
+  theta_T(j) - ceil(3j/2): (not constant; omitted)
+  theta_T(j) - 2j:         [1, 2]
+  periods:                 [3]
+
+$ python3 src/theta.py results/uniformA_2-12.txt 1400 300 10
+results/uniformA_2-12.txt, horizon T=1400, depths 10..300:
+  theta_T(j) - ceil(3j/2): [2]
+  theta_T(j) - 2j: (not constant; omitted)
+  periods:                 [1]
+
+$ python3 src/pumping.py results/uniformA_2-12.txt 650 | tail -1
+checked PUMP(n,n') for 4 <= n < n' <= 650: 0 violations

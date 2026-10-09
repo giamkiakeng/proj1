@@ -189,3 +189,19 @@ All times single core (Intel/AMD cloud vCPU), kissat 4.x (git HEAD 2026-09) unle
   input positions kappa = 0..6.
 - Build: video/narration.py, video/render.sh hd, video/assemble.py (H.264 1080p30 + AAC, soft English
   subtitles, 14 chapters, -16 LUFS). Renders and audio are not committed (video/build/ is ignored).
+
+## Session 7 (2026-10-09): a 10-page note, internal review and revision
+
+- The manuscript was desk-rejected by Theoretical Computer Science (not enough contribution for a full review).
+  fssp5/note/note.tex condenses it to the two necessary conditions (Theorem 3.4, Theorem 4.2, Corollary 4.3,
+  complete proofs) and their computer-assisted applications; 10 pages in elsarticle 3p, references included.
+- An independent agent refereed the first version (commit 6603276): major revision, no error in the proofs;
+  report and point-by-point response in note/REVIEW.md. Its own re-computations agreed with the manuscript.
+- New checks for the revision: src/theta.py (theta_T(j), the start of the periodic tail of depth-row j on a
+  finite horizon) gives theta_T(j) in {2j+1, 2j+2} with period 3 for Mazoyer's rule (1 <= j < 700, T = 2600) and
+  theta_T(j) = ceil(3j/2)+2 with period 1 for delta12 (10 <= j <= 300, T = 1400); src/pumping.py finds no PUMP
+  violation on the delta12 half-line for 4 <= n < n' <= 650 (results/theta_pump.log). The Balzer-condition rules
+  were re-checked by direct simulation: balzer_sym11.txt (strong reading, I = id) synchronizes 2..11 and fails at
+  12; balzer6_sym14.txt (I = id) and balzer6_LA14.txt (I = (L A)) satisfy the strong reading, synchronize 2..14
+  and fail at 15.
+- paper/refs.bib: author list of Wetzler-Heule-Hunt corrected ("Hunt, Jr., Warren A."); manuscript rebuilt.
