@@ -286,6 +286,49 @@ synchronize the lines $2,\dots,8$. Proposition~\ref{prop:G4} replaces the
 complete lines $8$ and $9$ by the first seven rows of the reflected triangles
 of the lines $8$, $9$, $10$, together with their return chains.
 
+The early rows only forbid firing cells. A requirement that some cell
+\emph{does} fire is added by the right ends. For $C\ge T+2$, a rule satisfies
+$\mathcal G_k(T,N_1,C)$ if it satisfies $\mathcal G_k(T,N_1)$ and
+\begin{enumerate}[(G1)]\setcounter{enumi}{4}
+\item for $T+2\le n\le C$, the cell $n$ of the line of length $n$ is $\Fq$ at
+time $2n-2$, no cell $(t,i)$ of $R_n$ with $t-i\le n-2$ and $t<2n-2$ is $\Fq$,
+and $C_n(t,i)\ne C_\infty(t,i)$ for the cells of the return chain $t+i=2n-1$
+with $t-i\le n-2$.
+\end{enumerate}
+In relative coordinates the cells of (G5) are those with $\tau+\kappa\le n-1$,
+the backward dependency cone of the firing cell $(n-1,0)$ (Lemma~3.2 of the
+note); in \texttt{gfix.py} it is the region \texttt{cone:$n$}. Every
+minimal-time solution satisfies (G5), by the definition of synchronization and
+Lemma~2.3 of the note, so Lemma~\ref{lem:G} extends to $\mathcal
+G_k(T,N_1,C)$.
+
+\begin{proposition}[computer-assisted; the unsatisfiable case is
+LRAT-certified]\label{prop:G4cone}
+The formula $\mathcal G_4(4,10,10)$ is unsatisfiable: no four-state rule
+satisfying~(1) synchronizes the lines of lengths $2,\dots,5$ in minimal time
+and satisfies, for each $n\in\{6,\dots,10\}$, (G2) and (G3) with $T=4$, (G4)
+and (G5). The following variants are satisfiable: $\mathcal G_4(4,30,9)$;
+$\mathcal G_4(3,30,12)$; and the formula with (G1) for $T=4$ and (G5) for
+$6\le n\le12$, without (G2) and (G3).
+\end{proposition}
+
+\begin{proof}
+As for \cref{prop:G4}, with the specification \texttt{full:2-5 early:6-10:4
+cone:6-10}: $874$ variables, $20{,}461$ clauses, SHA-256 digest of the CNF
+file
+\begin{center}\small
+\texttt{124f095450ee725be06f07271e1d752c4cbacce9f4bff190ddea1907d39e4f51};
+\end{center}
+CaDiCaL refutes it in $36$\,s with an LRAT proof of $173$\,MB, which
+\texttt{lrat-check} verifies in $4$\,s. The variants are \texttt{full:2-5
+early:6-30:4 cone:6-9}, \texttt{full:2-4 early:5-30:3 cone:5-12} and
+\texttt{full:2-5 cone:6-12}, for which CaDiCaL returns models.
+\end{proof}
+
+So with the right ends of the lines $6,\dots,10$, four states are refuted by
+the complete lines $2,\dots,5$ only, and neither the early rows nor the right
+ends suffice alone.
+
 \begin{proposition}[computational]\label{prop:nearmissearly}
 Each of the following five-state rules synchronizes exactly the lines of
 lengths $2,\dots,N$ among $2\le n\le60$, for the stated $N$. The line of the

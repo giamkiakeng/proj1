@@ -636,3 +636,45 @@ This is the strongest form of G_5(T, ·) for that half-line, since it covers eve
 The early-row formulas are stronger tests per unit of encoding than the old formulas (full:2-14 + early rows at T = 8).
 
 **Certification status.** A refutation of all 16 germs would give c78 ≥ 17, but only after the classification behind K16_remaining16 is certified. Only its complexity ≤ 14 part is LRAT-certified (results/germs/CERTIFICATES.txt).
+
+## 28. Right-end cones lower the threshold; four states refuted with complete lines 2..5
+
+Adding the right ends (region cone:n, i.e. τ + κ ≤ n − 1: the right end fires at 2n−2 and nothing in its cone before) to the early-row formulas gives G_k(T, N1, C) (early_rows.tex, condition (G5)).
+
+**Four-state calibration** (CaDiCaL, FREE k = 4, sharing):
+
+| formula | result |
+|---|---|
+| full:2-5 early:6-30:4 cone:6-12 | UNSAT (56 s) |
+| full:2-5 early:6-12:4 cone:6-12 | UNSAT (30 s) |
+| full:2-5 early:6-30:4 cone:6-11 | UNSAT (49 s) |
+| full:2-5 early:6-30:4 cone:6-10 | UNSAT (49 s) |
+| full:2-5 early:6-30:4 cone:6-9 | SAT (6 s) |
+| full:2-5 early:6-11:4 cone:6-10 | UNSAT (39 s) |
+| full:2-5 early:6-10:4 cone:6-10 = G_4(4, 10, 10) | UNSAT (33 s) |
+| full:2-4 early:5-30:3 cone:5-12 | SAT (1 s) |
+| full:2-3 early:4-30:2 cone:4-12 | SAT (2 s) |
+| full:2-5 cone:6-12 (no early rows) | SAT (2 s) |
+| full:2-6 early:7-30:5 cone:7-12 | UNSAT (55 s) |
+| full:2-6 early:7-30:5 cone:7-12:2 | UNSAT (49 s) |
+
+**Certificate for G_4(4, 10, 10)** (certify_lrat.sh):
+- 874 vars, 20,461 clauses; CNF sha256 124f095450ee725be06f07271e1d752c4cbacce9f4bff190ddea1907d39e4f51;
+- CaDiCaL 36 s; LRAT 172,820,213 B, sha256 7f76fe69c6158ebf03891cb9aa6fe0fb61b5e7e60f1b5b317f10baa4e944c8d8;
+- lrat-check VERIFIED in 4 s.
+
+So four states are refuted by the complete lines 2..5, plus the first five rows, the return chains and the right ends of the lines 6..10. Neither part suffices alone.
+
+**Five states, cone-augmented free formulas** (share, symbreak, full half-line; kissat 4 h), started 21:31:
+- C_7 = full:2-8 early:9-30:7 cone:9-20: 9,999 vars, 612,003 clauses;
+- C_8 = full:2-9 early:10-30:8 cone:10-20: 10,471 vars, 649,616 clauses.
+
+They replace G_5(11, 28) and G_5(12, 30), stopped after about an hour without an answer.
+
+**Joint complexity-15 test with cones** (runs/joint15c.sh 10 20; started 21:11, kissat 2 h): T = 10, the early rows of all n ≥ 12, and the right ends of lines 12..20.
+
+**Other per-germ results (overloaded machine).** All three were UNKNOWN:
+- δ14d's germ at T = 11 and at T = 12, after 900 s each;
+- δ14d's germ at T = 10 plus cone:12-20, after 1200 s.
+
+The joint test without cones at T = 11 (runs/joint15.sh 11) runs until 22:49.
