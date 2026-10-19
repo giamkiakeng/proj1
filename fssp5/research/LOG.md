@@ -678,3 +678,8 @@ They replace G_5(11, 28) and G_5(12, 30), stopped after about an hour without an
 - δ14d's germ at T = 10 plus cone:12-20, after 1200 s.
 
 The joint test without cones at T = 11 (runs/joint15.sh 11) runs until 22:49.
+
+**Per-germ results with right-end cones (δ14d's germ; kissat, 600 s each, overloaded machine):**
+- T = 7, full:2-8, the early rows (τ ≤ 7) of all n ≥ 9, cone:9-20: SAT (556 s). So the free C_7 is SAT as well (same lifting argument as in §27), and it was stopped at 21:36.
+- T = 8, cone:10-20: UNKNOWN.
+- T = 10, cone:12-20: UNKNOWN (1200 s).
