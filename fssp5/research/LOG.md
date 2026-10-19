@@ -376,3 +376,23 @@ The answers with δ14's table fixed are unchanged (SAT for 2..14, UNSAT for 2..1
 - Elementary rule 124, the mirror image of rule 110, on {L, G}: r16_11 and r16_13 (GGL, GLG, GLL, LGG, LGL > G; LLG, GGG > L).
 - The complexity-15 half-line: r16_02 (δ14c) and r16_15 (δ14d).
 - r16_01, r16_12 and r16_14: three-state patterns that do not fall into these families.
+
+## 19. Direct LRAT certificates; the joint test for the two complexity-15 labellings
+
+**certify_lrat.sh.** CaDiCaL 3.0.1 writes an LRAT proof itself (`--lrat=true --binary=false`), and lrat-check verifies it with no DRAT-to-LRAT conversion. Test on the repair-distance formula D = 8 (3,057 vars, 111,537 clauses):
+- CaDiCaL: UNSAT in 6 s;
+- proof: 35 MB;
+- lrat-check: `c VERIFIED` in 0.7 s.
+
+**The common relaxation is implemented.** GFIX_UNFIX=*GL,GLL keeps the two time-0 transitions of a germ for computing the half-line but leaves them free in the table. GCEGAR_START1=AB makes gcegar.py simulate the lines n ≥ 3 from A B L…L at time 1.
+
+Validation on δ14d's germ with the lengths 3..14 (CaDiCaL, table fixed):
+
+| | δ14d's table | δ14c's table, renamed by σ⁻¹ |
+|---|---|---|
+| germ as is | SAT | UNSAT (the fixed time-0 entries differ) |
+| time-0 entries free | SAT | SAT |
+
+So both labellings' rules are models of the relaxation, as Lemma 6 of early_rows.tex predicts.
+
+**Run started 17:02 UTC (er_cd_8).** δ14d's germ with GFIX_UNFIX=*GL,GLL, full:3-14 and the early rows (T = 8) of all n ≥ 15 (44 lengths), with sharing. If it is unsatisfiable, both complexity-15 germs are refuted at once and every five-state minimal-time solution has c78 ≥ 16.

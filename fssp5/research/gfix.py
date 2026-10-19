@@ -297,7 +297,10 @@ def build(germ, k, specs, P=None, interior=False, upf=None):
     (with interior=True: exactly the interior ones mapped to F); upf: a state X, adds the
     redundant clauses of the class 'pre-firing configuration X^n for n >= 3' (see add_upf)"""
     free = germ is None
-    E = Enc(k, {} if free else germ)
+    # GFIX_UNFIX=*GL,GLL: these germ transitions still define the half-line but are free in the table
+    # (used for the common relaxation of the two labellings of the complexity-15 half-line)
+    unfix = {tuple(w) for w in os.environ.get('GFIX_UNFIX', '').split(',') if w}
+    E = Enc(k, {} if free else {nb: d for nb, d in germ.items() if nb not in unfix})
     if P is not None:
         apply_class(E, P, interior)
     lines = []

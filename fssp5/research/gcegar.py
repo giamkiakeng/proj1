@@ -14,6 +14,8 @@ usage: gcegar.py GERMFILE NMAX OUT SPEC... [--timeout S] [--budget S] [--k K] [-
    --Pint: the same for the neighbourhoods without a border only (border entries stay free)
    --upf X: add the redundant clauses 'cells at time 2n-3 are X' (use with --Pint XXX)
    --timeout: limit per SAT call; --budget: total time, after which the loop stops
+   GCEGAR_START1=AB: simulate the lines from the configuration AB L...L at time 1 and only for the
+      lengths n > 2 (for the common relaxation of two germs that agree from time 1 on)
 """
 import os
 import subprocess
@@ -50,10 +52,16 @@ def table_from_model(E, model):
     return tab
 
 
+START1 = os.environ.get('GCEGAR_START1', '')   # e.g. AB: simulate from this configuration at time 1
+
+
 def simulate(tab, n):
     """first failure of the line of length n: None, or (kind, leftmost cell involved)"""
     c = ['G'] + ['L'] * (n - 1)
-    for t in range(1, 2 * n - 1):
+    t1 = 1
+    if START1 and n > len(START1):
+        c, t1 = list(START1) + ['L'] * (n - len(START1)), 2
+    for t in range(t1, 2 * n - 1):
         r = ['*'] + c + ['*']
         c = [tab[(r[i - 1], r[i], r[i + 1])] for i in range(1, n + 1)]
         fired = [i + 1 for i, x in enumerate(c) if x == 'F']
@@ -103,7 +111,7 @@ def main():
             return
         tab = table_from_model(E, model)
         fail = None
-        for n in range(2, nmax + 1):
+        for n in range(len(START1) + 1 if START1 else 2, nmax + 1):
             f = simulate(tab, n)
             if f:
                 fail = (n, f)
