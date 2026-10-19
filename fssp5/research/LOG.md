@@ -699,3 +699,10 @@ The T = 10 model without cones (§27) failed at the right end instead. So the ch
 So the complexity-15 half-line passes the early-row level T = 11 for all lengths. T = 12 excludes this model (line 13 complete; lines 17 and 24 fire at τ = 12). The joint test at T = 12 started 22:15 (kissat 2 h).
 
 δ14d's germ at T = 7 with cone:9-20 and the middle cones mid:9-16 (gfix.py region mid): UNKNOWN after 1200 s.
+
+**Joint test with cones at T = 10 (cone:12-20): UNKNOWN** after 2 h of kissat (23:11). The same CNF is now running in CaDiCaL (-t 21600) since 23:13. Still running at 23:13:
+- joint15 T = 12 (kissat 2 h, from 22:15);
+- joint15c T = 9 with cone:11-20 (kissat 2 h, from 21:40);
+- the free C_8 (kissat 4 h, from 21:17).
+
+The models found so far are saved in research/models/ and described in early_rows.tex, Proposition "germmodels".
