@@ -690,3 +690,12 @@ The joint test without cones at T = 11 (runs/joint15.sh 11) runs until 22:49.
 - Lines 18, 20, 21, 23 and 24 fire early, outside the encoded cones (at τ = 16, 13, 10, 10, 11).
 
 The T = 10 model without cones (§27) failed at the right end instead. So the cheap regions (early rows, right-end cones, left bands) control the two ends of each line. Some five-state tables get both ends right but not the middle, which four-state tables cannot do (§28). Excluding them needs the firing of middle cells, whose dependency cones cover most of R_n. That is where the cost of complete lines comes back.
+
+**Joint complexity-15 test at T = 11: SAT** (kissat, 79 min, finished 22:08). The model was decoded with scratchpad anal/decode.py into runs/joint15_T11.rule. With the time-1 configuration A B L…L of δ14d's labelling:
+- it synchronizes the lines 3..12;
+- lines 13 and 14 fire at the right time, but only partially (line 13: F F F F G B L B L L B B F);
+- lines 15–25 fire early at τ = 12..17.
+
+So the complexity-15 half-line passes the early-row level T = 11 for all lengths. T = 12 excludes this model (line 13 complete; lines 17 and 24 fire at τ = 12). The joint test at T = 12 started 22:15 (kissat 2 h).
+
+δ14d's germ at T = 7 with cone:9-20 and the middle cones mid:9-16 (gfix.py region mid): UNKNOWN after 1200 s.
