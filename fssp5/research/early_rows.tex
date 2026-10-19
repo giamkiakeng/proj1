@@ -290,17 +290,24 @@ The early rows only forbid firing cells. A requirement that some cell
 \emph{does} fire is added by the right ends. For $C\ge T+2$, a rule satisfies
 $\mathcal G_k(T,N_1,C)$ if it satisfies $\mathcal G_k(T,N_1)$ and
 \begin{enumerate}[(G1)]\setcounter{enumi}{4}
-\item for $T+2\le n\le C$, the cell $n$ of the line of length $n$ is $\Fq$ at
-time $2n-2$, no cell $(t,i)$ of $R_n$ with $t-i\le n-2$ and $t<2n-2$ is $\Fq$,
-and $C_n(t,i)\ne C_\infty(t,i)$ for the cells of the return chain $t+i=2n-1$
-with $t-i\le n-2$.
+\item for $T+2\le n\le C$, writing $\Psi_n(\tau,\kappa):=\Psi(J_n,n;\tau,\kappa)$
+for the determinacy map of Lemma~3.1 of the note: $\Psi_n(\tau,\kappa)$ is
+defined and different from $\Fq$ for all $(\tau,\kappa)\in R_n$ with
+$\tau+\kappa\le n-1$ and $\tau<n-1$, $\Psi_n(n-1,0)=\Fq$, and
+$\Psi_n(\kappa,\kappa)\ne C_\infty(n-1+\kappa,n-\kappa)$ for $2\kappa\le n-1$.
 \end{enumerate}
-In relative coordinates the cells of (G5) are those with $\tau+\kappa\le n-1$,
-the backward dependency cone of the firing cell $(n-1,0)$ (Lemma~3.2 of the
-note); in \texttt{gfix.py} it is the region \texttt{cone:$n$}. Every
-minimal-time solution satisfies (G5), by the definition of synchronization and
-Lemma~2.3 of the note, so Lemma~\ref{lem:G} extends to $\mathcal
-G_k(T,N_1,C)$.
+The cells of (G5) are the backward dependency cone of the firing cell
+$(n-1,0)$, and by Lemma~3.2 of the note the values $\Psi_n$ there depend only
+on the input cells of that cone. So (G5) is a condition on the cone alone: a
+cell outside it may be $\Fq$ earlier, in which case the line of length $n$ is
+no longer defined at time $2n-2$, while $\Psi_n$ still is on the cone. In
+\texttt{gfix.py} it is the region \texttt{cone:$n$}, which encodes exactly
+these values. If no cell of the line of length $n$ is $\Fq$ before time
+$2n-2$, then $\Psi_n=C_n$ on $R_n$ by Lemma~3.1. In particular every
+minimal-time solution satisfies (G5), by the definition of synchronization
+and Lemma~2.3 of the note, and Lemma~\ref{lem:G} extends to $\mathcal
+G_k(T,N_1,C)$. The conditions (G1)--(G4) need no such convention, because
+the cells they constrain form whole rows of each line.
 
 \begin{proposition}[computer-assisted; the unsatisfiable case is
 LRAT-certified]\label{prop:G4cone}
@@ -364,6 +371,71 @@ Direct simulation of the lines of lengths $2\le n\le60$ (script
 each rule synchronizes the lines $2,\dots,10$, so it satisfies (G1) for $T=9$,
 and the stated line violates (G2).
 \end{proof}
+
+For a fixed germ $g$, the conditions (G2) and (G3) can be imposed on all
+lengths $n\ge T+2$ at once: by \cref{lem:early} and \cref{cor:reduce}, the
+lengths produced by \texttt{asymp.py} represent all of them. The following
+models of such formulas, for the germ of $\delta_{14}^{\mathrm d}$, show how the
+five-state rules evade them. The rule files are in
+\texttt{fssp5/research/models}.
+
+\begin{proposition}[computational]\label{prop:germmodels}
+Let $g$ be the germ of $\delta_{14}^{\mathrm d}$.
+\begin{enumerate}[(i)]
+\item The rule \texttt{germ14d\_T10} contains $g$ and synchronizes the lines
+of lengths $2,\dots,11$ in minimal time. No line of length $n\ge12$ has a
+cell in state $\Fq$ at a relative time $\tau\le10$. For $12\le n\le16$, no cell
+of the line of length $n$ is $\Fq$ before time $2n-2$, and the cells that are
+$\Fq$ at time $2n-2$ are exactly the cells $1$ and $2$, and for $n=15$ also
+the cell $10$.
+\item The rule \texttt{d14d\_T7c} contains $g$ and synchronizes the lines of
+lengths $2,\dots,8$ and $10$. No line of length $n\ge9$ has a cell in state
+$\Fq$ at a relative time $\tau\le7$, and (G5) holds for $9\le n\le20$. For
+$n\in\{9,11,12,\dots,17,19\}$, the cells $1$ and $n$ of the line of length $n$
+are $\Fq$ at time $2n-2$, no cell is $\Fq$ before, and some cell is not $\Fq$
+at time $2n-2$.
+\item The joint formula of \cref{lem:labellings} for $T=11$ is satisfiable.
+That formula keeps the lines $3,\dots,12$ complete and the early rows
+($\tau\le11$) of all lengths $n\ge13$, with the entries $(\ast,\Gq,\Lq)$,
+$(\Gq,\Lq,\Lq)$ free. Its model \texttt{joint15\_T11} behaves as follows.
+Start the line of length $n\ge3$ from $\Aq\,\Bq\,\Lq^{n-2}$ at time $1$, its
+configuration at time $1$ under both labellings, and evolve it by this table.
+Then the lines of lengths $3,\dots,12$ are synchronized at time $2n-2$, and no
+line of length $n\ge13$ has a cell in state $\Fq$ at a relative time
+$\tau\le11$. The lines of lengths $13$ and $14$ have cells in state $\Fq$ at
+time $2n-2$, but not all of them. The first cell in state $\Fq$ of the lines
+of lengths $15,\dots,25$ occurs at a relative time between $12$ and $17$.
+The table maps $(\ast,\Gq,\Lq)$ and $(\Gq,\Lq,\Lq)$, which occur again inside
+the reflected triangles, to $\Fq$ and $\Gq$. So it contains neither labelling
+of the germ: the joint formula is a common relaxation of the two labellings,
+and its models need not belong to either.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+The statements about finitely many lengths are checked by direct simulation;
+for (ii), (G5) is checked by computing $\Psi_n$ on the cone. The statements
+about all lengths $n\ge T+2$ ($T=10,7,11$) follow from \cref{lem:early} and
+\cref{cor:reduce}. The certificates of \texttt{asymp.py} for $g$ are: the
+depth rows $0,\dots,2T+4$ are periodic from $t_0=57$ with period $p=24$ for
+$T=10$, from $t_0=30$ with $p=24$ for $T=7$, and from $t_0=57$ with $p=48$
+for $T=11$. The half-line of $g$ is the same under both labellings and does not
+contain the neighbourhoods $(\ast,\Gq,\Lq)$, $(\Gq,\Lq,\Lq)$ at times $t\ge1$
+(\cref{lem:labellings}), so in (iii) it is the half-line used by the joint
+formula. Moreover, the representative
+lengths and all lengths up to $200$ were simulated and have no $\Fq$ at
+$\tau\le T$. The rules were found as models of the formulas \texttt{full:2-11}
+plus the early rows ($T=10$) of the representatives; \texttt{full:2-8} plus
+the early rows ($T=7$) and \texttt{cone:9-20}; and the joint formula of
+\cref{lem:labellings} at $T=11$ (\texttt{full:3-12} plus the early rows).
+\end{proof}
+
+So the early rows control the right part of each line at small relative times,
+and the right-end cones control the right end at the firing time. Both are
+satisfied by rules whose lines fire only at their two ends, as in (ii). To
+exclude such rules, a formula must make middle cells fire, and the dependency
+cone of a middle cell of the firing row covers most of $R_n$ (for $n=15$, $76$
+of the $120$ cells).
 
 \section{Uniform pre-firing configurations}\label{sec:classes}
 
