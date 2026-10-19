@@ -1,5 +1,5 @@
 /*
- * fsspdfs.c -- exhaustive depth-first search for k-state minimal-time FSSP tables (Balzer/Sanders style)
+ * dfs_timeorder.c -- exhaustive depth-first search for k-state minimal-time FSSP tables (Balzer/Sanders style)
  *
  * The table is filled lazily: all lines are simulated in time order (time-major, the half-line
  * C_inf first, then the reflected triangles R_n), and when a cell needs a neighbourhood whose entry is
@@ -12,7 +12,7 @@
  * up to relative time T only (no cell may fire there).  The quiescent entries LLL and LL* are L.
  * The two auxiliary states A, B are interchangeable: the first of them to be assigned is A.
  *
- * usage: fsspdfs K N [N1 T] [--print P] [--maxnodes M] [--plain]
+ * usage: dfs_timeorder K N [N1 T] [--print P] [--maxnodes M] [--plain]
  *   --plain: the lines 2..N alone (no return chain for line N, half-line only to t + i = 2N1 - 2);
  *            otherwise also the consequences of line N+1 not firing early at its left cells
  *   prints the number of nodes per depth (number of defined entries), the number of complete
@@ -145,7 +145,7 @@ static void dfs(int p)
 int main(int argc, char **argv)
 {
     if (argc < 3) {
-        fprintf(stderr, "usage: fsspdfs K N [N1 T] [--print P] [--maxnodes M]\n");
+        fprintf(stderr, "usage: dfs_timeorder K N [N1 T] [--print P] [--maxnodes M]\n");
         return 1;
     }
     K = atoi(argv[1]);

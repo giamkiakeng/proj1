@@ -506,7 +506,7 @@ The counts make this infeasible at the sizes that matter. The budget was 180 s p
 | FREE, lengths 2..6 | > 288,749 |
 | δ14d's germ, lengths 2..14 | none within 14 minutes (the first class was not yet found) |
 
-**Exhaustive depth-first search (fsspdfs.c).** This is a Balzer–Sanders style search:
+**Exhaustive depth-first search (research/dfs_timeorder.c).** This is a Balzer–Sanders style search. It is an independent re-implementation of src/fsspdfs.c, written before I noticed that tool; it evaluates the cells in time order instead of along anti-diagonals.
 - The lines are simulated in time order: the half-line first, then the reflected triangles.
 - A table entry is branched on when a cell first needs it: F in a firing row, a working state otherwise.
 - A branch dies on early or missing firing, or when the half-line would fire.
@@ -522,7 +522,7 @@ Validation with four states, in plain mode (lines 2..N only):
 | 7 | 6.60·10^9 | 342 |
 | 8 | 6.62·10^9 | 27 |
 
-The 27 for N = 8 are the 27 partial rules of the note (and of Yunès 1993).
+The 27 for N = 8 are the 27 partial rules of the note (and of Yunès 1993), so the two implementations agree.
 - In the default mode, two consequences of line 9 not firing early at its left cells are added: the return chain of line 8 differs from the half-line, and the half-line does not fire on t + i ≤ 16. Then N = 8 has no completion (6.64·10^9 nodes).
 - So for four states, the lines 2..8 together with these two conditions already admit no rule.
 
