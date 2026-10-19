@@ -492,3 +492,70 @@ At 17:50 UTC, three runs were restarted from their current constraints with symm
 **Sweep16.** Among the 16 germs of K16_remaining16, 2..14 completions are known only for r16_00 (δ14), r16_02 (δ14c) and r16_15 (δ14d). The other 13 are run through the refinement loop to length 14, with sharing and 30 minutes each. An UNSAT answer refutes a germ already at length 14.
 
 **Paused.** upf_G at 18:52 UTC; its constraints are in runs/paused.txt.
+
+## 25. Enumeration, exhaustive search, and a smaller decisive formula (19:00–20:20 UTC)
+
+**Projected enumeration (allsat.py).** A table synchronizes the lines 2..N iff its restriction to the entries those lines use does, so the completions for 2..N fall into classes, one per projected table. allsat.py lists the classes with one incremental CaDiCaL instance: a refinement loop as in gcegar_inc.py, and a blocking clause "some used entry takes another value" for every class found. Each class can then be extended to longer lengths by depth-first search.
+
+The counts make this infeasible at the sizes that matter. The budget was 180 s per run, and no run finished.
+
+| problem | classes found within the budget |
+|---|---|
+| FREE, lengths 2..4 | > 470,957 |
+| FREE, lengths 2..5 | > 388,044 |
+| FREE, lengths 2..6 | > 288,749 |
+| δ14d's germ, lengths 2..14 | none within 14 minutes (the first class was not yet found) |
+
+**Exhaustive depth-first search (fsspdfs.c).** This is a Balzer–Sanders style search:
+- The lines are simulated in time order: the half-line first, then the reflected triangles.
+- A table entry is branched on when a cell first needs it: F in a firing row, a working state otherwise.
+- A branch dies on early or missing firing, or when the half-line would fire.
+- It also dies when a return-chain cell equals the half-line's cell.
+- The first auxiliary state to be assigned is called A.
+
+Validation with four states, in plain mode (lines 2..N only):
+
+| N | nodes | complete assignments |
+|---|---|---|
+| 5 | 2.10·10^9 | 1,829,258 |
+| 6 | 6.30·10^9 | 49,893 |
+| 7 | 6.60·10^9 | 342 |
+| 8 | 6.62·10^9 | 27 |
+
+The 27 for N = 8 are the 27 partial rules of the note (and of Yunès 1993).
+- In the default mode, two consequences of line 9 not firing early at its left cells are added: the return chain of line 8 differs from the half-line, and the half-line does not fire on t + i ≤ 16. Then N = 8 has no completion (6.64·10^9 nodes).
+- So for four states, the lines 2..8 together with these two conditions already admit no rule.
+
+For five states the tree is far too large for this method. The solvers' clause learning is essential.
+
+**Edge tests on δ14d's germ.**
+- full:2-9 plus the early rows (T = 8) of all n ≥ 10 (49 representative lengths from asymp.py) is SAT in 4.2 s. The early rows alone do not contradict the short lines.
+- Adding the left bands band:10-40:4 gives UNKNOWN after 600 s.
+
+**Every known near miss fires early at τ ≤ 9.** Script: scratchpad anal/firstF.py; first firing for 2 ≤ n ≤ 60.
+
+| rule | synchronizes | first early firing at relative time τ ≤ 9 |
+|---|---|---|
+| δ13 | 2..13 | n = 14, τ = 8; τ = 8 for every 14 ≤ n ≤ 60 |
+| uniformA_2-12 | 2..12 | n = 16, τ = 7; τ = 7 for every 16 ≤ n ≤ 60 |
+| δ13_chaotic | 2..13 | n = 18, τ = 7 |
+| δ14 | 2..14 | n = 16, τ = 7 |
+| δ14b | 2..14 | n = 19, τ = 8 |
+| δ14c | 2..14 | n = 15, τ = 7 |
+| δ14d | 2..14 | n = 17, τ = 6 |
+| δ14e | 2..14 | n = 16, τ = 9 |
+
+The failures recur periodically in n. These are the limit triangles of §16 firing early.
+
+**A smaller decisive formula.** Let F(N0, T, N1) be full:2..N0 plus early:(N0+1)..N1:T.
+- Every part is a necessary condition, because a line of length n > T+1 may not fire at τ ≤ T.
+- For T = 9, the lines up to 10 are complete anyway. So F(10, 9, N1) is the smallest formula of this type that excludes every rule in the table.
+- It is a relaxation of the decisive formula of §22: it drops the complete lines 11..14, whose early rows it keeps.
+- If it is unsatisfiable, no five-state minimal-time solution exists.
+
+Runs (FREE, sharing, shallow half-line, A/B symmetry breaking; kissat with a 4 h limit):
+
+| formula | vars | clauses | started (UTC) |
+|---|---|---|---|
+| F(10, 9, 60) | 17,275 | 1,186,016 | 19:42 |
+| F(10, 9, 30) | 8,155 | 538,376 | 20:05 |
