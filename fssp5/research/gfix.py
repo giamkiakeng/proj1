@@ -12,6 +12,8 @@ necessary conditions on the remaining transitions:
              Lemmas 3.1, 3.2 of the note)
   band n:h   the anti-diagonals t + i = 2n-1 .. 2n-2+h (chains 1..h), which decide cells 1..h
   early n:h  the cells of R_n at relative times tau = t-(n-1) <= h (h < n-1: no cell may fire)
+  reset n:h:w  early n:h, and every cell with kappa <= tau - w (behind an echo of width w) is L,
+             as in Mazoyer's solution (w = 4) until tau is about n/3
 
 Cells at time 2n-2 must be F, all other encoded cells must not be F.  The return chain
 (t + i = 2n-1) must differ from C_inf (Lemma 2.3).  Unknowns: the transitions not in the germ.
@@ -148,8 +150,10 @@ def halfline(germ, M):
     return val
 
 
-def halfline_vars(E, M):
-    """C_inf(t, i) for t + i <= M as variables (one-hot over W, so no half-line cell fires)"""
+def halfline_vars(E, M, shallow=None):
+    """C_inf(t, i) for t + i <= M as variables (one-hot over W, so no half-line cell fires).
+    shallow = (D, tmax): also the cells beyond anti-diagonal M at depth t+1-i <= D, for t <= tmax
+    (the depth rows near the front; they are closed under predecessors and feed the early rows)"""
     C = {}
     def val(t, i):
         if i == 0:
@@ -165,6 +169,13 @@ def halfline_vars(E, M):
             if i > t + 1:
                 continue
             C[(t, i)] = E.cell(E.W)
+    if shallow:
+        D, tmax = shallow
+        for t in range(1, tmax + 1):
+            for j in range(0, D + 1):
+                i = t + 1 - j
+                if i >= 1 and t + i > M:
+                    C[(t, i)] = E.cell(E.W)
     for (t, i) in sorted(C):
         E.transition(val(t - 1, i - 1), val(t - 1, i), val(t - 1, i + 1), C[(t, i)])
     return val
@@ -292,6 +303,25 @@ def apply_class(E, P, interior=False):
             E.cls.append([])                           # the germ contradicts the class
 
 
+def equate(E, a, b):
+    """the table entries of the neighbourhoods a and b are equal (constants from the germ allowed)"""
+    va = E.germ.get(a, E.T.get(a))
+    vb = E.germ.get(b, E.T.get(b))
+    if va is None or vb is None:
+        return
+    if isinstance(va, str) and isinstance(vb, str):
+        if va != vb:
+            E.cls.append([])
+    elif isinstance(va, str):
+        E.cls.append([vb[va]] if va in vb else [])
+    elif isinstance(vb, str):
+        E.cls.append([va[vb]] if vb in va else [])
+    else:
+        for d in va:
+            E.cls.append([-va[d], vb[d]])
+            E.cls.append([va[d], -vb[d]])
+
+
 def build(germ, k, specs, P=None, interior=False, upf=None):
     """P: optional set of neighbourhoods (tuples) that are exactly the ones mapped to F
     (with interior=True: exactly the interior ones mapped to F); upf: a state X, adds the
@@ -303,21 +333,49 @@ def build(germ, k, specs, P=None, interior=False, upf=None):
     E = Enc(k, {} if free else {nb: d for nb, d in germ.items() if nb not in unfix})
     if P is not None:
         apply_class(E, P, interior)
+    be = os.environ.get('GFIX_BE')                # e.g. L,G: the left border acts as L, the right as G
+    if be:
+        xl, xr = be.split(',')
+        for y in E.W:
+            for z in E.W:
+                if xl != '-':
+                    equate(E, ('*', y, z), (xl, y, z))
+                if xr != '-':
+                    equate(E, (z, y, '*'), (z, y, xr))
     lines = []
     for sp in specs:
         w = sp.split(':')
         kind, ns = w[0], parse_range(w[1])
         h = int(w[2]) if len(w) > 2 else None
-        lines += [(n, kind, h) for n in ns]
+        if kind == 'reset':                     # reset:n:T:w = early:n:T, quiescent behind an echo of width w
+            lines += [(n, ('reset', int(w[3])), h) for n in ns]
+        else:
+            lines += [(n, kind, h) for n in ns]
     # half-line encoded to anti-diagonal 2N-2+MARGIN; for FREE, a margin > 0 also forbids F on the
     # anti-diagonals beyond 2N-2, i.e. requires line N+1 not to fire early at its left cells
-    M = max(2 * n - 2 for n, _, _ in lines) + int(os.environ.get('GFIX_MARGIN', '2'))
-    val = halfline_vars(E, M) if free else halfline(germ, M)
+    margin = int(os.environ.get('GFIX_MARGIN', '2'))
+    shallow = None
+    if free and os.environ.get('GFIX_SHALLOW') == '1':
+        # FREE mode: encode the whole half-line only as far as the non-early regions need it, and for
+        # the early/reset regions only the depth rows near the front (depth <= 2T+2) that they read
+        full = [2 * n - 2 for n, kind, _ in lines if kind not in ('early',) and not isinstance(kind, tuple)]
+        early = [(n, h) for n, kind, h in lines if kind == 'early' or isinstance(kind, tuple)]
+        M = (max(full) if full else 2) + margin
+        if early:
+            shallow = (2 * max(h for _, h in early) + 2, max(n - 1 + h + 1 for n, h in early))
+    else:
+        M = max(2 * n - 2 for n, _, _ in lines) + margin
+    val = halfline_vars(E, M, shallow) if free else halfline(germ, M)
     ncells = 0
     for n, kind, h in lines:
-        cells = region(n, kind, h)
+        cells = region(n, 'early' if isinstance(kind, tuple) else kind, h)
         ncells += len(cells)
         var = add_line(E, val, n, cells)
+        if isinstance(kind, tuple):             # reset: R_n(tau, kappa) = L for kappa <= tau - w
+            wid = kind[1]
+            for (t, i), v in var.items():
+                if t + i >= 2 * n - 1 + wid:
+                    E.cls.append([v['L']] if isinstance(v, dict) else [])
         if upf is not None and n >= 3:
             add_upf(E, val, n, var, upf)
     return E, ncells

@@ -396,3 +396,79 @@ Validation on δ14d's germ with the lengths 3..14 (CaDiCaL, table fixed):
 So both labellings' rules are models of the relaxation, as Lemma 6 of early_rows.tex predicts.
 
 **Run started 17:02 UTC (er_cd_8).** δ14d's germ with GFIX_UNFIX=*GL,GLL, full:3-14 and the early rows (T = 8) of all n ≥ 15 (44 lengths), with sharing. If it is unsatisfiable, both complexity-15 germs are refuted at once and every five-state minimal-time solution has c78 ≥ 16.
+
+## 20. What the limit triangles look like: Mazoyer's echo resets the line, the near misses' do not
+
+**Mazoyer's six-state solution, line of length 600, rows τ = 0..40, right 44 cells.**
+- The echo is a signal B A C B of width 4 on the diagonal, moving left at speed 1.
+- Behind it every cell is quiescent (L).
+- Ahead of it lies the periodic background C A A B B C … of the half-line's front region.
+
+So the limit triangles of Mazoyer's solution are trivial: an echo of width 4 followed by L. Define the reset horizon H(n) as the last relative time up to which all cells with κ ≤ τ − 4 are L:
+
+| n | 8 | 10 | 12 | 15 | 20 | 25 | 30 | 40 | 60 | 90 | 120 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| H(n) | 4 | 4 | 5 | 6 | 8 | 9 | 11 | 14 | 21 | 31 | 41 |
+
+H(n) ≈ n/3: the quiet region lasts until the echo reaches Mazoyer's division point, at distance n/3 from the right end, where a new general starts a smaller line in the quiescent cells. With width 3 the horizons collapse (e.g. H = 1 or 2 for most n), so the echo is exactly 4 cells wide.
+
+**The near misses.**
+- δ14d: the echo is the spare state G. Behind it, the cells mix A, B, G, L, and AAA appears after 6..12 steps (§16).
+- δ14e: a doubly periodic background, an echo of A's, and again AAA behind it.
+
+None of them clears the line behind the echo.
+
+**A structural class to test: "reset behind the echo".** gfix region `reset:n:T:w` = `early:n:T` plus R_n(τ,κ) = L for κ ≤ τ−w.
+- Validation with Mazoyer's table fixed (full:3-10): reset:24-40:6:4 and reset:30-40:9:4 SAT; reset:24-40:6:3 UNSAT.
+- Probe for five states started 17:05 UTC: FREE, full:2-12 + reset:40-46:10:4. The formula has 12,106 vars and 875,426 clauses, because the half-line must be encoded to anti-diagonal 92.
+
+**Probe result.** The FREE reset probe (full:2-12 + reset:40-46:10:4, 875k clauses) gave no answer within 25 minutes and was stopped. It is too large in this form, because the free half-line must be encoded to anti-diagonal 92.
+
+## 21. Mazoyer's borders: the left border acts as L, the right border as G
+
+On every neighbourhood that Mazoyer's six-state solution uses on the lines 3..120:
+- δ(∗,y,z) = δ(L,y,z) for all 5 left-border entries used;
+- δ(x,y,∗) = δ(x,y,G) for all 15 right-border entries used. Against every other state at least 8 of the 15 entries differ.
+- δ(L,L,x) = L for every state x.
+
+So a quiescent cell behaves exactly like the left border, and a general exactly like the right border. This is the file header's remark (borders: left ~ L, right ~ G) seen in the table. It is what lets one G at a division point split the line into two lines that run independently, which is the recursion of the two-thirds construction.
+
+**Class BE(X_L, X_R) ("border emulation").** The constraints are δ(∗,y,z) = δ(X_L,y,z) and δ(x,y,∗) = δ(x,y,X_R) for all x, y, z ∈ W (environment variable GFIX_BE=X_L,X_R; `-` leaves a side free). They remove the 32 border entries as free choices.
+- Validation: Mazoyer's germ with BE(L,G) and full:3-12, table free, is SAT.
+- Run started 17:20 UTC: FREE, k = 5, BE(L,G), gcegar from full:2-6. It reached length 12 in about 6 minutes (round 11 SAT in 268 s).
+
+**The near misses do not emulate their borders.** For each rule, the table below gives the number of border entries used on 2..14 whose value differs from that of the same neighbourhood with the border replaced by X.
+
+| rule | left entries used | mismatches vs L / G / A / B | right entries used | mismatches vs L / G / A / B |
+|---|---|---|---|---|
+| δ14 | 5 | 4 / 4 / 4 / 5 | 13 | 12 / 9 / 9 / 11 |
+| δ14b | 3 | 2 / 2 / 3 / 3 | 15 | 12 / 11 / 10 / 12 |
+| δ14c | 3 | 3 / 2 / 3 / 3 | 14 | 7 / 8 / 10 / 8 |
+| δ14d | 3 | 2 / 1 / 1 / 2 | 16 | 12 / 12 / 11 / 13 |
+| δ14e | 6 | 5 / 5 / 4 / 6 | 13 | 9 / 11 / 7 / 7 |
+
+So the five-state near misses rely on transitions specific to the borders, while Mazoyer's solution treats its borders as an L cell (left) and a G cell (right).
+
+**Combined class BE(L,G) with pre-firing G^n.**
+- With the exact firing set {GGG, ∗GG, GG∗} the formula is UNSAT at once. This is not a result: border emulation forces δ(L,G,G) = δ(∗,G,G) = F, and Mazoyer's table also maps the unused LGG to F.
+- The correct combination is BE(L,G) together with `--upf G` (pre-firing G^n), the F-set otherwise free. Started 17:31 UTC; it reached length 12 within a minute.
+
+## 22. The early-rows condition on the unrestricted problem (shallow half-line)
+
+In FREE mode, the early rows (τ ≤ T) of a long line read only the depth rows j ≤ 2T+1 of the half-line, which are closed under predecessors. With GFIX_SHALLOW=1, gfix.py therefore encodes:
+- the whole half-line only as far as the complete triangles and cones need it;
+- for longer lines, only the depth rows 0..2T+2 up to time n+T.
+
+Validation with δ14's table fixed, FREE, full:2-14 + early:15-30:T:
+
+| T | shallow encoding | full encoding |
+|---|---|---|
+| 6 | SAT (6,074 vars, 399,599 clauses) | SAT (7,798 vars, 534,800 clauses) |
+| 8 | UNSAT (7,546 vars, 509,831 clauses) | UNSAT (8,886 vars, 615,104 clauses) |
+
+This matches the first early firing of δ14 at τ = 7..10.
+
+**The decisive formula.** Lengths 2..14 complete, plus "no cell of R_n fires at τ ≤ 9" for every n = 15..30.
+- All five known near misses violate the second part: δ14 at τ ≤ 10, δ14b at τ = 8 (n = 19), δ14c at τ = 7 (n = 15), δ14d at τ ≤ 8 (n = 15, 17), δ14e at τ = 9 (n = 16).
+- Both parts are necessary for every minimal-time solution. So an unsatisfiable answer would prove that no five-state minimal-time solution exists; a satisfiable one gives a new kind of near miss.
+- Run started 17:43 UTC as a refinement loop (gcegar.py FREE 16, from full:2-6 early:15-30:9, cones added lazily for 7..16). Round 1: 434,704 clauses, SAT in 9 s.

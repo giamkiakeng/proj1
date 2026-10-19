@@ -110,6 +110,10 @@ def main():
             print('STOP:', st)
             return
         tab = table_from_model(E, model)
+        with open('%s.round%d' % (out, rnd), 'w') as fh:          # keep every model for later analysis
+            fh.write('k %d\n' % k)
+            for nb in sorted(tab):
+                fh.write('%s %s %s %s\n' % (nb + (tab[nb],)))
         fail = None
         for n in range(len(START1) + 1 if START1 else 2, nmax + 1):
             f = simulate(tab, n)
