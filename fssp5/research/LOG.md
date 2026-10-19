@@ -401,7 +401,7 @@ So both labellings' rules are models of the relaxation, as Lemma 6 of early_rows
 
 **Mazoyer's six-state solution, line of length 600, rows τ = 0..40, right 44 cells.**
 - The echo is a signal B A C B of width 4 on the diagonal, moving left at speed 1.
-- Behind it every cell is quiescent (L).
+- Behind it every cell is quiescent (L); checked by program, the reset horizon of the line of length 600 is H(600) = 201.
 - Ahead of it lies the periodic background C A A B B C … of the half-line's front region.
 
 So the limit triangles of Mazoyer's solution are trivial: an echo of width 4 followed by L. Define the reset horizon H(n) as the last relative time up to which all cells with κ ≤ τ − 4 are L:
@@ -471,4 +471,4 @@ This matches the first early firing of δ14 at τ = 7..10.
 **The decisive formula.** Lengths 2..14 complete, plus "no cell of R_n fires at τ ≤ 9" for every n = 15..30.
 - All five known near misses violate the second part: δ14 at τ ≤ 10, δ14b at τ = 8 (n = 19), δ14c at τ = 7 (n = 15), δ14d at τ ≤ 8 (n = 15, 17), δ14e at τ = 9 (n = 16).
 - Both parts are necessary for every minimal-time solution. So an unsatisfiable answer would prove that no five-state minimal-time solution exists; a satisfiable one gives a new kind of near miss.
-- Run started 17:43 UTC as a refinement loop (gcegar.py FREE 16, from full:2-6 early:15-30:9, cones added lazily for 7..16). Round 1: 434,704 clauses, SAT in 9 s.
+- Run started 17:35 UTC as a refinement loop (gcegar.py FREE 16, from full:2-6 early:15-30:9, cones added lazily for 7..16). Round 1: 434,704 clauses, SAT in 9 s.

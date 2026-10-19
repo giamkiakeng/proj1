@@ -285,6 +285,40 @@ of the half-line, so the lemma is no test on germs. The partial-triangle tests
 (cones of firing cells, \texttt{gfix.py}) imply it for every length they
 encode.
 
+\section{The architecture of Mazoyer's solution}\label{sec:mazoyer}
+
+The following facts about Mazoyer's six-state solution (file
+\texttt{results/mazoyer6.txt}, extracted from Duprat's Coq development) are
+established by simulation; they motivate the classes of rules tested in
+\texttt{LOG.md}.
+
+\begin{proposition}[computational]\label{prop:mazoyer}
+Let $\delta_M$ be Mazoyer's rule and let $U$ be the set of neighbourhoods that
+occur in the lines of lengths $3,\dots,120$ before their firing time.
+\begin{enumerate}[(i)]
+\item $\delta_M(\ast,y,z)=\delta_M(\Lq,y,z)$ for every $(\ast,y,z)\in U$ (five
+neighbourhoods), and $\delta_M(x,y,\ast)=\delta_M(x,y,\Gq)$ for every
+$(x,y,\ast)\in U$ (fifteen neighbourhoods); for every other state $X$ at least
+eight of the fifteen right-border entries differ from $\delta_M(x,y,X)$.
+\item $\delta_M(\Lq,\Lq,x)=\Lq$ for every working state $x$.
+\item Let $H(n)$ be the largest $T$ such that every cell of $R_n$ with
+$\kappa\le\tau-4$ and $\tau\le T$ is $\Lq$: up to the relative time $H(n)$, the
+reflected triangle is quiescent behind an echo of width four. Then
+$H(n)=4,4,5,6,8,9,11,14,21,31,41,201$ for
+$n=8,10,12,15,20,25,30,40,60,90,120,600$.
+\end{enumerate}
+\end{proposition}
+
+So the left border of Mazoyer's solution acts as a quiescent cell and the right
+border as a general, and the echo of the right end clears the line behind it
+until it meets the division point at about one third of the line from the right
+end ($H(n)\approx n/3$), where a new general starts a shorter line in the
+cleared cells. None of the five-state rules $\delta_{14}$,
+$\delta_{14}^{\mathrm b},\dots,\delta_{14}^{\mathrm e}$ has either property: each
+uses border transitions that differ from the interior transition with the
+border replaced by any state, and behind their echoes the reflected triangles
+never become quiescent (\cref{prop:nearmiss} and \texttt{LOG.md}, \S\S20--21).
+
 \section{The complexity-15 half-line}\label{sec:labellings}
 
 The two germs of complexity $15$ that survive the tests of the note are those of
