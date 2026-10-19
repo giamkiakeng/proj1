@@ -9,8 +9,10 @@ or a cell of the firing row that is not F).  Repeat until all lengths 2..NMAX sy
 table is written to OUT) or the constraints become unsatisfiable (the half-line has no completion
 for the lengths involved).
 
-usage: gcegar.py GERMFILE NMAX OUT SPEC... [--timeout S] [--budget S] [--k K] [--P GGG,*GG,GG*]
+usage: gcegar.py GERMFILE NMAX OUT SPEC... [--timeout S] [--budget S] [--k K] [--P GGG,*GG,GG*] [--Pint GGG] [--upf G]
    --P: restrict to rules whose F-producing neighbourhoods are exactly the listed ones
+   --Pint: the same for the neighbourhoods without a border only (border entries stay free)
+   --upf X: add the redundant clauses 'cells at time 2n-3 are X' (use with --Pint XXX)
    --timeout: limit per SAT call; --budget: total time, after which the loop stops
 """
 import os
@@ -69,15 +71,18 @@ def main():
     a = sys.argv[1:]
     germ = gfix.parse_germ(a[0])
     nmax, out = int(a[1]), a[2]
-    specs, timeout, k, budget, P = [], 3600, 5, None, None
+    specs, timeout, k, budget, P, interior, upf = [], 3600, 5, None, None, False, None
     it = iter(a[3:])
     for x in it:
         if x == '--timeout':
             timeout = int(next(it))
         elif x == '--budget':
             budget = float(next(it))
-        elif x == '--P':
+        elif x in ('--P', '--Pint'):
+            interior = x == '--Pint'
             P = {tuple(w) for w in next(it).split(',')}
+        elif x == '--upf':
+            upf = next(it)
         elif x == '--k':
             k = int(next(it))
         else:
@@ -88,7 +93,7 @@ def main():
         if budget is not None and time.time() - start > budget:
             print('STOP: budget exhausted')
             return
-        E, ncells = gfix.build(germ, k, specs, P)
+        E, ncells = gfix.build(germ, k, specs, P, interior, upf)
         left = timeout if budget is None else max(10, min(timeout, int(budget - (time.time() - start))))
         st, model, dt = solve(E, work, left)
         print('round %d: %s | cells=%d clauses=%d | %s (%.0f s)' % (rnd, ' '.join(specs), ncells, len(E.cls), st, dt),

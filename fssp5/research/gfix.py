@@ -27,6 +27,8 @@ import sys
 import time
 
 STATES = 'LGABCDE'
+# lengths n for which the return-chain condition (Lemma 2.3, which needs line n+1 as well) is omitted
+NORC = set(int(x) for x in os.environ.get('GFIX_NORC', '').split(',') if x)
 
 
 def parse_germ(path):
@@ -174,6 +176,18 @@ def region(n, kind, h=None):
         return R
     if kind == 'band':
         return {(t, i) for (t, i) in R if t + i <= 2 * n - 2 + h}
+    if kind == 'cell':                                   # cone of the single cell (t, i) = h
+        t0, i0 = h
+        out, stack = set(), [(t0, i0)]
+        while stack:
+            t, i = stack.pop()
+            if (t, i) in out:
+                continue
+            out.add((t, i))
+            for j in (i - 1, i, i + 1):
+                if (t - 1, j) in R:
+                    stack.append((t - 1, j))
+        return out
     if kind == 'cone':                                   # cones of the firing cells n-h .. n (h = 0: right end)
         out, stack = set(), [(2 * n - 2, i) for i in range(max(1, n - (h or 0)), n + 1)]
         while stack:
@@ -203,7 +217,7 @@ def add_line(E, val, n, cells):
         raise KeyError((n, t, j))
     for (t, i) in sorted(cells):
         E.transition(get(t - 1, i - 1), get(t - 1, i), get(t - 1, i + 1), var[(t, i)])
-        if t + i == 2 * n - 1 and t < 2 * n - 2:            # return chain differs from C_inf
+        if t + i == 2 * n - 1 and t < 2 * n - 2 and n not in NORC:   # return chain differs from C_inf
             c = val(t, i)
             if isinstance(c, str):
                 if c in var[(t, i)]:
@@ -226,30 +240,59 @@ def parse_range(s):
     return out
 
 
-def build(germ, k, specs, P=None):
-    """P: optional set of neighbourhoods (tuples) that are exactly the ones mapped to F"""
+def apply_class(E, P, interior=False):
+    """firing class: the neighbourhoods mapped to F are exactly those of P; with interior=True
+    only the neighbourhoods without a border are constrained (the border ones stay free)"""
+    def scoped(nb):
+        return not interior or (nb[0] != '*' and nb[2] != '*')
+    for nb, vs in E.T.items():
+        if scoped(nb):
+            E.cls.append([vs['F']] if nb in P else [-vs['F']])
+    for nb, d in E.germ.items():
+        if scoped(nb) and (d == 'F') != (nb in P):
+            E.cls.append([])                           # the germ contradicts the class
+
+
+def build(germ, k, specs, P=None, interior=False, upf=None):
+    """P: optional set of neighbourhoods (tuples) that are exactly the ones mapped to F
+    (with interior=True: exactly the interior ones mapped to F); upf: a state X, adds the
+    redundant clauses of the class 'pre-firing configuration X^n for n >= 3' (see add_upf)"""
     free = germ is None
     E = Enc(k, {} if free else germ)
     if P is not None:
-        for nb, vs in E.T.items():
-            E.cls.append([vs['F']] if nb in P else [-vs['F']])
-        for nb, d in E.germ.items():
-            if (d == 'F') != (nb in P):
-                E.cls.append([])                       # the germ contradicts the class
+        apply_class(E, P, interior)
     lines = []
     for sp in specs:
         w = sp.split(':')
         kind, ns = w[0], parse_range(w[1])
         h = int(w[2]) if len(w) > 2 else None
         lines += [(n, kind, h) for n in ns]
-    M = max(2 * n - 2 for n, _, _ in lines) + 2
+    # half-line encoded to anti-diagonal 2N-2+MARGIN; for FREE, a margin > 0 also forbids F on the
+    # anti-diagonals beyond 2N-2, i.e. requires line N+1 not to fire early at its left cells
+    M = max(2 * n - 2 for n, _, _ in lines) + int(os.environ.get('GFIX_MARGIN', '2'))
     val = halfline_vars(E, M) if free else halfline(germ, M)
     ncells = 0
     for n, kind, h in lines:
         cells = region(n, kind, h)
         ncells += len(cells)
-        add_line(E, val, n, cells)
+        var = add_line(E, val, n, cells)
+        if upf is not None and n >= 3:
+            add_upf(E, val, n, var, upf)
     return E, ncells
+
+
+def add_upf(E, val, n, var, X):
+    """redundant clauses for the class 'pre-firing configuration X^n' (n >= 3): the encoded cells
+    of line n at time 2n-3 are X, and so is the half-line cell (2n-3, 1)"""
+    for (t, i), v in var.items():
+        if t == 2 * n - 3:
+            E.cls.append([v[X]] if X in v else [])
+    c = val(2 * n - 3, 1)
+    if isinstance(c, str):
+        if c != X:
+            E.cls.append([])
+    else:
+        E.cls.append([c[X]] if X in c else [])
 
 
 def write_cnf(E, path, extra=()):

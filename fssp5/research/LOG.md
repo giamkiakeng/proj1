@@ -193,3 +193,102 @@ So, without a better score, local search is weaker here than the SAT methods. It
 **δ14c's germ, full:2-14 cone:15 (one formula, no loop):** running.
 
 The earlier direct attempts at length 15 on these germs stayed undecided after 0.5–4 h (manuscript log).
+
+## 12. Taxonomy of the five-state near misses by depth-row structure
+
+Measured with research/../scratch rowperiods (horizon 4000 to 6000, depths ≤ 40).
+
+| rule | row periods | θ(j) | reading |
+|---|---|---|---|
+| δ12, δ13 | 1 | ⌈3j/2⌉+2 | mid-way, bounded; regular half-line, refuted at n = 518 (Cor. 5.3) |
+| δ14b | 3 | 2j+2 | two-thirds, bounded; certified eventually regular (manuscript) |
+| δ14e | 1, 2 | ≈ 1.75 j (e.g. θ(20) = 35, θ(40) = 70) | bounded; division point at ≈ 0.4n from the right end |
+| δ14 | 4, 8, 16, … (doubling with depth) | ≈ 1.5 j | binary counter (rule 22 Sierpinski region) |
+| δ14c | even rows 1; odd rows 3, 6, 12, 24, 48, 96 | irregular, up to θ(39) = 254 | counter in base 2 with period-3 seed |
+
+So the five-state rules for lengths ≤ 14 use at least four different architectures:
+- two kinds of bounded-period half-line, with division ratios 1/2 and about 0.4;
+- binary counters, with periods 2^m and 3·2^m.
+
+Every one of them fails at length 15 in the right half.
+
+## 13. The right band as a finite automaton; the "column lemma"
+
+In R_n, the cells κ = 0..d−1 (the d cells next to the right border) evolve as a finite automaton:
+- its states are W^d, i.e. at most (k−1)^d states without F;
+- it is driven by the column κ = d, i.e. the sequence R_n(τ, d) for τ ≥ d;
+- it must reach the all-F state exactly at τ = n−1.
+
+**Column lemma.** If the driving column is ℓ-periodic on [τ0, n−2] with n−1−τ0 > (k−1)^d·ℓ, the right end fires early.
+
+**Proof.** This is the pigeonhole argument of Lemma 4.1 in the time direction. Some state repeats at two times τ1 < τ2 ≤ n−2 with ℓ | τ2−τ1. The automaton is then periodic up to n−1, so the all-F state also occurs at n−1−(τ2−τ1). ∎
+
+The same holds for the left band driven by the column of cell d+1.
+
+**Status.** The lemma concerns cells of R_n, so it is not a condition on the half-line alone. It is implied by the cone tests of §9.
+
+**How the near misses fail at 15.** For each rule, R_15's right part reaches the pre-firing configuration of a shorter length m at τ = m−2:
+
+| rule | m | first firing |
+|---|---|---|
+| δ14 | 9 | cells 13–15 at t = 22 |
+| δ14c | 8 | cell 11 at t = 21 |
+| δ14d | 9 | cells 11–15 at t = 22 |
+| δ14e | 14 | cells 9–11 at t = 27 |
+| δ14b | 12 | cell 12 at t = 25 |
+
+For δ14, the width-3 right band of R_15 at τ = 7 is "G G B", the right part of R_9's pre-firing configuration L G^7 B.
+
+PUMP guarantees that the cone inputs differ. So it is the finite right band that merges the two lengths: its driving column leads to the same state.
+
+## 14. Where the four-state wall sits, and why five states differ
+
+gfix.py FREE, k = 4, full triangles 2..8 (CaDiCaL via PySAT). GFIX_MARGIN is the number of half-line anti-diagonals beyond 2N−2 that are encoded and required not to fire. GFIX_NORC lists the lengths without the return-chain condition.
+
+| half-line margin | return chain at 8 | result |
+|---|---|---|
+| 0 | omitted | SAT (the 27 partial rules of the note exist) |
+| 1 | omitted | UNSAT (56 s) |
+| 1 | kept | UNSAT (48 s) |
+| 2 | omitted | UNSAT (48 s) |
+
+The cells of anti-diagonal 15 lie in line 9's agreement region. So every four-state rule that synchronizes 2..8 makes line 9 fire early inside its half-line part: some cell (t, i) with t + i = 15 is F.
+
+The four-state wall is therefore a half-line phenomenon. It is detected before the echo of line 9 matters.
+
+The five-state near misses are different:
+- their half-lines are closed and F-free up to anti-diagonal 10^4;
+- all of them fail inside the reflected triangle R_15, in its right half (§13).
+
+**Caveat for the tools.** By default gfix.py uses margin 2 and the return chain at every encoded length. Both are necessary conditions for minimal-time solutions, so refutations stay valid. But a table reported FOUND for lengths 2..N also satisfies these conditions of line N+1.
+
+## 15. The two complexity-15 germs are one problem for n ≥ 3; first look at firing classes
+
+**δ14c's germ, full:2-14 cone:15 (kissat, one formula).** No answer within 7200 s (`s UNKNOWN`). The same formula on δ14d's germ was satisfiable in 690 s (single shot) and in 1020 s (round 1 of the loop).
+
+**Why the two germs are almost the same problem.** Let σ rename δ14d's states by A ↦ G, B ↦ A, G ↦ B (L and F fixed).
+- σ maps the 13 transitions of δ14d's germ that occur at t ≥ 1 onto the 13 transitions of δ14c's germ that occur at t ≥ 1. The remaining two transitions of each germ are the step t = 0 → 1: δ14d has ∗GL>A, GLL>B and δ14c has ∗GL>G, GLL>A.
+- At t = 1 both half-lines are A B L L … in δ14d's names, so σ maps δ14d's half-line onto δ14c's from t = 1 on.
+- For n ≥ 3, line n at t = 1 is A B L … L in both problems (in δ14d's names). Its later evolution, and hence every constraint of R_n, involves only the table and the cells at t ≥ 1.
+- So for the lengths n ≥ 3 the two completion problems coincide, except on four entries. In δ14d's names, δ14d fixes (∗,G,L) ↦ A and (G,L,L) ↦ B and leaves (∗,A,L) and (A,L,L) free; δ14c fixes (∗,A,L) ↦ A and (A,L,L) ↦ B and leaves the other two free.
+- They also differ on the line of length 2, which reads (G,L,∗) in δ14d and (A,L,∗) in δ14c (δ14d's names).
+- Hence the relaxation "δ14d's half-line from t = 1, lengths 3..N, the four entries free" contains both problems. If it is unsatisfiable for some N, both complexity-15 germs are refuted at once, and c78 ≥ 16 follows.
+
+The two known rules on this half-line are genuinely different completions: of the 80 entries that δ14d uses at t ≥ 1 on the lengths 2..14, only 38 agree with δ14c under σ.
+
+**Architecture of δ14d.** Its return chain (t + i = 2n−1, read from i = n down to 1) is G^{n−2} A F for every 3 ≤ n ≤ 14.
+- The spare state G, which the half-line never uses after t = 0, carries the echo as a clean speed-1 signal: δ(B,L,∗) = G at the right end, then δ(x,y,G) = G for the pairs (x,y) of the half-line.
+- At cell 2, δ(A,B,G) = A, and then δ(∗,A,A) = F.
+- The pre-firing configuration is A^n.
+
+**Uniform pre-firing classes.** For a state X put P_X = {XXX, ∗XX, XX∗}. Consider the formula with `--P P_X`, i.e. exactly these three neighbourhoods give F.
+- *Reduction.* A rule that synchronizes 2..N with pre-firing configuration X^n for every n ≤ N satisfies this formula after its unused F-entries are changed to non-F values:
+  - such an entry never occurs before the firing time in the lines 2..N, nor in the encoded half-line, because it would produce F there;
+  - at time 2n−3 the configuration X^n has only windows in P_X.
+- Conversely, `--P P_X` forces the configuration X^n at time 2n−3, since only X^n has all its windows in P_X.
+- *Consequence.* If the formula is unsatisfiable, no rule synchronizing 2..N fires from X^n at all these lengths.
+- *Cases.* X = L is impossible because δ(L,L,L) = L. X = B is the case X = A with A and B exchanged.
+- So two FREE runs decide the class "uniform pre-firing" (pre-firing configuration X^n for one X and all n ≤ N): X = G, which is Balzer's (B3) in the strong reading and Mazoyer's class, and X = A.
+- δ14c lies in the class X = G and synchronizes 2..14, so N ≥ 15 is needed for X = G. δ14d fires from A^n at every length up to 14 (its F-entry ∗AL is unused), so N ≥ 15 is needed for X = A as well.
+
+Runs started 16:12 and 16:17 UTC: `gcegar.py FREE 16 … full:2-6 --P 'GGG,*GG,GG*'` and the same with `--P 'AAA,*AA,AA*'`. Both reached length 12 within two minutes, much faster than the unrestricted FREE loop (length 12 after about 80 minutes).
