@@ -11,6 +11,7 @@ necessary conditions on the remaining transitions:
   cone n:h   the cells on which the right h+1 cells at time 2n-2 depend (h = 0: the right end,
              Lemmas 3.1, 3.2 of the note)
   band n:h   the anti-diagonals t + i = 2n-1 .. 2n-2+h (chains 1..h), which decide cells 1..h
+  early n:h  the cells of R_n at relative times tau = t-(n-1) <= h (h < n-1: no cell may fire)
 
 Cells at time 2n-2 must be F, all other encoded cells must not be F.  The return chain
 (t + i = 2n-1) must differ from C_inf (Lemma 2.3).  Unknowns: the transitions not in the germ.
@@ -176,6 +177,8 @@ def region(n, kind, h=None):
         return R
     if kind == 'band':
         return {(t, i) for (t, i) in R if t + i <= 2 * n - 2 + h}
+    if kind == 'early':                                  # relative times tau = t - (n-1) <= h
+        return {(t, i) for (t, i) in R if t <= n - 1 + h}
     if kind == 'cell':                                   # cone of the single cell (t, i) = h
         t0, i0 = h
         out, stack = set(), [(t0, i0)]

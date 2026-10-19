@@ -292,3 +292,49 @@ The two known rules on this half-line are genuinely different completions: of th
 - δ14c lies in the class X = G and synchronizes 2..14, so N ≥ 15 is needed for X = G. δ14d fires from A^n at every length up to 14 (its F-entry ∗AL is unused), so N ≥ 15 is needed for X = A as well.
 
 Runs started 16:12 and 16:17 UTC: `gcegar.py FREE 16 … full:2-6 --P 'GGG,*GG,GG*'` and the same with `--P 'AAA,*AA,AA*'`. Both reached length 12 within two minutes, much faster than the unrestricted FREE loop (length 12 after about 80 minutes).
+
+## 16. Early rows of all reflected triangles: a finite test for infinitely many lengths (asymp.py)
+
+**Observation.** Every known near miss fails at every length n ≥ 15, and always within a bounded number of steps after the reflection. Simulation of n = 15..120 gives the first firing at relative time τ = t − (n−1):
+- δ14: 7..10;
+- δ14d: 6..12;
+- δ14e: 9..14;
+- δ14b: 8..14;
+- δ14c: 7..22.
+
+So their failure is a property of the *early rows* τ ≤ T of R_n, uniformly in n.
+
+**Lemma A (early cells).** Let T ≥ 0 and n, n′ ≥ T+3. Define the signature σ_n(T) as the input cells J_n(κ) for κ ≤ T+1 together with the return-chain values C∞(n−1+κ, n−κ) = Φ_{n−1+κ}(2κ) for κ ≤ T.
+- *Claim.* If σ_n(T) = σ_{n′}(T), then R_n and R_{n′} agree on E(T) = {(τ,κ): 0 ≤ κ ≤ τ ≤ T}, up to the first F in E(T).
+- *Proof.* A path from (τ,κ) to an input cell at κ′ after r steps has κ′ ≤ κ+r and τ−r ∈ {κ′−1, κ′−2}, so κ′ ≤ T+1. Its cells have κ″ ≤ T < n−1, so the left border is never adjacent. Now apply the determinacy lemma (note, Lemma 3.1). ∎
+
+**Lemma B (certified periodicity).** For D ≥ 0 and t ≥ D, put V_t = (Φ_t(0), …, Φ_t(D)).
+- By (3), V_{t+1} is a function of V_t alone, since j ≤ D ≤ t keeps the border out.
+- *Claim.* If V_{t0} = V_{t0+p} for some t0 ≥ D, then V_t = V_{t+p} for all t ≥ t0.
+
+**Consequence.** Take D = 2T+4 (the program's choice; 2T+1 would suffice).
+- For n ≥ t0+3, σ_n(T) depends only on n mod p.
+- So the conditions "no cell of E(T) fires and the return chain differs from C∞", for all n ≥ N0, reduce to one length per signature in N0 ≤ n < max(N0, t0+3)+p.
+- `asymp.py GERM T N0` computes the certificate (t0, p) and these representative lengths as specs early:n:T. Lemma A needs n ≥ T+3, so every length N0 ≤ n < T+3 is kept individually.
+- gfix.py has the region `early:n:h`: the cells of R_n with τ ≤ h.
+
+**Proposition (each near miss synchronizes exactly the lengths 2..14).** Proved by the certificate plus simulation of all representative lengths (`failall.py RULE T`). Each line n ≥ 15 fires early, at τ ≤ T:
+
+| rule | T | depth rows 0..2T+4 periodic from t0, period p | lengths simulated (each below T+3, one per signature above) |
+|---|---|---|---|
+| δ14 | 10 | t0 = 51, p = 8 | 35 (15..49) |
+| δ14b | 14 | t0 = 66, p = 3 | 39 (15..53) |
+| δ14c | 22 | t0 = 257, p = 192 | 413 (15..427) |
+| δ14d | 12 | t0 = 95, p = 48 | 116 (15..130) |
+| δ14e | 14 | t0 = 56, p = 2 | 28 (15..42) |
+
+**Reading.** For large n, the early rows of R_n are the early rows of a limit object D_r, a "dual half-line" that grows from the right border on the periodic background of the shallow depth rows. In a minimal-time solution every D_r must never fire, exactly as C∞ never fires. The near misses violate this: for n ≤ 14 they time the right end from the shallow, periodic part of the input, and the same mechanism fires the right end early for all larger n.
+
+**Validation.**
+- Mazoyer's solution (germ of 57 transitions; depth rows 0..20 periodic from t0 = 42 with period 3; 21 representatives) satisfies the early-rows constraints, T = 8, for all n ≥ 15 (CaDiCaL, table fixed: SAT).
+- δ14d's table violates them (UNSAT).
+
+**As a refutation test, with the table free.**
+- full:2-9 + early rows (T = 8) of all n ≥ 10 on δ14d's germ: SAT (3 s).
+- full:2-11 + early rows (T = 10) of all n ≥ 12: SAT (62 s).
+- Running since 16:40 UTC: full:2-14 + early rows (T = 8) of all n ≥ 15 on δ14d's germ (44 lengths), and the δ14 loop's cones for 2..14 + early rows (T = 10) of all n ≥ 15 on δ14's germ (35 lengths).
