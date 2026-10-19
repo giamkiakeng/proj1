@@ -602,3 +602,37 @@ So the four-state impossibility needs only the complete lines 2..7, plus the fir
 By the four-state calibration, the threshold in T may lie a few lengths below the complete-line threshold.
 
 Also stopped at 20:25: the sweep of the complexity-16 germs, after r16_01 and r16_03, both UNKNOWN at 30 min.
+
+## 27. Early-row formulas for a fixed germ (20:30–20:50 UTC)
+
+With the germ fixed, the early rows of all lengths reduce to the representatives of asymp.py. The per-germ formula at level T is:
+- full:2-(T+1);
+- plus the early rows (τ ≤ T) of all n ≥ T+2, i.e. the representatives of asymp.py at T with NMIN = T+2.
+
+This is the strongest form of G_5(T, ·) for that half-line, since it covers every n.
+
+**δ14d's germ (= r16_15).**
+- T = 10: 59 representatives, kissat SAT in 18.7 s.
+- The model (scratchpad runs/germ14d_T10.rule; extracted with CaDiCaL in 105 s) synchronizes 2..11.
+- Lines 12..16 fire at the right time 2n−2, but not all cells.
+- Every longer line up to 40 first fires at τ ≥ 11.
+- With A and B exchanged, this model satisfies G_5(10, N1) and G_5(9, N1) for every N1. So the free runs G_5(9, 30) and G_5(10, 26) can only end SAT, and they were stopped at 20:33.
+- T = 11: 82 representatives; kissat UNKNOWN after 900 s (machine overloaded).
+- T = 12 (117 representatives): running.
+
+**Joint test for the two labellings of the complexity-15 half-line** (runs/joint15.sh T):
+- δ14d's germ with GFIX_UNFIX=*GL,GLL, full:3-(T+1), and the early-row representatives;
+- line 2 is left out, because it differs between the labellings (early_rows.tex, Lemma labellings);
+- if it is unsatisfiable, both complexity-15 germs are refuted and c78 ≥ 16;
+- T = 11 started 20:49, kissat 2 h.
+
+**Sweep of the 16 germs of K16_remaining16** (runs/gsweep.sh): the per-germ formula at T = 11, then T = 12, kissat 20 min each; results in runs/gsweep.log. Started 20:38.
+
+**Stopped:**
+- free_p1 at round 4 (length 13), 2.2 h in;
+- the phase-2 waiter;
+- er_cd_8 after 3 h 37 min without an answer.
+
+The early-row formulas are stronger tests per unit of encoding than the old formulas (full:2-14 + early rows at T = 8).
+
+**Certification status.** A refutation of all 16 germs would give c78 ≥ 17, but only after the classification behind K16_remaining16 is certified. Only its complexity ≤ 14 part is LRAT-certified (results/germs/CERTIFICATES.txt).
