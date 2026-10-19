@@ -472,3 +472,11 @@ This matches the first early firing of δ14 at τ = 7..10.
 - All five known near misses violate the second part: δ14 at τ ≤ 10, δ14b at τ = 8 (n = 19), δ14c at τ = 7 (n = 15), δ14d at τ ≤ 8 (n = 15, 17), δ14e at τ = 9 (n = 16).
 - Both parts are necessary for every minimal-time solution. So an unsatisfiable answer would prove that no five-state minimal-time solution exists; a satisfiable one gives a new kind of near miss.
 - Run started 17:35 UTC as a refinement loop (gcegar.py FREE 16, from full:2-6 early:15-30:9, cones added lazily for 7..16). Round 1: 434,704 clauses, SAT in 9 s.
+
+## 23. Symmetry breaking for the free mode (A ↔ B)
+
+GFIX_SYMBREAK=1 requires the first half-line cell (in the order of t, then i) whose state is A or B to be A. This is valid whenever no constraint singles out A or B. It does not apply to the class X = A.
+- Validation, FREE full:2-10: δ14 SAT; δ14 with A and B swapped UNSAT.
+- Effect: FREE full:2-10 with CaDiCaL went from 575 s without symmetry breaking to 23 s with it (same overloaded machine).
+
+At 17:50 UTC, three runs were restarted from their current constraints with symmetry breaking: free_er9, upf_G and be_LG_upfG. The A-class run (upf_A) was stopped at length 13 to free a core. Its constraints are in runs/upf_A_v3_paused.log.

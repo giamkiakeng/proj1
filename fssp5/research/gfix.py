@@ -366,6 +366,8 @@ def build(germ, k, specs, P=None, interior=False, upf=None):
     else:
         M = max(2 * n - 2 for n, _, _ in lines) + margin
     val = halfline_vars(E, M, shallow) if free else halfline(germ, M)
+    if free and os.environ.get('GFIX_SYMBREAK') == '1' and 'A' in E.W and 'B' in E.W:
+        symbreak_AB(E, val, M)
     ncells = 0
     for n, kind, h in lines:
         cells = region(n, 'early' if isinstance(kind, tuple) else kind, h)
@@ -379,6 +381,31 @@ def build(germ, k, specs, P=None, interior=False, upf=None):
         if upf is not None and n >= 3:
             add_upf(E, val, n, var, upf)
     return E, ncells
+
+
+def symbreak_AB(E, val, M):
+    """FREE mode, states A and B interchangeable: require that the first half-line cell (in the order of
+    t, then i, for t + i <= M) whose state is A or B has state A.  Valid when no constraint singles out A
+    or B (no firing class or pre-firing state naming them)."""
+    prev = None                                  # variable: some earlier cell is A or B
+    for t in range(1, M):
+        for i in range(1, t + 2):
+            if t + i > M:
+                continue
+            c = val(t, i)
+            if isinstance(c, str):
+                continue
+            if prev is not None:
+                E.cls.append([-c['B'], prev])    # B only after an earlier A or B
+            else:
+                E.cls.append([-c['B']])
+            s = E.new()                          # s <-> prev or c in {A, B}
+            E.cls.append([-s, c['A'], c['B']] + ([prev] if prev is not None else []))
+            E.cls.append([s, -c['A']])
+            E.cls.append([s, -c['B']])
+            if prev is not None:
+                E.cls.append([s, -prev])
+            prev = s
 
 
 def add_upf(E, val, n, var, X):
