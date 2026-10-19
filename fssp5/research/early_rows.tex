@@ -1,0 +1,339 @@
+\documentclass[11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=2.7cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+\usepackage[capitalise,noabbrev]{cleveref}
+\usepackage{microtype}
+\usepackage{url}
+\usepackage[shortlabels]{enumitem}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Lq}{\mathsf L}
+\newcommand{\Gq}{\mathsf G}
+\newcommand{\Aq}{\mathsf A}
+\newcommand{\Bq}{\mathsf B}
+\newcommand{\Fq}{\mathsf F}
+
+\title{Early rows of the reflected triangles, firing classes,\\
+and the five-state near misses}
+\author{Research notes accompanying the note\\
+\emph{Two necessary conditions on minimal-time solutions}\\
+\emph{of the firing squad problem}}
+\date{October 2026}
+
+\begin{document}
+\maketitle
+
+\noindent Notation and numbering of results refer to the note: the half-line
+$C_\infty$, the line $C_n$, the reflected triangle $R_n$ in the relative
+coordinates $\tau=t-(n-1)$, $\kappa=n-i$, so that
+$R_n=\{(\tau,\kappa):0\le\kappa\le\tau\le n-1\}$, the input word
+\[
+J_n(\kappa)=\bigl(\Phi_{n-3+\kappa}(2\kappa-2),\;\Phi_{n-2+\kappa}(2\kappa-1)\bigr),
+\qquad 0\le\kappa\le n-1,
+\]
+the depth rows $\Phi_t(j)=C_\infty(t,t+1-j)$ with the recurrence
+\begin{equation}\label{eq:comoving}
+\Phi_{t+1}(j)=\delta\bigl(\Phi_t(j),\Phi_t(j-1),\Phi_t(j-2)\bigr)\qquad
+(0\le j\le t+1),
+\end{equation}
+where $\Phi_t(-1)=\Phi_t(-2)=\Lq$ and $\Phi_t(t+1)=\ast$ (equation~(3) of the
+note), and the partial map $\Psi$ of the determinacy lemma (Lemma~3.1 of the
+note). We write $R_n(\tau,\kappa):=C_n(n-1+\tau,n-\kappa)$. All statements are
+proved below; the computer-assisted parts are simulations of explicitly given
+rule tables and use no SAT solver. They are reproduced by the programs
+\texttt{asymp.py} and \texttt{failall.py} in the directory
+\texttt{fssp5/research} of the repository.
+
+\section{Early rows}\label{sec:early}
+
+For $T\ge0$ let $E(T):=\{(\tau,\kappa):0\le\kappa\le\tau\le T\}$. If $n\ge T+2$,
+then $E(T)\subseteq R_n$ and no cell of $E(T)$ lies in the firing row
+$\tau=n-1$ of $R_n$.
+
+\begin{lemma}[early cells]\label{lem:early}
+Let $\delta$ be a rule, $T\ge0$, and $n,n'\ge T+2$ with $J_n(\kappa)=J_{n'}(\kappa)$
+for $0\le\kappa\le T+1$. Then for every $(\tau,\kappa)\in E(T)$,
+$\Psi(J_n,n;\tau,\kappa)$ is defined if and only if
+$\Psi(J_{n'},n';\tau,\kappa)$ is defined, and then the two values are equal. In
+particular, the line of length $n$ has a cell in state $\Fq$ at a relative time
+$\tau\le T$ if and only if the line of length $n'$ has one at the same relative
+position.
+\end{lemma}
+
+\begin{proof}
+By the definition of $\Psi$ in the proof of Lemma~3.1 of the note,
+\[
+\Psi(J,m;\tau,\kappa)=\delta(x_{\kappa+1},x_\kappa,x_{\kappa-1}),
+\]
+where $x_{\kappa'}$ is the border $\ast$ if $\kappa'\in\{-1,m\}$, a component of
+$J(\kappa')$ if $\tau-1\in\{\kappa'-2,\kappa'-1\}$, and
+$\Psi(J,m;\tau-1,\kappa')$ otherwise (then $0\le\kappa'\le\tau-1$). Unfolding
+this recursion from $(\tau,\kappa)\in E(T)$ visits only pairs
+$(\tau'',\kappa'')$ with $0\le\kappa''\le\tau''\le T$ and reads the symbols
+$x_{\kappa'}$ with $\kappa'\le\kappa''+1\le T+1$. The case $\kappa'=m$ would
+require $m\le T+1$, which is excluded for $m\in\{n,n'\}$; hence the left border
+is never read, and the input word is read only at positions $\kappa'\le T+1$,
+where $J_n$ and $J_{n'}$ agree. The two recursions are therefore identical step
+by step, including the points where an argument equal to $\Fq$ makes $\delta$
+undefined. The last statement follows because the cells of the line of length
+$n$ outside $R_n$ coincide with cells of $C_\infty$ (Lemma~2.2 of the note) and
+are never $\Fq$ before the line has fired, while the cells of $R_n$ at the
+relative times $\tau\le T$ are exactly the cells of $E(T)$.
+\end{proof}
+
+\begin{lemma}[periodicity certificate]\label{lem:certificate}
+Let $\delta$ be a rule whose half-line does not fire, $D\ge0$, and
+$V_t:=(\Phi_t(0),\dots,\Phi_t(D))$ for $t\ge D$. There is a map $G_D$, depending
+on $\delta$ and $D$ only, with $V_{t+1}=G_D(V_t)$ for all $t\ge D$. Consequently,
+if $V_{t_0}=V_{t_0+p}$ for some $t_0\ge D$ and $p\ge1$, then $V_t=V_{t+p}$ for
+all $t\ge t_0$.
+\end{lemma}
+
+\begin{proof}
+For $t\ge D$ and $0\le j\le D$ we have $j\le t$, so the three arguments in
+\eqref{eq:comoving} are $\Phi_t(j)$, $\Phi_t(j-1)$, $\Phi_t(j-2)$ with indices at
+most $D$ (and $\Lq$ for negative indices); none of them is the border symbol
+$\Phi_t(t+1)=\ast$. Hence $G_D(v)_j:=\delta(v_j,v_{j-1},v_{j-2})$, with
+$v_{-1}=v_{-2}=\Lq$, does it; it is well defined on the vectors that occur
+because the half-line does not fire. The second statement follows by induction
+on $t$.
+\end{proof}
+
+\begin{corollary}[finitely many early-row problems]\label{cor:reduce}
+Let $\delta$, $T\ge0$, $D:=2T+1$, $t_0\ge D$ and $p\ge1$ satisfy
+$V_{t_0}=V_{t_0+p}$. Then $J_n(\kappa)=J_{n+p}(\kappa)$ for all
+$0\le\kappa\le T+1$ and all $n\ge t_0+3$. Hence, for every $N_0\ge T+2$, each
+line of length $n\ge N_0$ has the same cells at the relative times $\tau\le T$
+(in the sense of \cref{lem:early}) as one of the lines of the finitely many
+lengths $N_0\le n'<\max(N_0,t_0+3)+p$.
+\end{corollary}
+
+\begin{proof}
+For $0\le\kappa\le T+1$ the two components of $J_n(\kappa)$ are depth-row cells
+of depths $2\kappa-2,2\kappa-1\le 2T+1=D$ at the times $n-3+\kappa$ and
+$n-2+\kappa$, which are at least $n-3\ge t_0$ (for $\kappa=0$ the lower
+component is $\Lq$ by convention, and the upper one is $C_\infty(n-2,n)=\Lq$ by
+Lemma~2.1 of the note). By \cref{lem:certificate} these cells are unchanged when
+$n$ is replaced by $n+p$. If $n\ge\max(N_0,t_0+3)+p$, subtracting a suitable
+multiple of $p$ gives $n'$ in $[\max(N_0,t_0+3),\max(N_0,t_0+3)+p)$ with
+$J_{n'}=J_n$ on $[0,T+1]$, and \cref{lem:early} applies since $n,n'\ge N_0\ge
+T+2$.
+\end{proof}
+
+\begin{remark}\label{rem:limit}
+For a minimal-time solution, every line of length $n\ge T+2$ has no $\Fq$ at
+the relative times $\tau\le T$. If the depth column $V_t$ for $D=2T+1$ is
+periodic from $t_0$ with period $p$, the early rows of $R_n$ for $n\ge t_0+3$
+depend only on $n\bmod p$: they are the first $T+1$ rows of finitely many
+\emph{limit triangles}, which grow from the right border on the periodic
+background formed by the depth rows near the front. A minimal-time solution
+needs every limit triangle to stay free of $\Fq$ in all rows, just as the
+half-line itself never fires. The near misses of the note violate exactly this,
+as the next proposition shows.
+\end{remark}
+
+\begin{proposition}\label{prop:nearmiss}
+None of the rules $\delta_{14}$, $\delta_{14}^{\mathrm b}$,
+$\delta_{14}^{\mathrm c}$, $\delta_{14}^{\mathrm d}$, $\delta_{14}^{\mathrm e}$
+(files \texttt{results/delta14*.txt} of the repository) synchronizes a line of
+length $n\ge15$ at time $2n-2$. Each of them therefore synchronizes exactly the
+lines of lengths $2,\dots,14$ in minimal time.
+\end{proposition}
+
+\begin{proof}[Proof (computer-assisted, by simulation)]
+For each rule, \cref{tab:certificates} gives $T$ and a repetition
+$V_{t_0}=V_{t_0+p}$ of the depth column for $D=2T+4\ge2T+1$, found by
+simulating the half-line. Each rule's half-line uses only the transitions of its
+germ and does not fire on the computed cells, so \cref{lem:certificate} applies.
+By direct simulation:
+\begin{enumerate}[(i)]
+\item every line of length $15\le n<T+3$ fails to synchronize at time $2n-2$
+(early or incomplete firing);
+\item for every $n$ with $\max(15,T+3)\le n<t_0+3+p$, the line of length $n$, or
+a line of a length $n'$ in the same range with $J_{n'}=J_n$ on $[0,T+1]$, has a
+cell in state $\Fq$ at a relative time $\tau\le T$.
+\end{enumerate}
+By \cref{lem:early} and \cref{cor:reduce} (with $N_0=\max(15,T+3)$), every line
+of length $n\ge\max(15,T+3)$ has an $\Fq$ at a relative time $\tau\le T<n-1$,
+that is, before time $2n-2$.
+The lines of lengths $2,\dots,14$ are synchronized by these rules
+(Proposition~5.2 of the note and its text).
+\end{proof}
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+rule & $T$ & $t_0$ & $p$ & lengths simulated & first $\Fq$ at relative time\\
+\midrule
+$\delta_{14}$ & $10$ & $51$ & $8$ & $35$ $(15,\dots,49)$ & $7,\dots,10$\\
+$\delta_{14}^{\mathrm b}$ & $14$ & $66$ & $3$ & $39$ $(15,\dots,53)$ & $8,\dots,14$\\
+$\delta_{14}^{\mathrm c}$ & $22$ & $257$ & $192$ & $413$ $(15,\dots,427)$ & $7,\dots,22$\\
+$\delta_{14}^{\mathrm d}$ & $12$ & $95$ & $48$ & $116$ $(15,\dots,130)$ & $6,\dots,12$\\
+$\delta_{14}^{\mathrm e}$ & $14$ & $56$ & $2$ & $28$ $(15,\dots,42)$ & $9,\dots,14$\\
+\bottomrule
+\end{tabular}
+\caption{Certificates for \cref{prop:nearmiss}: the depth column of
+depths $0,\dots,2T+4$ repeats with period $p$ from time $t_0$; one length per
+distinct signature (input cells at $\kappa\le T+2$ and the return-chain values
+of $C_\infty$, a slightly finer partition than needed) is simulated, together
+with every length $15\le n<T+3$. Program: \texttt{failall.py RULE T}.}
+\label{tab:certificates}
+\end{table}
+
+\paragraph{The early-rows test} Let $g$ be a germ that determines $C_\infty$
+on the cells used below, and let the depth column of $C_\infty$ for $D=2T+1$
+satisfy $V_{t_0}=V_{t_0+p}$. If a rule $\delta\supseteq g$ is a minimal-time
+solution, then for each of the finitely many lengths $n$ of
+\cref{cor:reduce} no cell of $R_n$ with $\tau\le\min(T,n-2)$ is $\Fq$, and
+$R_n(\tau,\tau)\ne C_\infty(n-1+\tau,n-\tau)$ for $\tau\le\min(T,n-1)$ by
+Lemma~2.3 of the note. By \cref{cor:reduce}, these conditions for the listed
+lengths imply the same conditions for every $n\ge N_0$: no further length adds
+a constraint on the early rows. Combined with the complete triangles of the
+lengths $2,\dots,N_0-1$, they form a finite formula; if it has no model
+extending $g$, no minimal-time solution contains $g$. This test is the encoding
+\texttt{early:n:T} of \texttt{gfix.py}, with the lengths produced by
+\texttt{asymp.py}.
+
+\section{Uniform pre-firing configurations}\label{sec:classes}
+
+\begin{lemma}\label{lem:class}
+Let $X\in W$, $N\ge3$, and let $\delta$ be a minimal-time solution such that for
+every $3\le n\le N$ the configuration of the line of length $n$ at time $2n-3$
+is $X^n$. Define $\delta'$ by $\delta'(x,y,z):=\Lq$ for every $(x,y,z)\in
+W^3\setminus\{(X,X,X)\}$ with $\delta(x,y,z)=\Fq$, and $\delta':=\delta$
+elsewhere. Then $\delta'(X,X,X)=\Fq$, no other neighbourhood without a border is
+mapped to $\Fq$ by $\delta'$, and $\delta'$ coincides with $\delta$ on every
+neighbourhood that occurs in the half-line or in a line of length $n\le N$
+before time $2n-2$. In particular, $\delta'$ satisfies every constraint that
+the lines of lengths $2,\dots,N$ and the half-line impose on $\delta$.
+\end{lemma}
+
+\begin{proof}
+The rule $\delta'$ satisfies the quiescence condition~(1) of the note, since
+$\delta(\Lq,\Lq,\Lq)=\Lq$. The line of length $3$ fires from $XXX$, so
+$\delta(X,X,X)=\Fq=\delta'(X,X,X)$. Let $(x,y,z)\in W^3\setminus\{(X,X,X)\}$
+with $\delta(x,y,z)=\Fq$. It does not occur in the half-line, which never fires
+(equation~(2) of the note). If it occurred as the neighbourhood of a cell of the
+line of length $n\le N$ at a time $t<2n-2$, that cell would be $\Fq$ at time
+$t+1$; this is impossible for $t+1<2n-2$, and for $t=2n-3$ the configuration is
+$X^n$, whose neighbourhoods without a border are all $(X,X,X)$ (the line of
+length $2$ has none). Changing the values of neighbourhoods that never occur
+changes neither the half-line nor these lines.
+\end{proof}
+
+So if the constraints of the lengths $2,\dots,N$ (with the half-line encoded to
+any anti-diagonal), together with ``the only neighbourhood without a border
+that gives $\Fq$ is $(X,X,X)$'', are unsatisfiable, then no minimal-time
+solution fires from $X^n$ at every length $3\le n\le N$. This is option
+\texttt{--Pint XXX} of \texttt{gcegar.py}; option \texttt{--upf X} adds the
+implied unit clauses ``every cell at time $2n-3$ is $X$''. The state
+$X=\Lq$ is impossible, because $\delta(\Lq,\Lq,\Lq)=\Lq$, and $X=\Bq$ is the
+case $X=\Aq$ after exchanging the auxiliary states. Mazoyer's solution fires
+from $\Gq^n$, and so do the rules satisfying Balzer's condition (B3) in the
+strong reading.
+
+\section{A pumping lemma for the right band}\label{sec:column}
+
+The left-border lemma (Lemma~4.1 of the note) runs a band of chains along an
+anti-diagonal. The same pigeonhole argument applies to the cells next to the
+right border, read in the direction of time. It gives a necessary condition on
+the reflected triangle itself.
+
+\begin{lemma}[right band]\label{lem:column}
+Let $\delta$ have $k$ states and synchronize the line of length $n$ at time
+$2n-2$. Let $1\le d\le\tau_0\le n-2$ and $\ell\ge1$, and suppose that the
+column $\tau\mapsto R_n(\tau,d)$ is $\ell$-periodic on $[\tau_0,n-2]$. Then
+$n-1-\tau_0\le(k-1)^d\ell$.
+\end{lemma}
+
+\begin{proof}
+For $d-1\le\tau\le n-1$ put $\mathbf b(\tau):=(R_n(\tau,0),\dots,R_n(\tau,d-1))$.
+Since $R_n(\tau+1,\kappa)=\delta(R_n(\tau,\kappa+1),R_n(\tau,\kappa),
+R_n(\tau,\kappa-1))$ with $R_n(\tau,-1)=\ast$, there is a map $\Gamma$, depending
+on $\delta$ and $d$ only, with
+$\mathbf b(\tau+1)=\Gamma(\mathbf b(\tau),R_n(\tau,d))$ for $d\le\tau\le n-2$; its
+arguments lie in $W^d\times W$ because no cell fires before time $2n-2$. At
+$\tau=n-1$ the band is $\Fq^d$. Suppose $n-1-\tau_0>(k-1)^d\ell$. The pairs
+$(\mathbf b(\tau),\tau\bmod\ell)$, $\tau_0\le\tau\le n-2$, take at most
+$(k-1)^d\ell$ values, so there are $\tau_0\le\tau_1<\tau_2\le n-2$ with
+$\mathbf b(\tau_1)=\mathbf b(\tau_2)$ and $\ell\mid h:=\tau_2-\tau_1$. For
+$0\le s\le n-2-\tau_2$ the driving cells $R_n(\tau_1+s,d)$ and $R_n(\tau_2+s,d)$
+lie in $[\tau_0,n-2]$ and differ by a multiple of the period, so they are
+equal, and induction on $s$ gives
+$\mathbf b(\tau_1+s)=\mathbf b(\tau_2+s)$ for $0\le s\le n-1-\tau_2$. For
+$s=n-1-\tau_2$ this reads $\mathbf b(n-1-h)=\mathbf b(n-1)=\Fq^d$, although
+$n-1-h<n-1$: a contradiction.
+\end{proof}
+
+Unlike the two barriers of the note, the hypothesis concerns cells of $R_n$, not
+of the half-line, so the lemma is no test on germs. The partial-triangle tests
+(cones of firing cells, \texttt{gfix.py}) imply it for every length they
+encode.
+
+\section{The complexity-15 half-line}\label{sec:labellings}
+
+The two germs of complexity $15$ that survive the tests of the note are those of
+$\delta_{14}^{\mathrm c}$ and $\delta_{14}^{\mathrm d}$. Let $\sigma$ be the
+renaming $\Aq\mapsto\Gq$, $\Bq\mapsto\Aq$, $\Gq\mapsto\Bq$ of the states of
+$\delta_{14}^{\mathrm d}$ ($\Lq$ and $\Fq$ fixed).
+
+\begin{lemma}\label{lem:labellings}
+$\sigma$ maps the thirteen transitions of the germ of $\delta_{14}^{\mathrm d}$
+that occur at times $t\ge1$ onto the thirteen transitions of the germ of
+$\delta_{14}^{\mathrm c}$ that occur at times $t\ge1$. Let $n\ge3$. In the names
+of $\delta_{14}^{\mathrm d}$, the line of length $n$ is $\Aq\,\Bq\,\Lq^{n-2}$ at
+time $1$ for both germs. Hence the constraints that the line of length $n$
+imposes on a completion of the germ of $\delta_{14}^{\mathrm d}$ and,
+transported by $\sigma^{-1}$, on a completion of the germ of
+$\delta_{14}^{\mathrm c}$ are the same. The only exceptions are the four entries
+$(\ast,\Gq,\Lq)$, $(\Gq,\Lq,\Lq)$, which the germ of $\delta_{14}^{\mathrm d}$
+fixes to $\Aq,\Bq$, and $(\ast,\Aq,\Lq)$, $(\Aq,\Lq,\Lq)$, which the transported
+germ of $\delta_{14}^{\mathrm c}$ fixes to $\Aq,\Bq$.
+\end{lemma}
+
+\begin{proof}
+The germ of $\delta_{14}^{\mathrm d}$ is $\ast\Gq\Lq{>}\Aq$, $\Gq\Lq\Lq{>}\Bq$,
+$\ast\Aq\Bq{>}\Aq$, $\Aq\Bq\Lq{>}\Bq$, $\Bq\Lq\Lq{>}\Bq$, $\Aq\Bq\Bq{>}\Bq$,
+$\Bq\Bq\Lq{>}\Lq$, $\Bq\Lq\Bq{>}\Bq$, $\Lq\Bq\Lq{>}\Aq$, $\Bq\Bq\Aq{>}\Lq$,
+$\Bq\Aq\Bq{>}\Bq$, $\Lq\Bq\Bq{>}\Lq$, $\Bq\Bq\Bq{>}\Bq$, $\Lq\Bq\Aq{>}\Bq$,
+$\Aq\Bq\Aq{>}\Aq$. That of $\delta_{14}^{\mathrm c}$ is $\ast\Gq\Lq{>}\Gq$,
+$\Gq\Lq\Lq{>}\Aq$, $\ast\Gq\Aq{>}\Gq$, $\Gq\Aq\Lq{>}\Aq$, $\Aq\Lq\Lq{>}\Aq$,
+$\Gq\Aq\Aq{>}\Aq$, $\Aq\Aq\Lq{>}\Lq$, $\Aq\Lq\Aq{>}\Aq$, $\Lq\Aq\Lq{>}\Gq$,
+$\Aq\Aq\Gq{>}\Lq$, $\Aq\Gq\Aq{>}\Aq$, $\Lq\Aq\Aq{>}\Lq$, $\Aq\Aq\Aq{>}\Aq$,
+$\Lq\Aq\Gq{>}\Aq$, $\Gq\Aq\Gq{>}\Gq$. Applying $\sigma$ to the last thirteen
+transitions of the first list gives the last thirteen of the second. In both
+germs the first two transitions are used only at $t=0$ (the general is the only
+cell in state $\Gq$ of $\delta_{14}^{\mathrm d}$'s half-line, and
+$(\ast,\Gq,\Lq)$, $(\Gq,\Lq,\Lq)$ do not occur in $\delta_{14}^{\mathrm c}$'s half-line
+at $t\ge1$, by the correspondence). At time $1$ the line of length $n\ge3$ is
+$(\delta(\ast,\Gq,\Lq),\delta(\Gq,\Lq,\Lq),\Lq,\dots,\Lq)$, which is
+$\Aq\,\Bq\,\Lq^{n-2}$ for $\delta_{14}^{\mathrm d}$ and $\Gq\,\Aq\,\Lq^{n-2}$, that
+is $\sigma(\Aq\,\Bq\,\Lq^{n-2})$, for $\delta_{14}^{\mathrm c}$. From time $1$
+on, the line evolves by the table alone, so a completion $\delta$ of the first
+germ and the completion $\sigma\circ\delta\circ\sigma^{-1}$ of the second (after
+the four entries above are set as stated) produce corresponding lines of every
+length $n\ge3$. The line of length $2$ reads $(\Gq,\Lq,\ast)$ at time $0$ in
+both germs, which corresponds to two different entries.
+\end{proof}
+
+Consequently the completion problems of the two labellings for the lengths
+$3,\dots,N$, with the four entries left free, have a common relaxation; if it
+is unsatisfiable, both germs are refuted and every five-state minimal-time
+solution has $c_{78}\ge16$.
+
+\end{document}

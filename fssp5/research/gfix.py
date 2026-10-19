@@ -206,9 +206,14 @@ def region(n, kind, h=None):
 
 
 def add_line(E, val, n, cells):
-    var = {}
-    for (t, i) in sorted(cells):
-        var[(t, i)] = 'F' if t == 2 * n - 2 else E.cell(E.W)
+    """encode the cells of R_n in CELLS; with GFIX_SHARE=1, cells that compute the same function of the
+    table (same dependency tree down to the same input values and borders) share one variable, across
+    all lengths encoded in E (structural hashing; a firing cell meeting a non-firing one is a conflict,
+    which is how the pumping lemma shows up)"""
+    share = os.environ.get('GFIX_SHARE') == '1'
+    if share and not hasattr(E, 'share'):
+        E.share, E.ids = {}, {}
+    var, key = {}, {}
 
     def get(t, j):
         if j == 0 or j == n + 1:
@@ -218,15 +223,46 @@ def add_line(E, val, n, cells):
         if t + j <= 2 * n - 2:
             return val(t, j)
         raise KeyError((n, t, j))
+
+    def kget(t, j):
+        if j == 0 or j == n + 1:
+            return ('*',)
+        if (t, j) in var:
+            return key[(t, j)]
+        c = val(t, j) if t + j <= 2 * n - 2 else None
+        if c is None:
+            raise KeyError((n, t, j))
+        return ('c', c) if isinstance(c, str) else ('h', t, j)
     for (t, i) in sorted(cells):
-        E.transition(get(t - 1, i - 1), get(t - 1, i), get(t - 1, i + 1), var[(t, i)])
-        if t + i == 2 * n - 1 and t < 2 * n - 2 and n not in NORC:   # return chain differs from C_inf
-            c = val(t, i)
-            if isinstance(c, str):
-                if c in var[(t, i)]:
-                    E.cls.append([-var[(t, i)][c]])
+        fire = t == 2 * n - 2
+        if share:
+            k = (kget(t - 1, i - 1), kget(t - 1, i), kget(t - 1, i + 1))
+            kid = E.ids.setdefault(k, len(E.ids))
+            key[(t, i)] = ('v', kid)
+            if kid in E.share:
+                v = E.share[kid]
+                if (v == 'F') != fire:
+                    E.cls.append([])                 # the same function must be F and not F
+                var[(t, i)] = v
+                new = False
             else:
-                for d, x in var[(t, i)].items():
+                var[(t, i)] = E.share[kid] = 'F' if fire else E.cell(E.W)
+                new = True
+        else:
+            var[(t, i)] = 'F' if fire else E.cell(E.W)
+            new = True
+        if new:
+            E.transition(get(t - 1, i - 1), get(t - 1, i), get(t - 1, i + 1), var[(t, i)])
+        if t + i == 2 * n - 1 and not fire and n not in NORC:   # return chain differs from C_inf
+            c = val(t, i)
+            v = var[(t, i)]
+            if v == 'F':
+                continue
+            if isinstance(c, str):
+                if c in v:
+                    E.cls.append([-v[c]])
+            else:
+                for d, x in v.items():
                     if d in c:
                         E.cls.append([-x, -c[d]])
     return var

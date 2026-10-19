@@ -338,3 +338,41 @@ So their failure is a property of the *early rows* τ ≤ T of R_n, uniformly in
 - full:2-9 + early rows (T = 8) of all n ≥ 10 on δ14d's germ: SAT (3 s).
 - full:2-11 + early rows (T = 10) of all n ≥ 12: SAT (62 s).
 - Running since 16:40 UTC: full:2-14 + early rows (T = 8) of all n ≥ 15 on δ14d's germ (44 lengths), and the δ14 loop's cones for 2..14 + early rows (T = 10) of all n ≥ 15 on δ14's germ (35 lengths).
+
+## 17. Repair distance of the near misses at length 15
+
+The question: how many entries of a near miss must change, with its germ fixed, for the table to synchronize 2..15?
+
+**Encoding.** The formula is full:2-15 on the germ plus a cardinality constraint (PySAT sequential counter): at most D of the free entries that the rule uses on the lengths 2..14 may differ from the rule. Free entries that the rule does not use on 2..14 are unconstrained. Solver: kissat (script `scratch/anal/neardist.py`, not in the repository).
+
+| rule | used free entries | D = 0 | 2 | 4 | 6 | 8 | 10 | 12 |
+|---|---|---|---|---|---|---|---|---|
+| δ14d | 64 | UNSAT 0 s | UNSAT 0 s | UNSAT 1 s | UNSAT 2 s | UNSAT 11 s | UNSAT 42 s | UNSAT 193 s |
+| δ14e | 62 | – | UNSAT 1 s | UNSAT 1 s | UNSAT 2 s | UNSAT 5 s | UNSAT 18 s | UNSAT 67 s |
+
+So any completion of these germs for 2..15 differs from δ14d (resp. δ14e) in at least 13 of the entries that the rule uses on 2..14. This holds even for δ14e, whose line of length 15 misses by one step. The runs for D = 16 were stopped to free the cores. These are not certified, since no proofs were logged.
+
+## 18. Structural sharing in the encoding; the families among the 16 surviving germs
+
+**GFIX_SHARE=1** (gfix.add_line) gives one variable to all cells that compute the same function of the table, across all encoded lengths.
+- Two cells compute the same function when their dependency trees coincide down to the same half-line input values and borders. The key of a cell is the triple of its predecessors' keys, interned.
+- If a firing cell and a non-firing cell get the same key, the formula receives an empty clause. This is exactly how a violation of PUMP(n, n′) appears.
+
+Sizes:
+
+| formula | without sharing | with sharing |
+|---|---|---|
+| full:2-14 (δ14's germ) | 2,210 vars, 88,060 clauses | 1,854 vars, 80,075 clauses |
+| cone:2-30 (δ14's germ) | 10,670 vars, 520,701 clauses | 7,654 vars, 404,917 clauses |
+| δ14d full:2-14 + early rows (T = 8) of all n ≥ 15 | 10,135 vars, 393,587 clauses | 3,691 vars, 156,087 clauses |
+
+The answers with δ14's table fixed are unchanged (SAT for 2..14, UNSAT for 2..15 and for cone:2-30). The three early-rows runs were restarted with sharing at 16:55 UTC.
+
+**The 16 surviving germs (K16_remaining16) form a few families.**
+- Rule 22 driven at the left border, 9 germs:
+  - r16_00 is δ14's germ, rule 22 on {L, B}.
+  - r16_03..r16_10 run rule 22 on {L, G} (GLL, LGL, LLG > G; GGL, GLG, LGG, GGG > L), with different boundary layers in A, B.
+  - For T = 8, all nine have the same certificate shape: depth rows 0..20 periodic from t0 = 39, with p = 8 for r16_00 and r16_03..r16_10; 23 signatures each.
+- Elementary rule 124, the mirror image of rule 110, on {L, G}: r16_11 and r16_13 (GGL, GLG, GLL, LGG, LGL > G; LLG, GGG > L).
+- The complexity-15 half-line: r16_02 (δ14c) and r16_15 (δ14d).
+- r16_01, r16_12 and r16_14: three-state patterns that do not fall into these families.
