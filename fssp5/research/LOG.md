@@ -480,3 +480,15 @@ GFIX_SYMBREAK=1 requires the first half-line cell (in the order of t, then i) wh
 - Effect: FREE full:2-10 with CaDiCaL went from 575 s without symmetry breaking to 23 s with it (same overloaded machine).
 
 At 17:50 UTC, three runs were restarted from their current constraints with symmetry breaking: free_er9, upf_G and be_LG_upfG. The A-class run (upf_A) was stopped at length 13 to free a core. Its constraints are in runs/upf_A_v3_paused.log.
+
+## 24. Status at 19:00 UTC; cubes of the joint formula; sweep of the surviving germs at length 14
+
+**Cube-and-conquer on er_cd_8.** The formula has 158,037 clauses. march_cu at depth 10 splits it into 1,012 cubes, 10 of them refuted during cubing. The first three cubes each stayed undecided after 120 s of kissat on formula plus cube. At this depth the cubes are hard, so the worker was stopped. The single run on the whole formula continues: 2 h so far, no answer.
+
+**Phase split for the unrestricted early-rows search.** With the early rows of lengths 15..30 included, every refinement round was heavy, even at length 11 (more than 40 min). It now runs in two phases:
+- Phase 1 (free_p1): FREE + symmetry breaking for the lengths 2..14 only. Started at 18:40 UTC; at length 12 after 5 minutes.
+- Phase 2 (runs/phase2.sh): when phase 1 finds a table for 2..14, it restarts the loop from phase 1's constraints plus early:15-30:9.
+
+**Sweep16.** Among the 16 germs of K16_remaining16, 2..14 completions are known only for r16_00 (δ14), r16_02 (δ14c) and r16_15 (δ14d). The other 13 are run through the refinement loop to length 14, with sharing and 30 minutes each. An UNSAT answer refutes a germ already at length 14.
+
+**Paused.** upf_G at 18:52 UTC; its constraints are in runs/paused.txt.
