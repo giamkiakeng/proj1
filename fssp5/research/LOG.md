@@ -532,18 +532,18 @@ For five states the tree is far too large for this method. The solvers' clause l
 - full:2-9 plus the early rows (T = 8) of all n ≥ 10 (49 representative lengths from asymp.py) is SAT in 4.2 s. The early rows alone do not contradict the short lines.
 - Adding the left bands band:10-40:4 gives UNKNOWN after 600 s.
 
-**Every known near miss fires early at τ ≤ 9.** Script: scratchpad anal/firstF.py; first firing for 2 ≤ n ≤ 60.
+**Every known near miss fires early at τ ≤ 9.** Script: scratchpad anal/firstF.py; lines 2 ≤ n ≤ 60 simulated. N is the last length of the run of synchronized lines 2..N; n is the smallest length with an F at relative time τ ≤ 9 (and τ < n−1).
 
-| rule | synchronizes | first early firing at relative time τ ≤ 9 |
-|---|---|---|
-| δ13 | 2..13 | n = 14, τ = 8; τ = 8 for every 14 ≤ n ≤ 60 |
-| uniformA_2-12 | 2..12 | n = 16, τ = 7; τ = 7 for every 16 ≤ n ≤ 60 |
-| δ13_chaotic | 2..13 | n = 18, τ = 7 |
-| δ14 | 2..14 | n = 16, τ = 7 |
-| δ14b | 2..14 | n = 19, τ = 8 |
-| δ14c | 2..14 | n = 15, τ = 7 |
-| δ14d | 2..14 | n = 17, τ = 6 |
-| δ14e | 2..14 | n = 16, τ = 9 |
+| rule | N | n | τ | relative time of the first F, N < n ≤ 60 |
+|---|---|---|---|---|
+| δ13 | 13 | 14 | 8 | τ = 8 for every n |
+| uniformA_2-12 | 12 | 16 | 7 | 11, 10, 10 for n = 13, 14, 15; τ = 7 for n ≥ 16 |
+| δ13_chaotic | 13 | 14 | 9 | 7 ≤ τ ≤ 15; period 8 in n for n ≥ 22 |
+| δ14 | 14 | 15 | 8 | 7 ≤ τ ≤ 10; period 8 in n for n ≥ 18 |
+| δ14b | 14 | 19 | 8 | 8 ≤ τ ≤ 14; τ = 8, 12, 14 with period 3 for n ≥ 25 |
+| δ14c | 14 | 15 | 7 | 7 ≤ τ ≤ 18 |
+| δ14d | 14 | 15 | 8 | 6 ≤ τ ≤ 12 |
+| δ14e | 14 | 16 | 9 | 9 ≤ τ ≤ 14; τ = 9, 11 with period 2 for n ≥ 20 |
 
 The failures recur periodically in n. These are the limit triangles of §16 firing early.
 
@@ -559,3 +559,46 @@ Runs (FREE, sharing, shallow half-line, A/B symmetry breaking; kissat with a 4 h
 |---|---|---|---|
 | F(10, 9, 60) | 17,275 | 1,186,016 | 19:42 |
 | F(10, 9, 30) | 8,155 | 538,376 | 20:05 |
+
+## 26. Early-row formulas G_k(T, N1); four states refuted with complete lines 2..7
+
+**Definition.** G_k(T, N1) = full:2..(T+1) + early:(T+2)..N1:T, in the free mode. Requirements:
+- the half-line is encoded cell by cell to the anti-diagonal 2·N1 (default margin, no GFIX_SHALLOW);
+- the return chains are included.
+
+Every condition holds for every minimal-time solution (early_rows.tex, Lemma "G"). F(10, 9, N1) of §25 is G_5(9, N1) with the shallow half-line.
+
+**Why not shallow.** The shallow run F(10,9,60) returned SAT after 27 min, but the model is spurious. Its general fires at time 22 (cell 1, anti-diagonal 23), outside the half-line cells that the shallow encoding constrains (anti-diagonals ≤ 20). The model was decoded with scratchpad anal/decode.py, which rebuilds the encoding and reads the kissat model.
+
+The decisive formula of §22 and the phase-2 loop used the shallow encoding too. An UNSAT answer from them would still have been valid, but a SAT answer could be spurious. runs/phase2.sh now runs without GFIX_SHALLOW, with GFIX_SHARE=1.
+
+**Four-state calibration** (CaDiCaL, FREE k = 4, sharing):
+
+| formula | result |
+|---|---|
+| G_4(4, 30) = full:2-5 early:6-30:4 | SAT (0.0 s) |
+| G_4(5, 30) = full:2-6 early:7-30:5 | SAT (0.8 s) |
+| full:2-7 early:8-30:5 | SAT (4.2 s) |
+| G_4(6, 30) = full:2-7 early:8-30:6 | UNSAT (76 s) |
+| G_4(6, 20) | UNSAT (45 s) |
+| G_4(6, 14) | UNSAT (36 s) |
+| G_4(6, 10) | UNSAT (34 s) |
+| G_4(6, 9) | SAT (12 s) |
+| G_4(6, 8) | SAT (8 s) |
+| G_4(6, 10) without the return chains of 8, 9, 10 (GFIX_NORC) | SAT (12 s) |
+| G_4(7, 30) = full:2-8 early:9-30:7 | UNSAT (66 s) |
+
+**Certificate for G_4(6, 10)** (certify_lrat.sh):
+- 919 vars, 22,960 clauses; CNF sha256 0e0ba286ec7b60d05f6edee470b5cbd4d6655cd184186e630a96bd4187932e03;
+- CaDiCaL 41 s; LRAT 166,919,248 B, sha256 7943a69803f934814a80c731060747afeee9317d205b6330c4325a039f6da6fb;
+- lrat-check VERIFIED in 5 s.
+
+So the four-state impossibility needs only the complete lines 2..7, plus the first seven rows and the return chains of lines 8, 9, 10. With complete lines alone it needs 2..9: 27 partial rules synchronize 2..8.
+
+**Five states.** G_5(9, 30) is running since 20:17 UTC (10,175 vars, 635,332 clauses). G_5(9, 60) (30,425 vars, 1,960,762 clauses) was started then and stopped at 20:25 to free a core. G_5(10, 26) and G_5(11, 28) are running since 20:25:
+- G_5(10, 26): full:2-11 early:12-26:10, 8,815 vars, 555,373 clauses;
+- G_5(11, 28): full:2-12 early:13-28:11, 10,661 vars, 687,648 clauses.
+
+By the four-state calibration, the threshold in T may lie a few lengths below the complete-line threshold.
+
+Also stopped at 20:25: the sweep of the complexity-16 germs, after r16_01 and r16_03, both UNKNOWN at 30 min.

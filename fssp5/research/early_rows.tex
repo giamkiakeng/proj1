@@ -6,6 +6,7 @@
 \usepackage[margin=2.7cm]{geometry}
 \usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage{booktabs}
+\usepackage{array}
 \usepackage[hidelinks]{hyperref}
 \usepackage[capitalise,noabbrev]{cleveref}
 \usepackage{microtype}
@@ -208,6 +209,118 @@ lengths $2,\dots,N_0-1$, they form a finite formula; if it has no model
 extending $g$, no minimal-time solution contains $g$. This test is the encoding
 \texttt{early:n:T} of \texttt{gfix.py}, with the lengths produced by
 \texttt{asymp.py}.
+
+\section{Early-row formulas}\label{sec:G}
+
+The early-rows test of \cref{sec:early} fixes a germ. The following finite
+formulas leave the whole rule free and combine complete lines with the early
+rows of longer lines.
+
+\begin{definition}\label{def:G}
+Let $k\ge3$, $T\ge1$ and $N_1\ge T+2$. A $k$-state rule $\delta$ satisfying the
+quiescence condition~(1) of the note \emph{satisfies $\mathcal G_k(T,N_1)$} if
+\begin{enumerate}[(G1)]
+\item $\delta$ synchronizes the line of length $n$ at time $2n-2$ for
+$2\le n\le T+1$;
+\item for $T+2\le n\le N_1$, no cell of the line of length $n$ is $\Fq$ at a
+time $t\le n-1+T$;
+\item for $T+2\le n\le N_1$ and $1\le i\le n$ with $t:=2n-1-i\le n-1+T$,
+$C_n(t,i)\ne C_\infty(t,i)$;
+\item $C_\infty(t,i)\ne\Fq$ whenever $t+i\le 2N_1$.
+\end{enumerate}
+\end{definition}
+
+\begin{lemma}\label{lem:G}
+Every $k$-state minimal-time solution satisfies $\mathcal G_k(T,N_1)$ for all
+$T\ge1$ and $N_1\ge T+2$.
+\end{lemma}
+
+\begin{proof}
+(G1) holds by definition. For (G2), $n\ge T+2$ gives
+$2n-2=(n-1)+(n-1)\ge(n-1)+(T+1)>n-1+T$, so the times $t\le n-1+T$ precede the
+firing time $2n-2$ of the line of length $n$, at which the line is
+synchronized for the first time. (G3) is Lemma~2.3 of the note, which applies
+because the lines of lengths $n$ and $n+1$ are synchronized at times $2n-2$
+and $2n$. (G4) is equation~(2) of the note.
+\end{proof}
+
+By (G1) and (G2), the cells of $R_n$ that $\mathcal G_k(T,N_1)$ constrains are
+those of $E(T)$ for $n\ge T+2$ and all of $R_n$ for $n\le T+1$, which is why
+the lines $2,\dots,T+1$ are complete and no shorter list of complete lines
+occurs in the definition. In the encoding of \texttt{gfix.py}, $\mathcal
+G_k(T,N_1)$ is \texttt{full:2-(T+1) early:(T+2)-$N_1$:T} in the free mode,
+with the half-line encoded cell by cell up to the anti-diagonal $2N_1$
+(option \texttt{GFIX\_MARGIN=2}, the default). The option
+\texttt{GFIX\_SHALLOW} must not be used here. It encodes only the depth rows
+near the front for the long lines, and hence drops (G4) on the deeper cells of
+the half-line. The resulting relaxation for $T=9$, $N_1=60$ has a model whose
+general fires at time $22$.
+
+\begin{proposition}[computer-assisted; the unsatisfiable case is
+LRAT-certified]\label{prop:G4}
+The formula $\mathcal G_4(6,10)$ is unsatisfiable: no four-state rule
+satisfying~(1) synchronizes the lines of lengths $2,\dots,7$ in minimal time
+and satisfies (G2)--(G4) for $n\in\{8,9,10\}$ and $T=6$. Each of the
+following weakenings is satisfiable: $\mathcal G_4(5,30)$; $\mathcal
+G_4(6,9)$; and $\mathcal G_4(6,10)$ without (G3).
+\end{proposition}
+
+\begin{proof}
+The program \texttt{gfix.py} encodes $\mathcal G_4(6,10)$, with structural
+sharing (option \texttt{GFIX\_SHARE=1}), as a CNF formula with $919$ variables
+and $22{,}960$ clauses; the SHA-256 digest of the CNF file is
+\begin{center}\small
+\texttt{0e0ba286ec7b60d05f6edee470b5cbd4d6655cd184186e630a96bd4187932e03}.
+\end{center}
+CaDiCaL~3.0.1 refutes it in $41$\,s and writes an LRAT proof of $167$\,MB,
+which \texttt{lrat-check} verifies in $5$\,s (script
+\texttt{certify\_lrat.sh}). For each weakening, CaDiCaL returns a model of the
+encoding, i.e.\ a partial rule, and the encoding is equivalent to the formula
+on the cells it contains. Without (G3) means option
+\texttt{GFIX\_NORC=8,9,10}.
+\end{proof}
+
+Theorem~5.1 of the note refutes four states with the complete lines
+$2,\dots,9$, and the bound $9$ is sharp for complete lines: $27$ partial rules
+synchronize the lines $2,\dots,8$. Proposition~\ref{prop:G4} replaces the
+complete lines $8$ and $9$ by the first seven rows of the reflected triangles
+of the lines $8$, $9$, $10$, together with their return chains.
+
+\begin{proposition}[computational]\label{prop:nearmissearly}
+Each of the following five-state rules synchronizes exactly the lines of
+lengths $2,\dots,N$ among $2\le n\le60$, for the stated $N$. The line of the
+stated length $n\le19$, the smallest one with this property, has a cell in
+state $\Fq$ at the stated relative time $\tau=t-(n-1)\le9$, and $\tau<n-1$; the
+last column gives the relative time of the first firing cell of every failing
+line up to length $60$. The rules $\delta_{13}$, $\delta_{12}^{\Aq}$ and
+$\delta_{13}^{\mathrm{ch}}$ are the files \texttt{delta13.txt},
+\texttt{uniformA\_2-12.txt} and \texttt{delta13\_chaotic.txt} of
+\texttt{results/}, the others are those of \cref{prop:nearmiss}.
+\begin{center}\footnotesize
+\begin{tabular}{@{}lccc>{\raggedright\arraybackslash}p{6.3cm}@{}}
+\toprule
+rule & $N$ & $n$ & $\tau$ & relative time of the first $\Fq$ in the line of length $n$, $N<n\le60$\\
+\midrule
+$\delta_{13}$ & $13$ & $14$ & $8$ & $\tau=8$ for every $n$\\
+$\delta_{12}^{\Aq}$ & $12$ & $16$ & $7$ & $\tau=11,10,10$ for $n=13,14,15$; $\tau=7$ for $n\ge16$\\
+$\delta_{13}^{\mathrm{ch}}$ & $13$ & $14$ & $9$ & $7\le\tau\le15$; period $8$ in $n$ for $n\ge22$\\
+$\delta_{14}$ & $14$ & $15$ & $8$ & $7\le\tau\le10$; period $8$ in $n$ for $n\ge18$\\
+$\delta_{14}^{\mathrm b}$ & $14$ & $19$ & $8$ & $8\le\tau\le14$; $\tau=8,12,14$ with period $3$ for $n\ge25$\\
+$\delta_{14}^{\mathrm c}$ & $14$ & $15$ & $7$ & $7\le\tau\le18$\\
+$\delta_{14}^{\mathrm d}$ & $14$ & $15$ & $8$ & $6\le\tau\le12$\\
+$\delta_{14}^{\mathrm e}$ & $14$ & $16$ & $9$ & $9\le\tau\le14$; $\tau=9,11$ with period $2$ for $n\ge20$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Consequently none of them satisfies $\mathcal G_5(9,N_1)$ for $N_1\ge19$.
+\end{proposition}
+
+\begin{proof}
+Direct simulation of the lines of lengths $2\le n\le60$ (script
+\texttt{firstF.py}, recorded in \texttt{LOG.md}, \S25). For the last claim:
+each rule synchronizes the lines $2,\dots,10$, so it satisfies (G1) for $T=9$,
+and the stated line violates (G2).
+\end{proof}
 
 \section{Uniform pre-firing configurations}\label{sec:classes}
 
