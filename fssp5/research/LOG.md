@@ -665,7 +665,7 @@ Adding the right ends (region cone:n, i.e. τ + κ ≤ n − 1: the right end fi
 
 So four states are refuted by the complete lines 2..5, plus the first five rows, the return chains and the right ends of the lines 6..10. Neither part suffices alone.
 
-**Five states, cone-augmented free formulas** (share, symbreak, full half-line; kissat 4 h), started 21:31:
+**Five states, cone-augmented free formulas** (share, symbreak, full half-line; kissat 4 h), started 21:17:
 - C_7 = full:2-8 early:9-30:7 cone:9-20: 9,999 vars, 612,003 clauses;
 - C_8 = full:2-9 early:10-30:8 cone:10-20: 10,471 vars, 649,616 clauses.
 
