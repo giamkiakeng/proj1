@@ -14,6 +14,7 @@ necessary conditions on the remaining transitions:
   early n:h  the cells of R_n at relative times tau = t-(n-1) <= h (h < n-1: no cell may fire)
   reset n:h:w  early n:h, and every cell with kappa <= tau - w (behind an echo of width w) is L,
              as in Mazoyer's solution (w = 4) until tau is about n/3
+  mid n      the cone of the middle firing cell (2n-2, floor(n/2)+1)
 
 Cells at time 2n-2 must be F, all other encoded cells must not be F.  The return chain
 (t + i = 2n-1) must differ from C_inf (Lemma 2.3).  Unknowns: the transitions not in the germ.
@@ -202,6 +203,8 @@ def region(n, kind, h=None):
                 if (t - 1, j) in R:
                     stack.append((t - 1, j))
         return out
+    if kind == 'mid':                                    # cone of the middle firing cell (2n-2, ceil((n+1)/2))
+        return region(n, 'cell', (2 * n - 2, (n + 2) // 2))
     if kind == 'cone':                                   # cones of the firing cells n-h .. n (h = 0: right end)
         out, stack = set(), [(2 * n - 2, i) for i in range(max(1, n - (h or 0)), n + 1)]
         while stack:
