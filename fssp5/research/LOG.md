@@ -683,3 +683,10 @@ The joint test without cones at T = 11 (runs/joint15.sh 11) runs until 22:49.
 - T = 7, full:2-8, the early rows (τ ≤ 7) of all n ≥ 9, cone:9-20: SAT (556 s). So the free C_7 is SAT as well (same lifting argument as in §27), and it was stopped at 21:36.
 - T = 8, cone:10-20: UNKNOWN.
 - T = 10, cone:12-20: UNKNOWN (1200 s).
+
+**The T = 7 cone model fires at both ends.** The model of δ14d's germ at T = 7 with cone:9-20 was re-solved and decoded (scratchpad runs/d14d_T7c.rule).
+- It synchronizes the lines 2..8 and 10.
+- In the lines 9, 11–17 and 19, the left cells (via the return chain) and the right end (via the cones) fire exactly at 2n−2, but the middle cells do not. For n = 9 the firing row is F F L G L L G B F.
+- Lines 18, 20, 21, 23 and 24 fire early, outside the encoded cones (at τ = 16, 13, 10, 10, 11).
+
+The T = 10 model without cones (§27) failed at the right end instead. So the cheap regions (early rows, right-end cones, left bands) control the two ends of each line. Some five-state tables get both ends right but not the middle, which four-state tables cannot do (§28). Excluding them needs the firing of middle cells, whose dependency cones cover most of R_n. That is where the cost of complete lines comes back.
