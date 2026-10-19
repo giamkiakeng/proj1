@@ -706,3 +706,5 @@ So the complexity-15 half-line passes the early-row level T = 11 for all lengths
 - the free C_8 (kissat 4 h, from 21:17).
 
 The models found so far are saved in research/models/ and described in early_rows.tex, Proposition "germmodels".
+
+**Joint test with cones at T = 9 (cone:11-20): UNKNOWN** after 2 h of kissat (23:53). CaDiCaL (-t 21600) runs on the same CNF since 23:54. Both cone-augmented joint formulas (T = 9, 10) are in the hard zone; T = 7 with cones is SAT (Proposition "germmodels" (ii) of early_rows.tex).
