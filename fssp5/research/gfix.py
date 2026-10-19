@@ -1,0 +1,317 @@
+#!/usr/bin/env python3
+"""
+gfix.py -- completion constraints for a fixed half-line (germ), with partial triangles.
+
+The half-line C_inf of a rule is determined by its germ (the transitions it uses) as long as no
+other neighbourhood occurs.  With C_inf fixed, every cell of a reflected triangle R_n is a function
+of the cells below it, so any set of cells of R_n that is closed under predecessors gives
+necessary conditions on the remaining transitions:
+
+  full n     all cells of R_n (t + i >= 2n-1, t <= 2n-2): the line of length n fires exactly at 2n-2
+  cone n:h   the cells on which the right h+1 cells at time 2n-2 depend (h = 0: the right end,
+             Lemmas 3.1, 3.2 of the note)
+  band n:h   the anti-diagonals t + i = 2n-1 .. 2n-2+h (chains 1..h), which decide cells 1..h
+
+Cells at time 2n-2 must be F, all other encoded cells must not be F.  The return chain
+(t + i = 2n-1) must differ from C_inf (Lemma 2.3).  Unknowns: the transitions not in the germ.
+
+usage: gfix.py GERMFILE|FREE [k=5] spec... [--fix RULEFILE] [--cnf OUT] [--solve kissat|cadical] [--timeout S]
+   spec: full:2-14  cone:15-30  cone:15:7  band:15-80:4   (lengths a-b or a,b,c;
+         band takes :h = number of chains; cone takes an optional :h = the cones of the firing
+         cells n-h .. n, i.e. the right h+1 cells of the firing row)
+"""
+import itertools
+import os
+import subprocess
+import sys
+import time
+
+STATES = 'LGABCDE'
+
+
+def parse_germ(path):
+    if path == 'FREE':
+        return None
+    for ln in open(path):
+        w = ln.split()
+        if w and w[0] == 'GERM':
+            g = {}
+            for tr in w[1:]:
+                nb, d = tr.split('>')
+                g[tuple(nb)] = d
+            return g
+    raise SystemExit('no GERM line in ' + path)
+
+
+def load_rule(path):
+    tab = {}
+    for ln in open(path):
+        w = ln.split('#')[0].split()
+        if len(w) == 4:
+            tab[tuple(w[:3])] = w[3]
+    return tab
+
+
+class Enc:
+    def __init__(self, k, germ):
+        self.k = k
+        self.W = list(STATES[:k - 1])          # working states
+        self.S = self.W + ['F']
+        self.germ = dict(germ)
+        self.germ.setdefault(('L', 'L', 'L'), 'L')
+        self.germ.setdefault(('L', 'L', '*'), 'L')
+        self.nv = 0
+        self.cls = []
+        self.rev = os.environ.get('GFIX_REV') == '1'   # redundant clauses: cell values determine T
+        self.T = {}                             # free transitions: nbhd -> {d: var}
+        side = ['*'] + self.W
+        for a in side:
+            for b in self.W:
+                for c in side:
+                    if a == '*' and c == '*':
+                        continue
+                    if (a, b, c) in self.germ:
+                        continue
+                    vs = {d: self.new() for d in self.S}
+                    self.T[(a, b, c)] = vs
+                    self.exactly_one(list(vs.values()))
+
+    def new(self):
+        self.nv += 1
+        return self.nv
+
+    def exactly_one(self, vs):
+        self.cls.append(list(vs))
+        for x, y in itertools.combinations(vs, 2):
+            self.cls.append([-x, -y])
+
+    def cell(self, values):
+        vs = {d: self.new() for d in values}
+        self.exactly_one(list(vs.values()))
+        return vs
+
+    def transition(self, p, q, r, out):
+        """p, q, r: constants (str) or dicts value->var; out: dict value->var or the constant 'F'"""
+        dom = lambda x: [(x, None)] if isinstance(x, str) else list(x.items())
+        for (a, va), (b, vb), (c, vc) in itertools.product(dom(p), dom(q), dom(r)):
+            pre = [-v for v in (va, vb, vc) if v is not None]
+            nb = (a, b, c)
+            if nb in self.germ:
+                g = self.germ[nb]
+                if isinstance(out, str):
+                    if g != out:
+                        self.cls.append(pre)
+                elif g in out:
+                    self.cls.append(pre + [out[g]])
+                else:
+                    self.cls.append(pre)
+            else:
+                Tv = self.T[nb]
+                for d, td in Tv.items():
+                    if isinstance(out, str):
+                        if d != out:
+                            self.cls.append(pre + [-td])
+                    elif d in out:
+                        self.cls.append(pre + [-td, out[d]])
+                        if self.rev:
+                            self.cls.append(pre + [-out[d], td])
+                    else:
+                        self.cls.append(pre + [-td])
+
+
+def halfline(germ, M):
+    """C_inf(t, i) for t + i <= M (dict), using the germ only; raises if it is not closed."""
+    C = {}
+    def val(t, i):
+        if i == 0:
+            return '*'
+        if i > t + 1:
+            return 'L'
+        return C[(t, i)]
+    C[(0, 1)] = 'G'
+    for s in range(2, M + 1):          # anti-diagonal t + i = s
+        for t in range(1, s):                 # increasing t: (t-1, i+1) is on the same anti-diagonal
+            i = s - t
+            if i > t + 1:
+                continue
+            nb = (val(t - 1, i - 1), val(t - 1, i), val(t - 1, i + 1))
+            if nb == ('L', 'L', 'L'):
+                C[(t, i)] = 'L'
+            elif nb in germ:
+                C[(t, i)] = germ[nb]
+            else:
+                raise SystemExit('germ not closed: neighbourhood %s at (t,i)=(%d,%d), anti-diagonal %d'
+                                 % (''.join(nb), t, i, s))
+    return val
+
+
+def halfline_vars(E, M):
+    """C_inf(t, i) for t + i <= M as variables (one-hot over W, so no half-line cell fires)"""
+    C = {}
+    def val(t, i):
+        if i == 0:
+            return '*'
+        if t == 0:
+            return 'G' if i == 1 else 'L'
+        if i > t + 1:
+            return 'L'
+        return C[(t, i)]
+    for s in range(2, M + 1):
+        for t in range(1, s):
+            i = s - t
+            if i > t + 1:
+                continue
+            C[(t, i)] = E.cell(E.W)
+    for (t, i) in sorted(C):
+        E.transition(val(t - 1, i - 1), val(t - 1, i), val(t - 1, i + 1), C[(t, i)])
+    return val
+
+
+def region(n, kind, h=None):
+    """cells (t, i) of R_n of the given kind"""
+    R = {(t, i) for i in range(1, n + 1) for t in range(n - 1, 2 * n - 1) if t + i >= 2 * n - 1}
+    if kind == 'full':
+        return R
+    if kind == 'band':
+        return {(t, i) for (t, i) in R if t + i <= 2 * n - 2 + h}
+    if kind == 'cone':                                   # cones of the firing cells n-h .. n (h = 0: right end)
+        out, stack = set(), [(2 * n - 2, i) for i in range(max(1, n - (h or 0)), n + 1)]
+        while stack:
+            t, i = stack.pop()
+            if (t, i) in out:
+                continue
+            out.add((t, i))
+            for j in (i - 1, i, i + 1):
+                if (t - 1, j) in R:
+                    stack.append((t - 1, j))
+        return out
+    raise ValueError(kind)
+
+
+def add_line(E, val, n, cells):
+    var = {}
+    for (t, i) in sorted(cells):
+        var[(t, i)] = 'F' if t == 2 * n - 2 else E.cell(E.W)
+
+    def get(t, j):
+        if j == 0 or j == n + 1:
+            return '*'
+        if (t, j) in var:
+            return var[(t, j)]
+        if t + j <= 2 * n - 2:
+            return val(t, j)
+        raise KeyError((n, t, j))
+    for (t, i) in sorted(cells):
+        E.transition(get(t - 1, i - 1), get(t - 1, i), get(t - 1, i + 1), var[(t, i)])
+        if t + i == 2 * n - 1 and t < 2 * n - 2:            # return chain differs from C_inf
+            c = val(t, i)
+            if isinstance(c, str):
+                if c in var[(t, i)]:
+                    E.cls.append([-var[(t, i)][c]])
+            else:
+                for d, x in var[(t, i)].items():
+                    if d in c:
+                        E.cls.append([-x, -c[d]])
+    return var
+
+
+def parse_range(s):
+    out = []
+    for part in s.split(','):
+        if '-' in part:
+            a, b = part.split('-')
+            out.extend(range(int(a), int(b) + 1))
+        else:
+            out.append(int(part))
+    return out
+
+
+def build(germ, k, specs, P=None):
+    """P: optional set of neighbourhoods (tuples) that are exactly the ones mapped to F"""
+    free = germ is None
+    E = Enc(k, {} if free else germ)
+    if P is not None:
+        for nb, vs in E.T.items():
+            E.cls.append([vs['F']] if nb in P else [-vs['F']])
+        for nb, d in E.germ.items():
+            if (d == 'F') != (nb in P):
+                E.cls.append([])                       # the germ contradicts the class
+    lines = []
+    for sp in specs:
+        w = sp.split(':')
+        kind, ns = w[0], parse_range(w[1])
+        h = int(w[2]) if len(w) > 2 else None
+        lines += [(n, kind, h) for n in ns]
+    M = max(2 * n - 2 for n, _, _ in lines) + 2
+    val = halfline_vars(E, M) if free else halfline(germ, M)
+    ncells = 0
+    for n, kind, h in lines:
+        cells = region(n, kind, h)
+        ncells += len(cells)
+        add_line(E, val, n, cells)
+    return E, ncells
+
+
+def write_cnf(E, path, extra=()):
+    with open(path, 'w') as fh:
+        fh.write('p cnf %d %d\n' % (E.nv, len(E.cls) + len(extra)))
+        for c in list(E.cls) + list(extra):
+            fh.write(' '.join(map(str, c)) + ' 0\n')
+
+
+def main():
+    a = sys.argv[1:]
+    if not a:
+        sys.exit(__doc__)
+    germ = parse_germ(a[0])
+    k, specs, fix, out, solver, timeout = 5, [], None, None, None, 3600
+    it = iter(a[1:])
+    for x in it:
+        if x == '--fix':
+            fix = next(it)
+        elif x == '--cnf':
+            out = next(it)
+        elif x == '--solve':
+            solver = next(it)
+        elif x == '--timeout':
+            timeout = int(next(it))
+        elif x.isdigit():
+            k = int(x)
+        else:
+            specs.append(x)
+    t0 = time.time()
+    E, ncells = build(germ, k, specs)
+    units = []
+    if fix:
+        tab = load_rule(fix)
+        for nb, vs in E.T.items():
+            if nb in tab:
+                units.append([vs[tab[nb]]])
+    print('k=%d specs=%s cells=%d vars=%d clauses=%d free transitions=%d (%.1f s)'
+          % (k, ' '.join(specs), ncells, E.nv, len(E.cls), len(E.T), time.time() - t0), flush=True)
+    if out:
+        write_cnf(E, out, units)
+    if solver:
+        from pysat.solvers import Solver
+        if solver == 'cadical':
+            with Solver(name='cd19', bootstrap_with=E.cls + units) as s:
+                t1 = time.time()
+                r = s.solve()
+                print('cadical:', 'SAT' if r else 'UNSAT', '%.1f s' % (time.time() - t1))
+                if r:
+                    m = set(x for x in s.get_model() if x > 0)
+                    print('TABLE', ' '.join('%s>%s' % (''.join(nb), d)
+                                            for nb, vs in sorted(E.T.items()) for d, v in vs.items() if v in m))
+        else:
+            path = out or '/tmp/claude-0/gfix_%d.cnf' % os.getpid()
+            if not out:
+                write_cnf(E, path, units)
+            t1 = time.time()
+            p = subprocess.run(['/home/user/tools/kissat/build/kissat', '-q', '--time=%d' % timeout, path],
+                               capture_output=True, text=True)
+            st = [l for l in p.stdout.splitlines() if l.startswith('s ')]
+            print('kissat:', st[0] if st else 'UNKNOWN', '%.1f s' % (time.time() - t1))
+
+
+if __name__ == '__main__':
+    main()
