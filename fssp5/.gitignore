@@ -5,3 +5,8 @@ src/fsspdfs
 src/__pycache__/
 src/germdfs
 src/germext
+research/dfs_timeorder
+research/*.aux
+research/*.log
+research/*.out
+research/__pycache__/
