@@ -1,0 +1,3 @@
+refuted at N=10: 7324 (germinc), 7324 (stored list, complexity 16), equal as lists: True
+survivors: 828
+other statuses: []

@@ -15,6 +15,12 @@ This directory holds ongoing work on the five-state question that goes beyond th
 | `dfs_timeorder.c` | an independent re-implementation of `../src/fsspdfs.c` (exhaustive depth-first search in the style of Balzer and Sanders), which evaluates the cells in time order instead of along anti-diagonals and adds return-chain pruning; `--plain` counts the partial rules for the lengths 2..N alone (27 for four states and N = 8, as with the original). Compile with `gcc -O3 -o dfs_timeorder dfs_timeorder.c`. |
 | `early_rows.tex` | research notes with proofs: early rows, the formulas G_k(T, N1), pre-firing classes, the right-band lemma, Mazoyer's architecture, the complexity-15 half-line. |
 | `ils5.c` | iterated local search over rule tables, in the spirit of Clergue–Verel–Formenti 2018 (calibration only; see LOG.md §10). |
+| `icube.py`, `rcube.py`, `rfinal.py` | cube-and-conquer with one incremental CaDiCaL instance (PySAT): `icube.py` solves the cubes of an `.icnf` file under assumptions with a conflict budget; `rcube.py` is the recursive version (an UNKNOWN cube is split again by march_cu), restartable and sliceable, with a log of every result and split; `rfinal.py` reports the state of a tree (LOG.md §30). |
+| `covcert.sh`, `certcubes.sh`, `rcert.py` | certificates for cube-and-conquer refutations, by CaDiCaL 3 text LRAT proofs and lrat-check: the cubes cover (`covcert.sh`), each cube is refuted (`certcubes.sh`), and a whole tree of `rcube.py` (`rcert.py`, which rebuilds the tree from the cubes, hashes every checked object, and composes the result with `--final`). |
+| `germ_witness_check.py` | independent check of germext's witnesses (Lemma 4.1 or a failing PUMP(n, n′)) on the half-line simulated from the germ alone. |
+| `germ_regular_check.py` | independent check that a germ's half-line is eventually regular (blocks, growth vector, and the one-copy argument of LOG.md §30). |
+| `run30/` | data of LOG.md §30: the certificate logs and digests of the complexity-15 and complexity-16 funnels, germext outputs and their checks, the certificate of X(r16_01), the representatives of the per-germ formulas. |
+| `germs/r16/` | the 16 germs of `germs/K16_remaining16.txt`, one per file (r16_XX is germ XX+1). |
 | `germs/K16_remaining16.txt` | the 16 germs of complexity ≤ 16 that survive all tests of the manuscript. Two of them have complexity 15: those of δ14c and δ14d. |
 | `germs/K17_irregular187.txt` | the 187 complexity-17 germs that survive germext and are not certified regular. |
 

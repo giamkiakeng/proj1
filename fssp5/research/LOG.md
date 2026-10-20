@@ -796,3 +796,101 @@ So the left part of R_n is a cascade of finite automata driven by the upper inpu
 - the per-germ tests at T = 10 with cone:12-20 (δ14d's germ in CaDiCaL and δ14c's germ in kissat, 04:37–10:37);
 - C_7h3 (kissat, 04:37–08:37);
 - since 05:32, pg_delta14d_full15: δ14d's germ with the complete lines 2..15 (sharing), kissat, 4 h. The old cube-and-conquer (results/LOG.md, results/cubes/README.md) left 375 of the 3070 cubes of δ14d's labelling undecided and 1319 untried at these lengths.
+
+## 30. Per-germ formulas X(g), recursive cube-and-conquer, and the funnels for c78 ≥ 16 and c78 ≥ 17 (06:40–09:00 UTC; in progress)
+
+Programs: research/icube.py, rcube.py, rfinal.py, rcert.py, covcert.sh, certcubes.sh, germ_witness_check.py, germ_regular_check.py. Data: research/run30/. The germ r16_XX is germ XX+1 of germs/K16_remaining16.txt (one file each in germs/r16/).
+
+**The formula.** For a germ g let X(g) be the gfix.py formula (GFIX_SHARE=1) of
+- full:2-15 (the lines 2..15 are synchronized at 2n−2),
+- the early rows τ ≤ 12 of every line n ≥ 16, given by the asymp.py representatives (lem:early, cor:reduce of the note),
+- cone:16-20 (the right end of the lines 16..20 fires at 2n−2 and nothing in its cone fires earlier).
+
+Each part is a necessary condition for a minimal-time solution containing g, so "X(g) unsatisfiable" refutes g. Command (deterministic; the digests were reproduced):
+
+```
+REPS=$(python3 asymp.py germs/r16/r16_XX.txt 12 16 | tail -1)
+GFIX_SHARE=1 python3 gfix.py germs/r16/r16_XX.txt 5 full:2-15 $REPS cone:16-20 --cnf xg.cnf
+/home/user/tools/CnC/march_cu/march_cu xg.cnf -d 10 -o xg_d10.icnf
+```
+
+| germ | name | representatives | formula | march_cu -d 10 |
+|---|---|---|---|---|
+| r16_02 (δ14c's germ, complexity 15) | x14c | 115 (n = 16..130) | 9,571 vars, 463,849 clauses; sha256 6d1cb28b… | 916 cubes (64 refuted leaves), 41 s |
+| r16_15 (δ14d's germ, complexity 15) | x14d | 115 (n = 16..130) | 9,571 vars, 464,254 clauses; sha256 01c27479… | 869 cubes (44 refuted leaves), 27 s |
+| r16_01 | x16_01 | 30 (n = 16..45) | 5,390 vars, 254,443 clauses; sha256 119ac8a9… | 993 cubes (19 refuted leaves), 17 s |
+| r16_03 | x16_03 | 39 (n = 16..54) | 6,018 vars, 295,667 clauses | 564 cubes (72 refuted leaves), 12 s |
+
+**Cube-and-conquer.**
+- The cubes of march_cu form a complete cover: the CNF of their negations is unsatisfiable. covcert.sh checks this with CaDiCaL 3.0.1 and lrat-check. Negative control: dropping one cube makes that CNF satisfiable.
+- icube.py solves the cubes with one incremental CaDiCaL instance (PySAT cd19), under assumptions, with a conflict budget.
+- certcubes.sh certifies each cube c separately: CaDiCaL refutes X(g) + the unit clauses of c with a text LRAT proof, accepted only if lrat-check exits 0 and prints the line "c VERIFIED". Together with the LRAT refutation of the negated cubes, this certifies that X(g) is unsatisfiable.
+
+**r16_01 is refuted and certified.** All 993 cubes are UNSAT, 991 at 10^5 conflicts and the other 2 at 10^6 (run30/r16_01/x16_01_p1.out, _p2.out). All 993 per-cube LRAT proofs are VERIFIED (run30/r16_01/cert16_01.log; 452 s in total, at most 34.8 s for one cube), and so is the cover (cov16.log). So X(r16_01) is unsatisfiable, and no five-state minimal-time solution contains the germ r16_01.
+
+**The hard cubes sit at the near misses.** At 10^5 conflicts about 10 % of the cubes of x14c and x14d stay UNKNOWN. Every one of them is consistent with the table of δ14c (for x14c) or δ14d (for x14d): these rules synchronize the lines 2..14 and fail at 15 by early firing in the right half. Nine of the ten literals of each cube are cell variables of short lines, so the cube fixes the short lines to behave as in the near miss.
+
+Attempts on cube 170 of x14c (UNKNOWN at 10^5):
+
+| method | result |
+|---|---|
+| fresh CaDiCaL, 10^6 conflicts | UNKNOWN, 334 s |
+| the same, with the complete lines 16..20 added (x14c ∧ full:16-20, composed on the shared table variables) | UNKNOWN, 366 s |
+| kissat on x14c + cube units | UNKNOWN after 600 s |
+| march_cu -d 6 on x14c + cube units, sub-cubes at 10^5 | 60 sub-cubes: 49 UNSAT, 11 UNKNOWN |
+| the same on sub-cubes 7 and 8 | 63 and 54 sub-sub-cubes, all UNSAT, 17 s and 32 s |
+
+So a larger budget, kissat, or more necessary conditions do not decide the hard cubes, but splitting them further does, quickly.
+
+**Recursive cube-and-conquer (rcube.py).** The work items are the cubes not yet UNSAT. An untried item is solved at 10^5 conflicts by one incremental CaDiCaL instance. An UNKNOWN item c is split by march_cu -d 6 on X(g) + the units of c, and its sub-cubes c ∧ r become items, processed depth-first. The log (TAG.rlog) records every result and every split, and the relative cubes of each split are kept (TAG_split/), so the run can be restarted, sliced over several processes, and certified.
+
+**Certifying a tree (rcert.py).** The certificate is rebuilt from the cubes alone. The literals of node i.k1.k2 are top-level cube i, then the k1-th relative cube of the split of i, then the k2-th relative cube of the split of i.k1. The solver's claims (UNSAT, split) only select which checks to run. Three kinds of check, each by CaDiCaL 3.0.1 with a text LRAT proof, accepted only if lrat-check exits 0 and prints "c VERIFIED":
+- T: the top-level cubes cover (the CNF of their negations is unsatisfiable);
+- C: the relative cubes of each split cover;
+- L: X(g) + the unit clauses of each leaf is unsatisfiable.
+
+Every check line carries a hash of what was checked: the cubes of a cover, or the clauses of X(g) together with the literals of a leaf. The final composition (rcert.py --final) counts only checks of the current tree and formula. A node is certified if it has a verified L line, or a verified C line and all its sub-cubes certified. The formula is certified unsatisfiable if T is verified and every top-level cube is certified. By induction over the tree, X(g) ∧ c is then unsatisfiable for every node c, and the top-level cover gives X(g) unsatisfiable.
+
+Test on the split of cube 170 of x14c: the C check of node 7 (63 relative cubes) is VERIFIED, and the first leaves verify in 0.6–0.9 s. The T check of the 60 sub-cubes of 170 alone is SATISFIABLE, as it must be, since they cover only cube 170 (negative control).
+
+**The complexity-15 classification, re-checked with the programs of note2's supplementary folder (run30/k15/).**
+- `germdfs 5 78 15 40` (7 s): 1,635 germs of complexity ≤ 15, the same, in the same order, as the germs of complexity ≤ 15 in results/germs/germs_K16.txt: 2, 26, 216 and 1,391 of complexity 12, 13, 14 and 15. The 244 of complexity ≤ 14 are those of Proposition germs.
+- `germdfs_check.py 15 78 40`, the independent Python enumerator of the supplementary folder (12 min 13 s, 390,540,902 nodes): the same 1,635 germs in the same order (compared as sets of transitions).
+- `germinc.py` on the 1,391 of complexity 15 at the lengths 2..10: 1,270 UNSATISFIABLE and 121 SATISFIABLE. The UNSAT set is exactly the complexity-15 part of K16_refuted10.txt.
+- `germcert.py` on the 1,270: one selector formula, 18,306 variables and 575,418 clauses. CaDiCaL refutes it in 42 s with a 145 MB LRAT proof; lrat-check: "c VERIFIED" (2.6 s). Digests in run30/k15/k15_sha.txt (formula 101db213…, proof 4b20b0cf…, germ list 500430de…).
+- `germext 5 10000 3 24 800` on the 121 (16 s): 117 REFUTED by Lemma 4.1 (102 with s = 1 at 25 ≤ n ≤ 167; 15 with s = 2 at 388 ≤ n ≤ 2565; ℓ ≤ 6), 2 PUMPFAIL (PUMP(77, 109) and PUMP(45, 77) fail), and 2 with no flag: r16_02 and r16_15.
+- germ_witness_check.py, written independently of germext.c, simulates each half-line from the germ alone and checks every hypothesis of Lemma 4.1 (s ≤ Y ≤ n − s, both words ℓ-periodic, Y − s > 4^{2s} ℓ), or that PUMP(n, n′) fails (cone from pumping.py), at germext's witness. All 119 witnesses are confirmed (run30/k15/wchk10000.out). Negative control: with Y lowered by 1 and n′ raised by 1, 104 of the 119 fail.
+
+So 1,391 = 1,270 + 117 + 2 + 2. Once X(r16_02) and X(r16_15) are certified unsatisfiable, every five-state minimal-time solution has c78 ≥ 16.
+
+**The complexity-16 funnel, re-checked (run30/k16/).**
+- `germdfs 5 78 16 40` (27 s, 1,546,587,938 nodes): 9,787 germs of complexity ≤ 16, the same as results/germs/germs_K16.txt in the same order: 2, 26, 216, 1,391 and 8,152 of complexity 12, …, 16.
+- `germinc.py` on the 8,152 of complexity 16 at the lengths 2..10 (5 min 51 s): 7,324 UNSATISFIABLE and 828 SATISFIABLE. The UNSAT list equals the complexity-16 part of K16_refuted10.txt, as lists (compare10.txt).
+- `germcert.py` on the 7,324: 24,360 variables and 673,552 clauses. CaDiCaL refutes it in 240 s with a 1.77 GB LRAT proof; lrat-check: "c VERIFIED" (29 s). Digests in k16_sha.txt (formula cf275805…, proof ebdf5806…, germ list b89ad421…).
+- `germext 5 10000 3 24 800` on the 828 (1 min 24 s): 782 REFUTED by Lemma 4.1 (598 with s = 1 at 25 ≤ n ≤ 531; 184 with s = 2 at 325 ≤ n ≤ 4611; ℓ ≤ 22) and 14 PUMPFAIL (PUMP(182, 214) eight times; PUMP(44, 60) twice; PUMP(26, 42), PUMP(46, 62), PUMP(47, 111), PUMP(76, 108) and PUMP(116, 148) once each). On the 32 others, reach 20000 adds nothing, and reach 40000 (1 min 8 s; lines up to n = MBIG/2 + 1 are examined) refutes two more, both at n = 12293 with s = 3, ℓ = 2, Y = 8196.
+- germ_witness_check.py confirms all 796 witnesses at reach 10000 and both at reach 40000 (wchk10000.out, wchk40000.out). Negative control (Y − 1, n′ + 1): 700 of the 796 and both of the 2 are rejected. (The checker's simulation is vectorized with numpy; on the k15 data it gives the same 119 confirmations and the same 104 rejections.)
+- `germcert.py results/germs/K16_refuted13.txt 13`: the 8 germs refuted at the lengths 2..13, 17,840 variables and 615,605 clauses. CaDiCaL refutes it in 255 s (1.41 GB LRAT proof); lrat-check: "c VERIFIED" (24 s). Digests in k16_sha13.txt (formula 5460485c…, proof 60229cdc…, germ list 36c80bdd…). One of the 8 is the germ whose half-line needs a 17th transition at anti-diagonal 94 (germext: OPEN reach=94).
+- 8 eventually regular germs (next paragraph).
+- 14 left to X(g): r16_00, r16_01, r16_03, …, r16_14.
+
+So 8,152 = 7,324 + 796 + 2 + 8 + 8 + 14. Once the 13 formulas X(r16_00), X(r16_03), …, X(r16_14) are certified unsatisfiable as well, every five-state minimal-time solution has c78 ≥ 17.
+
+**The eight eventually regular germs of complexity 16.**
+- germpersist.py (results/LOG.md) found eight germs whose half-line is eventually regular: germs 2, 3, 6, 18, 21, 22 and 23 of results/germs/K16_remaining24.txt (P = 24, 4, 12, 18, 4, 4, 12; t1 = 600), and germ 2 of run30/k16/rem17.txt = K16_remaining24.txt without those seven, in order (P = 48, t1 = 1500). rem17 without its germ 2 is K16_remaining16.txt, as sets of transitions.
+- germ_regular_check.py checks this independently (no code shared with germpersist.py). It simulates the half-line C(t) = C∞(t,1) … C∞(t,t+1) from the germ alone, with (L,L,L) → L added. For every residue r < P and t = t1 + r it decomposes C(t) = w_0 z_1^{a_1} w_1 … z_m^{a_m} w_m: the blocks are the maximal runs, scanned from the left, of a smallest period q ≤ 24 with a_j q_j ≥ 2P + 2q_j. It then requires exactly one vector D ≥ 0 with C(t+P) = w_0 z_1^{a_1+D_1} … w_m (depth-first search over all vectors, block by block).
+- Why ν = 0, 1 suffice. Let F be P steps of the half-line rule on finite configurations (left border, L to the right). Take a run x[s, s+A) of period q with A ≥ 2P + q, and let x′ be x with one more period in that run: x′[i] = x[i] for i < s+A and x′[i] = x[i−q] for i ≥ s+q. Since F(y)[i] depends only on y[i−P, i+P], F(x′)[i] = F(x)[i] for i ≤ s+A−P−1 and F(x′)[i] = F(x)[i−q] for i ≥ s+q+P (the window avoids the border because s ≥ 0). So for every m in [s+q+P, s+A−P], F(x′) is F(x) with F(x)[m−q, m) inserted at m. If F(x) = inflate(x, D), i.e. w_0 z_1^{a_1+D_1} … w_m, then with m = s+A−P the interval [m−q, m) lies in block j of F(x), because the blocks to its left have grown by Σ_{i<j} D_i q_i ≤ P and A ≥ 2P + q; inserting there one period of a q-periodic block gives that block with one more period. Induction on the number of inserted copies (the blocks only grow, so the hypothesis A ≥ 2P + q persists) gives F(inflate(x, c)) = inflate(x, c + D) for every vector c ≥ 0, and so C(t+νP) = w_0 z_1^{a_1+νD_1} … w_m for all ν ≥ 0. The same window argument applied to the k-step images, k ≤ P, shows that every neighbourhood used along the way occurs in the evolution from C(t) over P steps, hence in the germ. So the half-line of every rule containing the germ is eventually regular in the sense of note2, and Corollary regular refutes the germ.
+- Result: all eight are REGULAR (0.4 s in total; run30/k16/regular.out). For example, germ 2 has blocks (start, q, count) = (0, 12, 25) and (300, 3, 100) at t = 600, and D = (1, 4). The predicted configuration 10 periods later is also compared with direct simulation.
+- Negative controls, all rejected: germs 1, 4 and 5 of remaining24 (NOT-CERTIFIED for germpersist); germ 2 with P = 23, germ 3 with P = 3, germ 18 with P = 9; germ 6 with t1 = 20; germ 1 of rem17 with P = 48 and its germ 2 with P = 24.
+
+**Runs.**
+- Stopped without an answer, their cores moved to the cube-and-conquer of X(g): pg_delta14c_T10_20 (kissat, stopped 06:35 after 2 h), pg_delta14d_T10_20 (CaDiCaL, stopped 06:46 after 2 h 10 min), pg_delta14d_full15 (kissat, stopped 06:52 after 77 min).
+- C_7h3 (the unrestricted decisive formula, kissat, 04:37–08:37): `s UNKNOWN` at the 4 h limit.
+- Cube trees at 08:44 (4 cores; x14c and x14d with two rcube.py processes each, on disjoint slices of the top-level cubes; x16_03 with one, at nice 19):
+
+| tree | top-level cubes closed | UNSAT leaves | splits |
+|---|---|---|---|
+| x14c | 585 / 916 | 3,182 (max level 5) | 49 |
+| x14d | 381 / 869 | 2,608 (max level 3) | 40 |
+| x16_03 | 441 / 564 | 2,525 (max level 5) | 36 |
+
+Where the time goes (x14c, first 2,177 items): the 2,140 UNSAT items took 3,493 s, of which 2,589 s went to the 162 items that needed more than 5 s; the 37 UNKNOWN items took 1,929 s (52 s each, the 10^5 budget). For x14d: 4,553 s for 1,950 UNSAT items (3,744 s for the 223 above 5 s) and 996 s for 18 UNKNOWN items. A top-level cube that is UNKNOWN at 10^5 costs between one split (about 60 leaves, about 100 s) and twenty splits (cube 170: about 1,200 leaves).
