@@ -712,3 +712,7 @@ The models found so far are saved in research/models/ and described in early_row
 **Joint test at T = 12 (no cones): UNKNOWN** after 2 h of kissat (00:15).
 
 Started 00:16: the joint test at T = 7 with the cones of the right four firing cells (cone:9-20:3; runs/joint15h.sh 7 20 3, kissat 2 h). At T = 7 with only the right end (cone:9-20) the single labelling of δ14d is SAT. In that model, line 9 fires its right-end cell but not its neighbour.
+
+**Free C_8 (full:2-9 early:10-30:8 cone:10-20): UNKNOWN** after 4 h of kissat (01:17).
+
+Started 01:18: C_7h3 = FREE full:2-8 early:9-30:7 cone:9-20:3, i.e. the right four firing cells of lines 9..20, kissat 4 h. C_7, with the right end only, is SAT by the δ14d model of §28. That model fires the right-end cell of line 9 but not its neighbour, so C_7h3 excludes it.
