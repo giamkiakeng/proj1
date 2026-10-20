@@ -718,3 +718,19 @@ Started 00:16: the joint test at T = 7 with the cones of the right four firing c
 Started 01:18: C_7h3 = FREE full:2-8 early:9-30:7 cone:9-20:3, i.e. the right four firing cells of lines 9..20, kissat 4 h. C_7, with the right end only, is SAT by the δ14d model of §28. That model fires the right-end cell of line 9 but not its neighbour, so C_7h3 excludes it.
 
 **Joint test with cones at T = 9 (cone:11-20): SAT** (CaDiCaL, from 23:54 to 01:52). Decoded with anal/decode.py (same environment GFIX_UNFIX='*GL,GLL' GFIX_SHARE=1 and the same specs) into runs/joint15c_T9_20.rule, 96 entries. As in the joint relaxation at T = 11, the model maps *GL → F and GLL → G, so it is a model of the relaxation, not a rule that synchronizes the line of length 2. Hence the complexity-15 half-line also passes T = 9 together with the right ends of the lines 11..20, and this test cannot show c_78 ≥ 16. Still running: the joint test at T = 10 with cones (CaDiCaL until about 05:13), joint15h T = 7 (kissat until about 02:16) and C_7h3 (kissat until about 05:18).
+
+**Joint test with the right four firing cells at T = 7 (joint15h, cone:9-20:3): UNKNOWN** after 2 h of kissat (02:16). Still running: the joint test at T = 10 with cones (CaDiCaL until about 05:13) and C_7h3 (kissat until about 05:18).
+
+**Left bands alone on δ14d's germ (02:20).** band:10-60:2 is satisfiable; band:10-60:4 (870k clauses) is UNKNOWN after 280 s of kissat. In the half-line of this germ, the periodic triangles (b.b.b / abab, period 2) start at cell 7 or 8, behind a boundary layer (cell 1 is always A, cell 2 always B). Lemma 4.1 would need s ≥ 8, hence a periodic stretch longer than 4^16·2, so it cannot reach this half-line.
+
+**Per-germ tests at T = 10 with cones, started 02:31 (scratchpad runs/pergerm.sh).** For each complexity-15 germ separately, without the relaxation: full:2-11, the early rows (τ ≤ 10) of all n ≥ 12 (asymp.py representatives), and cone:12-20. δ14d's germ runs in CaDiCaL and δ14c's germ in kissat, 6 h each. These formulas are stronger than the joint one, so they may be decided sooner. If both are unsatisfiable, every five-state minimal-time solution has c_78 ≥ 16 (after LRAT certification).
+
+**PUMP on the complexity-15 half-line, larger range.** The fast checker scratchpad anal/pumpfast.c reproduces the recorded results (δ12: 0 violations up to 650; δ14: 0 up to 800). As a positive control, it finds all 351 pairs violated for a trivial rule whose general never moves, as src/pumping.py does. On δ14c and δ14d (both labellings of the complexity-15 half-line), PUMP(n, n′) holds for 4 ≤ n < n′ ≤ 3000. PUMP does not exclude this half-line.
+
+**Parity structure of the complexity-15 half-line.** In the half-line of δ14d's germ, every cell with i ≥ 2 on an odd anti-diagonal (t + i odd, equivalently even depth) is B. So the lower input anti-diagonal of every R_n is B except at its two ends. The half-line is therefore a 3-state automaton network on the odd-depth rows: C(t+1, i) = g(C(t, i−1), C(t, i+1)) with g(x, y) = δ(x, B, y), which is defined by the germ entries ABA>A, ABB>B, ABL>B, BBA>L, BBB>B, BBL>L, LBA>B, LBB>L, LBL>A. For a fixed driving value y, g(·, y) is a 3-cycle (y = L), a transposition of L and B (y = A), or the map A, B ↦ B, L ↦ L (y = B). Each odd depth row is a finite automaton driven by the odd row two depths ahead.
+
+Consequences for R_n:
+- The return chain obeys r(κ) = δ(B, u_κ, r(κ−1)), where u_κ is the upper input.
+- (G3) for this germ says that r(κ) ≠ B for every κ ≤ n−2, because the half-line cell compared with r(κ) has even depth.
+
+These constraints are already contained in the band and early-row encodings; they explain why the lower inputs carry no information about n.
