@@ -745,3 +745,54 @@ These constraints are already contained in the band and early-row encodings; the
 None had answered. They are restarted when the machine is free again; the scripts are scratchpad runs/joint15c.sh, runs/pergerm.sh and runs/pergerm2.sh.
 
 **Restarted at 04:37:** the per-germ tests at T = 10 with cone:12-20 (δ14d's germ in CaDiCaL, δ14c's germ in kissat, 6 h each) and C_7h3 (kissat, 4 h), on the same CNF files. The joint test joint15c T = 10 is not restarted, because the two per-germ formulas are stronger.
+
+## 29. The complexity-15 half-line as input to R_n; forced entries of the left bands (04:40–06:40 UTC)
+
+**The input words of consecutive lines are related by a transducer.** Write u_n(κ) = C∞(n−2+κ, n−κ) and ℓ_n(κ) = C∞(n−3+κ, n−κ), κ = 0..n−1, for the upper and lower input words of R_n (κ indexes the cell n−κ; u_n(κ) has depth 2κ−1 and ℓ_n(κ) depth 2κ−2). For every rule, the local rule at the half-line cells (n−2+κ, n+1−κ) and (n−1+κ, n+1−κ) gives
+- ℓ_{n+1}(κ) = δ(ℓ_n(κ), u_n(κ−1), ℓ_{n+1}(κ−1)),
+- u_{n+1}(κ) = δ(u_n(κ), ℓ_{n+1}(κ), u_{n+1}(κ−1)).
+
+So the input pair of R_{n+1} is the image of the input pair of R_n under a sequential transducer that reads from the right end (κ = 0) leftwards. For the complexity-15 half-line in δ14d's labelling, ℓ_{n+1}(κ) = B for 1 ≤ κ ≤ n−1 (even depth, §28). The upper words then satisfy:
+- u_{n+1}(0) = L;
+- u_{n+1}(κ) = g(u_n(κ), u_{n+1}(κ−1)) for 1 ≤ κ ≤ n−2, with g(x, y) = δ(x, B, y);
+- u_{n+1}(n−1) = B and u_{n+1}(n) = A (cells 2 and 1).
+
+This is a 3-state letter-to-letter transducer whose state is its last output. It agrees with direct simulation for n = 3..400 (scratchpad new/uwords.py). The depth-1 row has period 3: u_n(1) = C∞(n−1, n−1) is A, B, L for n−1 ≡ 1, 2, 0 (mod 3).
+
+**Forced entries of the left bands (backbone).** scratchpad new/backbone.py takes a gfix.py formula and computes, for each free table entry, the set of values it takes in some model. It makes one incremental CaDiCaL call (PySAT) for each candidate value not already seen in a model. An entry with a single possible value is forced. The runs below use δ14d's germ, the left bands band:3-N:w (chains 1..w of R_n for the lines 3..N) and GFIX_SHARE=1:
+
+| region | forced | other restricted domains |
+|---|---|---|
+| band:3-5:1, band:3-5:3 | none | BL∗ ∈ {G, A} |
+| band:3-6:1, band:3-6:3 | BL∗ > G | BAG, BBG, BLG ∈ {G, A}; ABG ∈ {L, G, A} |
+| band:3-7:1 | BL∗, BBG > G | BAG, BLG ∈ {G, A}; ABG ∈ {L, G, A} |
+| band:3-7:3 | BL∗, BBG > G | ABG ∈ {L, A}; BG∗ ∈ {L, A, B} |
+| band:3-11:1 | BL∗, BBG, BAG > G | BLG ∈ {G, A}; ABG ∈ {L, G, A} |
+| band:3-12:1 | BL∗, BBG, BAG, BLG > G | ABG ∈ {L, G, A} |
+| band:3-16:5 (all 79 free entries; 113 calls, 26 s) | BL∗, BBG, BAG, BLG > G | ABG ∈ {L, A}; BG∗ ∈ {L, A, B}; AG∗, LG∗ ∈ {L, G, A, B} |
+
+In the first six rows only BL∗, BAG, BBG, BLG, ABG (and, for w ≥ 2, BG∗, AG∗, LG∗) were examined. In the last row every free entry not listed takes all five values. band:3-26:4 (76 s) forces nothing more. band:3-20:5 and band:3-16:6 did not finish within 600 s. The band:3-7:2 domains equal those of band:3-7:1, so the restriction of ABG and BG∗ needs chain 3.
+
+These are computer-assisted statements, not yet certified: each excluded value is an UNSAT answer under one assumption. A hand check of the first one, using only the germ entries BBA>L and BLL>B:
+- δ(B, L, ∗) is neither B ((G3)) nor F (no early firing).
+- If δ(B, L, ∗) = L, line 4 (U(4) = LLBA) gives r(1) = δ(B, L, L) = B, which violates (G3).
+- If δ(B, L, ∗) = A, line 6 (U(6) = LBLLBA) gives r(1) = δ(B, B, A) = L and r(2) = δ(B, L, L) = B, which again violates (G3).
+- Hence δ(B, L, ∗) = G, from line 6 on, as the solver found.
+
+**What the forced entries say.** Every five-state minimal-time solution with this half-line in δ14d's labelling satisfies the following, for every n:
+- r(0) = δ(B, L, ∗) = G and r(κ) = δ(B, u_κ, G) = G for 1 ≤ κ ≤ n−3, because u_κ ∈ {A, B, L}. The reflected speed-1 signal is the constant G.
+- ρ := r(n−2) = δ(A, B, G) ∈ {L, A}, and cell 1 fires by δ(∗, A, ρ) = F.
+- Chain 2 is the automaton c_2(κ) = δ(u_{κ+1}, G, c_2(κ−1)), c_2(−1) = ∗, reading u_1 … u_{n−2} (0 ≤ κ ≤ n−3). It fires by δ(A, ρ, c_2(n−3)) = F.
+- Chain 3 is c_3(κ) = δ(G, c_2(κ), c_3(κ−1)) for 0 ≤ κ ≤ n−4, firing by δ(ρ, c_2(n−3), c_3(n−4)) = F.
+
+So the left part of R_n is a cascade of finite automata driven by the upper input word, which is itself produced by the transducer above. All of this is forced by lines of length ≤ 12. The per-germ formulas, which contain complete lines up to 11 or 15 and the early rows of the longer lines, therefore already imply it, and adding these units cannot strengthen them.
+
+**Dead ends.**
+- *Lazy depth-first search over chains 1 and 2* (branching on table entries in the order the chains of lines 3, 4, … need them): more than 10^6 partial tables without exhausting the tree.
+- *Nested border chains.* The pigeonhole argument of Lemma 4.1 was meant to extend from periodic stretches to chains of nested borders: a chain of more than 4^{2s} nested borders of prefixes of V_n[s..n−s] would give two lines whose s-slices agree. The longest admissible chains for δ14d's half-line are tiny (scratchpad new/borders.py, all n ≤ 700): 2, 8 and 8 for s = 1, 2, 3, against 4^{2s} = 16, 256, 4096. So even if written up, this extension cannot reach the complexity-15 half-line, and it was not pursued.
+- *Pumping at the left end* adds nothing beyond PUMP: the right-end cone [0, ⌊n/2⌋] is already the smallest cone that the comparison uses.
+
+**Runs (06:40).** Running without a verdict:
+- the per-germ tests at T = 10 with cone:12-20 (δ14d's germ in CaDiCaL and δ14c's germ in kissat, 04:37–10:37);
+- C_7h3 (kissat, 04:37–08:37);
+- since 05:32, pg_delta14d_full15: δ14d's germ with the complete lines 2..15 (sharing), kissat, 4 h. The old cube-and-conquer (results/LOG.md, results/cubes/README.md) left 375 of the 3070 cubes of δ14d's labelling undecided and 1319 untried at these lengths.
