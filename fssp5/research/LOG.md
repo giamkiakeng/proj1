@@ -743,3 +743,5 @@ These constraints are already contained in the band and early-row encodings; the
 - the per-germ tests at T = 10 with cone:12-20, δ14d's germ in CaDiCaL and δ14c's germ in kissat, after 1 h 5 min each.
 
 None had answered. They are restarted when the machine is free again; the scripts are scratchpad runs/joint15c.sh, runs/pergerm.sh and runs/pergerm2.sh.
+
+**Restarted at 04:37:** the per-germ tests at T = 10 with cone:12-20 (δ14d's germ in CaDiCaL, δ14c's germ in kissat, 6 h each) and C_7h3 (kissat, 4 h), on the same CNF files. The joint test joint15c T = 10 is not restarted, because the two per-germ formulas are stronger.
