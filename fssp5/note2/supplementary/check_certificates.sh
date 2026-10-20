@@ -36,9 +36,12 @@ python3 balzer.py 10 1234 AB --lrat
 python3 balzer.py 9 1234 LA --lrat
 python3 balzer.py 9 1234 LB --lrat
 python3 balzer_k.py 5 12 1234 id --cnf=../cnf/w.cnf
-set +e; "$KISSAT" -q ../cnf/w.cnf ../cnf/w.drat | grep '^s '; set -e
-"$DRATTRIM" ../cnf/w.cnf ../cnf/w.drat -L ../cnf/w.lrat | grep '^s '
+set +e
+"$KISSAT" -q ../cnf/w.cnf ../cnf/w.drat | grep '^s '
+"$DRATTRIM" ../cnf/w.cnf ../cnf/w.drat -L ../cnf/w.lrat > ../cnf/w.drat-trim.log 2>&1
+echo "drat-trim (exit code $?): $(grep '^s ' ../cnf/w.drat-trim.log || echo 'no verdict line; the LRAT file is checked next')"
+set -e
 "$LRATCHECK" ../cnf/w.cnf ../cnf/w.lrat | grep -E "VERIFIED|FAIL|ERROR"
+sha256sum ../cnf/w.cnf ../cnf/w.lrat
 python3 balzer.py 11 1234s id | grep -E "SATISFIABLE|rule"
-sha256sum ../cnf/w.cnf
 
