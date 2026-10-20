@@ -906,3 +906,22 @@ Where the time goes (x14c, first 2,177 items): the 2,140 UNSAT items took 3,493 
 - Tested on pigeonhole formulas, with 2 processes on one tree (7 pigeons, 6 holes: 23 items solved, 1 split) and with 3 (8 pigeons, 7 holes: 196 items solved, 47 split). No item was solved twice, and rcert.py --final certified the 3-process tree (149 leaf refutations, 47 split covers).
 - At 09:00:41 the four x14 processes were replaced by four workers (scratchpad script worker.sh), two starting on each tree, one from each end. A worker that runs out of work moves to the other tree. Once a tree is ALL CLOSED, the four workers certify it with rcert.py in four slices and compose the result.
 - State at the switch: x14c 585/916 top-level cubes closed (4,300 UNSAT leaves, 68 splits); x14d 381/869 (3,602 leaves, 58 splits).
+
+**Stopped (09:40, at the user's request).** The four workers, x16_03 and the watcher were stopped (SIGTERM). The final state of the three trees is in run30/trees/.
+
+| tree | top-level cubes closed | UNSAT items in the rlog (+ UNSAT at pass 1) | splits |
+|---|---|---|---|
+| x14c | 585 / 916 | 6,831 (+449) | 123 |
+| x14d | 381 / 869 | 6,189 (+304) | 114 |
+| x16_03 | 441 / 564 | 2,340 (+439) | 40 |
+
+The table at 08:44 counted the pass-1 UNSAT cubes together with the rlog items.
+
+Re-estimate of the remaining work. This is an extrapolation from the logs, not a measurement. For an open cube, the estimate is the cost so far divided by the closed fraction of its subtree, where each sub-cube of a split is weighted 1/nsub.
+- **x14c.** 331 top-level cubes are open: 40 were UNKNOWN at pass 1 and 291 were never tried. Of the 137 untried cubes taken so far, 5 needed a split (3.6 %), so about 50 hard cubes remain. The closed hard cubes cost 110–2,627 s. The open ones are estimated at 2,800–13,700 s; cube 171 is the 13,700 s one, at closed fraction 0.33. At about 3,400 s each, that is about 47 h of CPU.
+- **x14d.** 488 cubes are open: 36 UNKNOWN at pass 1 and 452 never tried (2 of 64 split). The 15 closed hard cubes cost 27–469 s, and the 3 open ones are estimated at 4,800–10,500 s. That is about 19 h of CPU.
+- **Certification**, at about 0.8 s per easy leaf, adds roughly half again.
+
+So the c78 ≥ 16 step needs about 1–1.5 days on four cores, not the 10–20 h estimated at 09:00.
+
+To resume, empty the claim directories rc14c_claim/ and rc14d_claim/ and restart the workers. Alternatively, run the single-process command of run30/trees/README.md on the committed snapshot.
