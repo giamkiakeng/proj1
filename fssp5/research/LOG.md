@@ -926,3 +926,6 @@ So the c78 ≥ 16 step needs about 1–1.5 days on four cores, not the 10–20 h
 
 To resume, empty the claim directories rc14c_claim/ and rc14d_claim/ and restart the workers. Alternatively, run the single-process command of run30/trees/README.md on the committed snapshot.
 - Draft for note2, not yet included: run30/k15/prop_germs16_conditional.tex. It reduces c78 ≥ 16 to the unsatisfiability of X(r16_02) and X(r16_15), with the case split 1,391 = 1,270 + 117 + 2 + 2 above, citing the note's existing lemmas. It compiles in a minimal wrapper; the 8 undefined references are the note's own labels.
+- Next steps for the trees (ideas, untested):
+  - Certification without re-solving. rcert.py re-solves every leaf with a fresh CaDiCaL (about 0.8 s per easy leaf). An incremental proof (CaDiCaL's IDRUP/LIDRUP for solving under assumptions, checked by idrup-check) could certify the leaves from the same incremental run that refutes them, if those tools can be built here.
+  - Splitting on table variables only. Nine of the ten literals of each hard top-level cube are cell variables of short lines. Restricting march_cu's split variables to the 79 free table entries would make every node a partial table near δ14c or δ14d. Whether the trees get smaller is to be measured on cube 171 of x14c, the costliest open cube.
