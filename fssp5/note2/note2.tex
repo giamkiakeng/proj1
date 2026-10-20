@@ -1,0 +1,782 @@
+\documentclass[3p]{elsarticle}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage[shortlabels]{enumitem}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage[capitalise,noabbrev]{cleveref}
+\pdfstringdefDisableCommands{\def\corref#1{}}
+\usepackage{microtype}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\newcommand{\Lq}{\mathsf L}
+\newcommand{\Gq}{\mathsf G}
+\newcommand{\Aq}{\mathsf A}
+\newcommand{\Bq}{\mathsf B}
+\newcommand{\Fq}{\mathsf F}
+\newcommand{\G}{\mathcal G}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Necessary conditions on minimal-time solutions\\
+of the firing squad problem}
+
+\author[tjc]{Kia Keng Giam\corref{cor1}}
+\ead{giamkiakeng@gmail.com}
+\cortext[cor1]{Corresponding author.}
+\author[hci]{Beichen Sun}
+\author[hci]{Yaoqi Zhao}
+
+\affiliation[tjc]{organization={Temasek Junior College},
+            country={Singapore}}
+\affiliation[hci]{organization={Hwa Chong Institution},
+            country={Singapore}}
+
+\begin{abstract}
+We prove necessary conditions on the space-time diagrams of all minimal-time
+solutions of the firing squad synchronization problem, whatever their number
+of states: the non-periodic part of the half-line reaches the line $i=t/3$,
+the half-line is not periodic on any wedge at the left border and never
+eventually regular, and the first rows after the reflection take finitely many
+forms, determined by a periodicity certificate. With computer assistance,
+including LRAT-certified unsatisfiability proofs, we show that four states are
+excluded by the lines of lengths $2,\dots,5$ together with the first five
+rows, the return chains and the right ends of the lines of lengths
+$6,\dots,10$; that five five-state rules synchronize exactly the lines of
+lengths $2,\dots,14$; that every five-state minimal-time solution uses at
+least $15$ neighbourhoods on its half-line below the anti-diagonal $t+i=78$;
+and that a conditional five-state result claimed by Balzer in 1967 holds.
+\end{abstract}
+
+\begin{keyword}
+firing squad synchronization problem \sep cellular automata \sep state
+complexity \sep minimal time \sep pumping lemma \sep proof certificates
+\end{keyword}
+
+\end{frontmatter}
+
+%% ---------------------------------------------------------------------
+\section{Introduction}\label{sec:intro}
+
+The firing squad synchronization problem, posed by Myhill in 1957 and
+popularised by Moore \cite{Moore64}, asks for a finite automaton that, placed
+in every cell of a line of arbitrary length $n$ and started with all cells
+quiescent except a \emph{general} at one end, drives all cells into a firing
+state for the first time at the same instant. Goto \cite{Goto62} and Waksman
+\cite{Waksman66} solved it in the optimal time $2n-2$. The least number of
+states of a minimal-time solution is a benchmark question \cite{Correa17}:
+Waksman used $16$ states, Balzer $8$ \cite{Balzer67}, Gerken $7$
+\cite{Gerken87} and Mazoyer $6$ \cite{Mazoyer87}. Balzer's computer search
+excluded four states \cite{Balzer67}; Yun\`es \cite{Yunes93} observed that the
+lines of lengths $2,\dots,9$ suffice, and Sanders \cite{Sanders94} confirmed
+the result with a corrected search. Whether five states suffice has been open
+since 1987. As there are finitely many $k$-state rules, $k$-state minimal-time
+solutions do not exist if and only if for some $N$ no $k$-state rule
+synchronizes all lines of lengths $2,\dots,N$ in minimal time, so a negative
+answer may consist of finitely many necessary conditions.
+
+Until the echo of its right border returns, the line of length $n$ behaves
+like the infinite half-line, so a solution consists of one half-line diagram
+$C_\infty$ and, for each $n$, a triangle $R_n$ that is a function of two
+anti-diagonals of $C_\infty$ (\cref{lem:determinacy}). We derive conditions at
+the right end of $R_n$ (\cref{lem:pumping,thm:third,lem:rightband}), at its
+left end (\cref{lem:left,thm:left,cor:regular}) and in its first rows
+(\cref{cor:reduce,lem:G}), and apply them to four and five states in
+\cref{sec:computations}.
+
+\paragraph{Related work} Indistinguishability arguments, in which a solution
+cannot tell two situations apart and so fires too early, exclude minimal-time
+solutions with one-way channels \cite[Prop.~2]{Mazoyer96} and, through
+repetitions forced by the pigeonhole principle, for variants with sub-generals
+or some geometric configurations \cite{YamashitaEtAl14,Kobayashi19}; our
+pumping lemmas use this mechanism to constrain solutions of the original
+problem. The eventual periodicity behind the front is classical
+\cite{MazoyerTerrier94,MazoyerTerrier99}; lower bounds for restricted classes
+are surveyed in \cite{Correa17}. We are not aware of statements equivalent to
+\cref{thm:third,thm:left,cor:regular,cor:reduce} in the literature.
+
+%% ---------------------------------------------------------------------
+\section{Lines and the half-line}\label{sec:prelim}
+
+Let $S$ be a finite set of \emph{states} containing three pairwise distinct
+states, the quiescent state $\Lq$, the general $\Gq$ and the firing state
+$\Fq$; the \emph{working} states are $W:=S\setminus\{\Fq\}$, and $\ast\notin
+S$ denotes the border. A \emph{rule} is a map
+$\delta:(W\cup\{\ast\})\times W\times(W\cup\{\ast\})\to S$ with
+\begin{equation}\label{eq:quiescence}
+\delta(\Lq,\Lq,\Lq)=\delta(\Lq,\Lq,\ast)=\Lq .
+\end{equation}
+The \emph{line of length $n$} is the partial map $C_n:\mathbb
+N\times\{1,\dots,n\}\to S$ with $C_n(0,1)=\Gq$, $C_n(0,i)=\Lq$ for $i\ge2$,
+and $C_n(t+1,i)=\delta(C_n(t,i-1),C_n(t,i),C_n(t,i+1))$ if these three
+arguments are defined and none is $\Fq$, $C_n(t+1,i)$ undefined otherwise,
+where $C_n(t,0)=C_n(t,n+1)=\ast$. The rule \emph{synchronizes} it at time $T$
+if $C_n(T,i)=\Fq$ for $1\le i\le n$ and $C_n(t,i)\in W$ for $t<T$ and $1\le
+i\le n$. A \emph{minimal-time solution} synchronizes the line of length $n$ at
+time $2n-2$ for every $n\ge2$; it has $k$ states if $|S|=k$. The
+\emph{half-line} $C_\infty:\mathbb N\times\{1,2,\dots\}\to S$ is defined in
+the same way with a border on the left only.
+
+\begin{lemma}\label{lem:lightcone}
+For every rule, $C_n(t,i)=C_\infty(t,i)=\Lq$ whenever $t<i-1$ (and $i\le n$
+for $C_n$).
+\end{lemma}
+
+\begin{proof}
+Induction on $t$; for $t=0$ this is the initial condition. For $t\ge1$ the
+predecessors $(t-1,i')$, $i'\in\{i-1,i,i+1\}$, satisfy $t-1<i'-1$, so they are
+$\Lq$ or the right border, and \eqref{eq:quiescence} gives $\Lq$.
+\end{proof}
+
+\begin{lemma}[agreement]\label{lem:agree}
+For every rule, $n\ge2$, $1\le i\le n$ and $t+i\le 2n-2$, the values
+$C_n(t,i)$ and $C_\infty(t,i)$ are both undefined or both defined and equal.
+\end{lemma}
+
+\begin{proof}
+Induction on $t$, the case $t=0$ being clear. If $i=n$, then $t\le n-2<i-1$
+and both are $\Lq$ by \cref{lem:lightcone}. If $i<n$, the predecessors
+$(t-1,j)$, $j\in\{i-1,i,i+1\}$, satisfy $(t-1)+j\le 2n-2$ and $j\le n$, so
+they are both undefined or equal by induction (for $j=0$ both are the border),
+and the recursion gives the claim.
+\end{proof}
+
+The border is felt only in the \emph{reflected triangle}
+$R_n:=\{(t,i):1\le i\le n,\ t+i\ge 2n-1,\ t\le 2n-2\}$.
+
+\begin{lemma}[return chain]\label{lem:return}
+If $\delta$ synchronizes the lines of lengths $n$ and $n+1$ at times $2n-2$
+and $2n$, then $C_n(2n-1-i,i)\ne C_\infty(2n-1-i,i)$ for $1\le i\le n$, and the
+\emph{front} $f_i:=C_\infty(i-1,i)$ satisfies $f_{n-1}\ne\Lq$.
+\end{lemma}
+
+\begin{proof}
+For $i=1$, $C_n(2n-2,1)=\Fq$, whereas $C_\infty(2n-2,1)=C_{n+1}(2n-2,1)\ne\Fq$
+by \cref{lem:agree} and since $2n-2<2n$. If the claim holds for $i<n$, then
+the left and middle predecessors of $(2n-1-i,i)$ have coordinate sums $2n-3$
+and $2n-2$ and agree in $C_n$ and $C_\infty$ (for $i=1$ the left one is the
+border), so the right ones differ: this is the claim for $i+1$. For $i=n$ it
+reads $\delta(f_{n-1},\Lq,\ast)\ne\delta(f_{n-1},\Lq,\Lq)$ (by
+\cref{lem:agree,lem:lightcone}), which is impossible if $f_{n-1}=\Lq$ by
+\eqref{eq:quiescence}.
+\end{proof}
+
+If $\delta$ is a minimal-time solution and $n\ge t+i+1$, then
+$C_\infty(t,i)=C_n(t,i)$ with $t<2n-2$ by \cref{lem:agree}; hence
+\begin{equation}\label{eq:neverfire}
+C_\infty(t,i)\in W\qquad\text{for all }t\ge0,\ i\ge1 .
+\end{equation}
+
+%% ---------------------------------------------------------------------
+\section{The right end}\label{sec:right}
+
+Fix $n\ge2$ and use the relative coordinates $\tau:=t-(n-1)$, $\kappa:=n-i$, in
+which $R_n=\{(\tau,\kappa):0\le\kappa\le\tau\le n-1\}$, with the right border
+at $\kappa=-1$ and the left border at $\kappa=n$; write
+$R_n(\tau,\kappa):=C_n(n-1+\tau,n-\kappa)$. The predecessors of a cell of $R_n$
+lie in $R_n$, on a border, or on one of the anti-diagonals $t+i=2n-3$,
+$t+i=2n-2$, where \cref{lem:agree} applies. The \emph{input word} of $R_n$ is
+the partial word
+\[
+J_n(\kappa):=\bigl(C_\infty(n-3+\kappa,\,n-\kappa),\;C_\infty(n-2+\kappa,\,n-\kappa)\bigr),
+\qquad 0\le\kappa\le n-1,
+\]
+with \emph{lower} and \emph{upper input cells} on $t+i=2n-3$ and $2n-2$ (for
+$n=2$, $\kappa=0$ the lower cell lies at time $-1$, is a predecessor of no cell
+of $R_n$, and is set to $\Lq$).
+
+\begin{lemma}[determinacy]\label{lem:determinacy}
+There is a partial map $\Psi$, depending on $\delta$ only, such that for all
+$n\ge2$ and $(\tau,\kappa)\in R_n$ the values $R_n(\tau,\kappa)$ and
+$\Psi(J_n,n;\tau,\kappa)$ are both undefined or both defined and equal, and
+$\Psi(J,m;\tau,\kappa)$ depends only on the input cells and borders in the
+backward dependency cone of $(\tau,\kappa)$.
+\end{lemma}
+
+\begin{proof}
+Define $\Psi(J,m;\tau,\kappa)$ for $0\le\kappa\le\tau\le m-1$ by induction on
+$\tau$ as $\delta(x_{\kappa+1},x_\kappa,x_{\kappa-1})$, where $x_{\kappa'}$ is
+given by the first applicable case: $\ast$ if $\kappa'\in\{-1,m\}$; the lower
+or upper component of $J(\kappa')$ if $\tau-1=\kappa'-2$ or
+$\tau-1=\kappa'-1$; otherwise $\Psi(J,m;\tau-1,\kappa')$ (then
+$0\le\kappa'\le\tau-1$); $\Psi$ is undefined where an argument is $\Fq$ or
+undefined. For $m=n$ these are the left, middle and right predecessors of the
+cell $(n-1+\tau,n-\kappa)$, and on the input cells $C_n$ and $C_\infty$ are
+both undefined or equal (\cref{lem:agree}), so induction on $\tau$ gives the
+first claim; unfolding the definition gives the second.
+\end{proof}
+
+For $(\tau,\kappa)\in R_n$ let $\mathrm{cone}_n(\tau,\kappa)$ be the set of
+input cells reached from $(\tau,\kappa)$ by repeatedly passing to
+predecessors, stopping at input cells and borders.
+
+\begin{lemma}\label{lem:cone}
+For $n\ge2$, $\mathrm{cone}_n(n-1,0)$ avoids the left border and consists of
+the upper input cell at $\kappa'=0$, both input cells at
+$1\le\kappa'\le\lfloor n/2\rfloor$ and, if $n$ is odd, the lower one at
+$\kappa'=(n+1)/2$.
+\end{lemma}
+
+\begin{proof}
+A step changes $\tau$ by $-1$ and $\kappa$ by at most one, and input cells
+satisfy $\tau'\in\{\kappa'-1,\kappa'-2\}$; a path from $(n-1,0)$ reaching an
+input cell at $\kappa'$ after $r$ steps has $\kappa'\le r$ and
+$n-1-r\in\{\kappa'-1,\kappa'-2\}$, so $2\kappa'\le n+1$, and $2\kappa'\le n$
+for upper cells. Conversely, the upper cell at $\kappa'\le n/2$ is reached by
+$\kappa'$ left moves followed by vertical moves, and the lower cell at
+$1\le\kappa'\le(n+1)/2$ by $\kappa'-1$ left moves, vertical moves down to
+$(\kappa'-1,\kappa'-1)$ and one more left move, through cells of $R_n$; the
+lower cell at $\kappa'=0$ is a predecessor of no cell of $R_n$. Every cell of
+$R_n$ on such a path satisfies $\kappa\le\tau\le n-1-\kappa$, hence
+$\kappa\le(n-1)/2$, so no such cell is adjacent to the left border
+$\kappa=n$.
+\end{proof}
+
+\begin{lemma}[pumping]\label{lem:pumping}
+Let $2\le n<n'$ and let $\delta$ synchronize the lines of lengths $n$ and $n'$
+at times $2n-2$ and $2n'-2$. Then $J_n$ and $J_{n'}$ differ on
+$\mathrm{cone}_n(n-1,0)$.
+\end{lemma}
+
+\begin{proof}
+Otherwise, by \cref{lem:determinacy,lem:cone}, the relative cell $(n-1,0)$ of
+$R_{n'}$ (it lies in $R_{n'}$, and its cone has the same positions, away from
+the left border $\kappa=n'$) has the value of the relative cell $(n-1,0)$ of
+$R_n$, namely $C_n(2n-2,n)=\Fq$. Thus $C_{n'}(n'+n-2,n')=\Fq$ although
+$n'+n-2<2n'-2$.
+\end{proof}
+
+We write $\mathrm{PUMP}(n,n')$ for the conclusion of \cref{lem:pumping}; it is
+a condition on $C_\infty$ alone. In the frame of the front,
+$\Phi_t(j):=C_\infty(t,t+1-j)$ for $0\le j\le t$ is the cell at \emph{depth}
+$j$ behind the front, and the recurrence becomes
+\begin{equation}\label{eq:comoving}
+\Phi_{t+1}(j)=\delta\bigl(\Phi_t(j),\,\Phi_t(j-1),\,\Phi_t(j-2)\bigr)
+\qquad(0\le j\le t+1),
+\end{equation}
+with $\Phi_t(-1)=\Phi_t(-2)=\Lq$ and $\Phi_t(t+1)=\ast$: information only
+travels to larger depths, and the \emph{depth-row} $t\mapsto\Phi_t(j)$ starts
+at time $j$. In these coordinates
+$J_n(\kappa)=(\Phi_{n-3+\kappa}(2\kappa-2),\Phi_{n-2+\kappa}(2\kappa-1))$.
+
+\begin{theorem}[speed-$1/3$ barrier]\label{thm:third}
+Let $\delta$ be a minimal-time solution. Every depth-row $t\mapsto\Phi_t(j)$ is
+eventually periodic; let $\theta(j)$ be the least $t_0\ge j$ such that it is
+periodic on $[t_0,\infty)$. For every $n\ge4$ there is a depth $j\le n$ with
+$\theta(j)>n+\tfrac{j}{2}-\tfrac52$. Hence
+$\limsup_{j\to\infty}\theta(j)/j\ge 3/2$: along infinitely many depth-rows the
+non-periodic part extends, up to an arbitrarily small angle, to the line
+$i=t/3$.
+\end{theorem}
+
+\begin{proof}
+Row $0$ satisfies $\Phi_{t+1}(0)=\delta(\Phi_t(0),\Lq,\Lq)$ and is eventually
+periodic; by \eqref{eq:comoving}, row $j$ is a finite-state system driven by
+the eventually periodic rows $j-1,j-2$, hence eventually periodic, with some
+period $P_j$. Fix $n\ge4$ and a common
+multiple $P$ of $P_0,\dots,P_{n-1}$. The input cells of the cone at $\kappa=0$
+are quiescent in $R_n$ and $R_{n+P}$ (\cref{lem:lightcone}); the others have
+depth $2\kappa-2$ (lower) or $2\kappa-1$ (upper), at most $n-1$ by
+\cref{lem:cone}. If each of them lies in the periodic part of its row, i.e.\
+$n-3+\kappa\ge\theta(2\kappa-2)$ for the lower and
+$n-2+\kappa\ge\theta(2\kappa-1)$ for the upper ones, then $J_{n+P}=J_n$ on
+the cone, contradicting \cref{lem:pumping}. So some such cell, of depth $j\le
+n$, has $\theta(j)>n-3+\kappa\ge n+\frac{j}{2}-\frac52$. If
+$\limsup\theta(j)/j<3/2$, then $\theta(j)\le\alpha j+\beta$ for all $j$ with
+some $\tfrac12\le\alpha<\tfrac32$ and $\beta$, and for $n$ large and all $j\le
+n$ we get $(\alpha-\tfrac12)j\le(\alpha-\tfrac12)n<n-\beta-\tfrac52$, i.e.\
+$\theta(j)\le n+\tfrac j2-\tfrac52$, a contradiction. Finally, the cell of
+depth $j$ at time $\theta(j)$ is at position $\theta(j)+1-j$, which is at
+least $\theta(j)/3+1$ when $\theta(j)\ge 3j/2$.
+\end{proof}
+
+In simulations (up to times $2600$, resp.\ $1400$), Mazoyer's solution has
+$\theta(j)\in\{2j+1,2j+2\}$ for $1\le j<700$, whereas the rule $\delta_{12}$ of
+\cref{sec:computations} attains the bound, $\theta(j)=\lceil 3j/2\rceil+2$ for
+$10\le j\le300$, and satisfies $\mathrm{PUMP}(n,n')$ for $4\le n<n'\le650$; it
+is excluded by \cref{cor:germ12}.
+
+The same pigeonhole argument applies along the right border, in the direction
+of time.
+
+\begin{lemma}[right band]\label{lem:rightband}
+Let $\delta$ have $k$ states and synchronize the line of length $n$ at time
+$2n-2$. Let $1\le d\le\tau_0\le n-2$ and $\ell\ge1$, and suppose that the
+column $\tau\mapsto R_n(\tau,d)$ is $\ell$-periodic on $[\tau_0,n-2]$, i.e.\
+$R_n(\tau+\ell,d)=R_n(\tau,d)$ whenever $\tau,\tau+\ell\in[\tau_0,n-2]$. Then
+$n-1-\tau_0\le(k-1)^d\ell$.
+\end{lemma}
+
+\begin{proof}
+For $d-1\le\tau\le n-1$ put $\mathbf b(\tau):=(R_n(\tau,0),\dots,R_n(\tau,d-1))$.
+Since $R_n(\tau+1,\kappa)=\delta(R_n(\tau,\kappa+1),R_n(\tau,\kappa),
+R_n(\tau,\kappa-1))$ with $R_n(\tau,-1)=\ast$, there is a map $\Gamma$,
+depending on $\delta$ and $d$ only, with $\mathbf b(\tau+1)=\Gamma(\mathbf
+b(\tau),R_n(\tau,d))$ for $d\le\tau\le n-2$; its arguments lie in $W^d\times
+W$ because no cell fires before time $2n-2$. At $\tau=n-1$ the band is
+$\Fq^d$. Suppose $n-1-\tau_0>(k-1)^d\ell$. The pairs $(\mathbf
+b(\tau),\tau\bmod\ell)$, $\tau_0\le\tau\le n-2$, take at most $(k-1)^d\ell$
+values, so there are $\tau_0\le\tau_1<\tau_2\le n-2$ with $\mathbf
+b(\tau_1)=\mathbf b(\tau_2)$ and $\ell\mid h:=\tau_2-\tau_1$. For $0\le s\le
+n-2-\tau_2$ the driving cells $R_n(\tau_1+s,d)$ and $R_n(\tau_2+s,d)$ lie in
+$[\tau_0,n-2]$ and differ by a multiple of the period, so they are equal, and
+induction on $s$ gives $\mathbf b(\tau_1+s)=\mathbf b(\tau_2+s)$ for $0\le
+s\le n-1-\tau_2$. For $s=n-1-\tau_2$ this reads $\mathbf b(n-1-h)=\mathbf
+b(n-1)=\Fq^d$, although $n-1-h<n-1$: a contradiction.
+\end{proof}
+
+%% ---------------------------------------------------------------------
+\section{The left end}\label{sec:left}
+
+Near the left border the reflected triangle is produced by a band of
+anti-diagonals behind the reflected wave. Put $v_c(i):=C_n(2n-2+c-i,\,i)$ for
+$c\ge0$ and $\max(1,c)\le i\le n$, and for $c=-1$ and $1\le i\le n-1$: the cell
+of the \emph{chain} $t+i=2n-2+c$ at position $i$. Chains $-1$ and $0$ are the
+input anti-diagonals and chain $1$ is the return chain. The predecessors of
+$(2n-2+c-i,i)$ lie on the chains $c-2$, $c-1$, $c$, so
+\begin{equation}\label{eq:chains}
+v_c(i)=\delta\bigl(v_{c-2}(i-1),\,v_{c-1}(i),\,v_c(i+1)\bigr)\qquad(c\ge1),
+\end{equation}
+with $v_{c-2}(0)$ and $v_c(n+1)$ standing for the border. If the line of
+length $n$ is synchronized at time $2n-2$, then $v_i(i)=\Fq$ and $v_c(i)\ne\Fq$
+for $c<i$. In the skewed coordinates $u_c(y):=v_c(y+\lfloor c/2\rfloor)$ this
+becomes
+\begin{equation}\label{eq:slices}
+u_c(y)=\delta\bigl(u_{c-2}(y),\,u_{c-1}(y+\varepsilon_c),\,u_c(y+1)\bigr),
+\qquad \varepsilon_c=1\text{ for even }c,\ \varepsilon_c=0\text{ for odd }c,
+\end{equation}
+with $u_0(y)=C_\infty(2n-2-y,y)$ and $u_{-1}(y)=C_\infty(2n-2-y,y-1)$; here
+$u_c(y)$ is the cell $y+\lfloor c/2\rfloor$ at time
+$2n-2+\lceil c/2\rceil-y$, which is $\Fq$ if $\lceil c/2\rceil=y$ and not $\Fq$
+if $\lceil c/2\rceil<y$. Each slice $(u_1(y),u_2(y),\dots)$ is thus computed
+from the slice $y+1$ and the input cells $u_{-1}(y),u_0(y)$. A word $w$ on an
+integer interval $I$ is \emph{$\ell$-periodic} if $w(y+\ell)=w(y)$ whenever
+$y,y+\ell\in I$.
+
+\begin{lemma}[left border]\label{lem:left}
+Let $\delta$ have $k$ states and synchronize the line of length $n$ at time
+$2n-2$. Let $s,\ell\ge1$ and $s\le Y\le n-s$, and suppose that the words
+$y\mapsto C_\infty(2n-2-y,y)$ $(s\le y\le Y)$ and $y\mapsto C_\infty(2n-3-y,y)$
+$(s\le y\le Y-1)$ are $\ell$-periodic. Then $Y-s\le(k-1)^{2s}\ell$.
+\end{lemma}
+
+\begin{proof}
+For $s\le y\le Y$ let $\mathbf u(y):=(u_1(y),\dots,u_{2s}(y))$; these are
+cells $y+\lfloor c/2\rfloor\le n$ with $\lceil c/2\rceil\le s\le y$, so they
+are defined, and none is $\Fq$ when $y>s$. By \eqref{eq:slices}, $u_c(y)$,
+$1\le c\le 2s$, is computed from components of index $<c$ of $\mathbf u(y)$, of
+index $\le c$ of $\mathbf u(y+1)$, and from $u_{-1}(y),u_0(y)$; hence
+$\mathbf u(y)=\Gamma(\mathbf u(y+1),u_{-1}(y),u_0(y))$ for $s+1\le y\le Y-1$,
+with $\Gamma$ depending on $\delta$ only. Unfolding \eqref{eq:slices} for even
+$c$, $u_{2j}(y)=\delta(u_{2j-2}(y),u_{2j-1}(y+1),u_{2j}(y+1))$, shows that
+$u_{2s}(y)=\Gamma'(\mathbf u(y+1),u_0(y))$ for $s\le y\le Y-1$. By hypothesis,
+$u_0$ is $\ell$-periodic on $[s,Y]$ and $u_{-1}$ on $[s+1,Y]$.
+
+Suppose $Y-s>(k-1)^{2s}\ell$. The pairs $(\mathbf u(y),y\bmod\ell)$,
+$s+1\le y\le Y$, take at most $(k-1)^{2s}\ell$ values, so there are $s+1\le
+y_1<y_2\le Y$ with $\mathbf u(y_1)=\mathbf u(y_2)$ and $\ell\mid h:=y_2-y_1$.
+By downward induction, $\mathbf u(y)=\mathbf u(y+h)$ for $s+1\le y\le y_1$: if
+it holds for $y+1\le y_1$, then $\mathbf u(y)=\Gamma(\mathbf
+u(y+1),u_{-1}(y),u_0(y))=\Gamma(\mathbf u(y+1+h),u_{-1}(y+h),u_0(y+h))=\mathbf
+u(y+h)$, as $y+h<y_2\le Y$. Since $s+h\le Y-1$ and $u_0(s+h)=u_0(s)$,
+\[
+u_{2s}(s+h)=\Gamma'(\mathbf u(s+1+h),u_0(s+h))=\Gamma'(\mathbf u(s+1),u_0(s))=u_{2s}(s)=\Fq,
+\]
+although $\lceil 2s/2\rceil=s<s+h$, so that $u_{2s}(s+h)$, the cell $2s+h$ at
+time $2n-2-h$, is not $\Fq$: a contradiction.
+\end{proof}
+
+\begin{theorem}[left-border barrier]\label{thm:left}
+Let $\delta$ be a minimal-time solution. There are no $s\ge1$, $\alpha>0$,
+$t_0$ and $p,q\ge1$ such that $C_\infty(t+p,i)=C_\infty(t,i)$ and
+$C_\infty(t,i+q)=C_\infty(t,i)$ whenever the cells involved lie in the wedge
+$\Omega:=\{(t,i):\ s\le i\le\alpha t,\ t\ge t_0\}$.
+\end{theorem}
+
+\begin{proof}
+Suppose otherwise and put $\ell:=pq$. If $(t,i)$ and $(t-\ell,i+\ell)$ lie in
+$\Omega$, so do the cells $(t-\ell,i+jq)$, $0\le j\le p$, and
+$(t-\ell+jp,i)$, $0\le j\le q$, hence
+$C_\infty(t-\ell,i+\ell)=C_\infty(t-\ell,i)=C_\infty(t,i)$. Let
+$Y_n:=\lfloor\alpha(2n-3)/(1+\alpha)\rfloor$. For $s\le y\le Y_n$ the cells
+$(2n-2-y,y)$ and $(2n-3-y,y)$ satisfy $y\le\alpha(2n-3-y)$, so they lie in
+$\Omega$ once $2n-3-Y_n\ge t_0$, i.e.\ for $n$ large; since a step of $\ell$
+positions along an anti-diagonal is the step from $(t,i)$ to
+$(t-\ell,i+\ell)$, the words of \cref{lem:left} are $\ell$-periodic on
+$[s,Y_n]$ and $[s,Y_n-1]$. As $Y_n\ge\frac{2\alpha}{1+\alpha}n-4$, for $n$
+large $Y:=\min(Y_n,n-s)$ satisfies $Y-s>(k-1)^{2s}\ell$, contradicting
+\cref{lem:left}.
+\end{proof}
+
+The half-line of a rule is \emph{eventually regular} if there are $t_1$,
+$P\ge1$ and, for each residue $r\in\{0,\dots,P-1\}$, an integer $m$, words
+$w_0,\dots,w_m$, nonempty words $z_1,\dots,z_m$ over $W$ and integers
+$a_j,D_j\ge0$ (all depending on $r$) such that for all $\nu\ge0$ the
+configuration $C_\infty(t,1)\cdots C_\infty(t,t+1)$ at time $t=t_1+r+\nu P$ is
+$w_0z_1^{a_1+\nu D_1}w_1\cdots z_m^{a_m+\nu D_m}w_m$: finitely many periodic
+regions separated by signals of rational speeds.
+
+\begin{corollary}\label{cor:regular}
+The half-line of a minimal-time solution is not eventually regular.
+\end{corollary}
+
+\begin{proof}
+Suppose it is. For each residue $r$ some $D_j$ is positive, because the
+configuration grows by $P$ cells per period; let $j(r)$ be the least such
+index. The blocks and junctions left of $z_{j(r)}$ have constant lengths, so
+the block $z_{j(r)}^{a_{j(r)}+\nu D_{j(r)}}$ starts at a fixed cell $s_r$ and its
+length grows at least like $\beta t$, for some $\beta>0$ and $t$ large. Inside
+it the state of a cell depends only on its distance to $s_r$ modulo
+$|z_{j(r)}|$, and is the same at the times $t$ and $t+P$. With
+$s:=\max_r s_r$, $q:=\prod_r|z_{j(r)}|$, $\alpha:=\beta/2$ and $t_0$ large,
+every cell of $\{(t,i):s\le i\le\alpha t,\ t\ge t_0\}$ lies in the block of
+index $j(r)$ of its residue class, so $C_\infty$ is periodic with periods $P$ in
+time and $q$ in space on this wedge, contradicting \cref{thm:left}.
+\end{proof}
+
+%% ---------------------------------------------------------------------
+\section{The first rows after the reflection}\label{sec:early}
+
+For $T\ge0$ let $E(T):=\{(\tau,\kappa):0\le\kappa\le\tau\le T\}$, the first
+$T+1$ rows of a reflected triangle. If $n\ge T+2$, then $E(T)\subseteq R_n$
+and no cell of $E(T)$ lies in the firing row $\tau=n-1$.
+
+\begin{lemma}[early rows]\label{lem:early}
+Let $\delta$ be a rule, $T\ge0$, and $n,n'\ge T+2$ such that for $0\le\kappa\le
+T+1$ the partial values $J_n(\kappa)$ and $J_{n'}(\kappa)$ coincide. Then for
+every $(\tau,\kappa)\in E(T)$ the values $R_n(\tau,\kappa)$ and
+$R_{n'}(\tau,\kappa)$ are both undefined or both defined and equal.
+\end{lemma}
+
+\begin{proof}
+By \cref{lem:determinacy} we may compare $\Psi(J_n,n;\tau,\kappa)$ and
+$\Psi(J_{n'},n';\tau,\kappa)$. Unfolding the recursion of
+\cref{lem:determinacy} from $(\tau,\kappa)\in E(T)$ visits only pairs
+$(\tau'',\kappa'')$ with $0\le\kappa''\le\tau''\le T$ and reads the symbols
+$x_{\kappa'}$ with $\kappa'\le\kappa''+1\le T+1$. The case $\kappa'=m$ would
+require $m\le T+1$, which is excluded for $m\in\{n,n'\}$; hence the left
+border is never read, and the input word is read only at positions
+$\kappa'\le T+1$, where $J_n$ and $J_{n'}$ coincide. The two recursions are
+therefore identical step by step, including the points where an argument is
+$\Fq$ or undefined.
+\end{proof}
+
+\begin{lemma}[periodicity certificate]\label{lem:certificate}
+Let $\delta$ be a rule, $D\ge0$, and $V_t:=(\Phi_t(0),\dots,\Phi_t(D))$ for
+$t\ge D$. There is a map $G_D$ on $W^{D+1}$, depending on $\delta$ and $D$
+only, with $V_{t+1}=G_D(V_t)$ whenever $t\ge D$ and $V_t\in W^{D+1}$. If
+$V_{t_0}=V_{t_0+p}$ for some $t_0\ge D$ and $p\ge1$, and $V_t\in W^{D+1}$ for
+$t_0\le t<t_0+p$, then $V_t\in W^{D+1}$ and $V_{t+p}=V_t$ for all $t\ge t_0$.
+\end{lemma}
+
+\begin{proof}
+For $t\ge D$ and $0\le j\le D$ we have $j\le t$, so the arguments in
+\eqref{eq:comoving} are $\Phi_t(j)$, $\Phi_t(j-1)$, $\Phi_t(j-2)$ with indices
+at most $D$ ($\Lq$ for negative indices); none is the border symbol
+$\Phi_t(t+1)=\ast$. Hence $G_D(v)_j:=\delta(v_j,v_{j-1},v_{j-2})$, with
+$v_{-1}=v_{-2}=\Lq$, does it. For the second statement, suppose that
+$V_{t'}\in W^{D+1}$ and $V_{t'+p}=V_{t'}$ for $t_0\le t'\le t$ (true for
+$t=t_0$). Then $V_{t+1+p}=G_D(V_{t+p})=G_D(V_t)=V_{t+1}$, and $V_{t+1}\in
+W^{D+1}$, by hypothesis if $t+1<t_0+p$ and because $V_{t+1}=V_{t+1-p}$
+otherwise; induction on $t$ concludes.
+\end{proof}
+
+\begin{corollary}[finitely many early rows]\label{cor:reduce}
+Let $\delta$, $T\ge0$, $D:=2T+1$, $t_0\ge D$ and $p\ge1$ satisfy the
+hypothesis of \cref{lem:certificate}. Then $J_n(\kappa)=J_{n+p}(\kappa)\in
+W^2$ for all $0\le\kappa\le T+1$ and $n\ge t_0+3$. Hence, for every $N_0\ge
+T+2$, every $R_n$ with $n\ge N_0$ coincides on $E(T)$, in the sense of
+\cref{lem:early}, with $R_{n'}$ for one of the finitely many lengths $N_0\le
+n'<\max(N_0,t_0+3)+p$.
+\end{corollary}
+
+\begin{proof}
+For $1\le\kappa\le T+1$ the components of $J_n(\kappa)$ are depth-row cells
+of depths $2\kappa-2,2\kappa-1\le D$ at the times $n-3+\kappa$ and
+$n-2+\kappa$, which are at least $n-2>t_0$; by \cref{lem:certificate} they lie
+in $W$ and are unchanged when $n$ is replaced by $n+p$. For $\kappa=0$ the
+lower component is $\Lq$ by convention or by \cref{lem:lightcone}, and the
+upper one is $C_\infty(n-2,n)=\Lq$. If $n\ge\max(N_0,t_0+3)+p$, subtracting a
+multiple of $p$ gives $n'$ in $[\max(N_0,t_0+3),\max(N_0,t_0+3)+p)$ with
+$J_{n'}=J_n$ on $[0,T+1]$, and \cref{lem:early} applies since $n,n'\ge T+2$.
+\end{proof}
+
+So the condition that no $R_n$, $n\ge N_0$, is $\Fq$ on $E(T)$ reduces to
+finitely many lengths, with a certificate found by simulating the half-line.
+With complete lines, such rows give finite formulas.
+
+\begin{definition}\label{def:G}
+Let $k\ge3$, $T\ge1$, $N_1\ge T+2$ and $T+1\le C\le N_1$. A $k$-state rule $\delta$
+satisfying \eqref{eq:quiescence} \emph{satisfies $\G_k(T,N_1,C)$} if
+\begin{enumerate}[(G1)]
+\item $\delta$ synchronizes the line of length $n$ at time $2n-2$ for $2\le
+n\le T+1$;
+\item for $T+2\le n\le N_1$, $1\le i\le n$ and $t\le n-1+T$: $C_n(t,i)\in W$;
+\item for $T+2\le n\le N_1$ and $1\le i\le n$ with $t:=2n-1-i\le n-1+T$:
+$C_n(t,i)\ne C_\infty(t,i)$;
+\item $C_\infty(t,i)\in W$ whenever $t+i\le 2N_1$;
+\item for $T+2\le n\le C$: $R_n(\tau,\kappa)\in W$ for all $(\tau,\kappa)\in
+R_n$ with $\tau+\kappa\le n-1$ and $\tau<n-1$, $R_n(n-1,0)=\Fq$, and
+$R_n(\kappa,\kappa)\ne C_\infty(n-1+\kappa,n-\kappa)$ for $2\kappa\le n-1$.
+\end{enumerate}
+We write $\G_k(T,N_1)$ for $\G_k(T,N_1,T+1)$, in which (G5) is void.
+\end{definition}
+
+The cells of (G5) form the backward dependency cone of the firing cell
+$(n-1,0)$; by \cref{lem:determinacy} their values depend only on the input
+cells of that cone, and by the local definition of $C_n$ they are defined even
+if a cell outside the cone is $\Fq$ earlier.
+
+\begin{lemma}\label{lem:G}
+Every $k$-state minimal-time solution satisfies $\G_k(T,N_1,C)$ for all $T$,
+$N_1$ and $C$ as in \cref{def:G}.
+\end{lemma}
+
+\begin{proof}
+(G1) holds by definition. For (G2), $n\ge T+2$ gives $n-1+T<2n-2$, and every
+cell of the line of length $n$ is in $W$ before time $2n-2$. (G3) is
+\cref{lem:return}, which applies because the lines of lengths $n$ and $n+1$
+are synchronized at times $2n-2$ and $2n$. (G4) is \eqref{eq:neverfire}. For
+(G5), the cells of $R_n$ with $\tau<n-1$ are in $W$, $R_n(n-1,0)=C_n(2n-2,n)=\Fq$,
+and the return chain differs from $C_\infty$ by \cref{lem:return}.
+\end{proof}
+
+%% ---------------------------------------------------------------------
+\section{Applications to four and five states}\label{sec:computations}
+
+\paragraph{Encodings and evidence} The CNF formula $\mathrm{MT}_k(\mathcal
+N;M,N')$ has one-hot variables for the entries of a $k$-state rule table, the
+cells of $C_\infty$ with $t+i\le M$ and the cells of $R_n$, $n\in\mathcal N$.
+Its clauses state the recursion, that no half-line cell is $\Fq$, that the
+line of length $n\in\mathcal N$ is synchronized at time $2n-2$, the return
+chains of \cref{lem:return} for $n,n+1\in\mathcal N$, and
+$\mathrm{PUMP}(n,n')$ for $4\le n<n'\le N'$ (none in $\mathrm{MT}_k(\mathcal
+N;M)$). The formula $\G_k(T,N_1,C)$ is encoded likewise with $M=2N_1$; its
+regions are closed under predecessors, so the encoding is equivalent to
+\cref{def:G}; for a fixed germ (defined below), (G2), (G3) can be imposed on
+all $n\ge N_0$ through the representatives of \cref{cor:reduce}.
+Unsatisfiability is certified by LRAT proofs \cite{CruzFilipeEtAl17} from
+CaDiCaL \cite{CaDiCaL2}, or from Kissat \cite{Kissat20} via
+\textsf{drat-trim}, checked by \texttt{lrat-check} \cite{WetzlerHeuleHunt14};
+the generators, the enumeration and the simulations are trusted programs. As
+tests, Mazoyer's solution \cite{Duprat97} satisfies
+$\mathrm{MT}_6(\{3,\dots,12\};78,40)$ and, with its table fixed, (G2), (G3)
+for $T=8$ and all $n\ge15$; with the table of $\delta_{14}$ below fixed, the
+formulas are satisfiable for the lines $2,\dots,14$ and unsatisfiable with the
+line $15$, or with the early rows ($T=8$, not $T=6$) of the lines
+$15,\dots,30$, as simulation predicts; every solver model was re-simulated by
+an independent checker.
+
+\begin{theorem}\label{thm:four}
+No four-state rule satisfying \eqref{eq:quiescence}
+\begin{enumerate}[(i)]
+\item synchronizes all lines of lengths $2,\dots,9$ in minimal time;
+\item satisfies $\G_4(6,10)$: the lines $2,\dots,7$ complete and, for the lines
+$8,9,10$, the first seven rows and the return chains;
+\item satisfies $\G_4(4,10,10)$: the lines $2,\dots,5$ complete and, for the
+lines $6,\dots,10$, the first five rows, the return chains and the right ends.
+\end{enumerate}
+In particular, no four-state minimal-time solution exists.
+\end{theorem}
+
+\begin{proof}
+(i) Such a rule yields a model of $\mathrm{MT}_4(\{2,\dots,9\};16)$: a
+half-line cell with $t+i\le16$ is quiescent if $i\ge10$
+(\cref{lem:lightcone}) and equals a cell of the line of length $9$ at a time
+$t<16$ if $i\le9$ (\cref{lem:agree}), so it is in $W$, and the return chains
+hold by \cref{lem:return} for $2\le n\le8$. CaDiCaL refutes this formula
+($753$ variables, $17{,}605$ clauses) in $51$\,s with an LRAT proof of
+$177$\,MB, which \texttt{lrat-check} verifies in $5.7$\,s. (ii) The encoding
+of $\G_4(6,10)$ has $919$ variables and $22{,}960$ clauses; CaDiCaL refutes it
+in $41$\,s with an LRAT proof of $167$\,MB, verified in $5$\,s. (iii) The
+encoding of $\G_4(4,10,10)$ has $874$ variables and $20{,}461$ clauses;
+CaDiCaL refutes it in $36$\,s with an LRAT proof of $173$\,MB, verified in
+$4$\,s. The SHA-256 digests of the three formulas begin with
+\texttt{d18d6548}, \texttt{0e0ba286} and \texttt{124f0954}. The last claim
+follows from (i), and also from (ii) or (iii) with \cref{lem:G}. Part (i)
+certifies the bound observed by Yun\`es \cite{Yunes93}.
+\end{proof}
+
+The bounds are sharp in the following sense. An exhaustive enumeration finds
+$27$ partial rules (rules restricted to the transitions they use) for the
+lengths $2,\dots,8$, as did Yun\`es \cite{Yunes93} under the extra condition
+$\delta(\ast,\Lq,\Lq)=\Lq$, vacuous here as none of them uses $(\ast,\Lq,\Lq)$. The encodings of $\G_4(5,30)$, $\G_4(6,9)$, $\G_4(4,30,9)$,
+$\G_4(3,30,12)$, of $\G_4(6,10)$ without (G3), and of (G1) for $T=4$ with (G5)
+for $6\le n\le12$ have models. The five-state rules below are the files
+\texttt{delta14*.txt}, \texttt{delta13.txt} and \texttt{uniformA\_2-12.txt}
+($\delta_{12}$) in \texttt{results/} of the repository.
+
+\begin{proposition}\label{prop:nearmiss}
+Each of the five-state rules $\delta_{14}$, $\delta_{14}^{\mathrm b}$,
+$\delta_{14}^{\mathrm c}$, $\delta_{14}^{\mathrm d}$, $\delta_{14}^{\mathrm e}$
+synchronizes the line of length $n$ at time $2n-2$ for $2\le n\le14$ and for
+no $n\ge15$: for $n\ge15$, some cell of the line of length $n$ is $\Fq$ at a
+relative time $\tau\le\min(T,n-2)$, where $T=10,14,22,12,14$, respectively.
+\end{proposition}
+
+\begin{proof}
+The lines of lengths $2,\dots,60$ are simulated; for $15\le n\le60$ some cell
+is $\Fq$ at a relative time $\tau\le n-2$, which proves the claim for $15\le
+n<T+3$. The half-line has no cell in state $\Fq$ at the times $t<3000$, so by
+\cref{lem:agree} a cell of a line of length $n\le1500$ that is $\Fq$ at a time
+$t\le 2n-2$ lies in $R_n$. Simulating the half-line gives $t_0$ and $p$
+satisfying the hypothesis of \cref{lem:certificate} for $D=2T+4\ge2T+1$,
+namely $(t_0,p)=(51,8)$, $(66,3)$, $(257,192)$, $(95,48)$, $(56,2)$. For every
+$n$ with $\max(15,T+3)\le n<t_0+3+p\le452$, direct simulation shows that the
+line of length $n$, or of a length $n'$ in this range with $J_{n'}=J_n$ on
+$[0,T+1]$, has a cell in state $\Fq$ at a relative time $\tau\le T$, hence in
+$E(T)$ (one length is simulated per class of a partition finer than equality
+of $J_n$ on $[0,T+1]$; with the lengths below $T+3$ these are $35$, $39$,
+$413$, $116$, $28$ lengths, the largest being $49$, $53$, $427$, $130$,
+$42$). By \cref{lem:early,cor:reduce} with $N_0=\max(15,T+3)$, every $R_n$ with
+$n\ge N_0$ is $\Fq$ at a cell of $E(T)$, where $\tau\le T\le n-3$.
+\end{proof}
+
+
+For $3\le t<1500$ the half-line of $\delta_{14}$ takes the values $\Lq,\Gq$ at
+cell $1$, $\Lq,\Aq$ at cell $2$ and $\Lq,\Bq$ at the cells $i\ge3$, where
+$\delta_{14}$ restricted to $\{\Lq,\Bq\}^3$ is the elementary rule $22$
+\cite{Wolfram83}; in the simulated ranges ($\mathrm{PUMP}(n,n')$ for $4\le
+n<n'\le800$; $n\le5000$, $s\le3$, $\ell\le24$ in \cref{lem:left}) neither
+barrier excludes it. The rules $\delta_{12}$ and $\delta_{13}$ synchronize the
+lines of lengths $2,\dots,12$, resp.\ $2,\dots,13$, and no other line of length
+at most $60$. By simulation, each of these seven rules has a line of some
+length $14\le n\le19$ with a cell in state $\Fq$ at a relative time $\tau\le9$,
+so none of them satisfies $\G_5(9,N_1)$ for $N_1\ge19$.
+
+\paragraph{Half-lines of low complexity} The \emph{germ} below $M$ of a rule is
+its restriction to the neighbourhoods of the cells $(t,i)$, $t\ge1$, $t+i\le M$,
+of its half-line, and its \emph{complexity} $c_M(\delta)$ is the number of
+these neighbourhoods other than $(\Lq,\Lq,\Lq)$: $c_{78}=57$ for Mazoyer's
+rule, $22$ for $\delta_{12}$ and $16$ for $\delta_{14}$.
+
+\begin{proposition}\label{prop:germs}
+Every five-state minimal-time solution $\delta$ satisfies $c_{78}(\delta)\ge15$.
+\end{proposition}
+
+\begin{proof}
+Suppose $c_{78}(\delta)\le14$; exchanging $\Aq$ and $\Bq$ if necessary, $\Aq$
+occurs before $\Bq$ (if at all) in the order of anti-diagonals and, within an
+anti-diagonal, of time. By \eqref{eq:neverfire} and
+\cref{lem:return,lem:pumping}, the germ of $\delta$ below $78$ produces no
+$\Fq$, never produces $\Lq$ at the front, and satisfies $\mathrm{PUMP}(n,n')$
+for $4\le n<n'\le40$. A depth-first search that chooses the value of each
+neighbourhood at its first occurrence enumerates all such germs
+($1.0\cdot10^8$ nodes): there are $244$, and an independent re-implementation
+finds the same $244$. For $230$ of them, $\mathrm{MT}_5(\{2,\dots,10\};78,39)$
+(without symmetry breaking) with the germ fixed is unsatisfiable: one formula
+with a selector variable per germ, clauses that make each selector fix its
+germ and a clause requiring some selector is refuted by CaDiCaL in $4$\,s with
+an LRAT proof of $11$\,MB. Each of the other $14$ germs determines $C_\infty$
+up to the anti-diagonal $3300$, and there \cref{lem:left} applies with $s=1$:
+for some $n\le163$ and $\ell\le5$, the upper input anti-diagonal of the line of
+length $n$ is $\ell$-periodic on $[1,Y]$ and the lower one on $[1,Y-1]$ with
+$Y-1>16\ell$ (e.g.\ $n=28$, $\ell=1$, $Y=19$), as an independent simulation
+confirms. Hence no rule containing one of the $244$ germs is a minimal-time
+solution.
+\end{proof}
+
+The rules $\delta_{12}$ and $\delta_{13}$ have the same half-line for
+$t+i\le78$, where they use the $22$ transitions
+\begin{center}\small
+\texttt{*GL>A GLL>G *AG>B AGL>L *BL>A BLG>L LGL>B *AL>G ALB>A LBG>L BGL>G}\\
+\texttt{*GA>A GAL>L ALG>B LGG>G GGL>G BGG>L GGG>G ALL>A LLG>L ALA>A LAL>L}
+\end{center}
+(\texttt{xyz>d} means $\delta(x,y,z)=d$) besides $\delta(\Lq,\Lq,\Lq)=\Lq$:
+a front, a wake of $\Gq$'s and, behind a boundary of speed $1/3$, a region
+$\Aq\,\Lq\,\Aq\,\Lq\cdots$ periodic in time and space.
+
+\begin{corollary}\label{cor:germ12}
+No five-state rule with the $22$ transitions above synchronizes the line of
+length $518$ in minimal time.
+\end{corollary}
+
+\begin{proof}
+With these transitions and $\delta(\Lq,\Lq,\Lq)=\Lq$ only, no other
+neighbourhood occurs on the cells with $t+i\le1034$, so every such rule has the
+same diagram $C_\infty$ there. On $t+i=1034$ the cells $2,\dots,259$ are in
+state $\Aq$, and on $t+i=1033$ the cells $2,\dots,258$ are in state $\Lq$.
+\Cref{lem:left} with $k=5$, $n=518$, $s=2$, $\ell=1$, $Y=259$ would give
+$257\le4^4=256$.
+\end{proof}
+
+\paragraph{Balzer's conditions} Balzer \cite[p.~37]{Balzer67} reported that no
+five-state minimal-time solution satisfies the four conditions
+(B1) $\delta(x,\Gq,y)=\Gq$ unless $x,y\in\{\Gq,\ast\}$;
+(B2) $\delta(I(z),I(y),I(x))=I(\delta(x,y,z))$ for an involution $I$ of the
+states with $I(\ast)=\ast$;
+(B3) $\delta(\Gq,\Gq,\Gq)=\delta(\ast,\Gq,\Gq)=\delta(\Gq,\Gq,\ast)=\Fq$ and no
+other neighbourhood gives $\Fq$;
+(B4) $\delta(\Gq,v,\Gq)=\Gq$ for all $v\in W\setminus\{\Gq\}$.
+In the \emph{weak reading} \cite{Yunes93}, (B1) is required only for working
+states $x,y$ and (B3) without its last clause. We take $I(\Fq)=\Fq$; then
+$I(\Gq)=\Gq$, since otherwise $g:=I(\Gq)\in W\setminus\{\Gq\}$ and (B2), (B4)
+give $\delta(g,\Gq,g)=I(\delta(\Gq,g,\Gq))=I(\Gq)=g$, whereas (B1) gives
+$\delta(g,\Gq,g)=\Gq$. So $I$ is one of the four involutions of
+$\{\Lq,\Aq,\Bq\}$, and (B1)--(B4) become unit and binary clauses.
+
+\begin{proposition}\label{prop:balzer}
+No five-state rule satisfying (B1)--(B4) in the weak reading, with
+$I(\Fq)=\Fq$, synchronizes all lines of lengths $2,\dots,12$ in minimal time;
+a fortiori none satisfying Balzer's form does. The lengths up to $11$ do not
+suffice to prove this.
+\end{proposition}
+
+\begin{proof}
+For each involution, the clauses of (B1)--(B4) are added to
+$\mathrm{MT}_5(\{2,\dots,N\};2N-2)$. For $I=(\Aq\,\Bq)$ and $N=10$, and for
+$I=(\Lq\,\Aq)$ and $I=(\Lq\,\Bq)$ and $N=9$, CaDiCaL refutes the formula with
+LRAT proofs checked in $7.1$, $3.5$ and $3.3$\,s. For $I$ the identity and
+$N=12$, Kissat refutes it in $15$ minutes; \textsf{drat-trim} turns its DRAT
+proof into an LRAT proof of $3.1$\,GB, which \texttt{lrat-check} verifies in
+$66$\,s. The rule \texttt{results/balzer\_sym11.txt} satisfies (B1)--(B4) in
+the strong reading with $I$ the identity and synchronizes every line of length
+at most $11$ (direct simulation).
+\end{proof}
+
+%% ---------------------------------------------------------------------
+\section{Concluding remarks}\label{sec:conclusion}
+
+The five-state rules that come closest to minimal time are irregular and fail
+in the first rows after the reflection. For the germ of
+$\delta_{14}^{\mathrm d}$, (G1)--(G3) with $T=10$ and all $n\ge12$ have a
+model, and so do (G1)--(G3) with $T=7$ and all $n\ge9$ together with (G5) for
+$9\le n\le20$; in the latter, the lines of lengths $9$, $11,\dots,17$ and $19$
+have both end cells, but not all cells, in state $\Fq$ at time $2n-2$ and none
+before. Excluding such rules requires
+conditions on the middle cells, whose dependency cones cover most of $R_n$.
+Open questions: (1) Does a five-state minimal-time solution exist? (2) Is there
+a condition on the middle of the reflected triangles as economical as
+\cref{lem:G}? (3) Can the bound of \cref{lem:left} be made polynomial in $s$?
+(4) Do Balzer's conditions exclude six states?
+
+\section*{Declarations}
+\noindent\emph{CRediT.} All authors: Conceptualization, Methodology, Formal
+analysis, Investigation, Validation, Writing -- review \& editing.
+\emph{Competing interests and funding.} None. \emph{Data availability.}
+Programs, rule tables, logs, SHA-256 digests and the commands that regenerate
+the certificates and check every computational statement are at
+\url{https://github.com/giamkiakeng/proj1} (directory \texttt{fssp5}).
+\emph{Use of generative AI.} The authors used Claude (Anthropic) to develop and
+check the arguments, to write and run the programs and experiments, and to
+draft and proofread the text; they reviewed and edited the content and take
+full responsibility for it.
+
+\renewcommand{\bibfont}{\footnotesize}
+\bibliographystyle{elsarticle-num}
+\bibliography{refs}
+
+\end{document}

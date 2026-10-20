@@ -716,3 +716,5 @@ Started 00:16: the joint test at T = 7 with the cones of the right four firing c
 **Free C_8 (full:2-9 early:10-30:8 cone:10-20): UNKNOWN** after 4 h of kissat (01:17).
 
 Started 01:18: C_7h3 = FREE full:2-8 early:9-30:7 cone:9-20:3, i.e. the right four firing cells of lines 9..20, kissat 4 h. C_7, with the right end only, is SAT by the δ14d model of §28. That model fires the right-end cell of line 9 but not its neighbour, so C_7h3 excludes it.
+
+**Joint test with cones at T = 9 (cone:11-20): SAT** (CaDiCaL, from 23:54 to 01:52). Decoded with anal/decode.py (same environment GFIX_UNFIX='*GL,GLL' GFIX_SHARE=1 and the same specs) into runs/joint15c_T9_20.rule, 96 entries. As in the joint relaxation at T = 11, the model maps *GL → F and GLL → G, so it is a model of the relaxation, not a rule that synchronizes the line of length 2. Hence the complexity-15 half-line also passes T = 9 together with the right ends of the lines 11..20, and this test cannot show c_78 ≥ 16. Still running: the joint test at T = 10 with cones (CaDiCaL until about 05:13), joint15h T = 7 (kissat until about 02:16) and C_7h3 (kissat until about 05:18).
