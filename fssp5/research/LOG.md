@@ -708,3 +708,7 @@ So the complexity-15 half-line passes the early-row level T = 11 for all lengths
 The models found so far are saved in research/models/ and described in early_rows.tex, Proposition "germmodels".
 
 **Joint test with cones at T = 9 (cone:11-20): UNKNOWN** after 2 h of kissat (23:53). CaDiCaL (-t 21600) runs on the same CNF since 23:54. Both cone-augmented joint formulas (T = 9, 10) are in the hard zone; T = 7 with cones is SAT (Proposition "germmodels" (ii) of early_rows.tex).
+
+**Joint test at T = 12 (no cones): UNKNOWN** after 2 h of kissat (00:15).
+
+Started 00:16: the joint test at T = 7 with the cones of the right four firing cells (cone:9-20:3; runs/joint15h.sh 7 20 3, kissat 2 h). At T = 7 with only the right end (cone:9-20) the single labelling of δ14d is SAT. In that model, line 9 fires its right-end cell but not its neighbour.
