@@ -925,3 +925,4 @@ Re-estimate of the remaining work. This is an extrapolation from the logs, not a
 So the c78 ≥ 16 step needs about 1–1.5 days on four cores, not the 10–20 h estimated at 09:00.
 
 To resume, empty the claim directories rc14c_claim/ and rc14d_claim/ and restart the workers. Alternatively, run the single-process command of run30/trees/README.md on the committed snapshot.
+- Draft for note2, not yet included: run30/k15/prop_germs16_conditional.tex. It reduces c78 ≥ 16 to the unsatisfiability of X(r16_02) and X(r16_15), with the case split 1,391 = 1,270 + 117 + 2 + 2 above, citing the note's existing lemmas. It compiles in a minimal wrapper; the 8 undefined references are the note's own labels.
