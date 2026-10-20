@@ -736,3 +736,10 @@ Consequences for R_n:
 These constraints are already contained in the band and early-row encodings; they explain why the lower inputs carry no information about n.
 
 **Whole return chains (03:04).** gfix.py imposes (G3) only on the return-chain cells inside the encoded region. The region band:n:1 is the whole return chain together with the firing cell of cell 1; band:n:2 adds chain 2. Both are closed under predecessors and cheap with a germ fixed. With complete lines 2..11 on δ14d's germ, adding band:12-120:1, or band:12-120:2 (581k clauses), is satisfiable within seconds. The return chain avoids the forbidden value B, which the germ's entry BLL>B would otherwise produce, by passing through G. So whole return chains add no strength to this germ.
+
+**Container restart at about 03:37: four runs lost without a verdict.**
+- joint15c T = 10 with cone:12-20, CaDiCaL, after 4 h 25 min;
+- C_7h3, kissat, after 2 h 20 min;
+- the per-germ tests at T = 10 with cone:12-20, δ14d's germ in CaDiCaL and δ14c's germ in kissat, after 1 h 5 min each.
+
+None had answered. They are restarted when the machine is free again; the scripts are scratchpad runs/joint15c.sh, runs/pergerm.sh and runs/pergerm2.sh.
