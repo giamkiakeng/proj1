@@ -20,4 +20,17 @@ This directory holds ongoing work on the five-state question that goes beyond th
 
 The early-row formula G_k(T, N1) of `early_rows.tex` is `gfix.py FREE k full:2-(T+1) early:(T+2)-N1:T` (with `GFIX_SHARE=1`, and `GFIX_SYMBREAK=1` for k = 5). Do not use `GFIX_SHALLOW` for it. That option leaves the deep half-line cells unconstrained, which admits spurious models (LOG.md §26).
 
+### Reproducing the certified four-state results of `early_rows.tex`
+
+```
+GFIX_SHARE=1 python3 gfix.py FREE 4 full:2-7 early:8-10:6 --cnf k4_G6.cnf               # G_4(6,10)
+./certify_lrat.sh k4_G6.cnf      # c VERIFIED; LRAT ~167 MB
+#   CNF sha256 0e0ba286ec7b60d05f6edee470b5cbd4d6655cd184186e630a96bd4187932e03
+GFIX_SHARE=1 python3 gfix.py FREE 4 full:2-5 early:6-10:4 cone:6-10 --cnf k4_G4c.cnf    # G_4(4,10,10)
+./certify_lrat.sh k4_G4c.cnf     # c VERIFIED; LRAT ~173 MB
+#   CNF sha256 124f095450ee725be06f07271e1d752c4cbacce9f4bff190ddea1907d39e4f51
+```
+
+The CNF files are generated deterministically (regenerated and compared on 2026-10-20); the digests of the LRAT files are in `LOG.md` (§§26, 28).
+
 The tools expect kissat, drat-trim and lrat-check at the paths of `../README.md`, or in the variables `KISSAT`, `DRATTRIM` and `LRATCHECK`.
