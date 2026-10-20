@@ -734,3 +734,5 @@ Consequences for R_n:
 - (G3) for this germ says that r(κ) ≠ B for every κ ≤ n−2, because the half-line cell compared with r(κ) has even depth.
 
 These constraints are already contained in the band and early-row encodings; they explain why the lower inputs carry no information about n.
+
+**Whole return chains (03:04).** gfix.py imposes (G3) only on the return-chain cells inside the encoded region. The region band:n:1 is the whole return chain together with the firing cell of cell 1; band:n:2 adds chain 2. Both are closed under predecessors and cheap with a germ fixed. With complete lines 2..11 on δ14d's germ, adding band:12-120:1, or band:12-120:2 (581k clauses), is satisfiable within seconds. The return chain avoids the forbidden value B, which the germ's entry BLL>B would otherwise produce, by passing through G. So whole return chains add no strength to this germ.
