@@ -12,6 +12,7 @@ export KISSAT=${KISSAT:-$(command -v kissat || echo kissat)}
 export DRATTRIM=${DRATTRIM:-$(command -v drat-trim || echo drat-trim)}
 export LRATCHECK=${LRATCHECK:-$(command -v lrat-check || echo lrat-check)}
 mkdir -p "$H/cnf"
+export TMPDIR="$H/cnf"        # balzer.py and balzer_k.py write their formulas and proofs to $TMPDIR/balzer_*/
 sec() { echo; echo "=== $*"; }
 
 sec "Theorem 6.1 (i)-(iii): formulas, digests, LRAT proofs"

@@ -19,7 +19,7 @@ The proofs of Sections 2–5 need no computation. Section 6, the paragraph after
 - **`check_certificates.sh`** generates every unsatisfiable formula of the note, solves it with a proof, and checks the proof:
   - the LRAT proofs come from CaDiCaL directly, or from Kissat's DRAT proof via drat-trim;
   - each proof is checked with `lrat-check`;
-  - it writes about 4 GB to `cnf/`.
+  - it writes about 4 GB to `cnf/`, including the directories `cnf/balzer_*/` of `src/balzer.py`.
 
 Both scripts can be started from any directory. Solver binaries are taken from the environment variables `CADICAL`, `KISSAT`, `DRATTRIM` and `LRATCHECK` if they are set, otherwise from the `PATH`.
 
