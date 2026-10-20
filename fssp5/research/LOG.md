@@ -894,3 +894,15 @@ So 8,152 = 7,324 + 796 + 2 + 8 + 8 + 14. Once the 13 formulas X(r16_00), X(r16_0
 | x16_03 | 441 / 564 | 2,525 (max level 5) | 36 |
 
 Where the time goes (x14c, first 2,177 items): the 2,140 UNSAT items took 3,493 s, of which 2,589 s went to the 162 items that needed more than 5 s; the 37 UNKNOWN items took 1,929 s (52 s each, the 10^5 budget). For x14d: 4,553 s for 1,950 UNSAT items (3,744 s for the 223 above 5 s) and 996 s for 18 UNKNOWN items. A top-level cube that is UNKNOWN at 10^5 costs between one split (about 60 leaves, about 100 s) and twenty splits (cube 170: about 1,200 leaves).
+
+**Scheduling (09:00).**
+- The kernel groups processes into autogroups (one per session), and a process's nice value only weighs it against processes of its own group. So nice 19 on the x16_03 process did nothing against the four x14 processes. Setting the group's nice instead (`echo 19 > /proc/<pid>/autogroup`) moved about 1.6× more CPU to x14.
+- rcube.py now has optional work sharing (environment variables; the logs and the certificate mean the same as before):
+  - RC_CLAIM=DIR: an item is worked on only by the process that creates DIR/<path> (O_EXCL).
+  - RC_STEAL=1: when its own items run out, a process re-reads the log and takes the unclaimed open items (the last ones first).
+  - RC_REVERSE=1: the top-level cubes are taken in decreasing order.
+  
+  A split file is written completely before its S line, and a reader skips an unfinished last line of the log.
+- Tested on pigeonhole formulas, with 2 processes on one tree (7 pigeons, 6 holes: 23 items solved, 1 split) and with 3 (8 pigeons, 7 holes: 196 items solved, 47 split). No item was solved twice, and rcert.py --final certified the 3-process tree (149 leaf refutations, 47 split covers).
+- At 09:00:41 the four x14 processes were replaced by four workers (scratchpad script worker.sh), two starting on each tree, one from each end. A worker that runs out of work moves to the other tree. Once a tree is ALL CLOSED, the four workers certify it with rcert.py in four slices and compose the result.
+- State at the switch: x14c 585/916 top-level cubes closed (4,300 UNSAT leaves, 68 splits); x14d 381/869 (3,602 leaves, 58 splits).
