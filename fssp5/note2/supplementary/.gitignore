@@ -1,0 +1,9 @@
+# compiled programs, Python caches, and the formulas and proofs written by the scripts
+src/fsspcheck
+src/fsspdfs
+src/germdfs
+src/germext
+__pycache__/
+cnf/
+# the recorded logs are part of the supplement (the parent directory ignores *.log)
+!*.log

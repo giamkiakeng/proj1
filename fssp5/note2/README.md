@@ -4,6 +4,8 @@
 
 Build it with `latexmk -pdf note2.tex`, or with `pdflatex note2; bibtex note2; pdflatex note2; pdflatex note2`. `note2.pdf` and `note2.bbl` are committed, and `refs.bib` is a copy of `../note/refs.bib`.
 
+`supplementary/` is the supplementary material to submit with the note. It holds the programs, rule tables, germ lists and logs behind every computer-assisted statement, with two scripts that rerun them: `check_quick.sh` (about 7 minutes) and `check_certificates.sh` (LRAT proofs, about 30 minutes). Its README maps each statement of the note to commands and expected results. To submit it as one file, run `zip -r supplementary.zip supplementary` in this directory. Run this on a fresh checkout or after `git clean -dfX supplementary`, so that the compiled programs and the `cnf/` directory written by the scripts are not included.
+
 | note2 | source |
 |---|---|
 | §2: Lemmas 2.1–2.3, eq. (2) | note §2 |
