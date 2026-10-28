@@ -2,7 +2,7 @@
 
 for the note
 
-> Kia Keng Giam, Beichen Sun, Yaoqi Zhao, *Necessary conditions on minimal-time solutions of the firing squad problem*.
+> Kia Keng Giam, *Necessary conditions on minimal-time solutions of the firing squad problem*.
 
 This folder contains the programs and data behind every computer-assisted statement of the note, and two scripts that rerun them. Section and statement numbers below are those of the note.
 

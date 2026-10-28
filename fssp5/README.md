@@ -2,7 +2,7 @@
 
 This directory accompanies the note
 
-> Kia Keng Giam, Beichen Sun, Yaoqi Zhao, *Two necessary conditions on minimal-time solutions of
+> Kia Keng Giam, *Two necessary conditions on minimal-time solutions of
 > the firing squad problem*. The source is `note/note.tex` and the compiled PDF is `note/note.pdf`.
 
 The proofs in Sections 2–4 of the note need no computation. This directory holds everything behind its computer-assisted statements, which are in Section 5 and Remark 3.5. For each statement, the commands below regenerate the evidence and print the outcome recorded here. `note/REVIEW.md` contains the report of an internal referee on the first version of the note and the response to it.
