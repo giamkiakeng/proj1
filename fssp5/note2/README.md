@@ -1,10 +1,14 @@
 # The second note
 
-`note2.tex` is the note *Necessary conditions on minimal-time solutions of the firing squad problem*. It is 9 pages in Elsevier's journal-style `3p` layout, references included. It collects the statements proved in `../note/note.tex` and in `../research/early_rows.tex`; the exceptions are listed below.
+`note2.tex` is the note *Necessary conditions on minimal-time solutions of the firing squad problem*. It is 10 pages in Elsevier's journal-style `3p` layout, references included, and is prepared for submission to *Theoretical Computer Science*. It collects the statements proved in `../note/note.tex` and in `../research/early_rows.tex`; the exceptions are listed below.
 
 Build it with `latexmk -pdf note2.tex`, or with `pdflatex note2; bibtex note2; pdflatex note2; pdflatex note2`. `note2.pdf` and `note2.bbl` are committed, and `refs.bib` is a copy of `../note/refs.bib`.
 
 `supplementary/` is the supplementary material to submit with the note. It holds the programs, rule tables, germ lists and logs behind every computer-assisted statement, with two scripts that rerun them: `check_quick.sh` (about 7 minutes) and `check_certificates.sh` (LRAT proofs, about 30 minutes). Its README maps each statement of the note to commands and expected results. To submit it as one file, run `zip -r supplementary.zip supplementary` in this directory. Run this on a fresh checkout or after `git clean -dfX supplementary`, so that the compiled programs and the `cnf/` directory written by the scripts are not included.
+
+`highlights.txt` holds the optional highlights for the submission: five bullet points of at most 85 characters each, including spaces. They go in a separate file.
+
+For the journal, the declarations follow Elsevier's policy on generative AI (updated June 2026): the use of AI in the research is described in Section 6, and its use in preparing the manuscript is declared in a separate section immediately before the references.
 
 | note2 | source |
 |---|---|
@@ -30,7 +34,7 @@ Build it with `latexmk -pdf note2.tex`, or with `pdflatex note2; bibtex note2; p
 
 ## Left out
 
-These items were left out because none of them supports a statement of the note, and the page budget is 9 pages:
+These items were left out because none of them supports a statement of the note, and the note was written to a 9-page budget (it reached 10 pages when the journal's declarations were added):
 - the figures of `../note`;
 - Remark 4.4 of `../note` (the mirror image of Lemma 4.1);
 - the six-state remark after Proposition 5.5 of `../note`;

@@ -27,6 +27,8 @@
 \newcommand{\Fq}{\mathsf F}
 \newcommand{\G}{\mathcal G}
 
+\journal{Theoretical Computer Science}
+
 \begin{document}
 
 \begin{frontmatter}
@@ -574,7 +576,10 @@ for $T=8$ and all $n\ge15$; with the table of $\delta_{14}$ below fixed, the
 formulas are satisfiable for the lines $2,\dots,14$ and unsatisfiable with the
 line $15$, or with the early rows ($T=8$, not $T=6$) of the lines
 $15,\dots,30$, as simulation predicts; every solver model was re-simulated by
-an independent checker.
+an independent checker. The author used the AI system Claude (Anthropic) to
+develop and check the arguments of
+\cref{sec:prelim,sec:right,sec:left,sec:early} and to write and run all
+programs.
 
 \begin{theorem}\label{thm:four}
 No four-state rule satisfying \eqref{eq:quiescence}
@@ -760,17 +765,23 @@ a condition on the middle of the reflected triangles as economical as
 (4) Do Balzer's conditions exclude six states?
 
 \section*{Declarations}
-\noindent\emph{CRediT.} Kia Keng Giam: Conceptualization, Methodology, Formal
-analysis, Investigation, Validation, Writing -- review \& editing.
-\emph{Competing interests and funding.} None. \emph{Data availability.}
+\noindent\emph{CRediT authorship contribution statement.} Kia Keng Giam:
+Conceptualization, Methodology, Formal analysis, Investigation, Validation,
+Writing -- review \& editing. \emph{Declaration of competing interest.} The
+author declares no competing interests. \emph{Funding.} This research received
+no specific grant from any funding agency. \emph{Data availability.}
 Programs, rule tables, logs, SHA-256 digests and two scripts that regenerate
 the certificates and check every computational statement are in the
 supplementary material and at \url{https://github.com/giamkiakeng/proj1}
 (directory \texttt{fssp5/note2/supplementary}).
-\emph{Use of generative AI.} The author used Claude (Anthropic) to develop and
-check the arguments, to write and run the programs and experiments, and to
-draft and proofread the text. The author reviewed and edited the content and
-takes full responsibility for it.
+
+\section*{Declaration of generative AI and AI-assisted technologies in the
+manuscript preparation process}
+During the preparation of this work the author used Claude (Anthropic) in
+order to draft and proofread the text; its use in the research itself is
+described in \cref{sec:computations}. After using this tool, the author
+reviewed and edited the content as needed and takes full responsibility for
+the content of the publication.
 
 \renewcommand{\bibfont}{\footnotesize}
 \bibliographystyle{elsarticle-num}

@@ -1,0 +1,7 @@
+Highlights
+
+- The non-periodic part of the half-line of a minimal-time solution reaches i = t/3.
+- The half-line is not doubly periodic on a left-border wedge, nor eventually regular.
+- Four states are refuted with complete lines 2-5 and parts of lines 6-10 (LRAT).
+- Five five-state rules synchronize exactly the lines of lengths 2 to 14.
+- Five-state solutions use at least 15 half-line neighbourhoods below t + i = 78.
