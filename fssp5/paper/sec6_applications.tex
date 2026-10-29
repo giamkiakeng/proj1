@@ -1,0 +1,293 @@
+%% ---------------------------------------------------------------------------
+\section{Applications to Four and Five States}\label{sec:applications}
+
+We now combine the necessary conditions with satisfiability solvers. All
+statements of this section are computer-assisted. Each of them is either a
+finite simulation or enumeration, or the unsatisfiability of a propositional
+formula that is certified by a proof checked independently of the solver; the
+kind of evidence is stated for each result and summarized in
+\cref{tab:results}.
+
+\subsection{Method}\label{sec:method}
+
+\paragraph{Encodings}
+The formula $\MT_k(\mathcal N;M,N')$ has one-hot variables for the entries of a
+$k$-state rule table, for the cells of $C_\infty$ with $t+i\le M$ and for the
+cells of $R_n$ with $n\in\mathcal N$. Its clauses state the local rule, that no
+half-line cell is $\Fq$, that the line of length $n$ is synchronized at time
+$2n-2$ for every $n\in\mathcal N$, the return chains of \cref{lem:return} for
+$n,n+1\in\mathcal N$, and $\PUMP(n,n')$ for $4\le n<n'\le N'$; the formula
+$\MT_k(\mathcal N;M)$ has no pumping clauses. The formula $\G_k(T,N_1,C)$ is
+encoded in the same way, with $M=2N_1$. Its regions are closed under
+predecessors, so the encoding is equivalent to \cref{def:G}.
+
+\paragraph{Certificates}
+Every unsatisfiability claim is certified by a proof in the LRAT
+format~\cite{CruzFilipeEtAl17}, which is produced by the solver
+CaDiCaL~\cite{CaDiCaL2} or, for one formula, obtained from a DRAT proof of the
+solver Kissat~\cite{Kissat20} with \textsf{drat-trim}~\cite{WetzlerHeuleHunt14},
+and verified by the independent checker \texttt{lrat-check}. The formula
+generators, the enumerations and the simulations are trusted programs, and
+every model found by a solver was re-simulated by a checker that shares no code
+with the generators.
+
+\paragraph{Validation}
+As tests of the encodings, Mazoyer's solution, as extracted from Duprat's
+formal proof of its correctness~\cite{Duprat97}, satisfies
+$\MT_6(\{3,\dots,12\};78,40)$ and, with its table fixed, (G2) and (G3) for $T=8$
+and all $n\ge15$. With the table of the rule $\delta_{14}$ of \cref{sec:five}
+fixed, the formulas are satisfiable for the lines of lengths $2,\dots,14$ and
+unsatisfiable with the line of length $15$, or with the early rows ($T=8$, but
+not $T=6$) of the lines of lengths $15,\dots,30$, as simulation predicts.
+
+\paragraph{Reproducibility}
+The supplementary material contains the programs, the rule tables, the lists of
+half-line germs and the logs, with two scripts that rerun every computation:
+one for the simulations, enumerations and satisfiable formulas (about $7$
+minutes), and one that regenerates and checks every LRAT proof (about $30$
+minutes). The solver times, proof sizes and SHA-256 digests of all formulas and
+proofs are listed there; see the data availability statement at the end.
+
+\subsection{Four States}\label{sec:four}
+
+\begin{theorem}\label{thm:four}
+No four-state rule satisfying \eqref{eq:quiescence}
+\begin{enumerate}[(i)]
+\item synchronizes all lines of lengths $2,\dots,9$ in minimal time;
+\item satisfies $\G_4(6,10)$: the lines of lengths $2,\dots,7$ complete and,
+for the lines of lengths $8$, $9$ and $10$, the first seven rows and the return
+chains;
+\item satisfies $\G_4(4,10,10)$: the lines of lengths $2,\dots,5$ complete and,
+for the lines of lengths $6,\dots,10$, the first five rows, the return chains
+and the right ends.
+\end{enumerate}
+In particular, no four-state minimal-time solution exists.
+\end{theorem}
+
+\begin{proof}
+(i) Such a rule yields a model of $\MT_4(\{2,\dots,9\};16)$: a half-line cell
+with $t+i\le16$ is quiescent if $i\ge10$ (\cref{lem:lightcone}) and equals a
+cell of the line of length $9$ at a time $t<16$ if $i\le9$ (\cref{lem:agree}),
+so it is in $W$; and the return chains hold by \cref{lem:return} for $2\le
+n\le8$. This formula has $753$ variables and $17{,}605$ clauses. (ii) The
+encoding of $\G_4(6,10)$ has $919$ variables and $22{,}960$ clauses. (iii) The
+encoding of $\G_4(4,10,10)$ has $874$ variables and $20{,}461$ clauses. CaDiCaL
+refutes each of the three formulas with an LRAT proof, and \texttt{lrat-check}
+verifies each proof. The last claim follows from (i), and also from (ii) or
+(iii) with \cref{lem:G}.
+\end{proof}
+
+Part (i) certifies the bound observed by Yun\`es~\cite{Yunes93}; the earlier
+proofs~\cite{Balzer67,Yunes93,Sanders94} rest on the correctness of search
+programs. Parts (ii) and (iii) show how little information excludes four
+states: in (iii), only the lines of lengths up to $5$ are complete. These
+bounds are sharp in the following sense.
+
+\begin{proposition}[computational]\label{prop:sharp}
+\leavevmode
+\begin{enumerate}[(a)]
+\item Exactly $27$ partial four-state rules (rules restricted to the
+neighbourhoods they use) synchronize all lines of lengths $2,\dots,8$ in
+minimal time, and no partial four-state rule synchronizes all lines of lengths
+$2,\dots,9$.
+\item The formulas $\G_4(5,30)$, $\G_4(6,9)$, $\G_4(4,30,9)$ and
+$\G_4(3,30,12)$, the formula $\G_4(6,10)$ without (G3), and the formula that
+consists of (G1) for $T=4$ and (G5) for $6\le n\le12$ are satisfiable.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(a) is an exhaustive enumeration. Yun\`es~\cite{Yunes93} found the same number
+under the extra condition $\delta(\ast,\Lq,\Lq)=\Lq$, which is vacuous here
+because none of the $27$ partial rules uses the neighbourhood $(\ast,\Lq,\Lq)$.
+(b) The solver finds a model of each formula, and each model is re-simulated.
+\end{proof}
+
+So in part (ii) of \cref{thm:four} neither $T$ nor $N_1$ can be lowered and
+(G3) cannot be dropped; in part (iii) neither $T$ nor $C$ can be lowered, even
+with more early rows, and neither the early rows nor the right ends suffice on
+their own.
+
+\subsection{Five States: Rules for the Lengths Up to Fourteen}\label{sec:five}
+
+The following five-state rules were found with satisfiability solvers. Their
+tables are the files \texttt{uniformA\_2-12.txt} (the rule $\delta_{12}$),
+\texttt{delta13.txt} and \texttt{delta14*.txt} in \texttt{results/} of the
+supplementary material. \Cref{tab:delta14} shows $\delta_{14}$.
+
+\begin{table}[t]
+\centering\small
+\caption{The five-state rule $\delta_{14}$. The entry in row $(x,y)$ and
+column $z$ is $\delta_{14}(x,y,z)$; the neighbourhoods $(\ast,y,\ast)$ are not
+used (``--'').}
+\label{tab:delta14}
+\setlength{\tabcolsep}{4.2pt}
+\begin{tabular}{@{}cc|ccccc@{\hspace{2.2em}}cc|ccccc@{}}
+\toprule
+$x$ & $y$ & $z=\Lq$ & $\Gq$ & $\Aq$ & $\Bq$ & $\ast$ &
+$x$ & $y$ & $z=\Lq$ & $\Gq$ & $\Aq$ & $\Bq$ & $\ast$\\
+\midrule
+\input{figures/tab_delta14}
+\end{tabular}
+\end{table}
+
+\begin{proposition}\label{prop:nearmiss}
+Each of the five-state rules $\delta_{14}$, $\delta_{14}^{\mathrm b}$,
+$\delta_{14}^{\mathrm c}$, $\delta_{14}^{\mathrm d}$ and $\delta_{14}^{\mathrm
+e}$ synchronizes the line of length $n$ at time $2n-2$ for $2\le n\le14$, and
+for no $n\ge15$. More precisely, for every $n\ge15$, some cell of the line of
+length $n$ is $\Fq$ at a relative time $\tau\le\min(T,n-2)$, where
+$T=10,14,22,12,14$, respectively.
+\end{proposition}
+
+\begin{proof}
+The lines of lengths $2,\dots,60$ are simulated. For $15\le n\le60$ some cell
+is $\Fq$ at a relative time $\tau\le n-2$, which proves the claim for $15\le
+n<T+3$. The half-line has no cell in state $\Fq$ at the times $t<3000$, so by
+\cref{lem:agree} a cell of a line of length $n\le1500$ that is $\Fq$ at a time
+$t\le 2n-2$ lies in $R_n$. Simulating the half-line gives $t_0$ and $p$ that
+satisfy the hypothesis of \cref{lem:certificate} for $D=2T+4\ge2T+1$, namely
+$(t_0,p)=(51,8)$, $(66,3)$, $(257,192)$, $(95,48)$ and $(56,2)$. For every $n$
+with $\max(15,T+3)\le n<t_0+3+p\le452$, direct simulation shows that the line
+of length $n$, or of a length $n'$ in this range with $J_{n'}=J_n$ on
+$[0,T+1]$, has a cell in state $\Fq$ at a relative time $\tau\le T$, hence in
+$E(T)$. (One length is simulated for each class of a partition that is finer
+than equality of $J_n$ on $[0,T+1]$; together with the lengths below $T+3$,
+these are $35$, $39$, $413$, $116$ and $28$ lengths, the largest being $49$,
+$53$, $427$, $130$ and $42$.) By \cref{lem:early,cor:reduce} with
+$N_0=\max(15,T+3)$, every $R_n$ with $n\ge N_0$ has a cell of $E(T)$ in state
+$\Fq$, and there $\tau\le T\le n-3$.
+\end{proof}
+
+\begin{figure}[t]
+\centering
+\input{figures/fig_delta14}
+\caption{The rule $\delta_{14}$. Left: the line of length $14$ is synchronized
+at time $26$. Middle: on the line of length $15$, the cells $13$, $14$ and $15$
+fire at time $22$, that is, at the relative time $\tau=8$, six steps early.
+Right: the half-line for $0\le t\le63$. From time $3$ on, the cells $i\ge3$
+take only the values $\Lq$ and $\Bq$, and there $\delta_{14}$ acts as the
+elementary cellular automaton $22$.}
+\label{fig:delta14}
+\end{figure}
+
+\Cref{fig:delta14} shows how $\delta_{14}$ fails. For $3\le t<1500$ its
+half-line takes the values $\Lq,\Gq$ at cell $1$, $\Lq,\Aq$ at cell $2$ and
+$\Lq,\Bq$ at the cells $i\ge3$, and $\delta_{14}$ restricted to $\{\Lq,\Bq\}^3$
+is the elementary rule $22$~\cite{Wolfram83}. In the simulated ranges, neither
+barrier excludes this half-line: $\PUMP(n,n')$ holds for $4\le n<n'\le800$, and
+\cref{lem:left} does not apply for $n\le5000$, $s\le3$ and $\ell\le24$. The
+rules $\delta_{12}$ and $\delta_{13}$ synchronize the lines of lengths
+$2,\dots,12$ and $2,\dots,13$, respectively, and no other line of length at most
+$60$. Each of these seven rules has a line of some length $14\le n\le19$ with a
+cell in state $\Fq$ at a relative time $\tau\le9$, so none of them satisfies
+$\G_5(9,N_1)$ for $N_1\ge19$.
+
+\subsection{Five States: Half-Lines of Low Complexity}\label{sec:germs}
+
+The barriers constrain the half-line, so it is natural to ask how simple the
+half-line of a five-state minimal-time solution can be. We measure this by the
+number of distinct neighbourhoods that it uses in a fixed region. The
+\emph{germ} below $M$ of a rule is its restriction to the neighbourhoods of the
+cells $(t,i)$ of its half-line with $t\ge1$ and $t+i\le M$, and its
+\emph{complexity} $c_M(\delta)$ is the number of these neighbourhoods other than
+$(\Lq,\Lq,\Lq)$. We use $M=78$: the half-line below the anti-diagonal $t+i=78$
+contains the input anti-diagonals of all lines of lengths $n\le40$, so the germ
+below $78$ determines the conditions $\PUMP(n,n')$ for $n'\le40$. For example,
+$c_{78}=57$ for Mazoyer's solution, $22$ for $\delta_{12}$ and $16$ for
+$\delta_{14}$.
+
+\begin{proposition}\label{prop:germs}
+Every five-state minimal-time solution $\delta$ satisfies $c_{78}(\delta)\ge15$.
+\end{proposition}
+
+\begin{proof}
+Suppose that $c_{78}(\delta)\le14$. Exchanging $\Aq$ and $\Bq$ if necessary, we
+may assume that $\Aq$ occurs before $\Bq$ (if at all) in the order of
+anti-diagonals and, within an anti-diagonal, of time. By \eqref{eq:neverfire}
+and \cref{lem:return,lem:pumping}, the germ of $\delta$ below $78$ produces no
+$\Fq$, never produces $\Lq$ at the front, and satisfies $\PUMP(n,n')$ for $4\le
+n<n'\le40$. A depth-first search that chooses the value of each neighbourhood
+at its first occurrence enumerates all such germs, visiting about $10^8$ nodes:
+there are $244$, and an independent re-implementation finds the same $244$.
+For $230$ of them, the formula $\MT_5(\{2,\dots,10\};78,39)$ with the germ fixed
+is unsatisfiable. A single formula covers all $230$: it has a selector variable
+for each germ, clauses that make each selector fix its germ, and a clause that
+requires some selector; CaDiCaL refutes it with an LRAT proof that
+\texttt{lrat-check} verifies. Each of the other $14$ germs determines
+$C_\infty$ up to the anti-diagonal $3300$, and there \cref{lem:left} applies
+with $s=1$: for some $n\le163$ and $\ell\le5$, the upper input anti-diagonal of
+the line of length $n$ is $\ell$-periodic on $[1,Y]$ and the lower one on
+$[1,Y-1]$ with $Y-1>16\ell$ (for example $n=28$, $\ell=1$ and $Y=19$), as an
+independent simulation confirms. Hence no rule that contains one of the $244$
+germs is a minimal-time solution.
+\end{proof}
+
+The bound is attained by rules that come close to minimal time: the germs below
+$78$ of $\delta_{14}^{\mathrm c}$ and $\delta_{14}^{\mathrm d}$ have complexity
+$15$, and both rules synchronize the lines of lengths $2,\dots,14$
+(\cref{prop:nearmiss}).
+
+The rules $\delta_{12}$ and $\delta_{13}$ have the same half-line on the cells
+with $t+i\le78$, where they use the $22$ neighbourhoods
+\begin{center}\small
+\texttt{*GL>A GLL>G *AG>B AGL>L *BL>A BLG>L LGL>B *AL>G ALB>A LBG>L BGL>G}\\
+\texttt{*GA>A GAL>L ALG>B LGG>G GGL>G BGG>L GGG>G ALL>A LLG>L ALA>A LAL>L}
+\end{center}
+besides $(\Lq,\Lq,\Lq)$; here \texttt{xyz>d} means $\delta(x,y,z)=d$. This
+half-line consists of a front, a region of $\Gq$'s behind it and, beyond a
+boundary of speed $1/3$, a region that alternates between $\Aq$ and $\Lq$,
+periodically in time and space (\cref{fig:halflines}). By \cref{thm:left} no
+minimal-time solution has such a half-line, and \cref{lem:left} gives an
+explicit length.
+
+\begin{corollary}\label{cor:germ12}
+No five-state rule that has the $22$ transitions above synchronizes the line of
+length $518$ in minimal time.
+\end{corollary}
+
+\begin{proof}
+With these transitions and $\delta(\Lq,\Lq,\Lq)=\Lq$, no other neighbourhood
+occurs on the cells with $t+i\le1034$, so every such rule has the same diagram
+$C_\infty$ there. On the anti-diagonal $t+i=1034$ the cells $2,\dots,259$ are in
+state $\Aq$, and on $t+i=1033$ the cells $2,\dots,258$ are in state $\Lq$.
+\Cref{lem:left} with $k=5$, $n=518$, $s=2$, $\ell=1$ and $Y=259$ would give
+$257\le4^4=256$.
+\end{proof}
+
+\subsection{Balzer's Conditions}\label{sec:balzer}
+
+Balzer~\cite[p.~37]{Balzer67} reported that no five-state minimal-time
+solution satisfies the following four conditions:
+\begin{enumerate}[(B1)]
+\item $\delta(x,\Gq,y)=\Gq$ unless $x,y\in\{\Gq,\ast\}$;
+\item $\delta(I(z),I(y),I(x))=I(\delta(x,y,z))$ for an involution $I$ of the
+states with $I(\ast)=\ast$;
+\item $\delta(\Gq,\Gq,\Gq)=\delta(\ast,\Gq,\Gq)=\delta(\Gq,\Gq,\ast)=\Fq$, and no
+other neighbourhood gives $\Fq$;
+\item $\delta(\Gq,v,\Gq)=\Gq$ for all $v\in W\setminus\{\Gq\}$.
+\end{enumerate}
+In the \emph{weak reading}~\cite{Yunes93}, (B1) is required only for working
+states $x,y$, and (B3) without its last clause. We take $I(\Fq)=\Fq$. Then
+$I(\Gq)=\Gq$: otherwise $g:=I(\Gq)\in W\setminus\{\Gq\}$, and (B2) and (B4)
+give $\delta(g,\Gq,g)=I(\delta(\Gq,g,\Gq))=I(\Gq)=g$, whereas (B1) gives
+$\delta(g,\Gq,g)=\Gq$. So $I$ is one of the four involutions of
+$\{\Lq,\Aq,\Bq\}$, and (B1)--(B4) become unit and binary clauses.
+
+\begin{proposition}\label{prop:balzer}
+No five-state rule that satisfies (B1)--(B4) in the weak reading, with
+$I(\Fq)=\Fq$, synchronizes all lines of lengths $2,\dots,12$ in minimal time;
+a fortiori, no rule in Balzer's form does. The lengths up to $11$ do not suffice
+to prove this.
+\end{proposition}
+
+\begin{proof}
+For each involution, the clauses of (B1)--(B4) are added to
+$\MT_5(\{2,\dots,N\};2N-2)$. For $I=(\Aq\,\Bq)$ and $N=10$, and for $I=(\Lq\,\Aq)$
+and $I=(\Lq\,\Bq)$ and $N=9$, CaDiCaL refutes the formula with an LRAT proof.
+For $I$ the identity and $N=12$, Kissat refutes it; \textsf{drat-trim} turns its
+DRAT proof into an LRAT proof. Each of the four proofs is verified by
+\texttt{lrat-check}. The rule \texttt{results/balzer\_sym11.txt} satisfies
+(B1)--(B4) in the strong reading with $I$ the identity and synchronizes every
+line of length at most $11$ (direct simulation).
+\end{proof}

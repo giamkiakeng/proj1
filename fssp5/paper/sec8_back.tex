@@ -1,0 +1,53 @@
+%% ---------------------------------------------------------------------------
+\section*{Acknowledgements}
+This research received no specific grant from any funding agency. The author
+declares no competing interests.
+
+\paragraph{Use of generative AI}
+The author used the AI system Claude (Anthropic) to develop and check the
+arguments, to write and run the programs and experiments, to draw the figures,
+and to draft and revise the text. The author reviewed and edited the content and
+takes full responsibility for it.
+
+\paragraph{Data availability}
+The programs, rule tables, germ lists and logs behind every computational
+statement, two scripts that rerun them, the solver times, proof sizes and
+SHA-256 digests, and the program that draws the figures are in the
+supplementary material and at \url{https://github.com/giamkiakeng/proj1}
+(directory \texttt{fssp5/paper/supplementary}).
+
+%% ---------------------------------------------------------------------------
+\section*{Nomenclature}
+\begin{center}\small
+\begin{tabular}{@{}>{$}l<{$}>{\raggedright\arraybackslash}p{0.62\textwidth}l@{}}
+\toprule
+\text{Symbol} & Meaning & Where\\
+\midrule
+S,\ W,\ k & the set of states, the working states $S\setminus\{\Fq\}$, and $k=|S|$ & \cref{sec:lines}\\
+\Lq,\ \Gq,\ \Fq & the quiescent state, the general and the firing state & \cref{sec:lines}\\
+\Aq,\ \Bq,\ \Cq & auxiliary states & \cref{sec:lines}\\
+\ast & the border & \cref{sec:lines}\\
+\delta & a rule, defined on the neighbourhoods $(x,y,z)$ & \cref{sec:lines}\\
+C_n(t,i) & the state of cell $i$ at time $t$ in the line of length $n$ & \cref{sec:lines}\\
+C_\infty(t,i) & the same in the half-line & \cref{sec:lines}\\
+R_n & the reflected triangle of the line of length $n$ & \cref{sec:lines}\\
+\tau,\ \kappa & relative time $t-(n-1)$ and distance $n-i$ to the right end & \cref{sec:right}\\
+R_n(\tau,\kappa) & the state of $C_n$ at $(n-1+\tau,n-\kappa)$ & \cref{sec:right}\\
+J_n(\kappa) & the input word: the cells of the half-line on $t+i=2n-3$ and $2n-2$ & \cref{sec:right}\\
+\Psi & the map that computes $R_n$ from $J_n$ & \cref{lem:determinacy}\\
+\mathrm{cone}_n(\tau,\kappa) & the input cells on which $R_n(\tau,\kappa)$ depends & \cref{sec:right}\\
+\PUMP(n,n') & the conclusion of the pumping lemma & \cref{lem:pumping}\\
+\Phi_t(j) & the cell of the half-line at depth $j$ behind the front at time $t$ & \cref{sec:right}\\
+\theta(j) & the time from which depth row $j$ is periodic & \cref{thm:third}\\
+v_c(i),\ u_c(y) & the cells of chain $c$, in direct and in skewed coordinates & \cref{sec:left}\\
+E(T) & the first $T+1$ rows of a reflected triangle & \cref{sec:early}\\
+V_t,\ G_D & the first $D+1$ depth rows at time $t$, and the map that advances them & \cref{lem:certificate}\\
+\G_k(T,N_1,C) & the early-row conditions (G1)--(G5) & \cref{def:G}\\
+\MT_k(\mathcal N;M,N') & the formula for the lines in $\mathcal N$, the half-line up to $t+i=M$ and $\PUMP$ up to $N'$ & \cref{sec:method}\\
+c_M(\delta) & the number of neighbourhoods besides $(\Lq,\Lq,\Lq)$ on the half-line up to $t+i=M$ & \cref{sec:germs}\\
+\delta_{12},\ \delta_{13},\ \delta_{14} & five-state rules for the lengths up to $12$, $13$ and $14$ & \cref{sec:five}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\input{references}

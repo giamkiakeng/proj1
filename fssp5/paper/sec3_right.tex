@@ -1,0 +1,260 @@
+%% ---------------------------------------------------------------------------
+\section{The Right End}\label{sec:right}
+
+The reflected triangle $R_n$ is computed from the half-line, and its right end
+fires at time $2n-2$. We show that the firing cell depends only on a cone of
+about $n/2$ cells of two anti-diagonals of the half-line. If two lines of
+different lengths received the same values on this cone, their right ends would
+fire at the same relative time, which is impossible (\cref{lem:pumping}). This
+pumping lemma is a condition on the half-line alone, and it implies the
+speed-$1/3$ barrier (\cref{thm:third}).
+
+\subsection{Relative Coordinates and Determinacy}
+
+Fix $n\ge2$ and use the relative coordinates $\tau:=t-(n-1)$ and $\kappa:=n-i$:
+the relative time since the front reached the right end, and the distance from
+the right end. Write $R_n(\tau,\kappa):=C_n(n-1+\tau,n-\kappa)$. Then
+\[
+R_n=\{(\tau,\kappa):\ 0\le\kappa\le\tau\le n-1\},
+\]
+the right border is at $\kappa=-1$, the left border at $\kappa=n$, the return
+chain is the diagonal $\tau=\kappa$, and the firing row is $\tau=n-1$
+(\cref{fig:anatomy}). The predecessors of a cell of $R_n$ lie in $R_n$, on a
+border, or on one of the anti-diagonals $t+i=2n-3$ and $t+i=2n-2$, where the
+line agrees with the half-line (\cref{lem:agree}). The \emph{input word} of
+$R_n$ is the partial word
+\[
+J_n(\kappa):=\bigl(C_\infty(n-3+\kappa,\,n-\kappa),\;C_\infty(n-2+\kappa,\,n-\kappa)\bigr),
+\qquad 0\le\kappa\le n-1,
+\]
+whose components are the \emph{lower} and \emph{upper input cells}, on the
+anti-diagonals $t+i=2n-3$ and $t+i=2n-2$. (For $n=2$ and $\kappa=0$ the lower
+cell lies at time $-1$; it is a predecessor of no cell of $R_n$, and we set it
+to $\Lq$.)
+
+\begin{figure}[t]
+\centering
+\input{figures/fig_anatomy}
+\caption{Anatomy of the line of length $n=12$, coloured by region rather than
+by state. The upper part agrees with the half-line (\cref{lem:agree}). The
+reflected triangle $R_n$ (\cref{lem:determinacy}) is computed from the two
+input anti-diagonals and the borders; its first anti-diagonal is the return
+chain (\cref{lem:return}). The right end at the firing time ($\bigstar$)
+depends only on the dark input cells (\cref{lem:cone}); the dashed line is the
+left edge of its dependency cone. The arrows show the relative coordinates
+$\tau$ and $\kappa$ of \cref{sec:right}.}
+\label{fig:anatomy}
+\end{figure}
+
+\begin{lemma}[determinacy]\label{lem:determinacy}
+There is a partial map $\Psi$, depending on $\delta$ only, such that for all
+$n\ge2$ and $(\tau,\kappa)\in R_n$ the values $R_n(\tau,\kappa)$ and
+$\Psi(J_n,n;\tau,\kappa)$ are both undefined or both defined and equal.
+Moreover, $\Psi(J,m;\tau,\kappa)$ depends only on the input cells and the
+borders in the backward dependency cone of $(\tau,\kappa)$.
+\end{lemma}
+
+\begin{proof}
+Define $\Psi(J,m;\tau,\kappa)$ for $0\le\kappa\le\tau\le m-1$ by induction on
+$\tau$ as $\delta(x_{\kappa+1},x_\kappa,x_{\kappa-1})$, where each $x_{\kappa'}$
+is given by the first applicable case: $\ast$ if $\kappa'\in\{-1,m\}$; the lower
+or the upper component of $J(\kappa')$ if $\tau-1=\kappa'-2$ or
+$\tau-1=\kappa'-1$, respectively; and $\Psi(J,m;\tau-1,\kappa')$ otherwise (then
+$0\le\kappa'\le\tau-1$). The value $\Psi$ is undefined if one of the arguments
+is $\Fq$ or undefined. For $m=n$ the three arguments are the left, middle and
+right predecessors of the cell $(n-1+\tau,n-\kappa)$, and on the input cells
+$C_n$ and $C_\infty$ are both undefined or equal by \cref{lem:agree}, so
+induction on $\tau$ gives the first claim. Unfolding the definition gives the
+second.
+\end{proof}
+
+For $(\tau,\kappa)\in R_n$ let $\mathrm{cone}_n(\tau,\kappa)$ be the set of input
+cells that are reached from $(\tau,\kappa)$ by repeatedly passing to
+predecessors, stopping at input cells and borders.
+
+\begin{lemma}[cone of the right end]\label{lem:cone}
+For $n\ge2$, the cone $\mathrm{cone}_n(n-1,0)$ avoids the left border. It
+consists of the upper input cell at $\kappa'=0$, both input cells at
+$1\le\kappa'\le\lfloor n/2\rfloor$ and, if $n$ is odd, the lower input cell at
+$\kappa'=(n+1)/2$.
+\end{lemma}
+
+\begin{proof}
+A step to a predecessor decreases $\tau$ by one and changes $\kappa$ by at most
+one, and the input cells satisfy $\tau'\in\{\kappa'-1,\kappa'-2\}$. A path from
+$(n-1,0)$ that reaches an input cell at $\kappa'$ after $r$ steps therefore has
+$\kappa'\le r$ and $n-1-r\in\{\kappa'-1,\kappa'-2\}$, so $2\kappa'\le n+1$, and
+$2\kappa'\le n$ for upper cells. Conversely, the upper cell at $\kappa'\le n/2$
+is reached by $\kappa'$ steps to the left followed by vertical steps, and the
+lower cell at $1\le\kappa'\le(n+1)/2$ by $\kappa'-1$ steps to the left,
+vertical steps down to $(\kappa'-1,\kappa'-1)$ and one more step to the left,
+through cells of $R_n$; the lower cell at $\kappa'=0$ is a predecessor of no
+cell of $R_n$. Every cell of $R_n$ on such a path satisfies $\kappa\le\tau\le
+n-1-\kappa$, hence $\kappa\le(n-1)/2$, so no such cell is adjacent to the left
+border $\kappa=n$.
+\end{proof}
+
+\subsection{The Pumping Lemma}
+
+\begin{lemma}[pumping]\label{lem:pumping}
+Let $2\le n<n'$, and let $\delta$ synchronize the lines of lengths $n$ and
+$n'$ at times $2n-2$ and $2n'-2$. Then $J_n$ and $J_{n'}$ differ on
+$\mathrm{cone}_n(n-1,0)$.
+\end{lemma}
+
+\begin{proof}
+Suppose that they agree there. The relative cell $(n-1,0)$ lies in $R_{n'}$,
+and its cone in $R_{n'}$ consists of the same positions, which are away from
+the left border $\kappa=n'$. By \cref{lem:determinacy,lem:cone}, the relative
+cell $(n-1,0)$ of $R_{n'}$ has the value of the relative cell $(n-1,0)$ of
+$R_n$, namely $C_n(2n-2,n)=\Fq$. Thus $C_{n'}(n'+n-2,n')=\Fq$, although
+$n'+n-2<2n'-2$.
+\end{proof}
+
+We write $\PUMP(n,n')$ for the conclusion of \cref{lem:pumping}. It is a
+condition on the half-line alone: the half-line must keep supplying new
+information to the right ends of longer and longer lines. If the depth rows
+that carry these cones (defined below) were periodic, the input words of two
+lengths that differ by a common period would agree on the cone; the next
+theorem turns this observation into a bound on where the periodicity can start.
+
+\subsection{Depth Rows and the Speed-1/3 Barrier}
+
+In the frame of the front, the half-line is a stack of rows parallel to the
+front. Let
+\[
+\Phi_t(j):=C_\infty(t,\,t+1-j)\qquad(0\le j\le t)
+\]
+be the cell at \emph{depth} $j$ behind the front; the front cell has depth $0$.
+The local rule becomes
+\begin{equation}\label{eq:comoving}
+\Phi_{t+1}(j)=\delta\bigl(\Phi_t(j),\,\Phi_t(j-1),\,\Phi_t(j-2)\bigr)
+\qquad(0\le j\le t+1),
+\end{equation}
+with $\Phi_t(-1)=\Phi_t(-2)=\Lq$ (the quiescent cells ahead of the front) and
+$\Phi_t(t+1)=\ast$ (the left border). So information only travels to larger
+depths, and the \emph{depth row} $t\mapsto\Phi_t(j)$ starts at the left border
+at time $j$ and then moves to the right at speed one. In these coordinates,
+\[
+J_n(\kappa)=\bigl(\Phi_{n-3+\kappa}(2\kappa-2),\ \Phi_{n-2+\kappa}(2\kappa-1)\bigr):
+\]
+the input cells at distance $\kappa$ from the right end lie on the depth rows
+$2\kappa-2$ and $2\kappa-1$.
+
+\begin{theorem}[speed-$1/3$ barrier]\label{thm:third}
+Let $\delta$ be a minimal-time solution. Every depth row $t\mapsto\Phi_t(j)$ is
+eventually periodic; let $\theta(j)$ be the least $t_0\ge j$ such that it is
+periodic on $[t_0,\infty)$. For every $n\ge4$ there is a depth $j\le n$ with
+$\theta(j)>n+\tfrac{j}{2}-\tfrac52$. Hence
+$\limsup_{j\to\infty}\theta(j)/j\ge 3/2$.
+\end{theorem}
+
+\begin{proof}
+Row $0$ satisfies $\Phi_{t+1}(0)=\delta(\Phi_t(0),\Lq,\Lq)$, so it is
+eventually periodic. By \eqref{eq:comoving}, row $j$ is a finite-state system
+driven by the rows $j-1$ and $j-2$; if these are eventually periodic, so is row
+$j$. By \eqref{eq:neverfire} all values lie in $W$. Let $P_j$ be a period of
+row $j$, fix $n\ge4$ and let $P$ be a common multiple of $P_0,\dots,P_{n-1}$.
+
+We compare the input words of $R_n$ and $R_{n+P}$ on $\mathrm{cone}_n(n-1,0)$.
+The input cell at $\kappa=0$ in this cone is the upper one, and it is quiescent
+in both triangles by \cref{lem:lightcone}. The other input cells of the cone
+have depth $2\kappa-2$ (lower cells) or $2\kappa-1$ (upper cells), at most
+$n-1$ by \cref{lem:cone}. Suppose that each of them lies in the periodic part of
+its row, that is, $n-3+\kappa\ge\theta(2\kappa-2)$ for the lower cells and
+$n-2+\kappa\ge\theta(2\kappa-1)$ for the upper cells. Replacing $n$ by $n+P$
+moves each input cell along its depth row by $P$ steps, so $J_{n+P}=J_n$ on the
+cone, which contradicts \cref{lem:pumping}. Hence some input cell of the cone,
+of depth $j\le n$, satisfies $\theta(j)>n-3+\kappa$. For a lower cell
+$\kappa=(j+2)/2$ and for an upper cell $\kappa=(j+1)/2$, so in both cases
+$\theta(j)>n+\frac{j}{2}-\frac52$.
+
+Suppose now that $\limsup_{j\to\infty}\theta(j)/j<3/2$. Then there are
+$\alpha<\tfrac32$ and $\beta$ with $\theta(j)\le\alpha j+\beta$ for all $j$;
+since $\theta(j)\ge j$, we may take $\alpha\ge\tfrac12$. For all $j\le n$,
+\[
+\theta(j)-\tfrac{j}{2}\le(\alpha-\tfrac12)j+\beta\le(\alpha-\tfrac12)n+\beta,
+\]
+and since $\alpha-\tfrac12<1$, this is at most $n-\tfrac52$ for $n$ large. This
+contradicts the first part.
+\end{proof}
+
+In the space-time diagram, depth row $j$ becomes periodic at the cell
+$(\theta(j),\theta(j)+1-j)$, and if $\theta(j)\ge(\tfrac32-\varepsilon)j$, this
+cell lies to the right of the line $i=\frac{1-2\varepsilon}{3-2\varepsilon}\,t$
+(up to an additive constant), whose slope tends to $1/3$ as
+$\varepsilon\to0$. So infinitely many rows parallel to the front become
+periodic only after crossing the line $i=t/3$, up to an arbitrarily small angle:
+the transient part of the half-line, which starts at the left border, must
+reach this line.
+
+\begin{remark}[an interpretation]\label{rem:division}
+In the classical constructions, the line is divided recursively, and the first
+division point is where a signal sent by the general meets the echo of the right
+end. A signal of speed $v$ that leaves the general at time $0$ meets the echo,
+which leaves the right end at time $n-1$ at speed one, at the cell
+$v(2n-1)/(1+v)$. If, as for the two rules simulated below, this signal is the
+boundary between the transient and the periodic parts of the depth rows, then
+depth row $j$ meets it at the time $(j-1)/(1-v)$, so $\theta(j)\approx j/(1-v)$.
+\Cref{thm:third} then says that $v\ge1/3$ asymptotically, so the first division
+point, at the cell $v(2n-1)/(1+v)\ge(2n-1)/4$, is asymptotically never in the
+half of the line next to the general. Waksman's and Balzer's solutions divide
+the line in the middle, with $v=1/3$, and Mazoyer's solution divides it at two
+thirds of its length from the general, with $v=1/2$. In simulations of
+Mazoyer's solution up to time $2600$, $\theta(j)\in\{2j+1,2j+2\}$ for $1\le
+j<700$; for the five-state rule $\delta_{12}$ of \cref{sec:five}, which
+synchronizes the lines of lengths $2,\dots,12$, simulations up to time $1400$
+give $\theta(j)=\lceil 3j/2\rceil+2$ for $10\le j\le300$, and $\PUMP(n,n')$ holds
+for $4\le n<n'\le650$ (\cref{fig:halflines}). This reading is a heuristic and
+not a theorem: in general, the boundary of the periodic part need not be a
+signal.
+\end{remark}
+
+\begin{figure}[t]
+\centering
+\input{figures/fig_halflines}
+\caption{The half-lines of Mazoyer's six-state solution (left) and of the
+five-state rule $\delta_{12}$ (right) for $0\le t\le90$. The dashed lines are
+$i=t/2$ and $i=t/3$. The rows parallel to the front become periodic to the
+right of the line $i=t/2$ for Mazoyer's solution and of the line $i=t/3$ for
+$\delta_{12}$ (\cref{rem:division}); by \cref{thm:third}, no minimal-time
+solution can do this to the left of the line $i=t/3$, asymptotically. To the
+left of the line $i=t/3$, the half-line of $\delta_{12}$ alternates between
+$\Aq$ and $\Lq$, periodically in time and space. \Cref{thm:left} excludes such a
+wedge at the left border, and \cref{cor:germ12} makes this explicit for the
+line of length $518$.}
+\label{fig:halflines}
+\end{figure}
+
+\subsection{The Right Band}
+
+The pigeonhole argument behind the pumping lemma also works along the right
+border, in the direction of time. The $d$ cells next to the right border form a
+finite automaton driven by the column $\kappa=d$, and this automaton has to
+reach its all-firing state exactly at the firing time.
+
+\begin{lemma}[right band]\label{lem:rightband}
+Let $\delta$ have $k$ states and synchronize the line of length $n$ at time
+$2n-2$. Let $1\le d\le\tau_0\le n-2$ and $\ell\ge1$, and suppose that the
+column $\tau\mapsto R_n(\tau,d)$ is $\ell$-periodic on $[\tau_0,n-2]$, that is,
+$R_n(\tau+\ell,d)=R_n(\tau,d)$ whenever $\tau,\tau+\ell\in[\tau_0,n-2]$. Then
+$n-1-\tau_0\le(k-1)^d\ell$.
+\end{lemma}
+
+\begin{proof}
+For $d-1\le\tau\le n-1$ put $\mathbf b(\tau):=(R_n(\tau,0),\dots,R_n(\tau,d-1))$.
+Since $R_n(\tau+1,\kappa)=\delta(R_n(\tau,\kappa+1),R_n(\tau,\kappa),
+R_n(\tau,\kappa-1))$ with $R_n(\tau,-1)=\ast$, there is a map $\Gamma$,
+depending on $\delta$ and $d$ only, with $\mathbf b(\tau+1)=\Gamma(\mathbf
+b(\tau),R_n(\tau,d))$ for $d\le\tau\le n-2$; its arguments lie in $W^d\times W$
+because no cell fires before time $2n-2$. At $\tau=n-1$ the band is $\Fq^d$.
+Suppose that $n-1-\tau_0>(k-1)^d\ell$. The pairs $(\mathbf
+b(\tau),\tau\bmod\ell)$ with $\tau_0\le\tau\le n-2$ take at most $(k-1)^d\ell$
+values, so there are $\tau_0\le\tau_1<\tau_2\le n-2$ with $\mathbf
+b(\tau_1)=\mathbf b(\tau_2)$ and $\ell\mid h:=\tau_2-\tau_1$. For $0\le s\le
+n-2-\tau_2$ the driving cells $R_n(\tau_1+s,d)$ and $R_n(\tau_2+s,d)$ lie in
+$[\tau_0,n-2]$ and their times differ by a multiple of the period, so they are
+equal, and induction on $s$ gives $\mathbf b(\tau_1+s)=\mathbf b(\tau_2+s)$ for
+$0\le s\le n-1-\tau_2$. For $s=n-1-\tau_2$ this reads $\mathbf
+b(n-1-h)=\mathbf b(n-1)=\Fq^d$, although $n-1-h<n-1$, a contradiction.
+\end{proof}

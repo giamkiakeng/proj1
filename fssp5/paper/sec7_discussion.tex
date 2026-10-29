@@ -1,0 +1,35 @@
+%% ---------------------------------------------------------------------------
+\section{Discussion}\label{sec:discussion}
+
+The two barriers constrain the half-line from opposite sides, and the
+five-state rules of \cref{sec:five} show how they complement each other. The
+half-line of $\delta_{12}$ meets the speed-$1/3$ barrier exactly in simulations,
+but its periodic region at the left border is excluded by the left-border
+barrier (\cref{cor:germ12}). The half-line of $\delta_{14}$ follows the
+elementary cellular automaton $22$ and shows a nested pattern
+(\cref{fig:delta14}); it passes both barriers in the simulated ranges, and the
+rule fails only in the first rows of the reflected triangle of the line of
+length $15$. All five rules of
+\cref{prop:nearmiss} fail in the first rows of their reflected triangles.
+
+The early rows and the right ends of the reflected triangles are controlled by
+\cref{cor:reduce,lem:G}, but they do not exclude every rule. For the germ of
+$\delta_{14}^{\mathrm d}$, which has complexity $15$, conditions (G1)--(G3) with
+$T=10$ and all $n\ge12$ have a model, and so do (G1)--(G3) with $T=7$ and all
+$n\ge9$ together with (G5) for $9\le n\le20$. In the second model, the lines of
+lengths $9$, $11,\dots,17$ and $19$ have both end cells, but not all cells, in
+state $\Fq$ at time $2n-2$, and no cell in state $\Fq$ before (both models are
+in the supplementary material). This suggests that excluding such rules needs
+conditions on the middle cells of the firing row, which are expensive to
+encode: for $n=15$, the dependency cone of the middle cell of the firing row
+contains $76$ of the $120$ cells of $R_{15}$.
+
+We close with four questions.
+\begin{enumerate}[(1)]
+\item Does a five-state minimal-time solution exist?
+\item Is there a condition on the middle of the reflected triangles that is as
+economical as \cref{lem:G}?
+\item Can the bound $(k-1)^{2s}\ell$ of \cref{lem:left} be made polynomial in
+$s$?
+\item Do Balzer's conditions exclude six states?
+\end{enumerate}

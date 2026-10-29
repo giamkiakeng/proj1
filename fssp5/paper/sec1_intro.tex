@@ -1,0 +1,178 @@
+%% ---------------------------------------------------------------------------
+\section{Introduction}\label{sec:intro}
+
+The firing squad synchronization problem, posed by Myhill in 1957 and made
+popular by Moore~\cite{Moore64}, asks for a finite automaton with the following
+property. Copies of the automaton are placed in the cells of a line of
+arbitrary length $n$. At time $0$ the leftmost cell, the \emph{general}, is in a
+special state and all other cells are \emph{quiescent}. At each step every cell
+updates its state from its own state and the states of its two neighbours. All
+cells must then enter a \emph{firing} state at the same time, and none of them
+earlier. The difficulty is that the cells are identical, that each sees only
+its two neighbours, and that a cell with $k$ states cannot count up to $n$:
+the same finite rule has to synchronize lines of every length.
+
+No line can be synchronized before time $2n-2$: the order of the general needs
+$n-1$ steps to reach the far end of the line, and the news that the far end
+exists needs $n-1$ more steps to come back. Goto~\cite{Goto62} and
+Waksman~\cite{Waksman66} showed that time $2n-2$ can be achieved, and a
+solution that synchronizes every line of length $n\ge2$ at time $2n-2$ is
+called a \emph{minimal-time solution}. Since then, the least number of states
+of a minimal-time solution has been a benchmark question of cellular automata
+theory~\cite{Mazoyer86,Umeo09,Correa17}. Waksman's solution has $16$ states,
+Balzer's $8$~\cite{Balzer67}, Gerken's $7$~\cite{Gerken87} and Mazoyer's
+$6$~\cite{Mazoyer87}. In the other direction, Balzer~\cite{Balzer67} reported
+a computer search showing that no four-state minimal-time solution exists;
+Yun\`es~\cite{Yunes93} repeated the search and observed that the lines of
+lengths $2,\dots,9$ suffice, and Sanders~\cite{Sanders94} found Balzer's
+search incomplete and confirmed the result with a corrected one. Many
+six-state minimal-time solutions are known today~\cite{Clergue18,NguyenMaignan20};
+solutions with at most five states are known for restricted families of
+lengths, such as the powers of two, some of them in non-minimal
+time~\cite{UmeoYanagihara07,Yunes08}, and four-state protocols synchronize the
+rings whose lengths are powers of two~\cite{UmeoKamikawaYunes09}. Whether a
+five-state minimal-time solution exists has been open since Mazoyer's
+construction~\cite{Umeo09,Correa17}.
+
+\paragraph{Why lower bounds are hard}
+A five-state rule is a table of $96$ entries (\cref{sec:lines}), two of which
+are fixed by quiescence, so there are $5^{94}>10^{65}$ rules. A rule can be
+refuted by a single line that it fails to synchronize, but a minimal-time
+solution has to synchronize every line, so a proof that five states do not
+suffice must exclude all rules. As there are finitely many rules, it suffices
+to find one length $N$ such that no five-state rule synchronizes the lines of
+lengths $2,\dots,N$; a negative answer can thus consist of finitely many
+conditions. The difficulty is to find conditions that are strong enough and
+cheap enough to check. This paper proves such conditions for every number of
+states and measures how far they reach for four and five states.
+
+\paragraph{The idea}
+Until the echo of its right end comes back, a line cannot tell that it is
+finite: it follows the infinite \emph{half-line}, which is started in the same
+way but has no right end (\cref{lem:agree}). \Cref{fig:line} shows this for
+Mazoyer's solution. A minimal-time solution therefore consists of a single
+space-time diagram of the half-line, shared by all lengths, and, for each length
+$n$, a \emph{reflected triangle} next to the right end, in which the line reacts
+to its border. Everything that the reflected triangle of the line of length $n$
+learns from the half-line is written on two anti-diagonals of the half-line
+diagram (\cref{lem:determinacy}). Conditions on the half-line alone are cheap
+to check and apply to all lengths at once.
+
+\begin{figure}[t]
+\centering
+\input{figures/fig_line}
+\caption{Mazoyer's six-state minimal-time solution. Left: the line of length
+$n=24$; time runs downwards from $t=0$ to the firing time $t=2n-2=46$, and the
+cells $i=1,\dots,24$ run from left to right. Right: the half-line, which is
+started in the same way but has no right end, for the same times. The two
+diagrams coincide above the dashed anti-diagonal $t+i=2n-2$
+(\cref{lem:agree}); the dotted line marks the right end of the line of length
+$24$. Below the anti-diagonal lies the reflected triangle $R_n$, in which the
+line reacts to its right end; on the first anti-diagonal of $R_n$,
+the \emph{return chain} $t+i=2n-1$, every cell of the line differs from the
+corresponding cell of the half-line (\cref{lem:return}).}
+\label{fig:line}
+\end{figure}
+
+\paragraph{Results}
+Our main results concern minimal-time solutions with any number of states.
+\begin{enumerate}[(1)]
+\item \emph{The speed-$1/3$ barrier} (\cref{thm:third}). Behind the front of
+  the half-line, each row parallel to the front starts at the left border and
+  becomes periodic after a transient. Infinitely many of these rows become
+  periodic only after crossing the line $i=t/3$, up to an arbitrarily small
+  angle. The proof rests on a pumping lemma (\cref{lem:pumping}): two reflected
+  triangles that receive the same input on the cone of their right end fire it
+  at the same relative time, which is impossible for lines of different
+  lengths. In the known constructions, the boundary of the periodic part is the
+  signal that meets the echo at the first division point of the line; read in
+  this way, the barrier says that this point is asymptotically never in the half
+  of the line next to the general (\cref{rem:division}). In simulations, the
+  half-line of the five-state rule $\delta_{12}$ of \cref{sec:five}, which
+  synchronizes the lines of lengths $2,\dots,12$, meets the barrier exactly.
+\item \emph{The left-border barrier} (\cref{thm:left,cor:regular}). The
+  half-line is never periodic in time and space on a wedge at its left border;
+  in particular it is never \emph{eventually regular}, that is, it never
+  consists of finitely many periodic regions separated by signals of rational
+  speeds. The reason is that the cells near the left border are fired by a
+  finite automaton that reads the half-line along anti-diagonals, and a long
+  periodic input would make it fire too early (\cref{lem:left}). The half-line
+  of $\delta_{12}$, which meets the speed-$1/3$ barrier exactly, is excluded by
+  this one (\cref{cor:germ12}).
+\item \emph{Finitely many early rows} (\cref{cor:reduce}). The first rows of
+  the reflected triangles of all lengths take only finitely many forms, which a
+  certificate computed from the half-line determines. This turns the condition
+  that no reflected triangle fires early in its first rows into finitely many
+  checks (\cref{lem:G}).
+\end{enumerate}
+With these conditions and satisfiability solvers whose negative answers are
+certified by independently checked proofs, we obtain the following results.
+Four states are excluded by the lines of lengths $2,\dots,5$ together with
+partial information on the lines of lengths $6,\dots,10$, and this is sharp in
+several directions (\cref{thm:four,prop:sharp}). Five five-state rules
+synchronize exactly the lines of lengths $2,\dots,14$
+(\cref{prop:nearmiss}), so the lines of lengths $2,\dots,14$ alone cannot
+exclude five states. On the cells of its half-line with $t+i\le78$, every
+five-state minimal-time solution uses at least $15$ distinct neighbourhoods
+besides the quiescent one (\cref{prop:germs}). Finally, a conditional five-state
+result reported by Balzer in 1967 holds, even in a weaker form
+(\cref{prop:balzer}). \Cref{tab:results} lists the results with the kind of
+evidence behind each of them.
+
+\begin{table}[t]
+\centering\small
+\caption{The results of this paper and the evidence behind them. A
+``computation'' is a finite simulation or enumeration; ``certified'' means that
+every unsatisfiability claim comes with a proof that an independent checker
+verifies.}
+\label{tab:results}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.56\textwidth}l>{\raggedright\arraybackslash}p{0.25\textwidth}@{}}
+\toprule
+Result & Where & Evidence\\
+\midrule
+Agreement with the half-line; return chain; determinacy & \ref{lem:agree}, \ref{lem:return}, \ref{lem:determinacy} & proof\\
+Pumping lemma; speed-$1/3$ barrier & \ref{lem:pumping}, \ref{thm:third} & proof\\
+Right band & \ref{lem:rightband} & proof\\
+Left-border lemma and barrier; no eventually regular half-line & \ref{lem:left}, \ref{thm:left}, \ref{cor:regular} & proof\\
+Finitely many early rows; the formulas $\G_k(T,N_1,C)$ & \ref{cor:reduce}, \ref{lem:G} & proof\\
+Four states excluded by the lines of lengths $2,\dots,5$ and parts of those of lengths $6,\dots,10$ & \ref{thm:four} & certified computation\\
+Sharpness of \cref{thm:four} & \ref{prop:sharp} & computation\\
+Five rules for exactly the lengths $2,\dots,14$ & \ref{prop:nearmiss} & computation and proof\\
+At least $15$ neighbourhoods on the half-line of a five-state solution & \ref{prop:germs} & certified computation and proof\\
+The half-line of $\delta_{12}$ and $\delta_{13}$ cannot be completed & \ref{cor:germ12} & computation and proof\\
+Balzer's conditional five-state result & \ref{prop:balzer} & certified computation\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Related work}
+Indistinguishability arguments, in which a solution cannot tell two situations
+apart and therefore fires too early, show that there is no minimal-time
+solution with one-way communication~\cite[Prop.~2]{Mazoyer96}. Through
+repetitions forced by the pigeonhole principle, they also exclude minimal-time
+solutions for variants with sub-generals~\cite{YamashitaEtAl14} and for some
+geometric configurations~\cite{Kobayashi19}. Our pumping lemma and our
+left-border lemma use the same mechanism to constrain solutions of the original
+problem. That the behaviour behind the front of a cellular automaton is
+eventually periodic is classical~\cite{MazoyerTerrier99}; our contribution is a
+lower bound on where this periodicity can start. Lower bounds on the number of
+states are known for restricted classes and for variants such as the
+ring~\cite{BerthiaumeEtAl04}; see the survey~\cite{Correa17}. Satisfiability
+solvers have been applied to cellular automata before~\cite{DAntonioDelzanno04},
+and clausal proofs checked by programs independent of the
+solvers~\cite{WetzlerHeuleHunt14,CruzFilipeEtAl17} have certified large
+computer-assisted results in combinatorics~\cite{HeuleKullmannMarek16,Heule18}.
+We are not aware
+of statements equivalent to
+\cref{thm:third,thm:left,cor:regular,cor:reduce} in the literature.
+
+\paragraph{Organization}
+\Cref{sec:lines} introduces lines, the half-line and their agreement.
+\Cref{sec:right} studies the right end of the reflected triangles and proves
+the speed-$1/3$ barrier, \cref{sec:left} studies their left end and proves the
+left-border barrier, and \cref{sec:early} reduces their first rows to finitely
+many cases. \Cref{sec:applications} applies these results to four and five
+states, and \cref{sec:discussion} discusses open questions. A list of symbols
+is given at the end. The programs, rule tables and logs behind every
+computational statement, with scripts that rerun them, are in the
+supplementary material, as described in the data availability statement at the end.

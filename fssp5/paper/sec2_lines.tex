@@ -1,0 +1,129 @@
+%% ---------------------------------------------------------------------------
+\section{Lines and the Half-Line}\label{sec:lines}
+
+\subsection{Rules, Lines and Synchronization}
+
+Let $S$ be a finite set of \emph{states} that contains three distinct states:
+the \emph{quiescent} state $\Lq$, the \emph{general} $\Gq$ and the
+\emph{firing} state $\Fq$. The other states are called \emph{auxiliary}; the
+rules of this paper use $\Aq$, $\Bq$ and, for Mazoyer's solution, $\Cq$. The
+\emph{working} states are $W:=S\setminus\{\Fq\}$, and $\ast\notin S$ denotes the
+border. A \emph{neighbourhood} is a triple $(x,y,z)\in(W\cup\{\ast\})\times
+W\times(W\cup\{\ast\})$ with $(x,z)\ne(\ast,\ast)$, and a \emph{rule} is a map
+$\delta$ from the set of neighbourhoods to $S$ such that
+\begin{equation}\label{eq:quiescence}
+\delta(\Lq,\Lq,\Lq)=\delta(\Lq,\Lq,\ast)=\Lq .
+\end{equation}
+If $|S|=k$, there are $k(k-1)k-(k-1)=(k-1)^2(k+1)$ neighbourhoods: $45$ for
+four states, $96$ for five and $175$ for six.
+
+The \emph{line of length $n\ge2$} is the partial map
+$C_n:\mathbb N\times\{1,\dots,n\}\to S$ given by $C_n(0,1)=\Gq$, $C_n(0,i)=\Lq$
+for $2\le i\le n$, and
+\[
+C_n(t+1,i)=\delta\bigl(C_n(t,i-1),\,C_n(t,i),\,C_n(t,i+1)\bigr)
+\]
+if the three arguments are defined and none of them is $\Fq$; otherwise
+$C_n(t+1,i)$ is undefined. Here $C_n(t,0)=C_n(t,n+1)=\ast$ stand for the
+borders. Thus a cell is defined as long as nothing in its neighbourhood has
+fired. The rule \emph{synchronizes} the line of length $n$ at time $T$ if
+$C_n(T,i)=\Fq$ for $1\le i\le n$ and $C_n(t,i)\in W$ for all $t<T$ and $1\le
+i\le n$. A \emph{minimal-time solution} is a rule that synchronizes the line of
+length $n$ at time $2n-2$ for every $n\ge2$; it has $k$ states if $|S|=k$.
+
+The \emph{half-line} $C_\infty:\mathbb N\times\{1,2,\dots\}\to S$ is defined in
+the same way, with $C_\infty(0,1)=\Gq$, $C_\infty(0,i)=\Lq$ for $i\ge2$, and a
+border on the left only. We draw space-time diagrams with time running
+downwards and the cells from left to right, as in \cref{fig:line}. The
+\emph{front} is the diagonal $t=i-1$, and the \emph{anti-diagonal} $t+i=m$ is
+the set of cells $(t,i)$ with $t+i=m$.
+
+\subsection{Agreement}
+
+Information travels at most one cell per step, so the cells that the general
+cannot yet have influenced stay quiescent.
+
+\begin{lemma}[light cone]\label{lem:lightcone}
+For every rule, $C_n(t,i)=C_\infty(t,i)=\Lq$ whenever $t<i-1$ (and $i\le n$
+for $C_n$).
+\end{lemma}
+
+\begin{proof}
+By induction on $t$. For $t=0$ this is the initial condition. For $t\ge1$, the
+cells $(t-1,i')$ with $i'\in\{i-1,i,i+1\}$ satisfy $t-1<i'-1$, so each of them
+is $\Lq$ or the right border, and \eqref{eq:quiescence} gives
+$C_n(t,i)=C_\infty(t,i)=\Lq$.
+\end{proof}
+
+The right border of the line of length $n$ is first felt by the cell $n$ at
+time $n-1$, when the front reaches it, and its influence travels back to the
+left at speed at most one. Before this echo arrives, the line cannot be told
+apart from the half-line.
+
+\begin{lemma}[agreement]\label{lem:agree}
+For every rule, every $n\ge2$, $1\le i\le n$ and $t\ge0$ with $t+i\le 2n-2$,
+the values $C_n(t,i)$ and $C_\infty(t,i)$ are both undefined or both defined
+and equal.
+\end{lemma}
+
+\begin{proof}
+By induction on $t$; the case $t=0$ is clear. Let $t\ge1$. If $i=n$, then
+$t\le n-2<i-1$, and both values are $\Lq$ by \cref{lem:lightcone}. If $i<n$,
+the cells $(t-1,j)$, $j\in\{i-1,i,i+1\}$, satisfy $(t-1)+j\le 2n-2$ and $j\le
+n$, so by induction they are both undefined or equal in $C_n$ and $C_\infty$
+(for $j=0$ both are the border), and the recursion gives the claim.
+\end{proof}
+
+So the border can only matter in the \emph{reflected triangle}
+\[
+R_n:=\{(t,i):\ 1\le i\le n,\ t+i\ge 2n-1,\ t\le 2n-2\},
+\]
+which is bounded by the anti-diagonal $t+i=2n-1$, the right border and the
+firing row $t=2n-2$ (\cref{fig:line}). The agreement lemma already shows why
+time $2n-2$ is optimal.
+
+\begin{remark}\label{rem:lowerbound}
+Suppose that a rule synchronizes every line, the line of length $n$ at some
+time $T\le 2n-3$. Since $T+1\le 2n-2$, \cref{lem:agree} gives
+$C_\infty(T,1)=C_n(T,1)=\Fq$, and then $C_{n'}(T,1)=\Fq$ for every $n'\ge n$,
+by \cref{lem:agree} again. For $n'>T+1$ the cell $n'$ is still quiescent at
+time $T$ by \cref{lem:lightcone}, so the line of length $n'$ has a cell in
+state $\Fq$ at time $T$ although not all of its cells are in state $\Fq$; it
+can then never be synchronized, a contradiction.
+\end{remark}
+
+\subsection{The Return Chain}
+
+The first anti-diagonal of $R_n$ is where the line starts to differ from the
+half-line, and in a minimal-time solution it differs there everywhere.
+
+\begin{lemma}[return chain]\label{lem:return}
+Let $n\ge2$. If $\delta$ synchronizes the lines of lengths $n$ and $n+1$ at
+times $2n-2$ and $2n$, then $C_n(2n-1-i,i)\ne C_\infty(2n-1-i,i)$ for $1\le i\le
+n$, and the front cell $f_{n-1}:=C_\infty(n-2,n-1)$ is not $\Lq$.
+\end{lemma}
+
+\begin{proof}
+For $i=1$ we have $C_n(2n-2,1)=\Fq$, whereas
+$C_\infty(2n-2,1)=C_{n+1}(2n-2,1)\ne\Fq$ by \cref{lem:agree} (applied to the
+length $n+1$) and because $2n-2<2n$. Suppose that the claim holds for some
+$i<n$. The left and middle predecessors of the cell $(2n-1-i,i)$, namely
+$(2n-2-i,i-1)$ and $(2n-2-i,i)$, lie on the anti-diagonals $t+i=2n-3$ and
+$2n-2$ (for $i=1$ the left one is the border), so they agree in $C_n$ and
+$C_\infty$ by \cref{lem:agree}. As the cell itself differs, so do the right
+predecessors $(2n-2-i,i+1)$; all these cells are defined, since no cell of the
+line of length $n$ fires before time $2n-2$. This is the claim for $i+1$. For
+$i=n$ the claim concerns the cell $(n-1,n)$. Its predecessors satisfy
+$C_n(n-2,n-1)=C_\infty(n-2,n-1)=f_{n-1}$ by \cref{lem:agree}, and the cells
+$(n-2,n)$ and $(n-2,n+1)$ are quiescent by \cref{lem:lightcone}, so the claim
+reads $\delta(f_{n-1},\Lq,\ast)\ne\delta(f_{n-1},\Lq,\Lq)$. This is impossible
+if $f_{n-1}=\Lq$, by \eqref{eq:quiescence}.
+\end{proof}
+
+We call the anti-diagonal $t+i=2n-1$ the \emph{return chain} of the line of
+length $n$. Finally, a minimal-time solution never fires on the half-line:
+given a cell $(t,i)$, take $n\ge t+i+1$; then $C_\infty(t,i)=C_n(t,i)$ by
+\cref{lem:agree}, and $t<2n-2$, so
+\begin{equation}\label{eq:neverfire}
+C_\infty(t,i)\in W\qquad\text{for all }t\ge0\text{ and }i\ge1 .
+\end{equation}

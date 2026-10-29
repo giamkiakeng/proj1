@@ -1,0 +1,36 @@
+%% Figure 5: delta14 on the lines of lengths 14 and 15, and its half-line (cells from figures.py).
+\begin{tikzpicture}
+  % the line of length 14, up to its firing time 26
+  \begin{scope}[x=1.55mm,y=1.55mm]
+    \input{figures/cells_delta14_line14}
+    \draw[grid,line width=0.3pt] (0,0) rectangle (14,-27);
+    \node[font=\small,anchor=south] at (7,0.6) {$n=14$};
+    \foreach \y/\l in {0/0,13/13,26/26}
+      \node[font=\scriptsize,anchor=east] at (-0.5,-\y-0.5) {$\l$};
+    \foreach \x/\l in {1/1,14/14}
+      \node[font=\scriptsize,anchor=north] at (\x-0.5,-27.3) {$\l$};
+  \end{scope}
+  % the line of length 15, up to its first firing cell (time 22)
+  \begin{scope}[x=1.55mm,y=1.55mm,shift={(19,0)}]
+    \input{figures/cells_delta14_line15}
+    \draw[grid,line width=0.3pt] (0,0) rectangle (15,-23);
+    \draw[ink,line width=1.0pt] (12,-22) rectangle (15,-23);
+    \node[font=\small,anchor=south] at (7.5,0.6) {$n=15$};
+    \node[font=\scriptsize,anchor=north,align=center] at (7.5,-23.4) {cells $13$--$15$ fire\\ at $t=22$};
+    \foreach \y/\l in {0/0,14/14,22/22}
+      \node[font=\scriptsize,anchor=west] at (15.4,-\y-0.5) {$\l$};
+  \end{scope}
+  % the half-line, 0 <= t <= 63
+  \begin{scope}[x=0.92mm,y=0.92mm,shift={(70,0)}]
+    \input{figures/cells_delta14_half63}
+    \draw[grid,line width=0.3pt] (0,0) rectangle (64,-64);
+    \node[font=\small,anchor=south] at (32,1) {half-line};
+    \foreach \y/\l in {0/0,63/63}
+      \node[font=\scriptsize,anchor=east] at (-0.6,-\y-0.5) {$\l$};
+  \end{scope}
+  % legend
+  \begin{scope}[shift={(0,-6.6)},font=\scriptsize]
+    \foreach \c/\l [count=\k from 0] in {white/$\Lq$,stG/$\Gq$,stA/$\Aq$,stB/$\Bq$,stF/$\Fq$}
+      \node[anchor=west,inner sep=0pt] at (\k*1.25,0) {\swatch{\c}\ \l};
+  \end{scope}
+\end{tikzpicture}

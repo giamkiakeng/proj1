@@ -1,0 +1,32 @@
+%% Figure 1: Mazoyer's solution on the line of length 24 and on the half-line (cells from figures.py).
+\begin{tikzpicture}[x=1.45mm,y=1.45mm]
+  % the line of length n = 24
+  \begin{scope}
+    \input{figures/cells_mazoyer_line24}
+    \draw[grid,line width=0.3pt] (0,0) rectangle (24,-47);
+    \draw[white,line width=2.2pt] (0,-47) -- (24,-23);
+    \draw[ink,densely dashed,line width=0.9pt] (0,-47) -- (24,-23);
+    \node[font=\footnotesize,fill=white,inner sep=1.2pt,rounded corners=1pt] at (17.2,-41.6) {$R_n$};
+    \node[font=\small,anchor=south] at (12,0.6) {line of length $n=24$};
+    \foreach \y/\l in {0/{t=0},23/{t=n-1},46/{t=2n-2}}
+      \node[font=\scriptsize,anchor=east] at (-0.5,-\y-0.5) {$\l$};
+    \foreach \x/\l in {1/1,24/24}
+      \node[font=\scriptsize,anchor=north] at (\x-0.5,-47.3) {$\l$};
+  \end{scope}
+  % the half-line, cells 1..47
+  \begin{scope}[shift={(30,0)}]
+    \input{figures/cells_mazoyer_half46}
+    \draw[grid,line width=0.3pt] (0,0) rectangle (47,-47);
+    \draw[ink,densely dotted,line width=0.9pt] (24,0) -- (24,-47);
+    \draw[white,line width=2.2pt] (0,-47) -- (47,0);
+    \draw[ink,densely dashed,line width=0.9pt] (0,-47) -- (47,0);
+    \node[font=\scriptsize,fill=white,inner sep=1pt,rotate=45] at (36.3,-13.9) {$t+i=2n-2$};
+    \node[font=\small,anchor=south] at (23.5,0.6) {half-line};
+    \foreach \x/\l in {1/1,24/24,47/47}
+      \node[font=\scriptsize,anchor=north] at (\x-0.5,-47.3) {$\l$};
+  \end{scope}
+  % legend
+  \node[anchor=north,font=\scriptsize] at (38.5,-50.4) {\swatch{white}\,$\Lq$ (quiescent)\quad
+    \swatch{stG}\,$\Gq$ (general)\quad \swatch{stA}\,$\Aq$\quad \swatch{stB}\,$\Bq$\quad
+    \swatch{stC}\,$\Cq$\quad \swatch{stF}\,$\Fq$ (firing)};
+\end{tikzpicture}

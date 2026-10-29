@@ -1,0 +1,114 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=2.6cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,array}
+\usepackage[shortlabels]{enumitem}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,patterns,shapes.geometric}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
+\usepackage[capitalise,noabbrev]{cleveref}
+\usepackage{microtype}
+
+% Headings as in the journal's notes for contributors: first level in bold capitals,
+% second level in bold title case, third level in title case followed by a colon.
+\titleformat{\section}{\normalfont\normalsize\bfseries}{\thesection}{0.7em}{\MakeUppercase}
+\titleformat{\subsection}{\normalfont\normalsize\bfseries}{\thesubsection}{0.7em}{}
+\titlespacing*{\section}{0pt}{3.0ex plus 1ex minus 0.4ex}{1.4ex plus 0.3ex}
+\titlespacing*{\subsection}{0pt}{2.4ex plus 0.8ex minus 0.3ex}{1.0ex plus 0.2ex}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\itshape Barriers for minimal-time squads}
+\fancyhead[R]{\small\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[C]{\small\thepage}\renewcommand{\headrulewidth}{0pt}}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Lq}{\mathsf L}
+\newcommand{\Gq}{\mathsf G}
+\newcommand{\Aq}{\mathsf A}
+\newcommand{\Bq}{\mathsf B}
+\newcommand{\Cq}{\mathsf C}
+\newcommand{\Fq}{\mathsf F}
+\newcommand{\G}{\mathcal G}
+\newcommand{\PUMP}{\mathrm{PUMP}}
+\newcommand{\MT}{\mathrm{MT}}
+
+% State colours of the space-time diagrams: a lightness ramp that stays readable in
+% black and white (L blank, B light, A medium, C medium-dark, G dark) and one warm
+% colour for the firing state F.
+\definecolor{stB}{HTML}{C6D5E6}
+\definecolor{stA}{HTML}{7C9DC2}
+\definecolor{stC}{HTML}{3F6894}
+\definecolor{stG}{HTML}{1A2638}
+\definecolor{stF}{HTML}{E8650E}
+% Region colours of the schematic figures.
+\definecolor{rgAgree}{HTML}{E9EFF6}
+\definecolor{rgInput}{HTML}{B4C7DC}
+\definecolor{rgCone}{HTML}{4A75A3}
+\definecolor{rgReturn}{HTML}{6B3519}
+\definecolor{rgRefl}{HTML}{F5E6D7}
+\definecolor{rgRefl2}{HTML}{E4C8AE}
+\definecolor{ink}{HTML}{111111}
+\definecolor{grid}{HTML}{8A8A8A}
+
+\newcommand{\swatch}[1]{\tikz[baseline=-0.6ex,x=1cm,y=1cm]\filldraw[fill=#1,draw=grid,line width=0.3pt] (0,-0.09) rectangle (0.24,0.15);}
+
+\title{Two barriers for minimal-time firing squads,\\ with applications to four and five states}
+\author{Kia Keng Giam\\[0.4ex]
+  \small Temasek Junior College, Singapore\\
+  \small \texttt{giamkiakeng@gmail.com}}
+\date{}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{plain}
+
+\begin{abstract}
+\noindent A minimal-time solution of the firing squad synchronization problem
+synchronizes every line of $n$ cells at time $2n-2$. Six states suffice; whether
+five do has been open since 1987. Every line
+follows the infinite half-line until the echo of its right end returns. For any
+number of states, we prove that infinitely many rows parallel to the
+half-line's front become periodic only after crossing the line $i=t/3$, up to an
+arbitrarily small angle, and that the half-line is never periodic in time and
+space on a wedge at its left border, hence never eventually regular. With certified
+satisfiability checks, we exclude four states using the lines of lengths $2$ to
+$5$ and parts of those of lengths $6$ to $10$, give five-state rules
+synchronizing exactly the lengths $2$ to $14$, and show that every five-state
+solution uses at least $15$ non-quiescent neighbourhoods on the first $78$
+anti-diagonals of its half-line.
+\end{abstract}
+
+\noindent\textbf{Keywords:} firing squad synchronization problem; cellular
+automata; minimal time; state complexity; lower bounds; pumping lemma; eventual
+periodicity; SAT solving; proof certificates
+
+\input{sec1_intro}
+\input{sec2_lines}
+\input{sec3_right}
+\input{sec4_left}
+\input{sec5_early}
+\input{sec6_applications}
+\input{sec7_discussion}
+\input{sec8_back}
+
+\end{document}

@@ -1,0 +1,160 @@
+%% ---------------------------------------------------------------------------
+\section{The Left End}\label{sec:left}
+
+Near the left border, the reflected triangle is produced by a band of
+anti-diagonals that follow the echo of the right end, the \emph{chains}. The
+first few chains form a finite automaton that reads the two input
+anti-diagonals and must fire the cells near the left border exactly when the
+echo reaches them. If the input anti-diagonals were periodic over a long
+stretch, this automaton would repeat a state and fire too early
+(\cref{lem:left}). Applied to all lengths at once, this excludes periodic
+wedges at the left border of the half-line (\cref{thm:left}).
+
+\subsection{Chains and Slices}
+
+Fix $n\ge2$. For $c\ge0$ and $\max(1,c)\le i\le n$, and for $c=-1$ and $1\le
+i\le n-1$, put
+\[
+v_c(i):=C_n(2n-2+c-i,\,i),
+\]
+the cell at position $i$ of the \emph{chain} $t+i=2n-2+c$. Chains $-1$ and $0$
+are the input anti-diagonals, and chain $1$ is the return chain
+(\cref{fig:chains}). The predecessors of the cell $(2n-2+c-i,i)$ lie on the
+chains $c-2$, $c-1$ and $c$, so
+\begin{equation}\label{eq:chains}
+v_c(i)=\delta\bigl(v_{c-2}(i-1),\,v_{c-1}(i),\,v_c(i+1)\bigr)\qquad(c\ge1),
+\end{equation}
+where $v_{c-2}(0)$ and $v_c(n+1)$ stand for the borders. If the line of length
+$n$ is synchronized at time $2n-2$, then the cell $i$ fires on chain $i$:
+$v_i(i)=\Fq$, and $v_c(i)\ne\Fq$ for $c<i$. In the skewed coordinates
+$u_c(y):=v_c(y+\lfloor c/2\rfloor)$ the recursion \eqref{eq:chains} becomes
+\begin{equation}\label{eq:slices}
+u_c(y)=\delta\bigl(u_{c-2}(y),\,u_{c-1}(y+\varepsilon_c),\,u_c(y+1)\bigr),
+\qquad \varepsilon_c=1\text{ for even }c,\ \ \varepsilon_c=0\text{ for odd }c,
+\end{equation}
+with $u_0(y)=C_\infty(2n-2-y,y)$ and $u_{-1}(y)=C_\infty(2n-2-y,y-1)$. Here
+$u_c(y)$ is the cell $y+\lfloor c/2\rfloor$ at time $2n-2+\lceil c/2\rceil-y$;
+it is $\Fq$ if $\lceil c/2\rceil=y$ and not $\Fq$ if $\lceil c/2\rceil<y$. So
+each \emph{slice} $(u_1(y),u_2(y),\dots)$ is computed from the slice $y+1$ and
+the two input cells $u_{-1}(y)$ and $u_0(y)$: reading the input anti-diagonals
+from right to left, the slices form a finite automaton. A word $w$ on an
+integer interval $I$ is \emph{$\ell$-periodic} if $w(y+\ell)=w(y)$ whenever
+$y,y+\ell\in I$.
+
+\begin{figure}[t]
+\centering
+\input{figures/fig_chains}
+\caption{The lower left corner of the line of length $n=12$, coloured by
+chain. The cell $i$ of the firing row lies on chain $i$. Each outlined group of
+six cells is a slice $(u_1(y),\dots,u_4(y))$ of the band of chains
+$1,\dots,4$ used in the proof of \cref{lem:left} with $s=2$, together with its
+two input cells $u_{-1}(y)$ and $u_0(y)$: the slice is computed from the slice
+to its right and from these two input cells. The group drawn with a thick line
+is the one at $y=s$; its last cell $u_{2s}(s)$ is in the firing row.}
+\label{fig:chains}
+\end{figure}
+
+\subsection{The Left-Border Lemma}
+
+\begin{lemma}[left border]\label{lem:left}
+Let $\delta$ have $k$ states and synchronize the line of length $n$ at time
+$2n-2$. Let $s,\ell\ge1$ and $s\le Y\le n-s$, and suppose that the words
+$y\mapsto C_\infty(2n-2-y,y)$ for $s\le y\le Y$ and $y\mapsto
+C_\infty(2n-3-y,y)$ for $s\le y\le Y-1$ are $\ell$-periodic. Then
+$Y-s\le(k-1)^{2s}\ell$.
+\end{lemma}
+
+\begin{proof}
+For $s\le y\le Y$ let $\mathbf u(y):=(u_1(y),\dots,u_{2s}(y))$. These are the
+cells $y+\lfloor c/2\rfloor\le n$ at the times $2n-2+\lceil c/2\rceil-y$ with
+$\lceil c/2\rceil\le s\le y$, so they are defined, and none of them is $\Fq$ when
+$y>s$. By \eqref{eq:slices}, $u_c(y)$ with $1\le c\le 2s$ is computed from
+components of index less than $c$ of $\mathbf u(y)$, components of index at
+most $c$ of $\mathbf u(y+1)$, and the input cells $u_{-1}(y)$ and $u_0(y)$.
+Hence $\mathbf u(y)=\Gamma(\mathbf u(y+1),u_{-1}(y),u_0(y))$ for $s+1\le y\le
+Y-1$, with $\Gamma$ depending on $\delta$ only. Unfolding \eqref{eq:slices} for
+even $c$, $u_{2j}(y)=\delta(u_{2j-2}(y),u_{2j-1}(y+1),u_{2j}(y+1))$, shows that
+$u_{2s}(y)=\Gamma'(\mathbf u(y+1),u_0(y))$ for $s\le y\le Y-1$. By hypothesis,
+$u_0$ is $\ell$-periodic on $[s,Y]$ and $u_{-1}$ on $[s+1,Y]$.
+
+Suppose that $Y-s>(k-1)^{2s}\ell$. The pairs $(\mathbf u(y),y\bmod\ell)$ with
+$s+1\le y\le Y$ take at most $(k-1)^{2s}\ell$ values, so there are $s+1\le
+y_1<y_2\le Y$ with $\mathbf u(y_1)=\mathbf u(y_2)$ and $\ell\mid h:=y_2-y_1$.
+By downward induction, $\mathbf u(y)=\mathbf u(y+h)$ for $s+1\le y\le y_1$: if
+this holds for $y+1\le y_1$, then
+\[
+\mathbf u(y)=\Gamma(\mathbf u(y+1),u_{-1}(y),u_0(y))
+=\Gamma(\mathbf u(y+1+h),u_{-1}(y+h),u_0(y+h))=\mathbf u(y+h),
+\]
+since $y+h<y_2\le Y$. As $s+h\le Y-1$ and $u_0(s+h)=u_0(s)$,
+\[
+u_{2s}(s+h)=\Gamma'(\mathbf u(s+1+h),u_0(s+h))=\Gamma'(\mathbf
+u(s+1),u_0(s))=u_{2s}(s)=\Fq,
+\]
+although $\lceil 2s/2\rceil=s<s+h$, so that $u_{2s}(s+h)$, the cell $2s+h$ at
+time $2n-2-h$, is not $\Fq$. This is a contradiction.
+\end{proof}
+
+In words: if the two input anti-diagonals are $\ell$-periodic over a stretch
+of more than $(k-1)^{2s}\ell$ cells that starts at the cell $s$, then the band
+of the first $2s$ chains repeats a state, and the cell $2s+h$ fires $h$ steps
+too early. The bound is exponential in $s$, but for $s=1$ and $s=2$ it is small
+enough to be useful in computations (\cref{prop:germs,cor:germ12}).
+
+\subsection{No Periodic Wedge at the Left Border}
+
+\begin{theorem}[left-border barrier]\label{thm:left}
+Let $\delta$ be a minimal-time solution. There are no $s\ge1$, $\alpha>0$,
+$t_0$ and $p,q\ge1$ such that $C_\infty(t+p,i)=C_\infty(t,i)$ and
+$C_\infty(t,i+q)=C_\infty(t,i)$ whenever the cells involved lie in the wedge
+\[
+\Omega:=\{(t,i):\ s\le i\le\alpha t,\ t\ge t_0\}.
+\]
+\end{theorem}
+
+\begin{proof}
+Suppose otherwise and put $\ell:=pq$. If $(t,i)$ and $(t-\ell,i+\ell)$ lie in
+$\Omega$, so do the cells $(t-\ell,i+jq)$ for $0\le j\le p$ and $(t-\ell+jp,i)$
+for $0\le j\le q$, hence
+$C_\infty(t-\ell,i+\ell)=C_\infty(t-\ell,i)=C_\infty(t,i)$. Let
+$Y_n:=\lfloor\alpha(2n-3)/(1+\alpha)\rfloor$. For $s\le y\le Y_n$ the cells
+$(2n-2-y,y)$ and $(2n-3-y,y)$ satisfy $y\le\alpha(2n-3-y)$, so they lie in
+$\Omega$ as soon as $2n-3-Y_n\ge t_0$, that is, for all large $n$. A step of
+$\ell$ positions along an anti-diagonal is the step from $(t,i)$ to
+$(t-\ell,i+\ell)$, so the words of \cref{lem:left} are $\ell$-periodic on
+$[s,Y_n]$ and $[s,Y_n-1]$. As $Y_n\ge\frac{2\alpha}{1+\alpha}n-4$, for large
+$n$ the number $Y:=\min(Y_n,n-s)$ satisfies $Y-s>(k-1)^{2s}\ell$, which
+contradicts \cref{lem:left}.
+\end{proof}
+
+The half-line of a rule is \emph{eventually regular} if there are $t_1$,
+$P\ge1$ and, for each residue $r\in\{0,\dots,P-1\}$, an integer $m$, words
+$w_0,\dots,w_m$, nonempty words $z_1,\dots,z_m$ over $W$ and integers
+$a_j,D_j\ge0$ (all depending on $r$) such that for all $\nu\ge0$ the
+configuration $C_\infty(t,1)\cdots C_\infty(t,t+1)$ at the time
+$t=t_1+r+\nu P$ is $w_0z_1^{a_1+\nu D_1}w_1\cdots z_m^{a_m+\nu D_m}w_m$. In
+words: from some time on, the half-line consists of finitely many periodic
+regions separated by signals of rational speeds; on signals in one-dimensional
+cellular automata see~\cite{MazoyerTerrier99}. The half-line of $\delta_{12}$
+in \cref{fig:halflines} looks like this: a front, a region of $\Gq$'s behind it
+and, beyond a boundary of speed $1/3$, a region that alternates between $\Aq$
+and $\Lq$.
+
+\begin{corollary}\label{cor:regular}
+The half-line of a minimal-time solution is not eventually regular.
+\end{corollary}
+
+\begin{proof}
+Suppose that it is. For each residue $r$ some $D_j$ is positive, because the
+configuration grows by $P$ cells per period; let $j(r)$ be the least such
+index. The blocks and the junctions to the left of $z_{j(r)}$ have constant
+lengths, so the block $z_{j(r)}^{a_{j(r)}+\nu D_{j(r)}}$ starts at a fixed cell
+$s_r$, and its length is at least $\beta t$ for some $\beta>0$ and all large
+$t$ of the residue class $r$. Inside this block, the state of a cell depends
+only on its distance to $s_r$ modulo $|z_{j(r)}|$, and it is the same at the
+times $t$ and $t+P$. Let $s:=\max_r s_r$, $q:=\prod_r|z_{j(r)}|$ and
+$\alpha:=\beta/2$. For $t_0$ large, every cell of the wedge $\{(t,i):s\le
+i\le\alpha t,\ t\ge t_0\}$ lies in the block of index $j(r)$ of its residue
+class, so $C_\infty$ is periodic with period $P$ in time and $q$ in space on
+this wedge. This contradicts \cref{thm:left}.
+\end{proof}

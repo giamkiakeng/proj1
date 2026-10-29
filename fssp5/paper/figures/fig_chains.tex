@@ -1,0 +1,45 @@
+%% Figure 4: the lower left corner of the line of length n = 12, coloured by chain, with the slices of
+%% the proof of the left-border lemma for s = 2.
+\begin{tikzpicture}
+  \def\u{0.44}\def\v{0.33}
+  \def\tz{13}
+  % cell (t,i) occupies [(i-1)u, iu] x [-(t-tz+1)v, -(t-tz)v]
+  \foreach \t in {13,...,22} {%
+    \foreach \i in {1,...,10} {%
+      \pgfmathtruncatemacro{\c}{\t+\i-22}
+      \pgfmathtruncatemacro{\odd}{mod(\c+10,2)}
+      \def\cc{rgAgree}%
+      \ifnum\c>-2 \def\cc{rgInput}\fi
+      \ifnum\c=1 \def\cc{rgReturn}\fi
+      \ifnum\c>1 \ifnum\odd=1 \def\cc{rgRefl2}\else\def\cc{rgRefl}\fi\fi
+      \ifnum\t=22 \def\cc{stF}\fi
+      \filldraw[fill=\cc,draw=grid!45,line width=0.15pt]
+        (\i*\u-\u,-\t*\v+\tz*\v) rectangle (\i*\u,-\t*\v+\tz*\v-\v);
+    }}
+  \draw[ink,line width=1.3pt] (0,0.06) -- (0,-10*\v-0.06);
+  \def\cellbox#1#2#3{\draw[#3] (#2*\u-\u,-#1*\v+\tz*\v) rectangle (#2*\u,-#1*\v+\tz*\v-\v);}
+  % slices y = 4 (dashed), y = 3 (thin) and y = s = 2 (thick), each with its two input cells
+  \foreach \t/\i in {18/3,18/4,19/4,19/5,20/5,20/6} {\cellbox{\t}{\i}{ink,line width=0.7pt,densely dashed}}
+  \foreach \t/\i in {19/2,19/3,20/3,20/4,21/4,21/5} {\cellbox{\t}{\i}{ink,line width=0.8pt}}
+  \foreach \t/\i in {20/1,20/2,21/2,21/3,22/3,22/4} {\cellbox{\t}{\i}{ink,line width=1.8pt}}
+  % on the firing row, cell i lies on chain i
+  \foreach \i in {1,...,10} {\node[font=\scriptsize,text=white] at (\i*\u-0.5*\u,-9.5*\v) {\i};}
+  % chains -1, 0, 1 cross the first row shown at the cells 8, 9, 10
+  \node[font=\scriptsize,anchor=south] at (7.5*\u,0.03) {$-1$};
+  \node[font=\scriptsize,anchor=south] at (8.5*\u,0.03) {$0$};
+  \node[font=\scriptsize,anchor=south] at (9.5*\u,0.03) {$1$};
+  \node[font=\scriptsize,anchor=south east] at (6.95*\u,0.03) {chain};
+  \node[font=\scriptsize,anchor=east] at (-0.08,-9.5*\v) {$t=2n-2$};
+  \node[font=\scriptsize,anchor=east] at (-0.08,-0.5*\v) {$t=13$};
+  % legend
+  \begin{scope}[font=\scriptsize]
+    \node[anchor=west,inner sep=0pt] at (4.8,-0.15) {chain $c$: the anti-diagonal $t+i=2n-2+c$};
+    \foreach \c/\l [count=\k from 1] in {
+        rgInput/{chains $-1$ and $0$: the input anti-diagonals},
+        rgReturn/{chain $1$: the return chain},
+        stF/{firing row: cell $i$ fires on chain $i$}}
+      \node[anchor=west,inner sep=0pt] at (4.8,-0.15-0.45*\k) {\swatch{\c}\ \l};
+    \node[anchor=west,inner sep=0pt] at (4.8,-1.95) {\swatch{rgRefl}\,\swatch{rgRefl2}\ chains $c\ge2$, alternately shaded};
+    \node[anchor=west,inner sep=0pt] at (4.8,-2.5) {outlined: slices $y=2$ (thick), $3$ and $4$ (dashed)};
+  \end{scope}
+\end{tikzpicture}

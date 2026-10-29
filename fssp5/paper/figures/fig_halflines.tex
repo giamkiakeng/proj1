@@ -1,0 +1,20 @@
+%% Figure 3: the half-lines of Mazoyer's solution and of delta12 for 0 <= t <= 90 (cells from figures.py).
+\begin{tikzpicture}[x=0.74mm,y=0.74mm]
+  \foreach \file/\title/\dx in {cells_mazoyer_half90/{Mazoyer's solution (six states)}/0,
+                                cells_delta12_half90/{$\delta_{12}$ (five states)}/99} {
+    \begin{scope}[shift={(\dx,0)}]
+      \input{figures/\file}
+      \draw[grid,line width=0.3pt] (0,0) rectangle (91,-91);
+      \foreach \sl/\st in {2/densely dashed,3/densely dashed} {
+        \draw[white,line width=2.0pt] (0,0) -- (91/\sl,-91);
+        \draw[ink,\st,line width=0.85pt] (0,0) -- (91/\sl,-91);
+      }
+      \node[font=\scriptsize,anchor=north,fill=white,inner sep=1pt] at (91/3,-92) {$i=t/3$};
+      \node[font=\scriptsize,anchor=north,fill=white,inner sep=1pt] at (91/2+2,-92) {$i=t/2$};
+      \node[font=\small,anchor=south] at (45.5,1) {\title};
+      \foreach \y in {0,30,60,90}
+        \node[font=\scriptsize,anchor=east] at (-0.8,-\y-0.5) {$\y$};
+    \end{scope}
+  }
+  \node[font=\scriptsize,anchor=east] at (-6,-45.5) {$t$};
+\end{tikzpicture}

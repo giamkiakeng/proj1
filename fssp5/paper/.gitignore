@@ -1,8 +1,8 @@
 *.aux
 *.log
+*.out
 *.fls
 *.fdb_latexmk
 *.blg
-*.out
 *.spl
-build*.log
+*.toc
