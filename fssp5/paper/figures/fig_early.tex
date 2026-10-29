@@ -1,0 +1,54 @@
+%% Figure: the early rows (Lemma 5.1, schematic) and the periodicity certificate of delta14 (Lemma 5.2,
+%% Corollary 5.3; cells from figures.py). In (a) the relative cell (tau,kappa) of R_m is
+%% [m-kappa-1,m-kappa] x [-tau-3,-tau-2]; here T = 3.
+\begin{tikzpicture}
+  % (a) two reflected triangles with the same input on [0, T+1]
+  \begin{scope}[x=2.5mm,y=2.5mm]
+    \foreach \m/\dx in {9/0,13/13} {
+      \begin{scope}[shift={(\dx,0)}]
+        \foreach \tau in {-2,...,12} {\foreach \kap in {0,...,12} {%
+          \pgfmathtruncatemacro{\cls}{((\kap<=\tau)&&(\tau<=\m-1)) ? ((\tau==\m-1) ? 1 : ((\tau<=3) ? 2 : 3))
+            : ((((\tau==\kap-1)||((\tau==\kap-2)&&(\kap>=1)))&&(\kap<=\m-1)) ? ((\kap<=4) ? 4 : 5) : 0)}%
+          \ifnum\cls>0
+            \def\cc{\ifcase\cls\or stF\or rgRefl2\or rgRefl\or rgCone\or rgInput\fi}%
+            \filldraw[fill=\cc,draw=grid!45,line width=0.15pt] (\m-\kap-1,-\tau-2) rectangle (\m-\kap,-\tau-3);
+          \fi}}
+        \draw[ink,line width=1.2pt] (\m,0.1) -- (\m,-\m-2.1);
+        \draw[ink,line width=1.2pt] (0,-\m+0.9) -- (0,-\m-2.1);
+        \draw[ink,densely dashed,line width=0.7pt] (\m-4.6,-6) -- (\m+0.6,-6);
+      \end{scope}}
+    \node[font=\small,anchor=south] at (4.5,0.4) {$R_n$, $n=9$};
+    \node[font=\small,anchor=south] at (21.0,0.4) {$R_{n'}$, $n'=13$};
+    \node[font=\scriptsize,anchor=west] at (26.8,-6) {$\tau=T$};
+    \draw[-{Stealth[length=1.8mm]},ink,line width=0.6pt] (8.6,-0.2) .. controls (10.6,2.7) and (15.4,2.7) .. (17.4,-0.2);
+    \node[font=\scriptsize,anchor=south] at (13.0,2.25) {equal on $[0,T+1]$};
+    \node[font=\scriptsize,anchor=north,align=center] at (13,-16.4) {then $R_n$ and $R_{n'}$ coincide on the first $T+1$ rows};
+    \node[font=\small,anchor=south west] at (-0.5,3.6) {(a) the early rows};
+  \end{scope}
+  % (b) the depth rows 0..24 of the half-line of delta14 at the times 24..130
+  \begin{scope}[shift={(0,-5.9cm)},x=1.22mm,y=1.22mm]
+    \input{figures/cells_delta14_depth}
+    \draw[grid,line width=0.3pt] (0,0) rectangle (107,-25);
+    \foreach \n in {60,68} {\foreach \k in {1,...,11} {
+      \draw[ink,line width=0.55pt] (\n-27+\k,-2*\k+2) rectangle ++(1,-1);
+      \draw[ink,line width=0.55pt] (\n-26+\k,-2*\k+1) rectangle ++(1,-1);}}
+    \draw[stF,line width=1.0pt] (27,1.0) -- (27,-26.0);
+    \draw[stF,line width=1.0pt,densely dashed] (35,1.0) -- (35,-26.0);
+    \draw[{Stealth[length=1.4mm]}-{Stealth[length=1.4mm]},ink,line width=0.5pt] (27,2.0) -- (35,2.0);
+    \node[font=\scriptsize,anchor=south] at (31,2.1) {$p=8$};
+    \node[font=\scriptsize,anchor=north] at (27,-26.2) {$t_0=51$};
+    \node[font=\scriptsize,anchor=north] at (36,-26.2) {$t_0+p$};
+    \node[font=\scriptsize,anchor=north] at (45,-23.4) {$J_{60}$};
+    \node[font=\scriptsize,anchor=north] at (53,-23.4) {$J_{68}$};
+    \foreach \x/\l in {0/24,56/80,76/100,106/130} \node[font=\scriptsize,anchor=north] at (\x+0.5,-26.2) {$\l$};
+    \node[font=\scriptsize,anchor=north] at (90,-26.2) {time $t$};
+    \foreach \y in {0,12,24} \node[font=\scriptsize,anchor=east] at (-0.5,-\y-0.5) {$\y$};
+    \node[font=\scriptsize,rotate=90,anchor=south] at (-3.4,-12.5) {depth $j$};
+    \node[font=\small,anchor=south west] at (-4,5.0) {(b) the depth rows of the half-line of $\delta_{14}$};
+  \end{scope}
+  % legend
+  \node[anchor=north west,font=\scriptsize,align=left] at (0,-9.6) {%
+    in (a):\ \swatch{rgCone}\,input cells at $\kappa\le T+1$\quad \swatch{rgRefl2}\,the first $T+1$ rows $E(T)$\quad
+    \swatch{stF}\,firing row\qquad
+    in (b):\ \swatch{white}\,$\Lq$\ \swatch{stG}\,$\Gq$\ \swatch{stA}\,$\Aq$\ \swatch{stB}\,$\Bq$};
+\end{tikzpicture}

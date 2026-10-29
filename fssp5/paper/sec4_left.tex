@@ -103,8 +103,27 @@ time $2n-2-h$, is not $\Fq$. This is a contradiction.
 In words: if the two input anti-diagonals are $\ell$-periodic over a stretch
 of more than $(k-1)^{2s}\ell$ cells that starts at the cell $s$, then the band
 of the first $2s$ chains repeats a state, and the cell $2s+h$ fires $h$ steps
-too early. The bound is exponential in $s$, but for $s=1$ and $s=2$ it is small
+too early (\cref{fig:leftproof}). The bound is exponential in $s$, but for $s=1$ and $s=2$ it is small
 enough to be useful in computations (\cref{prop:germs,cor:germ12}).
+
+\begin{figure}[t]
+\centering
+\input{figures/fig_leftproof}
+\caption{The proof of \cref{lem:left}, drawn for $n=20$, $s=2$, $\ell=2$ and
+$Y=16$: the lower left corner of the line of length $n$, at the times
+$n\le t\le2n-2$. The two input anti-diagonals $t+i=2n-3$ and $t+i=2n-2$ are
+$\ell$-periodic from the cell $s$ to the cell $Y$. Each slice $\mathbf u(y)$,
+a group of $2s$ cells on the chains $1,\dots,2s$ (outlined), is computed from
+the slice $\mathbf u(y+1)$ and from two input cells, so the slices form a
+finite automaton that reads the input anti-diagonals from right to left. If two
+slices are equal, $\mathbf u(y_1)=\mathbf u(y_2)$ with $\ell\mid
+h=y_2-y_1$, then $\mathbf u(y)=\mathbf u(y+h)$ for $s+1\le y\le y_1$, and the
+last cell $u_{2s}(s+h)$ of the slice $s+h$ (hatched) has the state of the last
+cell $u_{2s}(s)$ of the slice $s$, which is $\Fq$. It is the cell $2s+h$ at
+the time $2n-2-h$, which would fire $h$ steps too early. Hence $Y-s\le
+(k-1)^{2s}\ell$.}
+\label{fig:leftproof}
+\end{figure}
 
 \subsection{No Periodic Wedge at the Left Border}
 
@@ -129,8 +148,27 @@ $\ell$ positions along an anti-diagonal is the step from $(t,i)$ to
 $(t-\ell,i+\ell)$, so the words of \cref{lem:left} are $\ell$-periodic on
 $[s,Y_n]$ and $[s,Y_n-1]$. As $Y_n\ge2\alpha n/(1+\alpha)-4$, for large
 $n$ the number $Y:=\min(Y_n,n-s)$ satisfies $Y-s>(k-1)^{2s}\ell$, which
-contradicts \cref{lem:left}.
+contradicts \cref{lem:left} (\cref{fig:wedge}(a)).
 \end{proof}
+
+\begin{figure}[t]
+\centering
+\input{figures/fig_wedge}
+\caption{(a)~The proof of \cref{thm:left}. If the half-line were periodic in
+time and in space on the wedge $\Omega=\{(t,i):s\le i\le\alpha t,\ t\ge t_0\}$,
+then the input anti-diagonals $t+i=2n-3$ and $t+i=2n-2$ of the line of length
+$n$ would be $\ell$-periodic, with $\ell=pq$, from the cell $s$ to the cell
+$Y_n\approx2\alpha n/(1+\alpha)$ (thick), a stretch whose length grows
+linearly with $n$; for large $n$, \cref{lem:left} gives a contradiction. The
+path from $(t,i)$ to $(t-\ell,i+\ell)$ shows why: $\ell$ steps along an
+anti-diagonal are $q$ time periods $p$ followed by $p$ space periods $q$
+inside $\Omega$. (b)~An eventually regular half-line (\cref{cor:regular}):
+from the time $t_1$ on, it consists of finitely many periodic blocks
+separated by signals of rational speeds, here $0$, $1/4$ and $1/2$. The first
+block that grows contains a wedge (dashed) on which the half-line is periodic
+in time and space, which (a) excludes.}
+\label{fig:wedge}
+\end{figure}
 
 The half-line of a rule is \emph{eventually regular} if there are $t_1$,
 $P\ge1$ and, for each residue $r\in\{0,\dots,P-1\}$, an integer $m$, words
@@ -162,5 +200,5 @@ times $t$ and $t+P$. Let $s:=\max_r s_r$, $q:=\prod_r|z_{j(r)}|$ and
 $\alpha:=\beta/2$. For $t_0$ large, every cell of the wedge $\{(t,i):s\le
 i\le\alpha t,\ t\ge t_0\}$ lies in the block of index $j(r)$ of its residue
 class, so $C_\infty$ is periodic with period $P$ in time and $q$ in space on
-this wedge. This contradicts \cref{thm:left}.
+this wedge (\cref{fig:wedge}(b)). This contradicts \cref{thm:left}.
 \end{proof}

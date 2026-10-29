@@ -1,0 +1,43 @@
+%% Figure: the proof of the left-border lemma (Lemma 4.1). Schematic: the lower left corner of the
+%% line of length n = 20 with s = 2, l = 2, Y = 16, y_1 = 8, y_2 = 12, h = 4. The cell (t,i), 20 <= t <= 38,
+%% is [i-1,i] x [19-t,20-t]; chain c is the anti-diagonal t+i = 2n-2+c = 38+c.
+\begin{tikzpicture}[x=2.6mm,y=2.6mm]
+  \foreach \t in {20,...,38} {\foreach \i in {1,...,18} {%
+    \pgfmathtruncatemacro{\c}{\t+\i-38}%
+    \pgfmathtruncatemacro{\cls}{(\t==38) ? 1 : ((\c<=-2) ? 2 : ((\c==-1) ? (((\i>=2)&&(\i<=15)) ? 3+mod(\i,2) : 5)
+      : ((\c==0) ? (((\i>=2)&&(\i<=16)) ? 3+mod(\i,2) : 5) : ((\c<=4) ? 6+mod(\c,2) : 8))))}%
+    \def\cc{\ifcase\cls\or stF\or rgAgree\or stB\or stA\or rgInput\or rgRefl\or rgRefl2\or gNone\fi}%
+    \filldraw[fill=\cc,draw=grid!45,line width=0.15pt] (\i-1,20-\t) rectangle (\i,19-\t);}}
+  \draw[ink,line width=1.2pt] (0,0.2) -- (0,-19.2);
+  % slices y_1 = 8 and y_2 = 12 (equal), slice s = 2 and the cell u_{2s}(s+h)
+  \def\slice#1#2{\draw[#2] (#1-1,1-39+#1+19) -- ++(2,0) -- ++(0,-1) -- ++(1,0) -- ++(0,-1) -- ++(-2,0) -- ++(0,1) -- ++(-1,0) -- cycle;}
+  \slice{8}{ink,line width=1.3pt}
+  \slice{12}{ink,line width=1.3pt}
+  \slice{2}{ink,line width=1.3pt,densely dashed}
+  \fill[stF] (7,-14) rectangle (8,-15);
+  \fill[pattern=north east lines,pattern color=white] (7,-14) rectangle (8,-15);
+  \draw[ink,line width=1.3pt] (7,-14) rectangle (8,-15);
+  % labels below the input anti-diagonals and of the chains
+  \node[font=\scriptsize,anchor=south] at (15.5,-0.0) {$Y$};
+  \node[font=\scriptsize,anchor=east] at (-0.3,-0.5) {$t=n$};
+  \node[font=\scriptsize,anchor=east] at (-0.3,-18.5) {$t=2n-2$};
+  \foreach \i/\l in {1/1,2/2,4/4,8/8,18/18} \node[font=\scriptsize,anchor=north] at (\i-0.5,-19.3) {$\l$};
+  % annotations
+  \draw[-{Stealth[length=1.5mm]},ink,line width=0.5pt] (20.5,-1.5) -- (13.7,-4.0);
+  \node[font=\scriptsize,anchor=west,align=left] at (20.5,-1.5) {input anti-diagonals $t+i=2n-3,\,2n-2$:\\
+    $\ell$-periodic from the cell $s$ to the cell $Y$};
+  \draw[-{Stealth[length=1.5mm]},ink,line width=0.5pt] (20.5,-6.6) -- (14.3,-8.9);
+  \draw[-{Stealth[length=1.5mm]},ink,line width=0.5pt] (20.5,-6.6) -- (10.3,-12.9);
+  \node[font=\scriptsize,anchor=west,align=left] at (20.5,-6.6) {equal slices $\mathbf u(y_1)=\mathbf u(y_2)$, with\\
+    $y_1=8$, $y_2=12$ and $\ell\mid h=y_2-y_1$};
+  \draw[-{Stealth[length=1.5mm]},ink,line width=0.5pt] (20.5,-12.6) -- (8.3,-14.4);
+  \node[font=\scriptsize,anchor=west,align=left] at (20.5,-12.6) {then $u_{2s}(s+h)=u_{2s}(s)=\Fq$:\\
+    the cell $2s+h$ fires at time $2n-2-h$};
+  \draw[-{Stealth[length=1.5mm]},ink,line width=0.5pt] (20.5,-17.4) -- (4.3,-18.6);
+  \node[font=\scriptsize,anchor=west,align=left] at (20.5,-17.4) {slice $s$ (dashed): $u_{2s}(s)$ is\\
+    the cell $2s$ of the firing row};
+  % legend
+  \node[anchor=north west,font=\scriptsize,align=left] at (0,-21.6) {%
+    \swatch{stB}\,\swatch{stA}\,periodic part of the input, shaded by $i\bmod\ell$\quad
+    \swatch{rgRefl2}\,\swatch{rgRefl}\,chains $1,\dots,2s$\quad \swatch{gNone}\,chains $c>2s$\quad \swatch{stF}\,$\Fq$};
+\end{tikzpicture}

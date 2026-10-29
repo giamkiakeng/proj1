@@ -1,0 +1,66 @@
+%% Figure: why no line is synchronized before time 2n-2 (Remark 2.3). Schematic, with n = 8, a
+%% hypothetical firing time T = 11 <= 2n-3 and n' = 13 > T+1; cell (t,i) is [i-1,i] x [-t-1,-t].
+\begin{tikzpicture}[x=3.1mm,y=3.1mm]
+  % (a) the line of length n = 8, synchronized at time T = 11
+  \begin{scope}
+    \foreach \t in {0,...,11} {\foreach \i in {1,...,8} {%
+      \pgfmathtruncatemacro{\s}{\t+\i}\pgfmathtruncatemacro{\lc}{\i-1}%
+      \def\cc{rgRefl}%
+      \ifnum\s<15 \def\cc{rgAgree}\fi
+      \ifnum\t=11 \def\cc{stF}\fi
+      \ifnum\t<\lc \def\cc{white}\fi
+      \filldraw[fill=\cc,draw=grid!45,line width=0.15pt] (\i-1,-\t) rectangle (\i,-\t-1);}}
+    \begin{scope}\clip (0,0) rectangle (8,-12);
+      \draw[white,line width=1.8pt] \staircase{14}{7} -- (8,-7);
+      \draw[ink,densely dashed,line width=0.8pt] \staircase{14}{7} -- (8,-7);
+    \end{scope}
+    \draw[ink,line width=0.6pt] (0,0) rectangle (8,-12);
+    \node[font=\small,anchor=south] at (4,0.4) {(a) line of length $n$};
+    \node[font=\scriptsize,anchor=east] at (-0.3,-0.5) {$t=0$};
+    \node[font=\scriptsize,anchor=east] at (-0.3,-11.5) {$t=T$};
+    \node[font=\scriptsize,anchor=north,align=center] at (4,-12.4) {synchronized at a\\ time $T\le 2n-3$};
+  \end{scope}
+  % (b) the half-line up to time T
+  \begin{scope}[shift={(12,0)}]
+    \foreach \t in {0,...,11} {\foreach \i in {1,...,14} {%
+      \pgfmathtruncatemacro{\s}{\t+\i}\pgfmathtruncatemacro{\lc}{\i-1}%
+      \def\cc{gNone}%
+      \ifnum\s<15 \def\cc{rgAgree}\ifnum\t=11 \def\cc{stF}\fi\fi
+      \ifnum\t<\lc \def\cc{white}\fi
+      \filldraw[fill=\cc,draw=grid!45,line width=0.15pt] (\i-1,-\t) rectangle (\i,-\t-1);}}
+    \begin{scope}\clip (0,0) rectangle (14,-12);
+      \draw[white,line width=1.8pt] \staircase{14}{14};
+      \draw[ink,densely dashed,line width=0.8pt] \staircase{14}{14};
+    \end{scope}
+    \draw[ink,line width=0.6pt] (0,0) -- (0,-12) -- (14,-12) (0,0) -- (14,0);
+    \node[font=\scriptsize,fill=white,inner sep=1pt,rotate=45] at (9.6,-4.2) {$t+i=2n-2$};
+    \node[font=\small,anchor=south] at (7,0.4) {(b) half-line};
+    \node[font=\scriptsize,anchor=north,align=center] at (7,-12.4) {$C_\infty(T,1)=C_n(T,1)=\Fq$\\
+      (\cref{lem:agree}, as $T+1\le 2n-2$)};
+  \end{scope}
+  % (c) the line of length n' = 13 > T+1 up to time T
+  \begin{scope}[shift={(30,0)}]
+    \foreach \t in {0,...,11} {\foreach \i in {1,...,13} {%
+      \pgfmathtruncatemacro{\s}{\t+\i}\pgfmathtruncatemacro{\lc}{\i-1}%
+      \def\cc{gNone}%
+      \ifnum\s<15 \def\cc{rgAgree}\ifnum\t=11 \def\cc{stF}\fi\fi
+      \ifnum\t<\lc \def\cc{white}\fi
+      \filldraw[fill=\cc,draw=grid!45,line width=0.15pt] (\i-1,-\t) rectangle (\i,-\t-1);}}
+    \begin{scope}\clip (0,0) rectangle (13,-12);
+      \draw[white,line width=1.8pt] \staircase{14}{13};
+      \draw[ink,densely dashed,line width=0.8pt] \staircase{14}{13};
+    \end{scope}
+    \draw[ink,line width=0.6pt] (0,0) rectangle (13,-12);
+    \draw[ink,line width=1.1pt] (12,-11) rectangle (13,-12);
+    \node[font=\small,anchor=south] at (6.5,0.4) {(c) line of length $n'>T+1$};
+    \node[font=\scriptsize,anchor=north,align=center] at (6.5,-12.4) {$C_{n'}(T,1)=\Fq$, but the cell $n'$\\
+      is still quiescent (\cref{lem:lightcone})};
+  \end{scope}
+  % legend
+  \node[anchor=north,font=\scriptsize,align=left] at (21.5,-15.6) {%
+    \swatch{white}\,quiescent, $t<i-1$\qquad
+    \swatch{rgAgree}\,$t+i\le 2n-2$: the same in (a), (b) and (c) (\cref{lem:agree})\qquad
+    \swatch{stF}\,$\Fq$\\[0.4ex]
+    \swatch{rgRefl}\,the reflected triangle $R_n$\qquad
+    \swatch{gNone}\,the same in (b) and (c) (\cref{lem:agree} for the length $n'$)};
+\end{tikzpicture}

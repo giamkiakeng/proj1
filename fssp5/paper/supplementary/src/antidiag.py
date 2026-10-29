@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-antidiag.py -- neighbourhoods and anti-diagonals of the half-line of a rule (Corollary 6.4).
+antidiag.py -- neighbourhoods and anti-diagonals of the half-line of a rule (Corollary 6.5).
 
 usage: python3 antidiag.py RULE M [D LO HI ...]
 

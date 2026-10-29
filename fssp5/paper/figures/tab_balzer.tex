@@ -1,0 +1,12 @@
+%% Table: Balzer's conditions (Proposition 6.6); the proofs are checked by check_certificates.sh.
+\begin{tabular}{@{}lcll>{\raggedright\arraybackslash}p{0.27\textwidth}@{}}
+\toprule
+Involution $I$ & Lengths & Reading & Result & Certificate\\
+\midrule
+$(\Aq\,\Bq)$ & $2,\dots,10$ & weak & unsatisfiable & LRAT proof of CaDiCaL\\
+$(\Lq\,\Aq)$ & $2,\dots,9$ & weak & unsatisfiable & LRAT proof of CaDiCaL\\
+$(\Lq\,\Bq)$ & $2,\dots,9$ & weak & unsatisfiable & LRAT proof of CaDiCaL\\
+identity & $2,\dots,12$ & weak & unsatisfiable & DRAT proof of Kissat, turned into LRAT by \textsf{drat-trim}\\
+identity & $2,\dots,11$ & strong & satisfiable & the rule \texttt{balzer\_sym11}\\
+\bottomrule
+\end{tabular}

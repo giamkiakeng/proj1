@@ -1,0 +1,39 @@
+%% Figure: the half-line of delta12 on the cells with t+i <= 1034 (Corollary 6.5), as an image from
+%% figures.py in which the cell (t,i) is the pixel (i-1,t), and a window of 30 x 30 cells.
+\begin{tikzpicture}
+  % (a) the cells with t+i <= 1034; one unit is one cell
+  \begin{scope}[x=0.006cm,y=0.006cm]
+    \node[anchor=north west,inner sep=0pt] at (0,0) {\includegraphics[width=6.204cm]{figures/delta12_1034.png}};
+    \draw[grid,line width=0.3pt] (0,0) rectangle (1034,-1034);
+    \draw[ink,densely dashed,line width=0.6pt] (0,0) -- (344.7,-1034);
+    \draw[stF,line width=1.3pt] (1,-1033) -- (259,-775);
+    \draw[ink,line width=0.6pt] (115,-889) rectangle (145,-919);
+    \node[font=\scriptsize,anchor=north] at (344.7,-1036) {$i=t/3$};
+    \node[font=\scriptsize,anchor=south] at (0.5,2) {$1$};
+    \node[font=\scriptsize,anchor=south] at (517,2) {$517$};
+    \node[font=\scriptsize,anchor=east] at (-6,-517) {$517$};
+    \node[font=\scriptsize,anchor=east] at (-6,-1030) {$t=1034$};
+    \node[font=\scriptsize,anchor=east] at (-6,-6) {$t=0$};
+    \node[font=\scriptsize,anchor=west,align=left] at (420,-760) {$t+i=1034$,\\ cells $2,\dots,259$};
+    \draw[-{Stealth[length=1.4mm]},ink,line width=0.45pt] (418,-790) -- (236,-806);
+    \node[font=\scriptsize,text=white] at (230,-400) {$\Gq$};
+    \node[font=\scriptsize,fill=white,inner sep=1pt] at (80,-640) {$\Aq,\Lq$};
+    \node[font=\small,anchor=south west] at (-60,40) {(a) $t+i\le1034$};
+  \end{scope}
+  % (b) the window of the cells 116..145 at the times 889..918; the cell (t,i) is [i-116,i-115] x [888-t,889-t]
+  \begin{scope}[shift={(7.0cm,0)},x=1.6mm,y=1.6mm]
+    \foreach \r in {1,...,29} \fill[gNone] (30-\r,-\r) rectangle (30,-\r-1);
+    \input{figures/cells_delta12_zoom}
+    \foreach \x in {0,...,29} \draw[stF,line width=0.6pt] (\x,-29+\x) rectangle (\x+1,-30+\x);
+    \foreach \x in {0,...,28} \draw[ink,line width=0.4pt,densely dotted] (\x,-28+\x) rectangle (\x+1,-29+\x);
+    \draw[ink,line width=0.6pt] (0,0) rectangle (30,-30);
+    \foreach \x/\l in {0/116,29/145} \node[font=\scriptsize,anchor=south] at (\x+0.5,0.2) {$\l$};
+    \foreach \y/\l in {0/889,29/918} \node[font=\scriptsize,anchor=east] at (-0.3,-\y-0.5) {$\l$};
+    \node[font=\scriptsize,anchor=north,align=center] at (15,-30.4) {solid: $t+i=1034$, all $\Aq$;\quad
+      dotted: $t+i=1033$, all $\Lq$};
+    \node[font=\small,anchor=south west] at (-4,3.0) {(b) the cells $116,\dots,145$ at the times $889,\dots,918$};
+  \end{scope}
+  % legend
+  \node[anchor=north west,font=\scriptsize] at (0,-7.1cm) {\swatch{white}\,$\Lq$\ \swatch{stG}\,$\Gq$\
+    \swatch{stA}\,$\Aq$\ \swatch{stB}\,$\Bq$\quad \swatch{gNone}\,$t+i>1034$, not drawn};
+\end{tikzpicture}

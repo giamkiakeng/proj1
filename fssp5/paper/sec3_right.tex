@@ -114,8 +114,29 @@ and its cone in $R_{n'}$ consists of the same positions, which are away from
 the left border $\kappa=n'$. By \cref{lem:determinacy,lem:cone}, the relative
 cell $(n-1,0)$ of $R_{n'}$ has the value of the relative cell $(n-1,0)$ of
 $R_n$, namely $C_n(2n-2,n)=\Fq$. Thus $C_{n'}(n'+n-2,n')=\Fq$, although
-$n'+n-2<2n'-2$.
+$n'+n-2<2n'-2$ (\cref{fig:pumping}(a)).
 \end{proof}
+
+\begin{figure}[t]
+\centering
+\input{figures/fig_pumping}
+\caption{(a)~The pumping lemma (\cref{lem:pumping}), drawn for $n=8$ and
+$n'=12$ in relative coordinates: $\tau$ runs downwards and $\kappa$ to the left
+of the right border (thick line). Above each triangle lie its input cells, on
+the diagonals $\tau=\kappa-2$ and $\tau=\kappa-1$. The right end of $R_n$ at the
+firing time ($\bigstar$) depends only on the dark input cells
+(\cref{lem:cone}), through the darker cells of the triangle. If $R_{n'}$
+received the same values at the same input positions, its relative cell
+$(n-1,0)$ would also be in state $\Fq$, although $n-1<n'-1$. (b)~The proof of
+\cref{thm:third}, in the half-line. The input cells of the cone of the right
+end of the line of length $n$ (thick) lie on the depth rows $0,\dots,n-1$
+(grey, parallel to the front), between the front and roughly the line $i=t/3$
+(dashed). The cone of the length $n+P$ meets the same depth rows $P$ steps
+later along each row (arrow). If each of these depth rows were periodic, with a
+period dividing $P$, from its point on the cone of $n$ (dots) on, the two cones
+would carry the same values, which (a) excludes.}
+\label{fig:pumping}
+\end{figure}
 
 We write $\PUMP(n,n')$ for the conclusion of \cref{lem:pumping}. It is a
 condition on the half-line alone: the half-line must keep supplying new
@@ -169,7 +190,7 @@ The input cell at $\kappa=0$ in this cone is the upper one, and it is quiescent
 in both triangles by \cref{lem:lightcone}. The other input cells of the cone
 have depth $2\kappa-2$ (lower cells) or $2\kappa-1$ (upper cells), at most
 $n-1$ by \cref{lem:cone}. Suppose that each of them lies in the periodic part of
-its row, that is, $n-3+\kappa\ge\theta(2\kappa-2)$ for the lower cells and
+its row (\cref{fig:pumping}(b)), that is, $n-3+\kappa\ge\theta(2\kappa-2)$ for the lower cells and
 $n-2+\kappa\ge\theta(2\kappa-1)$ for the upper cells. Replacing $n$ by $n+P$
 moves each input cell along its depth row by $P$ steps, so $J_{n+P}=J_n$ on the
 cone, which contradicts \cref{lem:pumping}. Hence some input cell of the cone,
@@ -195,7 +216,7 @@ position of this cell satisfies
 \theta(j)+1-j\ \ge\ \frac{1-2\varepsilon}{3-2\varepsilon}\,\theta(j)+1,
 \]
 where the factor $(1-2\varepsilon)/(3-2\varepsilon)$ tends to $1/3$ as
-$\varepsilon\to0$. So, for infinitely many $j$, depth row $j$ becomes periodic
+$\varepsilon\to0$ (\cref{fig:theta}). So, for infinitely many $j$, depth row $j$ becomes periodic
 only at a time $t$ at which it is close to the cell $t/3$ or beyond: along
 these rows, the transient part of the half-line, which starts at the left
 border, reaches roughly the cell $t/3$ at time $t$. This is the sense of the
@@ -204,7 +225,7 @@ name ``speed-$1/3$ barrier''.
 \begin{remark}[an interpretation]\label{rem:division}
 In the classical constructions, the line is divided recursively, and the first
 division point is where a signal sent by the general meets the echo of the right
-end; a \emph{signal} of speed $v$ is a pattern that moves by $v$ cells per
+end (\cref{fig:theta}(c)); a \emph{signal} of speed $v$ is a pattern that moves by $v$ cells per
 step. A signal of speed $v$ that leaves the general at time $0$ meets the echo,
 which leaves the right end at time $n-1$ at speed one, at the cell
 $v(2n-1)/(1+v)$. If, as for the two rules simulated below, this signal is the
@@ -219,10 +240,31 @@ Mazoyer's solution up to time $2600$, $\theta(j)\in\{2j+1,2j+2\}$ for $1\le
 j<700$; for the five-state rule $\delta_{12}$ of \cref{sec:five}, which
 synchronizes the lines of lengths $2,\dots,12$, simulations up to time $1400$
 give $\theta(j)=\lceil 3j/2\rceil+2$ for $10\le j\le300$, and $\PUMP(n,n')$ holds
-for $4\le n<n'\le650$ (\cref{fig:halflines}). This reading is a heuristic and
+for $4\le n<n'\le650$ (\cref{fig:theta,fig:halflines}). This reading is a heuristic and
 not a theorem: in general, the boundary of the periodic part need not be a
 signal.
 \end{remark}
+
+\begin{figure}[t]
+\centering
+\input{figures/fig_theta}
+\caption{(a)~The time $\theta(j)$ from which the depth row $j$ is periodic,
+observed on the half-lines of Mazoyer's six-state solution ($1\le j\le150$)
+and of the five-state rule $\delta_{12}$ ($10\le j\le150$), simulated up to
+time $700$; the dashed line is $3j/2$. In this range,
+$\theta(j)\in\{2j+1,2j+2\}$ for Mazoyer's solution and $\theta(j)=\lceil
+3j/2\rceil+2$ for $\delta_{12}$. (b)~The same data as the ratio $\theta(j)/j$ (from $j=3$ on for
+Mazoyer's solution). By \cref{thm:third}, every minimal-time solution has
+$\theta(j)/j\ge3/2-\varepsilon$ for infinitely many $j$; $\delta_{12}$, which
+synchronizes only the lines of lengths $2,\dots,12$, stays at this barrier.
+(c)~The heuristic of \cref{rem:division} on the line of length $n$: a signal of
+speed $v$ sent by the general meets the echo of the right end at the cell
+$v(2n-1)/(1+v)$, about $n/2$ for $v=1/3$ and $2n/3$ for $v=1/2$, and the depth
+row $j$ (grey) crosses the signal at about the time $j/(1-v)$ (dots). Shaded:
+the cells reached by the front but not yet by the echo, where the line agrees
+with the half-line.}
+\label{fig:theta}
+\end{figure}
 
 \begin{figure}[t]
 \centering
@@ -271,5 +313,22 @@ n-2-\tau_2$ the driving cells $R_n(\tau_1+s,d)$ and $R_n(\tau_2+s,d)$ lie in
 $[\tau_0,n-2]$ and their times differ by a multiple of the period, so they are
 equal, and induction on $s$ gives $\mathbf b(\tau_1+s)=\mathbf b(\tau_2+s)$ for
 $0\le s\le n-1-\tau_2$. For $s=n-1-\tau_2$ this reads $\mathbf
-b(n-1-h)=\mathbf b(n-1)=\Fq^d$, although $n-1-h<n-1$, a contradiction.
+b(n-1-h)=\mathbf b(n-1)=\Fq^d$, although $n-1-h<n-1$, a contradiction
+(\cref{fig:rightband}).
 \end{proof}
+
+\begin{figure}[t]
+\centering
+\input{figures/fig_rightband}
+\caption{The proof of \cref{lem:rightband}, drawn for $n=22$, $d=3$,
+$\ell=3$ and $\tau_0=5$ in the relative coordinates of $R_n$. The band of the
+$d$ cells next to the right border is a finite automaton driven by the column
+$\kappa=d$, which is $\ell$-periodic on $[\tau_0,n-2]$. If the band takes the
+same value $\mathbf b(\tau_1)=\mathbf b(\tau_2)$ (outlined) at two times whose
+difference $h$ is a multiple of $\ell$, then it evolves in the same way from
+$\tau_1$ and from $\tau_2$, so it reaches its all-firing value $\Fq^d$ at the
+time $n-1-h$ (hatched), $h$ steps before the firing row. As the pairs
+$(\mathbf b(\tau),\tau\bmod\ell)$ take at most $(k-1)^d\ell$ values, this
+forces $n-1-\tau_0\le(k-1)^d\ell$.}
+\label{fig:rightband}
+\end{figure}

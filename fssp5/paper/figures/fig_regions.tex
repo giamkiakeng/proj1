@@ -1,0 +1,21 @@
+%% Figure: the cells constrained by the formulas G_4(6,10) and G_4(4,10,10) of Theorem 6.1 (ii), (iii)
+%% (regions from figures.py). Each line of length n = 2,...,10 is drawn with time downwards.
+\begin{tikzpicture}[x=1.85mm,y=1.85mm]
+  \begin{scope}
+    \input{figures/regions_G6}
+    \node[font=\small,anchor=south west] at (-0.5,2.6) {(a) $\G_4(6,10)$, \cref{thm:four}~(ii): $T=6$, $N_1=10$};
+  \end{scope}
+  \begin{scope}[shift={(0,-25.5)}]
+    \input{figures/regions_G4}
+    \node[font=\small,anchor=south west] at (-0.5,2.6) {(b) $\G_4(4,10,10)$, \cref{thm:four}~(iii): $T=4$, $N_1=C=10$};
+  \end{scope}
+  \node[font=\scriptsize,anchor=east] at (-0.4,-0.5) {$t=0$};
+  \node[font=\scriptsize,anchor=east] at (-0.4,-26.0) {$t=0$};
+  \node[anchor=north west,font=\scriptsize,align=left] at (0,-46.6) {%
+    \swatch{gFull}\,(G1): the line is synchronized at time $2n-2$\qquad
+    \swatch{stF}\,$\Fq$ at time $2n-2$ (G1), (G5)\\[0.4ex]
+    \swatch{gEarly}\,(G2): no cell fires up to the relative time $T$\qquad
+    \swatch{gReturn}\,(G3), (G5): the return chain differs from the half-line\\[0.4ex]
+    \swatch{gCone}\,(G5): no cell of the cone of the right end fires\qquad
+    \swatch{gNone}\,not constrained};
+\end{tikzpicture}

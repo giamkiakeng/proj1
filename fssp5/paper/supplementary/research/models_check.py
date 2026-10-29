@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-models_check.py -- the two models named in Section 7 of the note.
+models_check.py -- the two models named in Section 7 of the paper.
 
 usage: python3 models_check.py        (in the directory research/)
 
@@ -17,10 +17,10 @@ Method:
   - (G2), (G3) for all n >= T+2: asymp.py certifies that the depth rows 0..2T+4 of the half-line
     are periodic and lists representative lengths; its signature of n contains the input cells at
     kappa <= T+2 and the half-line cells that the return chain is compared with, so by Lemma 5.1 and
-    Corollary 5.3 of the note the early rows tau <= T of R_n, and the comparisons of (G3), are those
+    Corollary 5.3 of the paper the early rows tau <= T of R_n, and the comparisons of (G3), are those
     of a representative; each representative line is simulated up to time n-1+T;
   - (G5): the lines are simulated as partial maps (a cell is defined iff its three predecessors are
-    defined and none of them is F), as in Section 2 of the note.
+    defined and none of them is F), as in Section 2 of the paper.
 """
 import os
 import subprocess

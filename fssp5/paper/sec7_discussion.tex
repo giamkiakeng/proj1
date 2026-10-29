@@ -17,11 +17,26 @@ $\delta_{14}^{\mathrm d}$, which has complexity $15$, conditions (G1)--(G3) with
 $T=10$ and all $n\ge12$ have a model, and so do (G1)--(G3) with $T=7$ and all
 $n\ge9$ together with (G5) for $9\le n\le20$. In the second model, the lines of
 lengths $9$, $11,\dots,17$ and $19$ have both end cells, but not all cells, in
-state $\Fq$ at time $2n-2$, and no cell in state $\Fq$ before (both models are
-in the supplementary material). This suggests that excluding such rules needs
+state $\Fq$ at time $2n-2$, and no cell in state $\Fq$ before
+(\cref{fig:model}(a); both models are in the supplementary material). This suggests that excluding such rules needs
 conditions on the middle cells of the firing row, which are expensive to
 encode: for $n=15$, the dependency cone of the middle cell of the firing row
-contains $76$ of the $120$ cells of $R_{15}$.
+contains $76$ of the $120$ cells of $R_{15}$ (\cref{fig:model}(b)).
+
+\begin{figure}[!htb]
+\centering
+\input{figures/fig_model}
+\caption{(a)~The line of length $15$ under the second model above, which
+contains the germ of $\delta_{14}^{\mathrm d}$ and satisfies (G1)--(G3) with
+$T=7$ for all $n\ge9$ and (G5) for $9\le n\le20$. No cell is in state $\Fq$
+before time $2n-2=28$, and at time $28$ only the end cells $1$ and $15$
+(outlined) are. (b)~The backward dependency cones, inside $R_{15}$, of the
+middle cell ($\kappa=7$) and of the right end ($\kappa=0$) of the firing row
+(both marked $\bigstar$), drawn level with (a). The first covers $76$ of the
+$120$ cells of $R_{15}$, the second $64$; condition (G5) constrains only the
+second.}
+\label{fig:model}
+\end{figure}
 
 We close with four questions.
 \begin{enumerate}[(1)]

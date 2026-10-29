@@ -1,0 +1,37 @@
+%% Figure: the second model of Section 7 on the line of length 15, and two dependency cones of R_15
+%% (cells and cones from figures.py). In (b), the relative cell (tau,kappa) is [14-kappa,15-kappa] x [-tau-1,-tau],
+%% shifted so that it is level with the cell (14+tau, 15-kappa) of (a).
+\begin{tikzpicture}[x=1.55mm,y=1.55mm]
+  \def\styleswatch#1{\tikz[baseline=-0.6ex,x=1cm,y=1cm]\filldraw[#1,draw=grid,line width=0.3pt] (0,-0.09) rectangle (0.24,0.15);}
+  % (a) the line of length 15 up to time 28
+  \begin{scope}
+    \input{figures/cells_model_line15}
+    \draw[white,line width=1.6pt] \staircase{28}{14} -- (15,-14);
+    \draw[ink,densely dashed,line width=0.7pt] \staircase{28}{14} -- (15,-14);
+    \draw[grid,line width=0.3pt] (0,0) rectangle (15,-29);
+    \draw[ink,line width=1.0pt] (0,-28) rectangle (1,-29) (14,-28) rectangle (15,-29);
+    \foreach \y/\l in {0/0,14/14,28/28} \node[font=\scriptsize,anchor=east] at (-0.4,-\y-0.5) {$\l$};
+    \foreach \x/\l in {1/1,15/15} \node[font=\scriptsize,anchor=north] at (\x-0.5,-29.3) {$\l$};
+    \node[font=\small,anchor=south] at (7.5,0.6) {(a) a model, $n=15$};
+  \end{scope}
+  % (b) the dependency cones of the middle cell and of the right end of the firing row of R_15
+  \begin{scope}[shift={(20,-14)}]
+    \input{figures/cones_R15}
+    \draw[ink,line width=0.5pt] (15,0) -- (14,0) \foreach \k in {1,...,14} { -- (15-\k,-\k) -- (14-\k,-\k) }
+      -- (0,-15) -- (15,-15) -- cycle;
+    \node[star,star points=5,fill=white,draw=ink,line width=0.4pt,inner sep=0pt,minimum size=0.2cm] at (7.5,-14.5) {};
+    \node[star,star points=5,fill=white,draw=ink,line width=0.4pt,inner sep=0pt,minimum size=0.2cm] at (14.5,-14.5) {};
+    \node[font=\small,anchor=south west] at (-1,15.6) {(b) two cones in $R_{15}$};
+  \end{scope}
+  % legend
+  \node[anchor=north west,font=\scriptsize,align=left] at (39,-6) {%
+    in (a):\ \swatch{white}\,$\Lq$\ \swatch{stG}\,$\Gq$\ \swatch{stA}\,$\Aq$\ \swatch{stB}\,$\Bq$\
+    \swatch{stF}\,$\Fq$\\[0.4ex]
+    \phantom{in (a):}\ dashed: the boundary of $R_{15}$\\[1.4ex]
+    in (b), the backward dependency cones of the cells $\bigstar$:\\[0.4ex]
+    \styleswatch{coneBoth}\ in both cones\\[0.3ex]
+    \styleswatch{coneMid}\ only in the cone of the middle cell\\[0.3ex]
+    \styleswatch{coneRight}\ only in the cone of the right end\\[0.3ex]
+    \styleswatch{coneNone}\ in neither\\[0.6ex]
+    middle cell: $76$ of the $120$ cells; right end: $64$};
+\end{tikzpicture}

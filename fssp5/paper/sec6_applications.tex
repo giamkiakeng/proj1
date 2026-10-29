@@ -40,7 +40,17 @@ $\MT_6(\{3,\dots,12\};78,40)$ and, with its table fixed, (G2) and (G3) for $T=8$
 and all $n\ge15$. With the table of the rule $\delta_{14}$ of \cref{sec:five}
 fixed, the formulas are satisfiable for the lines of lengths $2,\dots,14$ and
 unsatisfiable with the line of length $15$, or with the early rows ($T=8$, but
-not $T=6$) of the lines of lengths $15,\dots,30$, as simulation predicts.
+not $T=6$) of the lines of lengths $15,\dots,30$, as simulation predicts
+(\cref{tab:validation}).
+
+\begin{table}[t]
+\centering\small
+\caption{Tests of the encodings (\cref{sec:method}): formulas with a known rule
+table fixed, whose outcome is predicted by simulating that rule. The formula for
+all $n\ge15$ uses the representative lengths of \cref{cor:reduce}.}
+\label{tab:validation}
+\input{figures/tab_validation}
+\end{table}
 
 \paragraph{Reproducibility}
 The supplementary material contains the programs, the rule tables, the lists of
@@ -79,6 +89,26 @@ verifies each proof. The last claim follows from (i), and also from (ii) or
 (iii) with \cref{lem:G}.
 \end{proof}
 
+\Cref{fig:regions} shows the cells that the formulas of parts (ii) and (iii)
+constrain, and \cref{tab:four} compares them with the weaker formulas of the
+next proposition.
+
+\begin{table}[t]
+\centering\small
+\caption{The four-state formulas of \cref{thm:four,prop:sharp}. The columns
+(G1), (G2), (G3) and (G5) list the lengths $n$ to which each condition of
+\cref{def:G} is applied and, for (G2) and (G3), the relative times $\tau\le T$
+up to which they are imposed; every formula $\G_4$ also contains (G4). Every
+unsatisfiability is certified by an LRAT proof that \texttt{lrat-check}
+verifies, and every satisfiable formula has a model that is re-simulated. The
+labels (i)--(iii) refer to the parts of \cref{thm:four}, and (a), (b) to those
+of \cref{prop:sharp}; the first row is the exhaustive enumeration of part (a),
+which also finds no partial rule for the lengths $2,\dots,9$.}
+\label{tab:four}
+\setlength{\tabcolsep}{4.5pt}
+\input{figures/tab_four}
+\end{table}
+
 Part (i) certifies the bound observed by Yun\`es~\cite{Yunes93}; the earlier
 proofs~\cite{Balzer67,Yunes93,Sanders94} rest on the correctness of search
 programs. Parts (ii) and (iii) show how little information excludes four
@@ -105,8 +135,8 @@ because none of the $27$ partial rules uses the neighbourhood $(\ast,\Lq,\Lq)$.
 (b) The solver finds a model of each formula, and each model is re-simulated.
 \end{proof}
 
-In words: the formula of part (ii) of \cref{thm:four} becomes satisfiable if
-one row is removed, even when the lines up to length $30$ are added
+In words (\cref{tab:four}): the formula of part (ii) of \cref{thm:four}
+becomes satisfiable if one row is removed, even when the lines up to length $30$ are added
 ($\G_4(5,30)$), if the line of length $10$ is removed ($\G_4(6,9)$), or if the
 return chains are removed. The formula of part (iii) becomes satisfiable if
 the right end of the line of length $10$ is removed, even when the early rows
@@ -120,7 +150,8 @@ chains, do not suffice either.
 The following five-state rules were found with satisfiability solvers. Their
 tables are the files \texttt{uniformA\_2-12.txt} (the rule $\delta_{12}$),
 \texttt{delta13.txt} and \texttt{delta14*.txt} in \texttt{results/} of the
-supplementary material. \Cref{tab:delta14} shows $\delta_{14}$.
+supplementary material. \Cref{tab:delta14} shows $\delta_{14}$, and
+\cref{tab:rules} summarizes what we know about the seven rules.
 
 \begin{table}[t]
 \centering\small
@@ -163,7 +194,7 @@ than equality of $J_n$ on $[0,T+1]$; together with the lengths below $T+3$,
 these are $35$, $39$, $413$, $116$ and $28$ lengths, the largest being $49$,
 $53$, $427$, $130$ and $42$.) By \cref{lem:early,cor:reduce} with
 $N_0=\max(15,T+3)$, every $R_n$ with $n\ge N_0$ has a cell of $E(T)$ in state
-$\Fq$, and there $\tau\le T\le n-3$.
+$\Fq$, and there $\tau\le T\le n-3$ (\cref{fig:firstfire,tab:rules}).
 \end{proof}
 
 \begin{figure}[t]
@@ -176,6 +207,36 @@ Right: the half-line for $0\le t\le63$. From time $3$ on, the cells $i\ge3$
 take only the values $\Lq$ and $\Bq$, and there $\delta_{14}$ acts as the
 elementary cellular automaton $22$.}
 \label{fig:delta14}
+\end{figure}
+
+\begin{table}[t]
+\centering\small
+\caption{The seven five-state rules of \cref{sec:five}, with their files in
+\texttt{results/} of the supplementary material. Synchronized: the lengths $n$
+whose line is synchronized at time $2n-2$, among $2\le n\le60$ for
+$\delta_{12}$ and $\delta_{13}$ and among all $n\ge2$ for the five rules of
+\cref{prop:nearmiss}. For these five rules: the bound $T$ of the proposition,
+the certificate $(t_0,p)$ of \cref{lem:certificate} for $D=2T+4$, and the
+number of lengths simulated in the proof, with the largest of them. $\Fq$ at
+$\tau\le9$: the least length whose line has a cell in state $\Fq$ at a
+relative time $\tau\le9$. Last column: the complexity $c_{78}$ of
+\cref{sec:germs}.}
+\label{tab:rules}
+\setlength{\tabcolsep}{4.5pt}
+\input{figures/tab_rules}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\input{figures/fig_firstfire}
+\caption{The relative time $\tau=t-(n-1)$ of the first cell in state $\Fq$ on
+the line of length $n$, $15\le n\le60$, for the five rules of
+\cref{prop:nearmiss} (dots, from direct simulation). The thick line is the
+bound $\min(T,n-2)$ of the proposition. Every dot lies on or below it, so each
+of these lines fires before time $2n-2$, at a relative time $\tau\le T$. For
+$n>60$ the proposition rests on the certificates of \cref{tab:rules} and on
+\cref{cor:reduce}, not on this figure.}
+\label{fig:firstfire}
 \end{figure}
 
 For example, $\delta_{14}$ synchronizes the line of length $14$ at time $26$,
@@ -204,7 +265,7 @@ $(\Lq,\Lq,\Lq)$. We use $M=78$: the half-line below the anti-diagonal $t+i=78$
 contains the input anti-diagonals of all lines of lengths $n\le40$, so the germ
 below $78$ determines the conditions $\PUMP(n,n')$ for $n'\le40$. For example,
 $c_{78}=57$ for Mazoyer's solution, $22$ for $\delta_{12}$ and $16$ for
-$\delta_{14}$.
+$\delta_{14}$ (\cref{tab:rules}).
 
 \begin{proposition}\label{prop:germs}
 Every five-state minimal-time solution $\delta$ satisfies $c_{78}(\delta)\ge15$.
@@ -227,10 +288,25 @@ requires some selector; CaDiCaL refutes it with an LRAT proof that
 $C_\infty$ up to the anti-diagonal $3300$, and there \cref{lem:left} applies
 with $s=1$: for some $n\le163$ and $\ell\le5$, the upper input anti-diagonal of
 the line of length $n$ is $\ell$-periodic on $[1,Y]$ and the lower one on
-$[1,Y-1]$ with $Y-1>16\ell$ (for example $n=28$, $\ell=1$ and $Y=19$), as an
-independent simulation confirms. Hence no rule that contains one of the $244$
-germs is a minimal-time solution.
+$[1,Y-1]$ with $Y-1>16\ell$ (for example $n=28$, $\ell=1$ and $Y=19$,
+\cref{fig:germs}(b)), as an independent simulation confirms. Hence no rule
+that contains one of the $244$ germs is a minimal-time solution
+(\cref{fig:germs}(a)).
 \end{proof}
+
+\begin{figure}[t]
+\centering
+\input{figures/fig_germs}
+\caption{(a)~The case analysis in the proof of \cref{prop:germs}. (b)~One of
+the $14$ germs that the formula does not refute: the half-line of germ number
+$10$ of the file \texttt{germs\_K14\_surv10.txt} for $0\le t\le55$. For $n=28$,
+the upper input anti-diagonal $t+i=2n-2=54$ is in state $\Gq$ on the cells
+$1,\dots,19$, and the lower one, $t+i=53$, is in state $\Aq$ on the cells
+$1,\dots,18$ (outlined). So the hypothesis of \cref{lem:left} holds with $k=5$,
+$s=1$, $\ell=1$ and $Y=19$, and $Y-s=18>16=(k-1)^{2s}\ell$: no rule that
+contains this germ synchronizes the line of length $28$ in minimal time.}
+\label{fig:germs}
+\end{figure}
 
 The bound is attained by rules that come close to minimal time: the germs below
 $78$ of $\delta_{14}^{\mathrm c}$ and $\delta_{14}^{\mathrm d}$ have complexity
@@ -261,8 +337,25 @@ occurs on the cells with $t+i\le1034$, so every such rule has the same diagram
 $C_\infty$ there. On the anti-diagonal $t+i=1034$ the cells $2,\dots,259$ are in
 state $\Aq$, and on $t+i=1033$ the cells $2,\dots,258$ are in state $\Lq$.
 \Cref{lem:left} with $k=5$, $n=518$, $s=2$, $\ell=1$ and $Y=259$ would give
-$257\le4^4=256$.
+$257\le4^4=256$ (\cref{fig:delta12}).
 \end{proof}
+
+\begin{figure}[t]
+\centering
+\input{figures/fig_delta12}
+\caption{The half-line of $\delta_{12}$ on the cells with $t+i\le1034$, which
+every rule with the $22$ transitions of \cref{cor:germ12} shares. (a)~All
+these cells, one pixel per cell: the region in state $\Gq$ (dark) lies between
+roughly the line $i=t/3$ (dashed) and the front, and the cells between the left
+border and roughly the line $i=t/3$ alternate between $\Aq$ and $\Lq$. The thick
+segment marks the cells $2,\dots,259$ of the anti-diagonal $t+i=1034$.
+(b)~The cells in the small square of (a). On $t+i=1034$ (solid outlines) they
+are all in state $\Aq$, and on $t+i=1033$ (dotted outlines) all in state $\Lq$.
+This holds for the cells $2,\dots,259$ and $2,\dots,258$, respectively, so
+\cref{lem:left} applies to the line of length $518$ with $s=2$, $\ell=1$ and
+$Y=259$.}
+\label{fig:delta12}
+\end{figure}
 
 \subsection{Balzer's Conditions}\label{sec:balzer}
 
@@ -298,5 +391,16 @@ For $I$ the identity and $N=12$, Kissat refutes it; \textsf{drat-trim} turns its
 DRAT proof into an LRAT proof. Each of the four proofs is verified by
 \texttt{lrat-check}. The rule \texttt{results/balzer\_sym11.txt} satisfies
 (B1)--(B4) in the strong reading with $I$ the identity and synchronizes every
-line of length at most $11$ (direct simulation).
+line of length at most $11$ (direct simulation); see \cref{tab:balzer}.
 \end{proof}
+
+\begin{table}[t]
+\centering\small
+\caption{The formulas of \cref{prop:balzer}: the clauses of (B1)--(B4) for the
+involution $I$ added to $\MT_5(\{2,\dots,N\};2N-2)$, where $2,\dots,N$ are the
+lengths in the second column. Every proof is verified by \texttt{lrat-check}.
+The last row is a rule, found by a solver and checked by direct simulation,
+that satisfies the strong reading, hence the weak one.}
+\label{tab:balzer}
+\input{figures/tab_balzer}
+\end{table}

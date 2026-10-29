@@ -75,12 +75,15 @@ python3 halflines.py values ../results/delta14.txt 1500
 for r in uniformA_2-12 delta13; do python3 firstfire.py ../results/$r.txt 2 60 9 | grep -E "^\.\.|synchronized at|smallest"; done
 for r in delta14 delta14b delta14c delta14d delta14e; do python3 firstfire.py ../results/$r.txt 2 60 9 | grep -E "^\.\.|smallest"; done
 
-sec "Proposition 6.4 and the remark after it: germs of complexity at most 14"
+sec "Proposition 6.4, the remark after it, and Table 5: germs of complexity at most 14"
 python3 germcompare.py ../results/mazoyer6.txt 78 | sed -n 1p
 python3 germcompare.py ../results/uniformA_2-12.txt 78 | sed -n 1p
+python3 germcompare.py ../results/delta13.txt 78 | sed -n 1p
 python3 germcompare.py ../results/delta14.txt 78 | sed -n 1p
+python3 germcompare.py ../results/delta14b.txt 78 | sed -n 1p
 python3 germcompare.py ../results/delta14c.txt 78 | sed -n 1p
 python3 germcompare.py ../results/delta14d.txt 78 | sed -n 1p
+python3 germcompare.py ../results/delta14e.txt 78 | sed -n 1p
 ./germdfs 5 78 14 40 | cmp - ../results/germs/germs_K14.txt && echo "germdfs: the 244 germs of results/germs/germs_K14.txt"
 python3 germdfs_check.py 14 78 40 > "$TMPD/germs_check.txt"
 grep -v '^GERM' "$TMPD/germs_check.txt"
@@ -106,6 +109,6 @@ sec "Section 7: the two models of the germ of delta14d"
 cd "$H/research"
 python3 models_check.py
 
-sec "Figures 1, 3 and 5, Table 2, and the dependency cone of Section 7"
+sec "Figures 1, 6, 7 and 12-18, Table 4, and the dependency cones of Section 7"
 cd "$H/src"
 python3 figures.py "$TMPD/figures"

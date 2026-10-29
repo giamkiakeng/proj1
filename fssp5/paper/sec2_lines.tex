@@ -89,13 +89,29 @@ $C_\infty(T,1)=C_n(T,1)=\Fq$, and then $C_{n'}(T,1)=\Fq$ for every $n'\ge n$,
 by \cref{lem:agree} again. For $n'>T+1$ the cell $n'$ is still quiescent at
 time $T$ by \cref{lem:lightcone}, so the line of length $n'$ has a cell in
 state $\Fq$ at time $T$ although not all of its cells are in state $\Fq$; it
-can then never be synchronized, a contradiction.
+can then never be synchronized, a contradiction (\cref{fig:lowerbound}).
 \end{remark}
+
+\begin{figure}[t]
+\centering
+\input{figures/fig_lowerbound}
+\caption{Why no line can be synchronized before time $2n-2$
+(\cref{rem:lowerbound}), drawn for $n=8$, $T=11$ and $n'=13$. (a)~If the line
+of length $n$ were synchronized at a time $T\le 2n-3$, its cell $(T,1)$ would
+satisfy $T+1\le2n-2$ and lie above the dashed staircase, where the line agrees
+with the half-line. (b)~Hence the cell $(T,1)$ of the half-line would be in
+state $\Fq$. (c)~A line of length $n'>T+1$ agrees with the half-line on every
+cell with $t\le T$, because then $t+i\le T+n'\le 2n'-2$. Its cell $1$ would be
+in state $\Fq$ at time $T$ while its cell $n'$ is still quiescent, so this line
+could never be synchronized.}
+\label{fig:lowerbound}
+\end{figure}
 
 \subsection{The Return Chain}
 
 The first anti-diagonal of $R_n$ is where the line starts to differ from the
-half-line, and in a minimal-time solution it differs there everywhere.
+half-line, and in a minimal-time solution it differs there everywhere
+(\cref{fig:line}(c) and \cref{fig:return}).
 
 \begin{lemma}[return chain]\label{lem:return}
 Let $n\ge2$. If $\delta$ synchronizes the lines of lengths $n$ and $n+1$ at
@@ -119,6 +135,25 @@ $(n-2,n)$ and $(n-2,n+1)$ are quiescent by \cref{lem:lightcone}, so the claim
 reads $\delta(f_{n-1},\Lq,\ast)\ne\delta(f_{n-1},\Lq,\Lq)$. This is impossible
 if $f_{n-1}=\Lq$, by \eqref{eq:quiescence}.
 \end{proof}
+
+\begin{figure}[t]
+\centering
+\input{figures/fig_return}
+\caption{The proof of \cref{lem:return}, drawn for $n=8$. (a)~The line of
+length $n$. On the cells with $t+i\le2n-2$, including the two anti-diagonals
+$t+i=2n-3$ and $t+i=2n-2$, it agrees with the half-line (\cref{lem:agree}). The
+return chain $t+i=2n-1$ starts at the cell $(2n-2,1)$, which is $\Fq$ in the
+line but not in the half-line, and the induction climbs the chain to the cell
+$(n-1,n)$. (b)~The induction step, outlined in (a) for $i=3$: the left and
+middle predecessors of the cell $i$ of the return chain have the same state in
+the line and in the half-line ($=$); since the cell differs ($\neq$), so does
+its right predecessor, the cell $i+1$ of the return chain. (c)~The last cell
+$(n-1,n)$ of the return chain, outlined in (a), is computed from $f$, $\Lq$,
+$\ast$ in the line and from $f$, $\Lq$, $\Lq$ in the half-line, where
+$f=f_{n-1}$ is the front cell; by \eqref{eq:quiescence} the results can differ
+only if $f\neq\Lq$.}
+\label{fig:return}
+\end{figure}
 
 We call the anti-diagonal $t+i=2n-1$ the \emph{return chain} of the line of
 length $n$. Finally, a minimal-time solution never fires on the half-line:

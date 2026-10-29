@@ -65,16 +65,18 @@ therefore cheap to check, and they apply to all lengths at once.
 \begin{figure}[t]
 \centering
 \input{figures/fig_line}
-\caption{Mazoyer's six-state minimal-time solution. Left: the line of length
+\caption{Mazoyer's six-state minimal-time solution. (a) The line of length
 $n=24$; time runs downwards from $t=0$ to the firing time $t=2n-2=46$, and the
-cells $i=1,\dots,24$ run from left to right. Right: the half-line, which is
-started in the same way but has no right end, for the same times. The two
-diagrams coincide above the dashed anti-diagonal $t+i=2n-2$
-(\cref{lem:agree}); the dotted line marks the right end of the line of length
-$24$. Below the anti-diagonal lies the reflected triangle $R_n$, in which the
-line reacts to its right end; on the first anti-diagonal of $R_n$,
-the \emph{return chain} $t+i=2n-1$, every cell of the line differs from the
-corresponding cell of the half-line (\cref{lem:return}).}
+cells $i=1,\dots,24$ run from left to right. (b) The half-line, which is
+started in the same way but has no right end, for the same times; the dotted
+line marks the right end of the line in (a). (c) Each cell of (a) compared with
+the same cell of (b). Above the front $t=i-1$, both are quiescent
+(\cref{lem:lightcone}). The dashed staircase separates the cells with $t+i\le
+2n-2$, on which (a) and (b) coincide (\cref{lem:agree}), from the reflected
+triangle $R_n$, in which the line reacts to its right end. On the first
+anti-diagonal of $R_n$, the \emph{return chain} $t+i=2n-1$, every cell of the
+line differs from the same cell of the half-line (\cref{lem:return}); further
+down, the two diagrams coincide on some cells and differ on others.}
 \label{fig:line}
 \end{figure}
 
@@ -94,12 +96,14 @@ Our main results concern minimal-time solutions with any number of states.
   roughly the cell $t/3$ at time $t$. The proof rests on a pumping lemma (\cref{lem:pumping}): if the
   reflected triangles of two lines of different lengths received the same
   values on the cells that determine their right ends, these ends would fire at
-  the same number of steps after the front reaches them, which is impossible. In the known constructions, the boundary of the periodic part is the
+  the same number of steps after the front reaches them, which is impossible
+  (\cref{fig:pumping}). In the known constructions, the boundary of the periodic part is the
   signal that meets the echo at the first division point of the line; read in
   this way, the barrier says that this point is asymptotically never in the half
   of the line next to the general (\cref{rem:division}). In simulations, the
   half-line of the five-state rule $\delta_{12}$ of \cref{sec:five}, which
-  synchronizes the lines of lengths $2,\dots,12$, meets the barrier exactly.
+  synchronizes the lines of lengths $2,\dots,12$, meets the barrier exactly
+  (\cref{fig:theta}).
 \item \emph{The left-border barrier} (\cref{thm:left,cor:regular}). The
   half-line is never periodic in time and space on a wedge
   $\{(t,i):s\le i\le\alpha t,\ t\ge t_0\}$ at its left border; in particular it
@@ -107,16 +111,16 @@ Our main results concern minimal-time solutions with any number of states.
   periodic regions separated by signals of rational speeds. The reason is that
   the cells near the left border are fired by a finite automaton that reads the
   half-line along the cells with $t+i=2n-3$ and $t+i=2n-2$, and a long periodic
-  input would make it fire too early (\cref{lem:left}). The half-line
-  of $\delta_{12}$, which meets the speed-$1/3$ barrier exactly, is excluded by
-  this one (\cref{cor:germ12}).
+  input would make it fire too early (\cref{lem:left,fig:leftproof}). The
+  half-line of $\delta_{12}$, which meets the speed-$1/3$ barrier exactly, is
+  excluded by this one (\cref{cor:germ12,fig:delta12}).
 \item \emph{Finitely many early rows} (\cref{cor:reduce}). The front reaches
   the right end of the line of length $n$ at time $n-1$. For a fixed $T$, the
   cells of the reflected triangles at the times $n-1,\dots,n-1+T$, which we call
   the first $T+1$ rows, take only finitely many forms over all lengths $n$, and a
   certificate computed from the half-line determines them. This turns the
   condition that no line fires during these $T+1$ steps into finitely many
-  checks (\cref{lem:G}).
+  checks (\cref{lem:G,fig:early}).
 \end{enumerate}
 With these conditions and satisfiability solvers whose negative answers are
 certified by independently checked proofs, we obtain the following results.
@@ -135,26 +139,27 @@ evidence behind each of them.
 
 \begin{table}[t]
 \centering\small
-\caption{The results of this paper and the evidence behind them. A
-``computation'' is a finite simulation or enumeration; ``certified'' means that
-every unsatisfiability claim comes with a proof that an independent checker
-verifies.}
+\caption{The results of this paper, the evidence behind them, and the figures
+and tables that illustrate them. A ``computation'' is a finite simulation or
+enumeration; ``certified'' means that every unsatisfiability claim comes with a
+proof that an independent checker verifies.}
 \label{tab:results}
-\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.56\textwidth}l>{\raggedright\arraybackslash}p{0.25\textwidth}@{}}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.42\textwidth}l>{\raggedright\arraybackslash}p{0.19\textwidth}>{\raggedright\arraybackslash}p{0.14\textwidth}@{}}
 \toprule
-Result & Where & Evidence\\
+Result & Where & Evidence & Shown in\\
 \midrule
-Agreement with the half-line; return chain; determinacy & \ref{lem:agree}, \ref{lem:return}, \ref{lem:determinacy} & proof\\
-Pumping lemma; speed-$1/3$ barrier & \ref{lem:pumping}, \ref{thm:third} & proof\\
-Right band & \ref{lem:rightband} & proof\\
-Left-border lemma and barrier; no eventually regular half-line & \ref{lem:left}, \ref{thm:left}, \ref{cor:regular} & proof\\
-Finitely many early rows; the formulas $\G_k(T,N_1,C)$ & \ref{cor:reduce}, \ref{lem:G} & proof\\
-Four states excluded by the lines of lengths $2,\dots,5$ and parts of those of lengths $6,\dots,10$ & \ref{thm:four} & certified computation\\
-Sharpness of \cref{thm:four} & \ref{prop:sharp} & computation\\
-Five rules for exactly the lengths $2,\dots,14$ & \ref{prop:nearmiss} & computation and proof\\
-At least $15$ neighbourhoods on the half-line of a five-state solution & \ref{prop:germs} & certified computation and proof\\
-The half-line of $\delta_{12}$ and $\delta_{13}$ cannot be completed & \ref{cor:germ12} & computation and proof\\
-Balzer's conditional five-state result & \ref{prop:balzer} & certified computation\\
+Light cone; agreement with the half-line; return chain & \ref{lem:lightcone}, \ref{lem:agree}, \ref{lem:return} & proof & Figs.~\ref{fig:line}--\ref{fig:return}\\
+Determinacy; cone of the right end & \ref{lem:determinacy}, \ref{lem:cone} & proof & Figs.~\ref{fig:anatomy}, \ref{fig:pumping}\\
+Pumping lemma; speed-$1/3$ barrier & \ref{lem:pumping}, \ref{thm:third} & proof & Figs.~\ref{fig:pumping}--\ref{fig:halflines}\\
+Right band & \ref{lem:rightband} & proof & Fig.~\ref{fig:rightband}\\
+Left-border lemma and barrier; no eventually regular half-line & \ref{lem:left}, \ref{thm:left}, \ref{cor:regular} & proof & Figs.~\ref{fig:chains}--\ref{fig:wedge}\\
+Finitely many early rows; the formulas $\G_k(T,N_1,C)$ & \ref{cor:reduce}, \ref{lem:G} & proof & Figs.~\ref{fig:early}, \ref{fig:regions}\\
+Four states excluded by the lines of lengths $2,\dots,5$ and parts of those of lengths $6,\dots,10$ & \ref{thm:four} & certified computation & Fig.~\ref{fig:regions}, Table~\ref{tab:four}\\
+Sharpness of \cref{thm:four} & \ref{prop:sharp} & computation & Table~\ref{tab:four}\\
+Five rules for exactly the lengths $2,\dots,14$ & \ref{prop:nearmiss} & computation and proof & Figs.~\ref{fig:delta14}, \ref{fig:firstfire}, Tables~\ref{tab:delta14}, \ref{tab:rules}\\
+At least $15$ neighbourhoods on the half-line of a five-state solution & \ref{prop:germs} & certified computation and proof & Fig.~\ref{fig:germs}, Table~\ref{tab:rules}\\
+The half-line of $\delta_{12}$ and $\delta_{13}$ cannot be completed & \ref{cor:germ12} & computation and proof & Figs.~\ref{fig:halflines}, \ref{fig:delta12}\\
+Balzer's conditional five-state result & \ref{prop:balzer} & certified computation & Table~\ref{tab:balzer}\\
 \bottomrule
 \end{tabular}
 \end{table}

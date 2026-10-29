@@ -1,0 +1,54 @@
+%% Figure: the left-border barrier (Theorem 4.2) and eventually regular half-lines (Corollary 4.3).
+%% Schematic, in continuous coordinates: position i to the right, time t downwards.
+\begin{tikzpicture}[x=1.6mm,y=1.6mm]
+  % (a) the wedge and the input anti-diagonals of three lengths (s = 2, alpha = 0.4, t_0 = 8)
+  \begin{scope}
+    \fill[gNone] (0,0) -- (40,-40) -- (0,-40) -- cycle;
+    \fill[stB] (2,-8) -- (3.2,-8) -- (16,-40) -- (2,-40) -- cycle;
+    \draw[stC,line width=0.6pt] (2,-40) -- (2,-8) -- (3.2,-8) -- (16,-40);
+    \foreach \n in {12,16,20} {
+      \draw[grid,line width=0.5pt] (\n-1,-\n+1) -- (0,-2*\n+2);
+      \pgfmathsetmacro{\Y}{0.4*(2*\n-3)/1.4}
+      \draw[rgCone,line width=2.2pt] (2,-2*\n+4) -- (\Y,-2*\n+2+\Y);}
+    \draw[stF,line width=0.9pt] (5,-25) -- (5,-22) -- (8,-22);
+    \fill[ink] (5,-25) circle (0.45) (8,-22) circle (0.45);
+    \draw[ink,line width=1.2pt] (0,0) -- (0,-40);
+    \draw[ink,line width=0.7pt] (0,0) -- (40,-40);
+    \node[font=\small] at (5.6,-35) {$\Omega$};
+    \node[font=\scriptsize,anchor=north] at (2,-40.2) {$s$};
+    \node[font=\scriptsize,anchor=north] at (16,-40.2) {$i=\alpha t$};
+    \node[font=\scriptsize,anchor=east] at (-0.3,-8) {$t_0$};
+    \node[font=\scriptsize,rotate=-45,anchor=south] at (30,-30) {front};
+    \node[font=\scriptsize,anchor=west] at (8.4,-21.4) {$(t-\ell,i+\ell)$};
+    \node[font=\scriptsize,anchor=north west] at (5.2,-25.1) {$(t,i)$};
+    \node[font=\scriptsize,anchor=west,align=left] at (12.4,-11.6) {$t+i=2n-2$};
+    \draw[-{Stealth[length=1.4mm]},ink,line width=0.45pt] (12.6,-12.3) -- (6.8,-15.0);
+    \node[font=\small,anchor=south west] at (-2,0.8) {(a) the proof of \cref{thm:left}};
+  \end{scope}
+  % (b) an eventually regular half-line: blocks separated by signals of speeds 0, 1/4 and 1/2
+  \begin{scope}[shift={(48,0)}]
+    \fill[gNone] (0,0) -- (40,-40) -- (0,-40) -- cycle;
+    \fill[rgInput] (0,-8) rectangle (3,-40);
+    \fill[stB] (3,-8) -- (11,-40) -- (3,-40) -- cycle;
+    \fill[rgRefl2] (3,-8) -- (4,-8) -- (20,-40) -- (11,-40) -- cycle;
+    \fill[rgAgree] (4,-8) -- (8,-8) -- (40,-40) -- (20,-40) -- cycle;
+    \draw[ink,line width=0.6pt] (3,-8) -- (3,-40) (3,-8) -- (11,-40) (4,-8) -- (20,-40);
+    \draw[ink,densely dashed,line width=0.9pt] (4,-20) -- (8,-40) (4,-20) -- (4,-40);
+    \draw[grid,line width=0.4pt] (0,-8) -- (8,-8);
+    \draw[ink,line width=1.2pt] (0,0) -- (0,-40);
+    \draw[ink,line width=0.7pt] (0,0) -- (40,-40);
+    \node[font=\scriptsize,anchor=north] at (1.5,-40.2) {$w_0$};
+    \node[font=\scriptsize,anchor=north] at (7.0,-40.2) {$z_1^{a_1+\nu D_1}$};
+    \node[font=\scriptsize,anchor=north] at (15.5,-40.2) {$z_2^{a_2+\nu D_2}$};
+    \node[font=\scriptsize,anchor=north] at (30.0,-40.2) {$z_3^{a_3+\nu D_3}$};
+    \node[font=\scriptsize,anchor=east] at (-0.3,-8) {$t_1$};
+    \node[font=\scriptsize,anchor=west] at (10.5,-2.5) {transient part};
+    \draw[-{Stealth[length=1.4mm]},ink,line width=0.45pt] (10.6,-3.0) -- (3.0,-5.4);
+    \node[font=\small,anchor=south west] at (-2,0.8) {(b) an eventually regular half-line};
+  \end{scope}
+  % legend
+  \node[anchor=north west,font=\scriptsize,align=left] at (0,-44.6) {%
+    \swatch{stB}\,in (a): the wedge $\Omega$; in (b): the first block that grows, with a wedge (dashed)\\[0.3ex]
+    \swatch{rgCone}\,in (a): the stretch from the cell $s$ to the cell $Y_n$ of the input anti-diagonals
+    of the lengths $n=12,16,20$};
+\end{tikzpicture}

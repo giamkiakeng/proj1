@@ -1,0 +1,13 @@
+%% Table: tests of the encodings (Section 6.1); the results are rerun by check_quick.sh.
+\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{0.33\textwidth}l>{\raggedright\arraybackslash}p{0.3\textwidth}@{}}
+\toprule
+Table fixed & Conditions & Result & Prediction from simulation\\
+\midrule
+Mazoyer's & $\MT_6(\{3,\dots,12\};78,40)$ & satisfiable & synchronizes every line of length $n\ge3$\\
+Mazoyer's & (G2), (G3) with $T=8$ for all $n\ge15$ & satisfiable & the same; $21$ representative lengths, $(t_0,p)=(42,3)$\\
+$\delta_{14}$ & lines of lengths $2,\dots,14$ & satisfiable & synchronizes them\\
+$\delta_{14}$ & lines of lengths $2,\dots,15$ & unsatisfiable & the line of length $15$ fires at $\tau=8$\\
+$\delta_{14}$ & lines $2,\dots,14$ and (G2) for $15,\dots,30$, $T=6$ & satisfiable & no line $15\le n\le30$ fires at $\tau\le6$\\
+$\delta_{14}$ & lines $2,\dots,14$ and (G2) for $15,\dots,30$, $T=8$ & unsatisfiable & some line fires at $\tau\in\{7,8\}$\\
+\bottomrule
+\end{tabular}

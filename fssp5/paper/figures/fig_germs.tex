@@ -1,0 +1,44 @@
+%% Figure: the proof of Proposition 6.4 (diagram) and its example of Lemma 4.1: the half-line of germ 10
+%% of results/germs/germs_K14_surv10.txt for 0 <= t <= 55 (cells from figures.py).
+\begin{tikzpicture}
+  % (a) the case analysis
+  \begin{scope}[font=\scriptsize,every node/.style={align=flush center,inner sep=3pt,rounded corners=1.5pt}]
+    \node[draw=ink,fill=gNone,text width=5.6cm] (all) at (0,0) {germs below $78$ of five-state rules with
+      $c_{78}\le14$ that produce no $\Fq$, no $\Lq$ at the front, and satisfy $\PUMP(n,n')$ for
+      $4\le n<n'\le40$};
+    \node[draw=ink,fill=rgAgree,text width=5.6cm] (g244) at (0,-1.75) {$244$ germs, up to exchanging $\Aq$ and $\Bq$
+      (depth-first search with about $10^8$ nodes;\\ an independent program finds the same $244$)};
+    \node[draw=ink,fill=gEarly,text width=2.62cm] (g230) at (-1.5,-4.35) {$230$ germs: with the germ fixed,
+      the formula $\MT_5(\{2,\dots,10\};$ $78,39)$ is unsatisfiable (one LRAT proof)};
+    \node[draw=ink,fill=gEarly,text width=2.62cm] (g14) at (1.5,-4.35) {$14$ germs: \cref{lem:left} with $s=1$
+      applies for some $n\le163$ and $\ell\le5$; see (b)};
+    \node[draw=ink,fill=gNone,text width=5.6cm] (none) at (0,-6.75) {no five-state minimal-time solution has
+      $c_{78}\le14$};
+    \draw[-{Stealth[length=1.6mm]},ink,line width=0.5pt] (all) -- (g244);
+    \draw[-{Stealth[length=1.6mm]},ink,line width=0.5pt] (g244.south) -- ++(0,-0.2) -| (g230.north);
+    \draw[-{Stealth[length=1.6mm]},ink,line width=0.5pt] (g244.south) -- ++(0,-0.2) -| (g14.north);
+    \draw[-{Stealth[length=1.6mm]},ink,line width=0.5pt] (g230.south) -- ++(0,-0.2) -| ([xshift=-0.4cm]none.north);
+    \draw[-{Stealth[length=1.6mm]},ink,line width=0.5pt] (g14.south) -- ++(0,-0.2) -| ([xshift=0.4cm]none.north);
+    \node[font=\small,anchor=south west,align=left,rounded corners=0pt] at (-3.1,0.85) {(a) the proof of \cref{prop:germs}};
+  \end{scope}
+  % (b) germ 10 of the 14: on t+i = 54 the cells 1..19 are G, on t+i = 53 the cells 1..18 are A
+  \begin{scope}[shift={(4.1cm,0.95cm)},x=1.07mm,y=1.07mm]
+    \input{figures/cells_germ10_half}
+    \draw[grid,line width=0.3pt] (0,0) -- (0,-56) -- (56,-56);
+    \foreach \y in {1,...,19} \draw[white,line width=0.9pt] (\y-1,-54+\y) rectangle (\y,-55+\y);
+    \foreach \y in {1,...,18} \draw[white,line width=0.9pt] (\y-1,-53+\y) rectangle (\y,-54+\y);
+    \foreach \y in {1,...,19} \draw[stF,line width=0.45pt] (\y-1,-54+\y) rectangle (\y,-55+\y);
+    \foreach \y in {1,...,18} \draw[stF,line width=0.45pt] (\y-1,-53+\y) rectangle (\y,-54+\y);
+    \foreach \t in {0,27,54} \node[font=\scriptsize,anchor=east] at (-0.5,-\t-0.5) {$\t$};
+    \node[font=\scriptsize,anchor=east] at (-3.2,-40.5) {$t$};
+    \foreach \i in {1,19,56} \node[font=\scriptsize,anchor=north] at (\i-0.5,-56.3) {$\i$};
+    \draw[-{Stealth[length=1.4mm]},ink,line width=0.45pt] (27.2,-21.6) -- (15.2,-38.6);
+    \node[font=\scriptsize,anchor=west,align=left] at (26.6,-20.6) {$t+i=54$, cells $1,\dots,19$: $\Gq$\\
+      $t+i=53$, cells $1,\dots,18$: $\Aq$};
+    \node[font=\small,anchor=south west] at (-3,1.4) {(b) germ $10$ of the $14$};
+  \end{scope}
+  % legend and the numbers of Lemma 4.1 in (b)
+  \node[anchor=north west,font=\scriptsize,align=left] at (4.1cm,-5.55cm) {in (b):\ \swatch{white}\,$\Lq$\
+    \swatch{stG}\,$\Gq$\ \swatch{stA}\,$\Aq$\ \swatch{stB}\,$\Bq$\\[0.4ex]
+    $n=28$, $s=1$, $\ell=1$, $Y=19$: $Y-s=18>(k-1)^{2s}\ell=16$};
+\end{tikzpicture}

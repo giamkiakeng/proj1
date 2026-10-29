@@ -1,0 +1,67 @@
+%% Figure: the induction of Lemma 2.4 along the return chain. Schematic, n = 8; cell (t,i) is
+%% [i-1,i] x [-t-1,-t] in panel (a).
+\begin{tikzpicture}
+  % (a) the line of length n = 8
+  \begin{scope}[x=3.4mm,y=3.4mm]
+    \foreach \t in {0,...,14} {\foreach \i in {1,...,8} {%
+      \pgfmathtruncatemacro{\s}{\t+\i}\pgfmathtruncatemacro{\lc}{\i-1}%
+      \def\cc{rgRefl}%
+      \ifnum\s<16 \def\cc{rgReturn}\fi
+      \ifnum\s<15 \def\cc{rgInput}\fi
+      \ifnum\s<13 \def\cc{rgAgree}\ifnum\t<\lc \def\cc{white}\fi\fi
+      \ifnum\t=14 \def\cc{stF}\fi
+      \filldraw[fill=\cc,draw=grid!45,line width=0.15pt] (\i-1,-\t) rectangle (\i,-\t-1);}}
+    \draw[ink,line width=0.6pt] (0,0) rectangle (8,-15);
+    % the step of panel (b), for i = 3
+    \foreach \x/\y in {1/11,2/11,3/11} \draw[ink,line width=0.9pt,densely dashed] (\x,-\y) rectangle (\x+1,-\y-1);
+    \draw[ink,line width=1.3pt] (2,-12) rectangle (3,-13);
+    % the front cell f_{n-1} = (n-2, n-1) and the last cell (n-1, n) of the return chain
+    \node[font=\scriptsize] at (6.5,-6.5) {$f$};
+    \draw[ink,line width=1.3pt] (7,-7) rectangle (8,-8);
+    % direction of the induction
+    \draw[-{Stealth[length=1.8mm]},ink,line width=0.7pt] (1.9,-15.6) -- (9.0,-8.5);
+    \node[font=\scriptsize,rotate=45,anchor=south] at (5.2,-11.9) {induction on $i$};
+    \node[font=\small,anchor=south] at (4,0.4) {(a) line of length $n$};
+    \foreach \y/\l in {0/{t=0},7/{t=n-1},14/{t=2n-2}}
+      \node[font=\scriptsize,anchor=east] at (-0.3,-\y-0.5) {$\l$};
+    \foreach \x/\l in {1/1,8/n}
+      \node[font=\scriptsize,anchor=north] at (\x-0.5,-15.2) {$\l$};
+  \end{scope}
+  % (b) the induction step
+  \begin{scope}[shift={(4.7,-0.9)},x=9.5mm,y=9.5mm]
+    \filldraw[fill=rgInput,draw=ink,line width=0.5pt] (0,0) rectangle (1,-1);
+    \filldraw[fill=rgInput,draw=ink,line width=0.5pt] (1,0) rectangle (2,-1);
+    \filldraw[fill=rgReturn,draw=ink,line width=0.5pt] (2,0) rectangle (3,-1);
+    \filldraw[fill=rgReturn,draw=ink,line width=0.5pt] (1,-1.6) rectangle (2,-2.6);
+    \node[font=\small] at (0.5,-0.5) {$=$};
+    \node[font=\small] at (1.5,-0.5) {$=$};
+    \node[font=\small,text=white] at (2.5,-0.5) {$\neq$};
+    \node[font=\small,text=white] at (1.5,-2.1) {$\neq$};
+    \foreach \x in {0.5,1.5,2.5} \draw[-{Stealth[length=1.5mm]},ink,line width=0.5pt] (\x,-1.03) -- (1.5,-1.57);
+    \node[font=\scriptsize,anchor=south] at (0.5,0.02) {$2n-3$};
+    \node[font=\scriptsize,anchor=south] at (1.5,0.02) {$2n-2$};
+    \node[font=\scriptsize,anchor=south] at (2.5,0.02) {$2n-1$};
+    \node[font=\scriptsize,anchor=east] at (-0.1,0.25) {$t+i$:};
+    \node[font=\scriptsize,anchor=west,align=left] at (3.1,-0.5) {cell $i+1$ of the\\ return chain};
+    \node[font=\scriptsize,anchor=west,align=left] at (2.1,-2.1) {cell $i$ of the\\ return chain};
+    \node[font=\small,anchor=south west] at (-0.9,0.7) {(b) the induction step};
+  \end{scope}
+  % (c) the last cell of the return chain
+  \begin{scope}[shift={(4.7,-4.35)},x=9.5mm,y=9.5mm]
+    \foreach \row/\z/\lab in {0/{\ast}/{line of length $n$}, 1.15/{\Lq}/{half-line}} {
+      \filldraw[fill=rgInput,draw=ink,line width=0.5pt] (0,-\row) rectangle (1,-\row-1);
+      \filldraw[fill=white,draw=ink,line width=0.5pt] (1,-\row) rectangle (2,-\row-1);
+      \filldraw[fill=white,draw=ink,line width=0.5pt] (2,-\row) rectangle (3,-\row-1);
+      \node[font=\small] at (0.5,-\row-0.5) {$f$};
+      \node[font=\small] at (1.5,-\row-0.5) {$\Lq$};
+      \node[font=\small] at (2.5,-\row-0.5) {$\z$};
+      \node[font=\scriptsize,anchor=west] at (3.1,-\row-0.5) {\lab};
+    }
+    \node[font=\small,anchor=south west] at (-0.9,0.25) {(c) the last step};
+  \end{scope}
+  % legend
+  \node[anchor=north,font=\scriptsize,align=left] at (4.9,-6.75) {%
+    \swatch{white}\,quiescent\quad \swatch{rgAgree}\,$t+i\le 2n-4$\quad
+    \swatch{rgInput}\,$t+i=2n-3$ and $2n-2$\quad \swatch{rgReturn}\,$t+i=2n-1$\quad
+    \swatch{rgRefl}\,rest of $R_n$\quad \swatch{stF}\,$t=2n-2$};
+\end{tikzpicture}

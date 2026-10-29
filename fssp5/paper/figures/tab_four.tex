@@ -1,0 +1,20 @@
+%% Table: the four-state formulas of Theorem 6.1 and Proposition 6.2.
+\begin{tabular}{@{}lllll@{}}
+\toprule
+Formula & (G1): & (G2), (G3): early rows & (G5): & Result\\
+& complete lines & and return chains & right ends &\\
+\midrule
+(a) enumeration & $2,\dots,8$ & --- & --- & $27$ partial rules\\
+(i) $\MT_4(\{2,\dots,9\};16)$ & $2,\dots,9$ & --- & --- & unsatisfiable\\
+\midrule
+(ii) $\G_4(6,10)$ & $2,\dots,7$ & $8,\dots,10$; $\tau\le6$ & --- & unsatisfiable\\
+(b) $\G_4(5,30)$ & $2,\dots,6$ & $7,\dots,30$; $\tau\le5$ & --- & satisfiable\\
+(b) $\G_4(6,9)$ & $2,\dots,7$ & $8,9$; $\tau\le6$ & --- & satisfiable\\
+(b) $\G_4(6,10)$ without (G3) & $2,\dots,7$ & $8,\dots,10$; $\tau\le6$; (G2) only & --- & satisfiable\\
+\midrule
+(iii) $\G_4(4,10,10)$ & $2,\dots,5$ & $6,\dots,10$; $\tau\le4$ & $6,\dots,10$ & unsatisfiable\\
+(b) $\G_4(4,30,9)$ & $2,\dots,5$ & $6,\dots,30$; $\tau\le4$ & $6,\dots,9$ & satisfiable\\
+(b) $\G_4(3,30,12)$ & $2,\dots,4$ & $5,\dots,30$; $\tau\le3$ & $5,\dots,12$ & satisfiable\\
+(b) (G1) and (G5) only & $2,\dots,5$ & --- & $6,\dots,12$ & satisfiable\\
+\bottomrule
+\end{tabular}

@@ -1,0 +1,37 @@
+%% Figure: the proof of the right-band lemma (Lemma 3.6). Schematic, n = 22, d = 3, l = 3,
+%% tau_0 = 5, tau_1 = 8, tau_2 = 14, h = 6. The relative cell (tau,kappa) is [n-kappa-1,n-kappa] x [-tau-1,-tau].
+\begin{tikzpicture}[x=2.3mm,y=2.3mm]
+  \foreach \tau in {0,...,21} {\foreach \kap in {0,...,\tau} {%
+    \pgfmathtruncatemacro{\cls}{(\tau==21) ? 1 : ((\kap<3) ? ((\tau==15) ? 6 : 2)
+      : ((\kap==3) ? ((\tau>=5) ? 3+mod(\tau-5,3) : 2) : 0))}%
+    \def\cc{\ifcase\cls rgRefl\or stF\or rgRefl2\or stB\or stA\or stC\or stF\fi}%
+    \filldraw[fill=\cc,draw=grid!45,line width=0.15pt] (21-\kap,-\tau) rectangle (22-\kap,-\tau-1);
+    \ifnum\cls=6 \fill[pattern=north east lines,pattern color=white] (21-\kap,-\tau) rectangle (22-\kap,-\tau-1);\fi}}
+  \draw[ink,line width=1.2pt] (22,0.2) -- (22,-22.2);
+  \draw[ink,line width=0.5pt] (22,0) -- (0,-22) -- (22,-22);
+  % the band states b(tau_1) = b(tau_2)
+  \draw[ink,line width=1.2pt] (19,-8) rectangle (22,-9);
+  \draw[ink,line width=1.2pt] (19,-14) rectangle (22,-15);
+  % brackets: the band evolves in the same way from tau_1 and from tau_2
+  \draw[ink,line width=0.6pt] (22.9,-8.1) -- (23.4,-8.1) -- (23.4,-15.9) -- (22.9,-15.9);
+  \draw[ink,line width=0.6pt] (25.4,-14.1) -- (25.9,-14.1) -- (25.9,-21.9) -- (25.4,-21.9);
+  \node[font=\scriptsize,anchor=west,align=left] at (26.4,-17.0) {the same evolution,\\ $h$ steps apart};
+  % row labels
+  \foreach \y/\l in {5/{\tau_0},8/{\tau_1},14/{\tau_2},15/{n-1-h},21/{n-1}}
+    \node[font=\scriptsize,anchor=east] at (20.6-\y,-\y-0.5) {$\l$};
+  \node[font=\scriptsize,anchor=north] at (21.5,-22.3) {$0$};
+  \node[font=\scriptsize,anchor=north] at (18.5,-22.3) {$d$};
+  \node[font=\scriptsize,anchor=north] at (11,-22.3) {$\kappa$};
+  % annotations
+  \draw[-{Stealth[length=1.5mm]},ink,line width=0.5pt] (30.5,-3.5) -- (19.3,-6.4);
+  \node[font=\scriptsize,anchor=west,align=left] at (30.5,-3.5) {column $\kappa=d$: $\ell$-periodic\\ on $[\tau_0,n-2]$};
+  \draw[-{Stealth[length=1.5mm]},ink,line width=0.5pt] (30.5,-9.6) -- (22.4,-8.6);
+  \node[font=\scriptsize,anchor=west,align=left] at (30.5,-10.0) {$\mathbf b(\tau_1)=\mathbf b(\tau_2)$,\\ $\ell\mid h=\tau_2-\tau_1$};
+  \draw[-{Stealth[length=1.5mm]},ink,line width=0.5pt] (30.5,-13.3) -- (22.4,-14.5);
+  \draw[-{Stealth[length=1.5mm]},ink,line width=0.5pt] (31.0,-20.6) -- (22.4,-15.6);
+  \node[font=\scriptsize,anchor=west,align=left] at (31.0,-21.0) {then $\mathbf b(n-1-h)=\Fq^d$:\\ $h$ steps too early};
+  % legend
+  \node[anchor=north west,font=\scriptsize,align=left] at (0,-24.2) {%
+    \swatch{rgRefl2}\,the band $\kappa<d$\quad \swatch{stB}\,\swatch{stA}\,\swatch{stC}\,the column $\kappa=d$,
+    shaded by $\tau\bmod\ell$\quad \swatch{stF}\,$\Fq$};
+\end{tikzpicture}

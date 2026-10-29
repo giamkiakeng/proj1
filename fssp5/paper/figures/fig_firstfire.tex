@@ -1,0 +1,20 @@
+%% Figure: the relative time of the first F on the lines of lengths 15..60 of the five rules of
+%% Proposition 6.3 (data from figures.py), with the bound min(T, n-2) of the proposition.
+\begin{tikzpicture}
+  \begin{groupplot}[group style={group size=5 by 1,horizontal sep=0.32cm,y descriptions at=edge left},
+      scale only axis,width=2.42cm,height=2.6cm,xmin=13,xmax=62,ymin=0,ymax=25,
+      xtick={15,30,45,60},ytick={0,5,10,15,20,25},tick label style={font=\scriptsize},
+      label style={font=\small},title style={font=\small,yshift=-0.8ex},axis lines=left,tick align=outside,
+      xlabel={length $n$}]
+    \def\panel#1#2#3{%
+      \nextgroupplot[title={$#2$, $T=#3$}]
+      \addplot[gEarly,line width=2.4pt,domain=15:60,samples=46] {min(#3,x-2)};
+      \addplot[only marks,mark=*,mark size=0.95pt,stC] table[x=n,y=tau] {figures/firstfire_#1.dat};}
+    \panel{delta14}{\delta_{14}}{10}
+    \panel{delta14b}{\delta_{14}^{\mathrm b}}{14}
+    \panel{delta14c}{\delta_{14}^{\mathrm c}}{22}
+    \panel{delta14d}{\delta_{14}^{\mathrm d}}{12}
+    \panel{delta14e}{\delta_{14}^{\mathrm e}}{14}
+  \end{groupplot}
+  \node[font=\small,rotate=90,anchor=south] at ([xshift=-0.75cm]group c1r1.west) {$\tau$ of the first $\Fq$};
+\end{tikzpicture}

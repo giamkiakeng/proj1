@@ -10,6 +10,10 @@
 \usepackage{xcolor}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,calc,patterns,shapes.geometric}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepgfplotslibrary{groupplots}
+\usepackage{graphicx}
 \usepackage[font=small,labelfont=bf]{caption}
 \usepackage{titlesec}
 \usepackage{fancyhdr}
@@ -17,6 +21,7 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage[capitalise,noabbrev]{cleveref}
 \usepackage{microtype}
+\usepackage{placeins}
 
 % Headings as in the journal's notes for contributors: first level in bold capitals,
 % second level in bold title case, third level in title case followed by a colon.
@@ -68,7 +73,29 @@
 \definecolor{rgRefl2}{HTML}{E4C8AE}
 \definecolor{ink}{HTML}{111111}
 \definecolor{grid}{HTML}{8A8A8A}
+% Comparison of two diagrams: same state (light) and different states (dark).
+\definecolor{diffSame}{HTML}{DCE6F1}
+\definecolor{diffDiff}{HTML}{8C3B12}
+% Constraint classes of the formulas: complete lines, early rows, return chains,
+% cones of the right ends, and cells about which nothing is asserted.
+\definecolor{gFull}{HTML}{4A75A3}
+\definecolor{gEarly}{HTML}{B4C7DC}
+\definecolor{gReturn}{HTML}{6B3519}
+\definecolor{gCone}{HTML}{F2C48D}
+\definecolor{gNone}{HTML}{F1F1F1}
+\definecolor{stUnknown}{HTML}{D9D9D9}
+% Backward dependency cones in a reflected triangle.
+\definecolor{coneR}{HTML}{F2C48D}
+\definecolor{coneM}{HTML}{A9C1DA}
+\tikzset{
+  coneRight/.style={fill=coneR},
+  coneMid/.style={fill=coneM,postaction={pattern=north east lines,pattern color=ink!55}},
+  coneBoth/.style={fill=coneR,postaction={pattern=north east lines,pattern color=ink!55}},
+  coneNone/.style={fill=gNone}}
 
+% The staircase that separates the cells (t,i) with t+i<=m from those with t+i>m, for the cells
+% 1,...,k, as a path fragment; the cell (t,i) is the unit square [i-1,i]x[-t-1,-t].
+\newcommand{\staircase}[2]{(0,-#1) \foreach \i in {1,...,#2} { -- (\i,-#1+\i-1) -- (\i,-#1+\i) }}
 \newcommand{\swatch}[1]{\tikz[baseline=-0.6ex,x=1cm,y=1cm]\filldraw[fill=#1,draw=grid,line width=0.3pt] (0,-0.09) rectangle (0.24,0.15);}
 
 \title{Two barriers for minimal-time firing squads,\\ with applications to four and five states}
