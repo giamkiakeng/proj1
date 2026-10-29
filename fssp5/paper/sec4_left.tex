@@ -1,11 +1,11 @@
 %% ---------------------------------------------------------------------------
 \section{The Left End}\label{sec:left}
 
-Near the left border, the reflected triangle is produced by a band of
-anti-diagonals that follow the echo of the right end, the \emph{chains}. The
-first few chains form a finite automaton that reads the two input
-anti-diagonals and must fire the cells near the left border exactly when the
-echo reaches them. If the input anti-diagonals were periodic over a long
+Near the left border, the reflected triangle is produced by the anti-diagonals
+$t+i=2n-1$, $t+i=2n$, $\dots$, which follow the echo of the right end; we call
+them \emph{chains}. The first few chains form a finite automaton that reads the
+two input anti-diagonals $t+i=2n-3$ and $t+i=2n-2$ and must fire the cells near
+the left border exactly when the echo reaches them. If the input anti-diagonals were periodic over a long
 stretch, this automaton would repeat a state and fire too early
 (\cref{lem:left}). Applied to all lengths at once, this excludes periodic
 wedges at the left border of the half-line (\cref{thm:left}).
@@ -34,10 +34,15 @@ u_c(y)=\delta\bigl(u_{c-2}(y),\,u_{c-1}(y+\varepsilon_c),\,u_c(y+1)\bigr),
 \end{equation}
 with $u_0(y)=C_\infty(2n-2-y,y)$ and $u_{-1}(y)=C_\infty(2n-2-y,y-1)$. Here
 $u_c(y)$ is the cell $y+\lfloor c/2\rfloor$ at time $2n-2+\lceil c/2\rceil-y$;
-it is $\Fq$ if $\lceil c/2\rceil=y$ and not $\Fq$ if $\lceil c/2\rceil<y$. So
-each \emph{slice} $(u_1(y),u_2(y),\dots)$ is computed from the slice $y+1$ and
-the two input cells $u_{-1}(y)$ and $u_0(y)$: reading the input anti-diagonals
-from right to left, the slices form a finite automaton. A word $w$ on an
+it is $\Fq$ if $\lceil c/2\rceil=y$ and not $\Fq$ if $\lceil c/2\rceil<y$. The
+\emph{slice} $y$ is the sequence $(u_1(y),u_2(y),\dots)$. Its cells form a
+staircase that starts just below the input cells $u_{-1}(y)$ and $u_0(y)$, at
+the cell $y$ of chain $1$, and descends to the right: from $u_c(y)$ to
+$u_{c+1}(y)$ the position increases by one if $c$ is odd, and the time
+increases by one if $c$ is even. By \eqref{eq:slices}, each slice is computed
+from the slice $y+1$ and the two input cells $u_{-1}(y)$ and $u_0(y)$: reading
+the input anti-diagonals from right to left, the slices form a finite
+automaton. A word $w$ on an
 integer interval $I$ is \emph{$\ell$-periodic} if $w(y+\ell)=w(y)$ whenever
 $y,y+\ell\in I$.
 
@@ -122,7 +127,7 @@ $(2n-2-y,y)$ and $(2n-3-y,y)$ satisfy $y\le\alpha(2n-3-y)$, so they lie in
 $\Omega$ as soon as $2n-3-Y_n\ge t_0$, that is, for all large $n$. A step of
 $\ell$ positions along an anti-diagonal is the step from $(t,i)$ to
 $(t-\ell,i+\ell)$, so the words of \cref{lem:left} are $\ell$-periodic on
-$[s,Y_n]$ and $[s,Y_n-1]$. As $Y_n\ge\frac{2\alpha}{1+\alpha}n-4$, for large
+$[s,Y_n]$ and $[s,Y_n-1]$. As $Y_n\ge2\alpha n/(1+\alpha)-4$, for large
 $n$ the number $Y:=\min(Y_n,n-s)$ satisfies $Y-s>(k-1)^{2s}\ell$, which
 contradicts \cref{lem:left}.
 \end{proof}
@@ -135,10 +140,11 @@ configuration $C_\infty(t,1)\cdots C_\infty(t,t+1)$ at the time
 $t=t_1+r+\nu P$ is $w_0z_1^{a_1+\nu D_1}w_1\cdots z_m^{a_m+\nu D_m}w_m$. In
 words: from some time on, the half-line consists of finitely many periodic
 regions separated by signals of rational speeds; on signals in one-dimensional
-cellular automata see~\cite{MazoyerTerrier99}. The half-line of $\delta_{12}$
-in \cref{fig:halflines} looks like this: a front, a region of $\Gq$'s behind it
-and, beyond a boundary of speed $1/3$, a region that alternates between $\Aq$
-and $\Lq$.
+cellular automata see~\cite{MazoyerTerrier99}. In simulations, the half-line of
+the five-state rule $\delta_{12}$ of \cref{sec:five} looks like this
+(\cref{fig:halflines}): the cells between roughly the cell $t/3$ and the front
+are in state $\Gq$, and the cells between the left border and roughly the cell
+$t/3$ alternate between $\Aq$ and $\Lq$, both in time and in space.
 
 \begin{corollary}\label{cor:regular}
 The half-line of a minimal-time solution is not eventually regular.

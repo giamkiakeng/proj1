@@ -11,7 +11,9 @@ certificate for the reduction can be computed by simulating the half-line.
 \subsection{Finitely Many Early Rows}
 
 For $T\ge0$ let $E(T):=\{(\tau,\kappa):0\le\kappa\le\tau\le T\}$ be the first
-$T+1$ rows of a reflected triangle. If $n\ge T+2$, then $E(T)\subseteq R_n$,
+$T+1$ rows of a reflected triangle, that is, its cells at the relative times
+$0,\dots,T$, during the first $T+1$ steps after the front reaches the right
+end. If $n\ge T+2$, then $E(T)\subseteq R_n$,
 and no cell of $E(T)$ lies in the firing row $\tau=n-1$.
 
 \begin{lemma}[early rows]\label{lem:early}
@@ -111,9 +113,11 @@ $R_n(\kappa,\kappa)\ne C_\infty(n-1+\kappa,n-\kappa)$ for $2\kappa\le n-1$.
 We write $\G_k(T,N_1)$ for $\G_k(T,N_1,T+1)$, in which (G5) is void.
 \end{definition}
 
-Condition (G2) says that no cell of the lines of lengths $T+2,\dots,N_1$ fires
-up to the relative time $\tau=T$, and (G3) is the return chain of
-\cref{lem:return}, restricted to the relative times $\tau\le T$. Condition (G5)
+Condition (G1) asks for the complete lines of lengths up to $T+1$. Condition
+(G2) says that no cell of the lines of lengths $T+2,\dots,N_1$ fires up to the
+relative time $\tau=T$, and (G3) is the return chain of \cref{lem:return},
+restricted to the relative times $\tau\le T$. Condition (G4) says that the
+half-line does not fire on the cells with $t+i\le 2N_1$. Condition (G5)
 concerns the backward dependency cone $\{(\tau,\kappa)\in R_n:\tau+\kappa\le
 n-1\}$ of the firing cell $(n-1,0)$; by the local definition of $C_n$, its
 cells are defined even if a cell outside the cone fires earlier.

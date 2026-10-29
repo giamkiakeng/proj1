@@ -54,6 +54,10 @@ Moreover, $\Psi(J,m;\tau,\kappa)$ depends only on the input cells and the
 borders in the backward dependency cone of $(\tau,\kappa)$.
 \end{lemma}
 
+In words: the reflected triangle is computed row by row by the local rule,
+starting from the input word and the two borders, and each of its cells depends
+only on the input cells from which information can reach it.
+
 \begin{proof}
 Define $\Psi(J,m;\tau,\kappa)$ for $0\le\kappa\le\tau\le m-1$ by induction on
 $\tau$ as $\delta(x_{\kappa+1},x_\kappa,x_{\kappa-1})$, where each $x_{\kappa'}$
@@ -70,7 +74,9 @@ second.
 
 For $(\tau,\kappa)\in R_n$ let $\mathrm{cone}_n(\tau,\kappa)$ be the set of input
 cells that are reached from $(\tau,\kappa)$ by repeatedly passing to
-predecessors, stopping at input cells and borders.
+predecessors, stopping at input cells and borders. For the right end at the
+firing time, $(\tau,\kappa)=(n-1,0)$, this cone covers about the right half of
+the two input anti-diagonals.
 
 \begin{lemma}[cone of the right end]\label{lem:cone}
 For $n\ge2$, the cone $\mathrm{cone}_n(n-1,0)$ avoids the left border. It
@@ -120,8 +126,8 @@ theorem turns this observation into a bound on where the periodicity can start.
 
 \subsection{Depth Rows and the Speed-1/3 Barrier}
 
-In the frame of the front, the half-line is a stack of rows parallel to the
-front. Let
+It is convenient to locate the cells of the half-line by their distance behind
+the front, the cell $(t,t+1)$. Let
 \[
 \Phi_t(j):=C_\infty(t,\,t+1-j)\qquad(0\le j\le t)
 \]
@@ -133,8 +139,10 @@ The local rule becomes
 \end{equation}
 with $\Phi_t(-1)=\Phi_t(-2)=\Lq$ (the quiescent cells ahead of the front) and
 $\Phi_t(t+1)=\ast$ (the left border). So information only travels to larger
-depths, and the \emph{depth row} $t\mapsto\Phi_t(j)$ starts at the left border
-at time $j$ and then moves to the right at speed one. In these coordinates,
+depths. The \emph{depth row} $j$ is the sequence $t\mapsto\Phi_t(j)$, $t\ge j$:
+it consists of the cells $(t,t+1-j)$, so it starts in cell $1$ at time $j$ and
+then advances by one cell per step, at distance $j$ behind the front. In these
+coordinates,
 \[
 J_n(\kappa)=\bigl(\Phi_{n-3+\kappa}(2\kappa-2),\ \Phi_{n-2+\kappa}(2\kappa-1)\bigr):
 \]
@@ -145,7 +153,7 @@ $2\kappa-2$ and $2\kappa-1$.
 Let $\delta$ be a minimal-time solution. Every depth row $t\mapsto\Phi_t(j)$ is
 eventually periodic; let $\theta(j)$ be the least $t_0\ge j$ such that it is
 periodic on $[t_0,\infty)$. For every $n\ge4$ there is a depth $j\le n$ with
-$\theta(j)>n+\tfrac{j}{2}-\tfrac52$. Hence
+$\theta(j)>n+j/2-5/2$. Hence
 $\limsup_{j\to\infty}\theta(j)/j\ge 3/2$.
 \end{theorem}
 
@@ -167,31 +175,37 @@ moves each input cell along its depth row by $P$ steps, so $J_{n+P}=J_n$ on the
 cone, which contradicts \cref{lem:pumping}. Hence some input cell of the cone,
 of depth $j\le n$, satisfies $\theta(j)>n-3+\kappa$. For a lower cell
 $\kappa=(j+2)/2$ and for an upper cell $\kappa=(j+1)/2$, so in both cases
-$\theta(j)>n+\frac{j}{2}-\frac52$.
+$\theta(j)>n+j/2-5/2$.
 
 Suppose now that $\limsup_{j\to\infty}\theta(j)/j<3/2$. Then there are
-$\alpha<\tfrac32$ and $\beta$ with $\theta(j)\le\alpha j+\beta$ for all $j$;
-since $\theta(j)\ge j$, we may take $\alpha\ge\tfrac12$. For all $j\le n$,
+$\alpha<3/2$ and $\beta$ with $\theta(j)\le\alpha j+\beta$ for all $j$;
+since $\theta(j)\ge j$, we may take $\alpha\ge1/2$. For all $j\le n$,
 \[
-\theta(j)-\tfrac{j}{2}\le(\alpha-\tfrac12)j+\beta\le(\alpha-\tfrac12)n+\beta,
+\theta(j)-\frac{j}{2}\le\Bigl(\alpha-\frac12\Bigr)j+\beta\le\Bigl(\alpha-\frac12\Bigr)n+\beta,
 \]
-and since $\alpha-\tfrac12<1$, this is at most $n-\tfrac52$ for $n$ large. This
-contradicts the first part.
+and since $\alpha-1/2<1$, the right-hand side is at most $n-5/2$ for $n$ large.
+Then $\theta(j)\le n+j/2-5/2$ for all $j\le n$, which contradicts the first
+part.
 \end{proof}
 
-In the space-time diagram, depth row $j$ becomes periodic at the cell
-$(\theta(j),\theta(j)+1-j)$, and if $\theta(j)\ge(\tfrac32-\varepsilon)j$, this
-cell lies to the right of the line $i=\frac{1-2\varepsilon}{3-2\varepsilon}\,t$
-(up to an additive constant), whose slope tends to $1/3$ as
-$\varepsilon\to0$. So infinitely many rows parallel to the front become
-periodic only after crossing the line $i=t/3$, up to an arbitrarily small angle:
-the transient part of the half-line, which starts at the left border, must
-reach this line.
+Depth row $j$ becomes periodic at the cell $(\theta(j),\theta(j)+1-j)$. If
+$\theta(j)\ge(3/2-\varepsilon)j$, then $j\le\theta(j)/(3/2-\varepsilon)$, and the
+position of this cell satisfies
+\[
+\theta(j)+1-j\ \ge\ \frac{1-2\varepsilon}{3-2\varepsilon}\,\theta(j)+1,
+\]
+where the factor $(1-2\varepsilon)/(3-2\varepsilon)$ tends to $1/3$ as
+$\varepsilon\to0$. So, for infinitely many $j$, depth row $j$ becomes periodic
+only at a time $t$ at which it is close to the cell $t/3$ or beyond: along
+these rows, the transient part of the half-line, which starts at the left
+border, reaches roughly the cell $t/3$ at time $t$. This is the sense of the
+name ``speed-$1/3$ barrier''.
 
 \begin{remark}[an interpretation]\label{rem:division}
 In the classical constructions, the line is divided recursively, and the first
 division point is where a signal sent by the general meets the echo of the right
-end. A signal of speed $v$ that leaves the general at time $0$ meets the echo,
+end; a \emph{signal} of speed $v$ is a pattern that moves by $v$ cells per
+step. A signal of speed $v$ that leaves the general at time $0$ meets the echo,
 which leaves the right end at time $n-1$ at speed one, at the cell
 $v(2n-1)/(1+v)$. If, as for the two rules simulated below, this signal is the
 boundary between the transient and the periodic parts of the depth rows, then
@@ -215,10 +229,11 @@ signal.
 \input{figures/fig_halflines}
 \caption{The half-lines of Mazoyer's six-state solution (left) and of the
 five-state rule $\delta_{12}$ (right) for $0\le t\le90$. The dashed lines are
-$i=t/2$ and $i=t/3$. The rows parallel to the front become periodic to the
-right of the line $i=t/2$ for Mazoyer's solution and of the line $i=t/3$ for
-$\delta_{12}$ (\cref{rem:division}); by \cref{thm:third}, no minimal-time
-solution can do this to the left of the line $i=t/3$, asymptotically. To the
+$i=t/2$ and $i=t/3$. The depth rows, that is, the cells at a fixed distance
+behind the front, become periodic to the right of the line $i=t/2$ for
+Mazoyer's solution and of the line $i=t/3$ for $\delta_{12}$
+(\cref{rem:division}); by \cref{thm:third}, no minimal-time solution can do
+this to the left of the line $i=t/3$, asymptotically. To the
 left of the line $i=t/3$, the half-line of $\delta_{12}$ alternates between
 $\Aq$ and $\Lq$, periodically in time and space. \Cref{thm:left} excludes such a
 wedge at the left border, and \cref{cor:germ12} makes this explicit for the

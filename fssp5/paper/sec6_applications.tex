@@ -11,9 +11,11 @@ kind of evidence is stated for each result and summarized in
 \subsection{Method}\label{sec:method}
 
 \paragraph{Encodings}
-The formula $\MT_k(\mathcal N;M,N')$ has one-hot variables for the entries of a
-$k$-state rule table, for the cells of $C_\infty$ with $t+i\le M$ and for the
-cells of $R_n$ with $n\in\mathcal N$. Its clauses state the local rule, that no
+The formula $\MT_k(\mathcal N;M,N')$ (MT for minimal time) has one Boolean
+variable for each possible value of each entry of a $k$-state rule table, of
+each cell of $C_\infty$ with $t+i\le M$, and of each cell of $R_n$ with
+$n\in\mathcal N$; clauses require that exactly one value is chosen for each
+entry and each cell. Its clauses state the local rule, that no
 half-line cell is $\Fq$, that the line of length $n$ is synchronized at time
 $2n-2$ for every $n\in\mathcal N$, the return chains of \cref{lem:return} for
 $n,n+1\in\mathcal N$, and $\PUMP(n,n')$ for $4\le n<n'\le N'$; the formula
@@ -55,11 +57,11 @@ No four-state rule satisfying \eqref{eq:quiescence}
 \begin{enumerate}[(i)]
 \item synchronizes all lines of lengths $2,\dots,9$ in minimal time;
 \item satisfies $\G_4(6,10)$: the lines of lengths $2,\dots,7$ complete and,
-for the lines of lengths $8$, $9$ and $10$, the first seven rows and the return
-chains;
+for the lines of lengths $8$, $9$ and $10$, the first seven rows after the
+reflection, with the return chains on these rows;
 \item satisfies $\G_4(4,10,10)$: the lines of lengths $2,\dots,5$ complete and,
-for the lines of lengths $6,\dots,10$, the first five rows, the return chains
-and the right ends.
+for the lines of lengths $6,\dots,10$, the first five rows after the reflection,
+with the return chains on these rows, and the right ends.
 \end{enumerate}
 In particular, no four-state minimal-time solution exists.
 \end{theorem}
@@ -103,10 +105,15 @@ because none of the $27$ partial rules uses the neighbourhood $(\ast,\Lq,\Lq)$.
 (b) The solver finds a model of each formula, and each model is re-simulated.
 \end{proof}
 
-So in part (ii) of \cref{thm:four} neither $T$ nor $N_1$ can be lowered and
-(G3) cannot be dropped; in part (iii) neither $T$ nor $C$ can be lowered, even
-with more early rows, and neither the early rows nor the right ends suffice on
-their own.
+In words: the formula of part (ii) of \cref{thm:four} becomes satisfiable if
+one row is removed, even when the lines up to length $30$ are added
+($\G_4(5,30)$), if the line of length $10$ is removed ($\G_4(6,9)$), or if the
+return chains are removed. The formula of part (iii) becomes satisfiable if
+the right end of the line of length $10$ is removed, even when the early rows
+of the lines up to length $30$ are added ($\G_4(4,30,9)$), or if one row is
+removed, even when the right ends of the lines up to length $12$ are added
+($\G_4(3,30,12)$). The right ends alone, without the early rows and the return
+chains, do not suffice either.
 
 \subsection{Five States: Rules for the Lengths Up to Fourteen}\label{sec:five}
 
@@ -171,8 +178,10 @@ elementary cellular automaton $22$.}
 \label{fig:delta14}
 \end{figure}
 
-\Cref{fig:delta14} shows how $\delta_{14}$ fails. For $3\le t<1500$ its
-half-line takes the values $\Lq,\Gq$ at cell $1$, $\Lq,\Aq$ at cell $2$ and
+For example, $\delta_{14}$ synchronizes the line of length $14$ at time $26$,
+whereas on the line of length $15$ the cells $13$, $14$ and $15$ fire at time
+$22$, eight steps after the front has reached the right end and six steps too
+early (\cref{fig:delta14}). For $3\le t<1500$ its half-line takes the values $\Lq,\Gq$ at cell $1$, $\Lq,\Aq$ at cell $2$ and
 $\Lq,\Bq$ at the cells $i\ge3$, and $\delta_{14}$ restricted to $\{\Lq,\Bq\}^3$
 is the elementary rule $22$~\cite{Wolfram83}. In the simulated ranges, neither
 barrier excludes this half-line: $\PUMP(n,n')$ holds for $4\le n<n'\le800$, and
@@ -234,12 +243,12 @@ with $t+i\le78$, where they use the $22$ neighbourhoods
 \texttt{*GL>A GLL>G *AG>B AGL>L *BL>A BLG>L LGL>B *AL>G ALB>A LBG>L BGL>G}\\
 \texttt{*GA>A GAL>L ALG>B LGG>G GGL>G BGG>L GGG>G ALL>A LLG>L ALA>A LAL>L}
 \end{center}
-besides $(\Lq,\Lq,\Lq)$; here \texttt{xyz>d} means $\delta(x,y,z)=d$. This
-half-line consists of a front, a region of $\Gq$'s behind it and, beyond a
-boundary of speed $1/3$, a region that alternates between $\Aq$ and $\Lq$,
-periodically in time and space (\cref{fig:halflines}). By \cref{thm:left} no
-minimal-time solution has such a half-line, and \cref{lem:left} gives an
-explicit length.
+besides $(\Lq,\Lq,\Lq)$; here \texttt{xyz>d} means $\delta(x,y,z)=d$. On these
+cells, the cells between roughly the cell $t/3$ and the front are in state
+$\Gq$, and the cells between the left border and roughly the cell $t/3$
+alternate between $\Aq$ and $\Lq$, periodically in time and space
+(\cref{fig:halflines}). By \cref{thm:left} no minimal-time solution has such a
+half-line, and \cref{lem:left} gives an explicit length.
 
 \begin{corollary}\label{cor:germ12}
 No five-state rule that has the $22$ transitions above synchronizes the line of

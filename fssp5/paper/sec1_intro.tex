@@ -47,16 +47,20 @@ cheap enough to check. This paper proves such conditions for every number of
 states and measures how far they reach for four and five states.
 
 \paragraph{The idea}
-Until the echo of its right end comes back, a line cannot tell that it is
-finite: it follows the infinite \emph{half-line}, which is started in the same
-way but has no right end (\cref{lem:agree}). \Cref{fig:line} shows this for
-Mazoyer's solution. A minimal-time solution therefore consists of a single
-space-time diagram of the half-line, shared by all lengths, and, for each length
-$n$, a \emph{reflected triangle} next to the right end, in which the line reacts
-to its border. Everything that the reflected triangle of the line of length $n$
-learns from the half-line is written on two anti-diagonals of the half-line
-diagram (\cref{lem:determinacy}). Conditions on the half-line alone are cheap
-to check and apply to all lengths at once.
+Write $(t,i)$ for the cell $i$ at time $t$. The \emph{half-line} is started like
+a line, with the general in cell $1$, but has no right end. Until the echo of
+its right end comes back, a line cannot tell that it is finite: the line of
+length $n$ and the half-line agree on every cell $(t,i)$ with $t+i\le2n-2$
+(\cref{lem:agree}; \cref{fig:line} shows this for Mazoyer's solution). The line
+can therefore differ from the half-line only on the cells $(t,i)$ with
+$t+i\ge2n-1$ and $t\le2n-2$, which form a triangle next to the right end, the
+\emph{reflected triangle}. So a minimal-time solution consists of one
+space-time diagram of the half-line, shared by all lengths, and, for each
+length $n$, a reflected triangle in which the line reacts to its right end.
+Everything that the reflected triangle of the line of length $n$ learns from
+the half-line is contained in the cells of the half-line with $t+i=2n-3$ or
+$t+i=2n-2$ (\cref{lem:determinacy}). Conditions on the half-line alone are
+therefore cheap to check, and they apply to all lengths at once.
 
 \begin{figure}[t]
 \centering
@@ -77,39 +81,49 @@ corresponding cell of the half-line (\cref{lem:return}).}
 \paragraph{Results}
 Our main results concern minimal-time solutions with any number of states.
 \begin{enumerate}[(1)]
-\item \emph{The speed-$1/3$ barrier} (\cref{thm:third}). Behind the front of
-  the half-line, each row parallel to the front starts at the left border and
-  becomes periodic after a transient. Infinitely many of these rows become
-  periodic only after crossing the line $i=t/3$, up to an arbitrarily small
-  angle. The proof rests on a pumping lemma (\cref{lem:pumping}): two reflected
-  triangles that receive the same input on the cone of their right end fire it
-  at the same relative time, which is impossible for lines of different
-  lengths. In the known constructions, the boundary of the periodic part is the
+\item \emph{The speed-$1/3$ barrier} (\cref{thm:third}). The front of the
+  half-line is the cell $(t,t+1)$ reached by the general's signal at time $t$.
+  For $j\ge0$, the cells $(t,t+1-j)$ with $t\ge j$, which stay at distance $j$
+  behind the front, form the \emph{depth row} $j$. In a minimal-time solution
+  every depth row is eventually periodic in time; let $\theta(j)$ be the time
+  from which depth row $j$ is periodic. We show that for every $\varepsilon>0$
+  there are infinitely many $j$ with $\theta(j)\ge(3/2-\varepsilon)j$. At that
+  time, depth row $j$ is at the cell $\theta(j)+1-j$, which is close to
+  $\theta(j)/3$ or beyond. So, along these depth rows, the part of the
+  half-line that is not yet periodic, which starts at the left border, reaches
+  roughly the cell $t/3$ at time $t$. The proof rests on a pumping lemma (\cref{lem:pumping}): if the
+  reflected triangles of two lines of different lengths received the same
+  values on the cells that determine their right ends, these ends would fire at
+  the same number of steps after the front reaches them, which is impossible. In the known constructions, the boundary of the periodic part is the
   signal that meets the echo at the first division point of the line; read in
   this way, the barrier says that this point is asymptotically never in the half
   of the line next to the general (\cref{rem:division}). In simulations, the
   half-line of the five-state rule $\delta_{12}$ of \cref{sec:five}, which
   synchronizes the lines of lengths $2,\dots,12$, meets the barrier exactly.
 \item \emph{The left-border barrier} (\cref{thm:left,cor:regular}). The
-  half-line is never periodic in time and space on a wedge at its left border;
-  in particular it is never \emph{eventually regular}, that is, it never
-  consists of finitely many periodic regions separated by signals of rational
-  speeds. The reason is that the cells near the left border are fired by a
-  finite automaton that reads the half-line along anti-diagonals, and a long
-  periodic input would make it fire too early (\cref{lem:left}). The half-line
+  half-line is never periodic in time and space on a wedge
+  $\{(t,i):s\le i\le\alpha t,\ t\ge t_0\}$ at its left border; in particular it
+  is never \emph{eventually regular}, that is, it never consists of finitely many
+  periodic regions separated by signals of rational speeds. The reason is that
+  the cells near the left border are fired by a finite automaton that reads the
+  half-line along the cells with $t+i=2n-3$ and $t+i=2n-2$, and a long periodic
+  input would make it fire too early (\cref{lem:left}). The half-line
   of $\delta_{12}$, which meets the speed-$1/3$ barrier exactly, is excluded by
   this one (\cref{cor:germ12}).
-\item \emph{Finitely many early rows} (\cref{cor:reduce}). The first rows of
-  the reflected triangles of all lengths take only finitely many forms, which a
-  certificate computed from the half-line determines. This turns the condition
-  that no reflected triangle fires early in its first rows into finitely many
+\item \emph{Finitely many early rows} (\cref{cor:reduce}). The front reaches
+  the right end of the line of length $n$ at time $n-1$. For a fixed $T$, the
+  cells of the reflected triangles at the times $n-1,\dots,n-1+T$, which we call
+  the first $T+1$ rows, take only finitely many forms over all lengths $n$, and a
+  certificate computed from the half-line determines them. This turns the
+  condition that no line fires during these $T+1$ steps into finitely many
   checks (\cref{lem:G}).
 \end{enumerate}
 With these conditions and satisfiability solvers whose negative answers are
 certified by independently checked proofs, we obtain the following results.
 Four states are excluded by the lines of lengths $2,\dots,5$ together with
-partial information on the lines of lengths $6,\dots,10$, and this is sharp in
-several directions (\cref{thm:four,prop:sharp}). Five five-state rules
+the first five rows, the return chains and the right ends of the lines of
+lengths $6,\dots,10$, and this is sharp in several directions
+(\cref{thm:four,prop:sharp}). Five five-state rules
 synchronize exactly the lines of lengths $2,\dots,14$
 (\cref{prop:nearmiss}), so the lines of lengths $2,\dots,14$ alone cannot
 exclude five states. On the cells of its half-line with $t+i\le78$, every
