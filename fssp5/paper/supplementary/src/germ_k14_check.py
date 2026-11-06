@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""germ_k14_check.py -- independent check of the half-line part of Proposition 5.4 of the note.
+"""germ_k14_check.py -- independent check of the half-line part of Proposition 6.4 of the paper.
 
 For each of the 14 germs of complexity <= 14 that survive the completion test (the germs of
 results/germs/germs_K14.txt not in K14_refuted10.txt), simulate the half-line from the germ alone

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Soundness test of the encoding (note, Section 5).
+"""Soundness test of the encoding (Section 6.1 of the paper, check (2), and Table 2).
 
 Mazoyer's six-state rule (results/mazoyer6.txt, extracted from Duprat's Coq development by
 mazoyer_from_coq.py) synchronizes the lengths n >= 3, so it must satisfy MT_6({3,...,N}; M, NP):
 the formula of gencnf.build with the half-line to anti-diagonal M, the reflected triangles and
 return chains of the lengths 3..N and PUMP(n,n') for 4 <= n < n' <= NP.  The rule table is fixed
-by unit assumptions.  Tested without symmetry breaking (as every formula of the note) and, for
+by unit assumptions.  Tested without symmetry breaking (as every formula of the paper) and, for
 each renaming of the auxiliary states A, B, C, with the optional symmetry breaking (exactly one
 renaming, the first-occurrence order, must be satisfiable).
 

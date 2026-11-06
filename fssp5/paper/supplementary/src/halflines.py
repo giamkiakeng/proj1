@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-halflines.py -- two observations on half-lines used in Section 5 of the note.
+halflines.py -- two observations on half-lines used in Sections 6.3 and 6.4 of the paper.
 
   values RULE T      for every cell i, the set of states of C_inf(t, i), 3 <= t < T (cells 1, 2,
                      and all cells i >= 3 together), and, if the cells i >= 3 use exactly two

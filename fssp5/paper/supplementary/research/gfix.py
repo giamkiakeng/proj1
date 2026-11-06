@@ -9,7 +9,7 @@ necessary conditions on the remaining transitions:
 
   full n     all cells of R_n (t + i >= 2n-1, t <= 2n-2): the line of length n fires exactly at 2n-2
   cone n:h   the cells on which the right h+1 cells at time 2n-2 depend (h = 0: the right end,
-             Lemmas 3.1, 3.2 of the note)
+             Lemmas 3.1, 3.2 of the paper)
   band n:h   the anti-diagonals t + i = 2n-1 .. 2n-2+h (chains 1..h), which decide cells 1..h
   early n:h  the cells of R_n at relative times tau = t-(n-1) <= h (h < n-1: no cell may fire)
   reset n:h:w  early n:h, and every cell with kappa <= tau - w (behind an echo of width w) is L,
@@ -17,7 +17,7 @@ necessary conditions on the remaining transitions:
   mid n      the cone of the middle firing cell (2n-2, floor(n/2)+1)
 
 Cells at time 2n-2 must be F, all other encoded cells must not be F.  The return chain
-(t + i = 2n-1) must differ from C_inf (Lemma 2.3).  Unknowns: the transitions not in the germ.
+(t + i = 2n-1) must differ from C_inf (Lemma 2.4).  Unknowns: the transitions not in the germ.
 
 usage: gfix.py GERMFILE|FREE [k=5] spec... [--fix RULEFILE] [--cnf OUT] [--solve kissat|cadical] [--timeout S]
    spec: full:2-14  cone:15-30  cone:15:7  band:15-80:4   (lengths a-b or a,b,c;
@@ -31,7 +31,7 @@ import sys
 import time
 
 STATES = 'LGABCDE'
-# lengths n for which the return-chain condition (Lemma 2.3, which needs line n+1 as well) is omitted
+# lengths n for which the return-chain condition (Lemma 2.4, which needs line n+1 as well) is omitted
 NORC = set(int(x) for x in os.environ.get('GFIX_NORC', '').split(',') if x)
 
 

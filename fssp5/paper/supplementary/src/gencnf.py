@@ -16,12 +16,16 @@ triangle  R_n = {(t,i) : 1<=i<=n, 2n-1-i <= t <= 2n-3}  carry variables.
 State codes: L=0, G=1, aux=2..k-2, F=k-1.  Working states W = {0..k-2}.
 The border symbol is coded BND = -1.
 
-Optional extras (all logically implied or symmetry breaking; see Section 5 of the note):
-  --diff       C_n(2n-1-i,i) != C_inf(2n-1-i,i)            (implied)
-  --symbreak   auxiliary states appear in C_inf in increasing order
-               of first occurrence (time-major, left to right)
+Options (the formula mt4_9 of the paper is written with the defaults; README.md gives its
+command line):
+  --nodiff     omit the return chains C_n(2n-1-i,i) != C_inf(2n-1-i,i) (implied, Lemma 2.4)
+  --nosym      omit the symmetry breaking for k >= 5: auxiliary states appear in C_inf in
+               increasing order of first occurrence (time-major, left to right); for k = 4
+               there is no symmetry breaking
   --leftq      additionally require delta(*,L,L) = L
   --rev        redundant reverse clauses  y=d & nbhd -> T[nbhd]=d
+The formulas of Propositions 6.4 and 6.6 are written by germcert.py, balzer.py and balzer_k.py,
+which call build() with symbreak=False.
 """
 import argparse
 import itertools

@@ -1,4 +1,4 @@
-Certificate for the germs of Proposition 5.4 of the note (complexity <= 14)
+Certificate for the germs of Proposition 6.4 of the paper (complexity <= 14)
 ==========================================================================
 
 Completion test for the lengths 2..10 (half-line to anti-diagonal 78, pumping pairs to 39,
@@ -14,6 +14,6 @@ The LRAT file is regenerated deterministically by the command below (CaDiCaL 3.0
 
 germs_K14.txt sha256 8493d2bfcaf922f52b4700d25056a25a76b776c097abbd428e6bd13456bbffb5
 
-Half-line argument for the 14 survivors (src/germext.c; Lemma 4.1 of the note on the half-line
+Half-line argument for the 14 survivors (src/germext.c; Lemma 4.1 of the paper on the half-line
 determined by the germ):
   ./germext 5 3300 3 12 < germs_K14_surv10.txt      -> all 14 REFUTED (s=1, n <= 163)
