@@ -127,8 +127,10 @@ $i<n$. The left and middle predecessors of the cell $(2n-1-i,i)$, namely
 $(2n-2-i,i-1)$ and $(2n-2-i,i)$, lie on the anti-diagonals $t+i=2n-3$ and
 $2n-2$ (for $i=1$ the left one is the border), so they agree in $C_n$ and
 $C_\infty$ by \cref{lem:agree}. As the cell itself differs, so do the right
-predecessors $(2n-2-i,i+1)$; all these cells are defined, since no cell of the
-line of length $n$ fires before time $2n-2$. This is the claim for $i+1$. For
+predecessors $(2n-2-i,i+1)$. All these cells are defined: those of $C_n$
+because no cell of the line of length $n$ fires before time $2n-2$, and those of
+$C_\infty$ because they agree with $C_{n+1}$ (\cref{lem:agree}), which does not
+fire before time $2n$. This is the claim for $i+1$. For
 $i=n$ the claim concerns the cell $(n-1,n)$. Its predecessors satisfy
 $C_n(n-2,n-1)=C_\infty(n-2,n-1)=f_{n-1}$ by \cref{lem:agree}, and the cells
 $(n-2,n)$ and $(n-2,n+1)$ are quiescent by \cref{lem:lightcone}, so the claim

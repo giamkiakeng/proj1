@@ -28,14 +28,16 @@ predecessors, so the encoding is equivalent to \cref{def:G}. \Cref{app:encoding}
 gives the clauses.
 
 \paragraph{Certificates}
-Every unsatisfiability claim is certified by a proof in the LRAT
-format~\cite{CruzFilipeEtAl17}, which is produced by the solver
+Every unsatisfiability claim of \cref{thm:four,prop:germs,prop:balzer} is
+certified by a proof in the LRAT format~\cite{CruzFilipeEtAl17}, which is produced by the solver
 CaDiCaL~\cite{CaDiCaL2} or, for one formula, obtained from a DRAT proof of the
 solver Kissat~\cite{Kissat20} with \textsf{drat-trim}~\cite{WetzlerHeuleHunt14},
 and verified by the independent checker \texttt{lrat-check}. The eight
 unsatisfiable formulas and their proofs are published with their SHA-256
 digests (\cref{app:artefacts} and the data availability statement), so that
-each proof can be checked against exactly its formula.
+each proof can be checked against exactly its formula. The unsatisfiable
+outcomes in the checks of the encodings below, where a rule table is fixed, are
+predicted by simulating that rule; they are tests, not claims of their own.
 
 \paragraph{Checks of the encodings}
 A checked proof shows that a formula is unsatisfiable, but not that the formula
@@ -191,10 +193,11 @@ chains, do not suffice either.
 
 \subsection{Five States: Rules for the Lengths Up to Fourteen}\label{sec:five}
 
-The following five-state rules were found with satisfiability solvers. Their
-tables are the files \texttt{uniformA\_2-12.txt} (the rule $\delta_{12}$),
+The following five-state rules were found with satisfiability solvers. How they
+were found plays no role in what follows: every statement about them is checked
+on their tables, the files \texttt{uniformA\_2-12.txt} (the rule $\delta_{12}$),
 \texttt{delta13.txt} and \texttt{delta14*.txt} in \texttt{results/} of the
-supplementary material. \Cref{tab:delta14} shows $\delta_{14}$, and
+supplementary material and in the Zenodo record. \Cref{tab:delta14} shows $\delta_{14}$, and
 \cref{tab:rules} summarizes what we know about the seven rules.
 
 \begin{table}[t]
@@ -438,15 +441,17 @@ other neighbourhood gives $\Fq$;
 \item $\delta(\Gq,v,\Gq)=\Gq$ for all $v\in W\setminus\{\Gq\}$.
 \end{enumerate}
 In the \emph{weak reading}~\cite{Yunes93}, (B1) is required only for working
-states $x,y$, and (B3) without its last clause. We take $I(\Fq)=\Fq$. Then
+states $x,y$, and (B3) without its last clause. Since $\delta$ is defined only
+on neighbourhoods, which contain no $\Fq$, (B2) can hold for every
+neighbourhood only if $I$ maps $W$ to itself; hence $I(\Fq)=\Fq$. Then
 $I(\Gq)=\Gq$: otherwise $g:=I(\Gq)\in W\setminus\{\Gq\}$, and (B2) and (B4)
 give $\delta(g,\Gq,g)=I(\delta(\Gq,g,\Gq))=I(\Gq)=g$, whereas (B1) gives
 $\delta(g,\Gq,g)=\Gq$. So $I$ is one of the four involutions of
 $\{\Lq,\Aq,\Bq\}$, and (B1)--(B4) become unit and binary clauses.
 
 \begin{proposition}\label{prop:balzer}
-No five-state rule that satisfies (B1)--(B4) in the weak reading, with
-$I(\Fq)=\Fq$, synchronizes all lines of lengths $2,\dots,12$ in minimal time;
+No five-state rule that satisfies (B1)--(B4) in the weak reading synchronizes
+all lines of lengths $2,\dots,12$ in minimal time;
 a fortiori, no rule in Balzer's form does. The lengths up to $11$ do not suffice
 to prove this.
 \end{proposition}
