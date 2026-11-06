@@ -72,15 +72,15 @@ In `src/balzer.py`, the conditions C1–C4 are (B1)–(B4) of the paper. `1234` 
 
 The solver times and proof sizes were measured on one core of a cloud virtual machine, and they depend on the machine:
 
-| statement | solver time | proof size | lrat-check time |
-|---|---|---|---|
-| Theorem 6.1 (i) | 51 s | 177 MB | 5.7 s |
-| Theorem 6.1 (ii) | 41 s | 167 MB | 5 s |
-| Theorem 6.1 (iii) | 36 s | 173 MB | 4 s |
-| Proposition 6.4 | 4 s | 11 MB | 0.6 s |
-| Proposition 6.6, Kissat case | 15 min | 3.1 GB | 66 s |
+| statement | solver time | proof size | lrat-check time | cake_lpr time |
+|---|---|---|---|---|
+| Theorem 6.1 (i) | 51 s | 177 MB | 5.7 s | 39 s |
+| Theorem 6.1 (ii) | 41 s | 167 MB | 5 s | 17 s |
+| Theorem 6.1 (iii) | 36 s | 173 MB | 4 s | 20 s |
+| Proposition 6.4 | 4 s | 11 MB | 0.6 s | 1 s |
+| Proposition 6.6, Kissat case | 15 min | 3.1 GB | 66 s | 212 s |
 
-For Proposition 6.6, the lrat-check times of the three CaDiCaL cases are 7.1, 3.5 and 3.3 s. The digests do not depend on the machine:
+For Proposition 6.6, the lrat-check times of the three CaDiCaL cases are 7.1, 3.5 and 3.3 s, and the cake_lpr times 40, 21 and 21 s. The digests do not depend on the machine:
 - **Formulas:** all formulas are generated deterministically; `SHA256SUMS` lists those of Theorem 6.1 and Proposition 6.4.
 - **Proofs:** CaDiCaL 3.0.1 writes the same LRAT proof on every run. The recorded digests are:
   - `cnf/mt4_9.lrat` `1d511a75ab25587fa4a3476b95ad3f7133c7375ad96661fd22fa598aec6c8092` (176,861,512 bytes);
@@ -155,6 +155,7 @@ For Proposition 6.6, the lrat-check times of the three CaDiCaL cases are 7.1, 3.
 | `results/germs/K14_n10.log`, `K14_refuted10.txt`, `germs_K14_surv10.txt` | the completion test of the 244 germs, the 230 refuted ones, the 14 others |
 | `results/germs/K14_ext3300.txt`, `CERTIFICATES.txt` | half-line extension of all 244 germs; digests of the germ certificate |
 | `results/balzer.log`, `results/theta_pump.log` | recorded runs for Proposition 6.6 and for Remark 3.5 |
+| `results/encode_independent.log`, `results/cake_lpr.log` | recorded runs of the second encoder (its differential test and the refutations of its eight formulas) and of `cake_lpr` on the eight proofs |
 | `results/encoding_check.log` | recorded run of the differential test of Section 6.1 |
 | `formulas/*.cnf.xz` | the unsatisfiable formulas: `mt4_9`, `k4_G6`, `k4_G4c` (Theorem 6.1), `k14_n10` (Proposition 6.4), `balzer_AB_10`, `balzer_LA_9`, `balzer_LB_9`, `balzer_id_12` (Proposition 6.6; `balzer_id_12` is the file `cnf/w.cnf` of `check_certificates.sh`) |
 | `research/models/germ14d_T10.txt`, `d14d_T7c.txt` | the two models of Section 7 |

@@ -7,7 +7,7 @@ we state for each result and summarize in \cref{tab:results}: proofs in the
 text; exact finite computations, that is, simulations and exhaustive
 enumerations that decide a finite statement completely; satisfiable formulas,
 whose models we check by simulation; and unsatisfiable formulas, certified by
-proofs that an independent checker verifies. Statements that rest on finite
+proofs that independent checkers verify. Statements that rest on finite
 simulations alone are observations about the simulated ranges. We mark them as
 such, and no proof uses them. The theorem, the propositions and the corollary
 of this section are marked computer-assisted: their proofs use computations,
@@ -35,7 +35,10 @@ Every unsatisfiability claim of \cref{thm:four,prop:germs,prop:balzer} is
 certified by a proof in the LRAT format~\cite{CruzFilipeEtAl17}, which is produced by the solver
 CaDiCaL~\cite{CaDiCaL2} or, for one formula, obtained from a DRAT proof of the
 solver Kissat~\cite{Kissat20} with \textsf{drat-trim}~\cite{WetzlerHeuleHunt14},
-and verified by the independent checker \texttt{lrat-check}. The eight
+and verified by the independent checker \texttt{lrat-check}. Each of these
+proofs is also verified by \texttt{cake\_lpr}~\cite{TanHeuleMyreen21}, a checker
+that is formally verified in the theorem prover HOL4 and compiled with the
+verified compiler CakeML. The eight
 unsatisfiable formulas and their proofs are published with their SHA-256
 digests (\cref{app:artefacts} and the data availability statement), so that
 each proof can be checked against exactly its formula. The unsatisfiable
@@ -111,7 +114,8 @@ with their SHA-256 digests, the logs, and three scripts: one writes the
 formulas with the generators and compares them with the recorded digests
 (about one minute); one reruns the simulations, enumerations, satisfiable
 formulas and the two differential tests (about $11$ minutes); and one
-regenerates every LRAT proof and checks it with \texttt{lrat-check}, and then
+regenerates every LRAT proof and checks it with \texttt{lrat-check} (and with
+\texttt{cake\_lpr} if it is installed), and then
 refutes the formulas of the second encoder in the same way (about two hours and
 $10$\,GB). Run again with CaDiCaL~3.0.1, Kissat~4.0.4 and \textsf{drat-trim},
 this script reproduced all eight recorded proofs byte for byte (its log is in
@@ -144,7 +148,7 @@ n\le8$. This formula has $753$ variables and $17{,}605$ clauses. (ii) The
 encoding of $\G_4(6,10)$ has $919$ variables and $22{,}960$ clauses. (iii) The
 encoding of $\G_4(4,10,10)$ has $874$ variables and $20{,}461$ clauses. CaDiCaL
 refutes each of the three formulas with an LRAT proof, and \texttt{lrat-check}
-verifies each proof. The last claim follows from (i), and also from (ii) or
+and \texttt{cake\_lpr} verify each proof. The last claim follows from (i), and also from (ii) or
 (iii) with \cref{lem:G}.
 \end{proof}
 
@@ -158,8 +162,8 @@ next proposition.
 (G1), (G2), (G3) and (G5) list the lengths $n$ to which each condition of
 \cref{def:G} is applied and, for (G2) and (G3), the relative times $\tau\le T$
 up to which they are imposed; every formula $\G_4$ also contains (G4). Every
-unsatisfiability is certified by an LRAT proof that \texttt{lrat-check}
-verifies, and every satisfiable formula has a model that is re-simulated. The
+unsatisfiability is certified by an LRAT proof that \texttt{lrat-check} and
+\texttt{cake\_lpr} verify, and every satisfiable formula has a model that is re-simulated. The
 labels (i)--(iii) refer to the parts of \cref{thm:four}, and (a), (b) to those
 of \cref{prop:sharp}; the first row is the exhaustive enumeration of part (a),
 which also finds no partial rule for the lengths $2,\dots,9$.}
@@ -367,7 +371,7 @@ For $230$ of them, the formula $\MT_5(\{2,\dots,10\};78,39)$ with the germ fixed
 is unsatisfiable. A single formula covers all $230$: it has a selector variable
 for each germ, clauses that make each selector fix its germ, and a clause that
 requires some selector; CaDiCaL refutes it with an LRAT proof that
-\texttt{lrat-check} verifies. Each of the other $14$ germs determines
+\texttt{lrat-check} and \texttt{cake\_lpr} verify. Each of the other $14$ germs determines
 $C_\infty$ up to the anti-diagonal $3300$, and there \cref{lem:left} applies
 with $s=1$: for some $n\le163$ and $\ell\le5$, the upper input anti-diagonal of
 the line of length $n$ is $\ell$-periodic on $[1,Y]$ and the lower one on
@@ -502,7 +506,7 @@ $\MT_5(\{2,\dots,N\};2N-2)$. For $I=(\Aq\,\Bq)$ and $N=10$, and for $I=(\Lq\,\Aq
 and $I=(\Lq\,\Bq)$ and $N=9$, CaDiCaL refutes the formula with an LRAT proof.
 For $I$ the identity and $N=12$, Kissat refutes it; \textsf{drat-trim} turns its
 DRAT proof into an LRAT proof. Each of the four proofs is verified by
-\texttt{lrat-check}. The rule \texttt{balzer\_sym11} in \texttt{results/} of the
+\texttt{lrat-check} and by \texttt{cake\_lpr}. The rule \texttt{balzer\_sym11} in \texttt{results/} of the
 supplementary material satisfies
 (B1)--(B4) in the strong reading with $I$ the identity and synchronizes every
 line of length at most $11$ (direct simulation); see \cref{tab:balzer}.
@@ -520,7 +524,8 @@ longer lines do.
 \centering\small
 \caption{The formulas of \cref{prop:balzer}: the clauses of (B1)--(B4) for the
 involution $I$ added to $\MT_5(\{2,\dots,N\};2N-2)$, where $2,\dots,N$ are the
-lengths in the second column. Every proof is verified by \texttt{lrat-check}.
+lengths in the second column. Every proof is verified by \texttt{lrat-check} and
+by \texttt{cake\_lpr}.
 The last two rows are rules, found by a solver and checked by direct
 simulation: the first satisfies the strong reading, hence the weak one; the
 second satisfies the weak reading except (B2) at the borders.}

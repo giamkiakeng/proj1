@@ -1,0 +1,16 @@
+# The eight LRAT proofs of Theorem 6.1 and Propositions 6.4 and 6.6, checked with cake_lpr on 2026-11-06.
+# cake_lpr: https://github.com/tanyongkiam/cake_lpr, commit 033aad5 (by its README, cake_lpr.S is built from
+# HOL4 9783a49 and CakeML 665f9b2; the files match cake_lpr.sha256), assembled with gcc 13.3 (make); run as
+#   cake_lpr --CML_HEAP_SIZE=6000 --CML_STACK_SIZE=4000 FORMULA.cnf PROOF.lrat
+# Before each check, the formula and the proof are compared with the SHA-256 digests recorded in the paper
+# (Table 7) and in formulas/SHA256SUMS, formulas/PROOFS.sha256 and results/balzer.log.  The proofs of
+# Theorem 6.1 and Proposition 6.4 are those written by check_certificates.sh; those of Proposition 6.6 are
+# the files of the Zenodo record, decompressed.
+mt4_9: formula digest OK, proof digest OK (176861512 bytes); cake_lpr: s VERIFIED UNSAT (39 s)
+k4_G6: formula digest OK, proof digest OK (166919248 bytes); cake_lpr: s VERIFIED UNSAT (17 s)
+k4_G4c: formula digest OK, proof digest OK (172820213 bytes); cake_lpr: s VERIFIED UNSAT (20 s)
+k14_n10: formula digest OK, proof digest OK (11065305 bytes); cake_lpr: s VERIFIED UNSAT (1 s)
+balzer_AB_10: formula digest OK, proof digest OK (380107536 bytes); cake_lpr: s VERIFIED UNSAT (40 s)
+balzer_LA_9: formula digest OK, proof digest OK (187568252 bytes); cake_lpr: s VERIFIED UNSAT (21 s)
+balzer_LB_9: formula digest OK, proof digest OK (184353504 bytes); cake_lpr: s VERIFIED UNSAT (21 s)
+balzer_id_12: formula digest OK, proof digest OK (3078078538 bytes); cake_lpr: s VERIFIED UNSAT (212 s)

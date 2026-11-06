@@ -37,8 +37,8 @@ The computational part has three limitations. Its results concern four and
 five states and, apart from the reduction of \cref{cor:reduce}, finitely many
 lengths. The formula generators are trusted programs: they are tested in
 \cref{sec:method} and cross-checked by a second, independent encoder, but they
-are not formally verified, and neither is the proof checker
-\texttt{lrat-check}. And the behaviour of particular
+are not formally verified; the proofs, in contrast, are also checked by the
+formally verified checker \texttt{cake\_lpr}. And the behaviour of particular
 rules beyond the simulated ranges, such as the patterns of the half-lines of
 $\delta_{12}$ and $\delta_{14}$, is not known.
 
