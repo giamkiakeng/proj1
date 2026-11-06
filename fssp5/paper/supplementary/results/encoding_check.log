@@ -1,8 +1,9 @@
 four states: building the formulas
-  36 models of the satisfiable formulas, 27 partial rules for 2..8 (27 s)
-five states (43 s)
-the clauses of (B1)-(B4) alone (62 s)
-six states (63 s)
+  36 models of the satisfiable formulas, 27 partial rules for 2..8 (25 s)
+five states (42 s)
+the clauses of (B1)-(B4) alone (61 s)
+six states (61 s)
+the published formulas (69 s)
 
 formula                                                        tables   sat  unsat  disagree
 gfix 4 full:2-7 early:8-10:6 share                               2490     0   2490         0
@@ -41,4 +42,5 @@ gfix 6 full:3-12 early:13-20:8 share                              126    26    1
 gfix 6 full:3-10 early:11-14:5 cone:11-14 share                   126    30     96         0
 (B1)-(B4) clauses alone: 5200 tables, 479 satisfying, 0 disagreements
 Lemma 3.2 (cone of the right end) by search for 2 <= n < 200: True
-57756 formula/table pairs, 0 disagreements (71 s)
+tested formulas identical to formulas/*.cnf.xz (k14_n10: with the selectors of its 230 germs): mt4_9 True, k4_G6 True, k4_G4c True, balzer_AB_10 True, balzer_LA_9 True, balzer_LB_9 True, balzer_id_12 True, k14_n10 True
+57756 formula/table pairs, 0 disagreements (73 s)

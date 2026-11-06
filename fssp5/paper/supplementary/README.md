@@ -42,7 +42,7 @@ Each row gives the statement, the commands (as run by the scripts), and the expe
 | Statement of the paper | Commands | Expected result |
 |---|---|---|
 | Remark 3.5: θ(j) for Mazoyer's solution and for δ12, and PUMP for δ12 | `src/theta.py results/mazoyer6.txt 2600 699 1`<br>`src/theta.py results/uniformA_2-12.txt 1400 300 10`<br>`src/pumping.py results/uniformA_2-12.txt 650` | θ_T(j) − 2j ∈ {1, 2}, period 3<br>θ_T(j) − ⌈3j/2⌉ = 2, period 1<br>0 violations |
-| §6.1, checks of the encodings, (1): differential test | `src/encoding_check.py` | 34 formulas × 3,582 tables: 57,756 formula/table pairs, 973 satisfiable, 0 disagreements; the clauses of (B1)–(B4) on 5,200 tables, 0 disagreements; Lemma 3.2 by search for 2 ≤ n < 200: True (recorded run: `results/encoding_check.log`) |
+| §6.1, checks of the encodings, (1): differential test | `src/encoding_check.py` | 34 formulas × 3,582 tables: 57,756 formula/table pairs, 973 satisfiable, 0 disagreements; the clauses of (B1)–(B4) on 5,200 tables, 0 disagreements; Lemma 3.2 by search for 2 ≤ n < 200: True; the tested formulas of Theorem 6.1 and Proposition 6.6 are identical to their files `formulas/*.cnf.xz`, and so is that of Proposition 6.4 once the selector clauses of its 230 germs are added (recorded run: `results/encoding_check.log`) |
 | Theorem 6.1, Propositions 6.4 and 6.6: the eight unsatisfiable formulas | `write_formulas.sh` (`--check` in `check_quick.sh`) | every formula matches its digest in `formulas/SHA256SUMS`, and so does every published file `formulas/*.cnf.xz` |
 | §6.1, checks of the encodings, (2) (Table 2): Mazoyer's solution | `src/fsspcheck results/mazoyer6.txt 3 3000`<br>`src/validate_mazoyer.py 12 78 40`<br>`research/asymp.py` and `research/gfix.py … --fix results/mazoyer6.txt` | OK for all 3 ≤ n ≤ 3000<br>MT_6({3..12}; 78, 40) satisfiable<br>(G2), (G3) for T = 8 and all n ≥ 15: SAT (21 representative lengths; depth rows periodic from t0 = 42, p = 3) |
 | §6.1, checks of the encodings, (2) (Table 2): the table of δ14 fixed | `research/gfix.py FREE 5 <spec> --fix results/delta14.txt --solve cadical` | full:2-14 SAT; full:2-15 UNSAT; full:2-14 early:15-30:6 SAT; full:2-14 early:15-30:8 UNSAT |
@@ -120,7 +120,7 @@ For Proposition 6.6, the lrat-check times of the three CaDiCaL cases are 7.1, 3.
 | `src/germcert.py` | one LRAT certificate for a list of refuted germs |
 | `src/germext.c` | extension of a germ's half-line, with the checks of Lemma 4.1 and PUMP |
 | `src/germ_k14_check.py` | independent check of the 14 half-line refutations of Proposition 6.4 |
-| `src/encoding_check.py` | the differential test of Section 6.1: the formula generators, used as black boxes, against a direct evaluation of the conditions written from the definitions of the paper |
+| `src/encoding_check.py` | the differential test of Section 6.1: the formula generators, used as black boxes, against a direct evaluation of the conditions written from the definitions of the paper; and the tested formulas against the published files `formulas/*.cnf.xz` |
 | `src/figures.py` | the data of Figures 1, 6, 7 and 12–18 (space-time diagrams, depth rows, regions, charts, an image), the table of δ14 (Table 4), and the cone counts of Section 7 |
 | `src/balzer.py`, `src/balzer_k.py` | formulas with Balzer's conditions |
 | `research/gfix.py` | the formulas of Definition 5.4, MT-type formulas and variants (regions `full`, `early`, `cone`), optionally with a germ or a whole table fixed |

@@ -18,6 +18,12 @@ balzer_sym11), models of the satisfiable four-state formulas of Proposition 6.2 
 mutations of all of these, and uniformly random tables.  Every disagreement is printed, and the
 program exits with status 1 if there is one.
 
+Finally, the formulas of Theorem 6.1 and Propositions 6.4 and 6.6 are built once more in the
+same way as for the test and compared with the published files formulas/*.cnf.xz.  They must be
+identical, except that the published formula of Proposition 6.4 consists of the tested formula
+followed by one selector per germ of results/germs/K14_refuted10.txt (Appendix A of the paper),
+whose clauses are checked against that list.
+
 usage: python3 encoding_check.py [--seed S] [--quick]
 """
 import argparse
@@ -467,6 +473,10 @@ def run(seed, quick):
     # ---- Lemma 3.2: the cone of the right end, by search, against the closed form used above
     lemma = all(cone_by_search(n) == set(cone_positions(n)) for n in range(2, 200))
 
+    # ---- the tested formulas against the published files
+    print('the published formulas (%.0f s)' % (time.time() - t0), flush=True)
+    published = published_check()
+
     print('\nformula                                                        tables   sat  unsat  disagree')
     bad = 0
     for F in four + five + six:
@@ -476,7 +486,9 @@ def run(seed, quick):
     print('(B1)-(B4) clauses alone: %d tables, %d satisfying, %d disagreements'
           % (Bstats['agree'] + Bstats['disagree'], Bstats['holds'], Bstats['disagree']))
     print('Lemma 3.2 (cone of the right end) by search for 2 <= n < 200: %s' % lemma)
-    bad += Bstats['disagree'] + (not lemma)
+    print('tested formulas identical to formulas/*.cnf.xz (k14_n10: with the selectors of its 230 germs): %s'
+          % ', '.join('%s %s' % (name, same) for name, same in published))
+    bad += Bstats['disagree'] + (not lemma) + sum(not same for _, same in published)
     total = sum(F.stats['sat'] + F.stats['unsat'] for F in four + five + six)
     print('%d formula/table pairs, %d disagreements (%.0f s)' % (total, bad, time.time() - t0))
     return bad
@@ -507,6 +519,49 @@ def balzer_like(rng, conds, inv):
     for nb, d in QUIESCENT.items():
         tab[nb] = d
     return mutate(5, tab, rng, 1) if rng.random() < 0.5 else tab
+
+
+def published_check():
+    """the formulas of Theorem 6.1 and Propositions 6.4 and 6.6, built as in run(), against the
+    published files formulas/*.cnf.xz; returns a list of (name, identical)"""
+    import lzma
+    form = os.path.join(HERE, '..', 'formulas')
+
+    def dimacs(nv, cls):
+        return ('p cnf %d %d\n' % (nv, len(cls))
+                + ''.join(' '.join(map(str, c)) + ' 0\n' for c in cls)).encode()
+
+    def same(name, nv, cls):
+        return (name, dimacs(nv, cls) == lzma.open(os.path.join(form, name + '.cnf.xz')).read())
+
+    out = []
+    F, E = gencnf_formula(4, range(2, 10), None)                      # Theorem 6.1 (i)
+    F.solver.delete()
+    out.append(same('mt4_9', E.nv, E.clauses))
+    for name, specs in (('k4_G6', ['full:2-7', 'early:8-10:6']),      # Theorem 6.1 (ii), (iii)
+                        ('k4_G4c', ['full:2-5', 'early:6-10:4', 'cone:6-10'])):
+        F, E = gfix_formula(4, specs, True)
+        F.solver.delete()
+        out.append(same(name, E.nv, E.cls))
+    for name, N, conds, inv in (('balzer_AB_10', 10, '1234', 'AB'), ('balzer_LA_9', 9, '1234', 'LA'),
+                                ('balzer_LB_9', 9, '1234', 'LB'), ('balzer_id_12', 12, '1234', 'id')):
+        F, E = gencnf_formula(5, range(2, N + 1), None, None,           # Proposition 6.6
+                              lambda E, c=conds, i=inv: balzer.add_conditions(E, c, i))
+        F.solver.delete()
+        out.append(same(name, E.nv, E.clauses))
+    F, E = gencnf_formula(5, range(2, 11), 78, 39)                    # Proposition 6.4
+    F.solver.delete()
+    code = {'*': gencnf.BND, 'L': 0, 'G': 1, 'A': 2, 'B': 3, 'F': 4}
+    sel, extra = [], []
+    for ln in open(os.path.join(RESULTS, 'germs', 'K14_refuted10.txt')):
+        if ln.startswith('GERM'):
+            s = E.nv + len(sel) + 1                                   # one new variable per germ
+            sel.append(s)
+            for tok in ln.split()[1:]:
+                nb, d = tok.split('>')
+                extra.append([-s, E.T[tuple(code[x] for x in nb)][code[d]]])
+    out.append(same('k14_n10', E.nv + len(sel), [list(c) for c in E.clauses] + extra + [sel]))
+    return out
 
 
 def cone_by_search(n):
