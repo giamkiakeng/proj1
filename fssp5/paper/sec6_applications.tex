@@ -26,9 +26,10 @@ half-line cell is $\Fq$, that the line of length $n$ is synchronized at time
 $2n-2$ for every $n\in\mathcal N$, the return chains of \cref{lem:return} for
 $n,n+1\in\mathcal N$, and $\PUMP(n,n')$ for $4\le n<n'\le N'$; the formula
 $\MT_k(\mathcal N;M)$ has no pumping clauses. The formula $\G_k(T,N_1,C)$ is
-encoded in the same way, with $M=2N_1$. Its regions are closed under
-predecessors, so the encoding is equivalent to \cref{def:G}. \Cref{app:encoding}
-gives the clauses.
+encoded in the same way, with $M=2N_1$; its regions are closed under
+predecessors, so that the table determines every encoded cell.
+\Cref{app:encoding} gives the clauses and shows that the encoding is equivalent
+to \cref{def:G}.
 
 \paragraph{Certificates}
 Every unsatisfiability claim of \cref{thm:four,prop:germs,prop:balzer} is
@@ -396,9 +397,9 @@ contains this germ synchronizes the line of length $28$ in minimal time.}
 \label{fig:germs}
 \end{figure}
 
-The bound is attained by rules that come close to minimal time: the germs below
-$78$ of $\delta_{14}^{\mathrm c}$ and $\delta_{14}^{\mathrm d}$ have complexity
-$15$, and both rules synchronize the lines of lengths $2,\dots,14$
+Complexity $15$ does occur for rules that synchronize many lines: the germs
+below $78$ of $\delta_{14}^{\mathrm c}$ and $\delta_{14}^{\mathrm d}$ have
+complexity $15$, and both rules synchronize the lines of lengths $2,\dots,14$
 (\cref{prop:nearmiss}).
 
 The rules $\delta_{12}$ and $\delta_{13}$ have the same half-line on the cells
@@ -408,9 +409,7 @@ with $t+i\le78$, where they use the $22$ neighbourhoods
 \texttt{*GA>A GAL>L ALG>B LGG>G GGL>G BGG>L GGG>G ALL>A LLG>L ALA>A LAL>L}
 \end{center}
 besides $(\Lq,\Lq,\Lq)$; here \texttt{xyz>d} means $\delta(x,y,z)=d$. On these
-cells, the cells between roughly the cell $t/3$ and the front are in state
-$\Gq$, and the cells between the left border and roughly the cell $t/3$
-alternate between $\Aq$ and $\Lq$, periodically in time and space
+cells the half-line has the pattern described before \cref{cor:regular}
 (\cref{fig:halflines}). If this pattern continued forever, \cref{thm:left}
 would exclude the half-line; \cref{lem:left} gives an explicit length without
 that assumption.

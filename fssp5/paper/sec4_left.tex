@@ -1,13 +1,13 @@
 %% ---------------------------------------------------------------------------
 \section{The Left End}\label{sec:left}
 
-Near the left border, the reflected triangle is produced by the anti-diagonals
-$t+i=2n-1$, $t+i=2n$, $\dots$, which follow the echo of the right end; we call
-them \emph{chains}. The first few chains form a finite automaton that reads the
-two input anti-diagonals $t+i=2n-3$ and $t+i=2n-2$ and must fire the cells near
-the left border exactly when the echo reaches them. If the input anti-diagonals were periodic over a long
-stretch, this automaton would repeat a state and fire too early
-(\cref{lem:left}). Applied to all lengths at once, this excludes periodic
+We cut the reflected triangle into the anti-diagonals $t+i=2n-1$, $t+i=2n$,
+$\dots$, which follow the echo of the right end; we call them \emph{chains}.
+Near the left border, the first few chains form a finite automaton that reads
+the two input anti-diagonals $t+i=2n-3$ and $t+i=2n-2$ and must fire the cells
+there exactly when the echo reaches them. If the input anti-diagonals were
+periodic over a long stretch, this automaton would repeat a state and fire too
+early (\cref{lem:left}). Applied to all lengths at once, this excludes periodic
 wedges at the left border of the half-line (\cref{thm:left}).
 
 \subsection{Chains and Slices}

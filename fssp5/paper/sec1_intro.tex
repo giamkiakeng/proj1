@@ -23,9 +23,9 @@ theory~\cite{Mazoyer86,Umeo09,Correa17}. Waksman's solution has $16$ states,
 Balzer's $8$~\cite{Balzer67}, Gerken's $7$~\cite{Gerken87} and Mazoyer's
 $6$~\cite{Mazoyer87}. In the other direction, Balzer~\cite{Balzer67} reported
 a computer search showing that no four-state minimal-time solution exists;
+Sanders~\cite{Sanders94} confirmed this with a search of his own, and
 Yun\`es~\cite{Yunes93} repeated the search and observed that the lines of
-lengths $2,\dots,9$ suffice, and Sanders~\cite{Sanders94} found Balzer's
-search incomplete and confirmed the result with a corrected one. Many
+lengths $2,\dots,9$ suffice. Many
 six-state minimal-time solutions are known today~\cite{Clergue18,NguyenMaignan20};
 solutions with at most five states are known for restricted families of
 lengths, such as the powers of two, some of them in non-minimal
@@ -100,25 +100,29 @@ Our main results concern minimal-time solutions with any number of states.
   reason we also call the theorem the \emph{speed-$1/3$ barrier}. The name
   describes this bound only: the theorem concerns infinitely many depth rows, not
   all of them, and it does not assert that a boundary or a signal moves at speed
-  $1/3$. In the known constructions, the depth rows become periodic where they
-  cross a signal of the general, and if that is so, the bound says that the
-  first division point of the line is asymptotically not in the half next to the
-  general; this reading is a heuristic (\cref{rem:division}). In simulations up
-  to time $1400$, the depth rows of the five-state rule $\delta_{12}$ of
-  \cref{sec:five}, which synchronizes the lines of lengths $2,\dots,12$, become
-  periodic at the time $\lceil 3j/2\rceil+2$, at the bound (\cref{fig:theta}).
+  $1/3$. If the depth rows become periodic where they cross a signal of the
+  general, as they do approximately in the two rules that we simulated, the
+  bound says that the first division point of the line is asymptotically not in
+  the half next to the general; this reading is a heuristic
+  (\cref{rem:division}). In simulations up to time $1400$, the depth rows
+  $10\le j\le300$ of the five-state rule $\delta_{12}$ of \cref{sec:five}, which
+  synchronizes the lines of lengths $2,\dots,12$, become periodic at the time
+  $\lceil 3j/2\rceil+2$, on the bound (\cref{fig:theta}).
 \item \emph{The left-border barrier} (\cref{thm:left,cor:regular}). The
   half-line is never periodic in time and space on a wedge
   $\{(t,i):s\le i\le\alpha t,\ t\ge t_0\}$ at its left border. In particular it
-  is not \emph{eventually regular} in the sense of \cref{sec:left}: from some
-  time on, it does not consist of finitely many periodic blocks, separated by
-  signals of rational speeds, whose lengths grow linearly. Other kinds of regular
+  is not \emph{eventually regular} in the sense of \cref{sec:left}, that is, it
+  is not true that from some time on the half-line consists of finitely many
+  periodic blocks, separated by signals of rational speeds, whose lengths grow
+  linearly. Other kinds of regular
   behaviour, and periodic regions away from the left border, are not excluded.
   The reason is that the cells near the left border are fired by a finite
   automaton that reads the half-line along the cells with $t+i=2n-3$ and
   $t+i=2n-2$, and a long periodic input would make it fire too early
-  (\cref{lem:left,fig:leftproof}). This excludes the half-line of $\delta_{12}$
-  for the line of length $518$ (\cref{cor:germ12,fig:delta12}).
+  (\cref{lem:left,fig:leftproof}). For example, no five-state rule whose
+  half-line agrees with that of $\delta_{12}$ on the cells with $t+i\le78$
+  synchronizes the line of length $518$ in minimal time
+  (\cref{cor:germ12,fig:delta12}).
 \item \emph{Finitely many early rows} (\cref{cor:reduce}). The front reaches
   the right end of the line of length $n$ at time $n-1$. For a fixed $T$, the
   cells of the reflected triangles at the times $n-1,\dots,n-1+T$, which we call
@@ -130,23 +134,24 @@ Our main results concern minimal-time solutions with any number of states.
 With these conditions and satisfiability solvers whose negative answers are
 certified by independently checked proofs, we obtain the following results.
 Four states are excluded by the lines of lengths $2,\dots,5$ together with
-the first five rows, the return chains and the right ends of the lines of
-lengths $6,\dots,10$, and this is sharp in several directions
-(\cref{thm:four,prop:sharp}). Five five-state rules
-synchronize exactly the lines of lengths $2,\dots,14$
-(\cref{prop:nearmiss}), so the lines of lengths $2,\dots,14$ alone cannot
-exclude five states; for four states, the longest such range is $2,\dots,8$
+three parts of the lines of lengths $6,\dots,10$: the first five rows, the
+return chains in these rows, and the dependency cones of the right ends at the
+firing time (\cref{thm:four}); this is sharp in several directions
+(\cref{prop:sharp}). Five rules with five states synchronize exactly
+the lines of lengths $2,\dots,14$ (\cref{prop:nearmiss}), so these lines alone
+cannot exclude five states; for four states, the longest such range is $2,\dots,8$
 (\cref{prop:sharp}). On
 the cells of its half-line with $t+i\le78$, every five-state minimal-time
 solution uses at least $15$ distinct neighbourhoods besides the quiescent one
-(\cref{prop:germs}). Finally, a conditional five-state result reported by Balzer
-in 1967 holds, even in a weaker form (\cref{prop:balzer}); its symmetry
-condition has to be imposed at the borders of the line as well, since otherwise
-the lines of lengths up to $12$ do not suffice (\cref{sec:balzer}).
-\Cref{tab:results}
-lists the results with the kind of evidence behind each of them, and separately
-the observations from simulations that the paper reports but does not claim
-beyond the simulated ranges.
+(\cref{prop:germs}). Finally, we confirm a conditional five-state result
+reported by Balzer in 1967, even under a weaker reading of his conditions: no
+five-state rule that satisfies them synchronizes all lines of lengths
+$2,\dots,12$ (\cref{prop:balzer}). His symmetry condition is needed at the
+borders of the line as well: without it there, some rule that satisfies the
+remaining conditions in the weak reading synchronizes all these lines
+(\cref{sec:balzer}).
+\Cref{tab:results} lists the results with the kind of evidence behind each of
+them, and separately the observations from simulations.
 
 \begin{table}[tbp]
 \centering\small
@@ -174,10 +179,10 @@ Four states excluded by the lines of lengths $2,\dots,5$ and parts of those of l
 Sharpness of \cref{thm:four} & \ref{prop:sharp} & exhaustive enumeration; models checked by simulation & Table~\ref{tab:four}\\
 Five rules for exactly the lengths $2,\dots,14$ & \ref{prop:nearmiss} & proof and exact finite simulation & Figs.~\ref{fig:delta14}, \ref{fig:firstfire}, Tables~\ref{tab:delta14}, \ref{tab:rules}\\
 At least $15$ neighbourhoods on the half-line of a five-state solution & \ref{prop:germs} & proof, exhaustive enumeration and certified computation & Fig.~\ref{fig:germs}, Table~\ref{tab:rules}\\
-The half-line of $\delta_{12}$ and $\delta_{13}$ cannot be completed & \ref{cor:germ12} & proof and exact finite simulation & Fig.~\ref{fig:delta12}\\
+No five-state minimal-time solution has the half-line of $\delta_{12}$ and $\delta_{13}$ & \ref{cor:germ12} & proof and exact finite simulation & Fig.~\ref{fig:delta12}\\
 Balzer's conditional five-state result; (B2) at the borders is needed & \ref{prop:balzer}, \ref{sec:balzer} & certified computation; models checked by simulation & Table~\ref{tab:balzer}\\
 \midrule
-\emph{Observations:} the onset times $\theta_T(j)$ for Mazoyer's solution and $\delta_{12}$; the patterns of the half-lines of $\delta_{12}$ and $\delta_{14}$; $\PUMP$ and \cref{lem:left} in finite ranges & \ref{rem:division}, \ref{sec:left}, \ref{sec:five} & finite simulation only & Figs.~\ref{fig:theta}, \ref{fig:halflines}, \ref{fig:delta14}\\
+\emph{Observations:} the onset times $\theta_H(j)$ for Mazoyer's solution and $\delta_{12}$; the patterns of the half-lines of $\delta_{12}$ and $\delta_{14}$; $\PUMP$ and \cref{lem:left} in finite ranges & \ref{rem:division}, \ref{sec:left}, \ref{sec:five} & finite simulation only & Figs.~\ref{fig:theta}, \ref{fig:halflines}, \ref{fig:delta14}\\
 \bottomrule
 \end{tabular}
 \end{table}

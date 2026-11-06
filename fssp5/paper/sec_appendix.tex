@@ -2,7 +2,7 @@
 \appendix
 \section{The Encodings}\label{app:encoding}
 
-Both formula generators build their formulas from the same pieces. Let $S$ be
+The formulas $\MT_k$ and $\G_k$ are built from the same pieces. Let $S$ be
 the set of $k$ states and $W=S\setminus\{\Fq\}$.
 \begin{enumerate}[(E1)]
 \item \emph{Rule table.} A variable $x_{e,s}$ for each neighbourhood $e$ and
@@ -45,9 +45,9 @@ formulas $\G_4$ of \cref{thm:four,prop:sharp}, the generator gives one variable
 to cells that compute the same function of the table, that is, cells with the
 same tree of predecessors down to the same half-line cells and borders; this
 does not change the satisfying assignments of the table variables. The formula
-of \cref{prop:germs} adds, for each germ $g$, a selector $s_g$ with the clauses
-$\neg s_g\vee x_{e,s}$ for the transitions $(e,s)$ of $g$, and the clause
-$\bigvee_g s_g$. The conditions (B1)--(B4) of \cref{prop:balzer} are unit and
+of \cref{prop:germs} adds, for each germ $g$, a selector variable $\sigma_g$
+with the clauses $\neg\sigma_g\vee x_{e,s}$ for the transitions $(e,s)$ of $g$,
+and the clause $\bigvee_g\sigma_g$. The conditions (B1)--(B4) of \cref{prop:balzer} are unit and
 binary clauses on the variables $x_{e,s}$.
 
 %% ---------------------------------------------------------------------------

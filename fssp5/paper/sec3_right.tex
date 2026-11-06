@@ -2,10 +2,10 @@
 \section{The Right End}\label{sec:right}
 
 The reflected triangle $R_n$ is computed from the half-line, and its right end
-fires at time $2n-2$. We show that the firing cell depends only on a cone of
-about $n/2$ cells of two anti-diagonals of the half-line. If two lines of
-different lengths received the same values on this cone, their right ends would
-fire at the same relative time, which is impossible (\cref{lem:pumping}). This
+fires at time $2n-2$. We show that the right end at the firing time depends
+only on about $n/2$ cells of each of two anti-diagonals of the half-line. If
+two lines of different lengths received the same values on these cells, their
+right ends would fire at the same relative time, which is impossible (\cref{lem:pumping}). This
 pumping lemma is a condition on the half-line alone. It implies a lower bound
 on the times from which the cells behind the front of the half-line are
 periodic (\cref{thm:third}), which we also call the speed-$1/3$ barrier, for a
@@ -203,7 +203,7 @@ $\theta(j)>n+j/2-5/2$.
 
 Suppose now that $\limsup_{j\to\infty}\theta(j)/j<3/2$. Then there are
 $\alpha<3/2$ and $\beta$ with $\theta(j)\le\alpha j+\beta$ for all $j$;
-since $\theta(j)\ge j$, we may take $\alpha\ge1/2$. For all $j\le n$,
+since $\theta(j)\ge j$, necessarily $\alpha\ge1$. For all $j\le n$,
 \[
 \theta(j)-\frac{j}{2}\le\Bigl(\alpha-\frac12\Bigr)j+\beta\le\Bigl(\alpha-\frac12\Bigr)n+\beta,
 \]
@@ -237,9 +237,9 @@ division point is where a signal sent by the general meets the echo of the right
 end (\cref{fig:theta}(c)); a \emph{signal} of speed $v$ is a pattern that moves by
 $v$ cells per step. A signal of speed $v$ that leaves the general at time $0$
 meets the echo, which leaves the right end at time $n-1$ at speed one, at the
-cell $v(2n-1)/(1+v)$. Suppose that the depth rows become periodic exactly where
-they cross this signal, as we observed for the two rules simulated below; this
-is an assumption, not a consequence of minimal time. Then depth row $j$ meets the
+cell $v(2n-1)/(1+v)$. Suppose that the depth rows become periodic where they
+cross this signal, as they do approximately for the two rules simulated below;
+this is an assumption, not a consequence of minimal time. Then depth row $j$ meets the
 signal at the time $(j-1)/(1-v)$, so $\theta(j)\approx j/(1-v)$, and
 \cref{thm:third} gives $v\ge1/3$ asymptotically: the first division point, at the
 cell $v(2n-1)/(1+v)\ge(2n-1)/4$, is then asymptotically never in the half of the
@@ -247,14 +247,14 @@ line next to the general. Waksman's and Balzer's solutions divide the line in
 the middle, with $v=1/3$, and Mazoyer's solution divides it at two thirds of its
 length from the general, with $v=1/2$.
 
-Simulations can only approximate $\theta(j)$. For a horizon $T$, let
-$\theta_T(j)$ be the least $t_0\ge j$ such that $\Phi_t(j)=\Phi_{t+p}(j)$ for
-$t_0\le t\le T-p$, where $p\le12$ is the least period of depth row $j$ on its
+Simulations can only approximate $\theta(j)$. For a horizon $H$, let
+$\theta_H(j)$ be the least $t_0\ge j$ such that $\Phi_t(j)=\Phi_{t+p}(j)$ for
+$t_0\le t\le H-p$, where $p\le12$ is the least period of depth row $j$ on its
 last $200$ simulated steps; if $p$ is a period of the row from $\theta(j)$ on,
-then $\theta_T(j)\le\theta(j)$. For Mazoyer's solution and $T=2600$,
-$\theta_T(j)\in\{2j+1,2j+2\}$ for $1\le j<700$. For the five-state rule
+then $\theta_H(j)\le\theta(j)$. For Mazoyer's solution and $H=2600$,
+$\theta_H(j)\in\{2j+1,2j+2\}$ for $1\le j<700$. For the five-state rule
 $\delta_{12}$ of \cref{sec:five}, which synchronizes the lines of lengths
-$2,\dots,12$, and $T=1400$, $\theta_T(j)=\lceil 3j/2\rceil+2$ for $10\le
+$2,\dots,12$, and $H=1400$, $\theta_H(j)=\lceil 3j/2\rceil+2$ for $10\le
 j\le300$, and $\PUMP(n,n')$ holds for $4\le n<n'\le650$
 (\cref{fig:theta,fig:halflines}). These are observations on finite horizons,
 and the reading above need not apply to other rules.

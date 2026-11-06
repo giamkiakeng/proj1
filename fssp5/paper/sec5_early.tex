@@ -1,10 +1,11 @@
 %% ---------------------------------------------------------------------------
 \section{The First Rows After the Reflection}\label{sec:early}
 
-The five-state rules that come closest to minimal time fail in the first rows
-of their reflected triangles: some cell of a long line fires a few steps after
-the front has reached the right end (\cref{prop:nearmiss,fig:delta14}). The
-condition that this never happens concerns infinitely many lengths. We show
+The five-state rules of \cref{prop:nearmiss}, which synchronize the lines of
+lengths $2,\dots,14$, fail in the first rows of the reflected triangles of all
+longer lines: some cell fires a few steps after the front has reached the right
+end (\cref{fig:delta14}). The condition that this never happens concerns
+infinitely many lengths. We show
 that, for a given half-line, it reduces to finitely many lengths, and that a
 certificate for the reduction can be computed by simulating the half-line.
 
@@ -38,9 +39,10 @@ $\Fq$ or undefined.
 \end{proof}
 
 The input word on $[0,T+1]$ consists of depth-row cells of depths at most
-$2T+1$ (\cref{fig:early}(b)). These rows are driven only by the rows of smaller depth
-\eqref{eq:comoving}, so the vector of the first $2T+2$ depth rows evolves
-autonomously, and one period of it is a certificate for all later times.
+$2T+1$ (\cref{fig:early}(b)). By \eqref{eq:comoving}, each depth row is driven
+only by itself and by the two rows of the next smaller depths, so the vector of
+the first $2T+2$ depth rows evolves autonomously, and one period of it is a
+certificate for all later times.
 
 \begin{lemma}[periodicity certificate]\label{lem:certificate}
 Let $\delta$ be a rule, $D\ge0$, and $V_t:=(\Phi_t(0),\dots,\Phi_t(D))$ for

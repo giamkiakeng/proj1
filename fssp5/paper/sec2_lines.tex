@@ -131,10 +131,12 @@ predecessors $(2n-2-i,i+1)$. All these cells are defined: those of $C_n$
 because no cell of the line of length $n$ fires before time $2n-2$, and those of
 $C_\infty$ because they agree with $C_{n+1}$ (\cref{lem:agree}), which does not
 fire before time $2n$. This is the claim for $i+1$. For
-$i=n$ the claim concerns the cell $(n-1,n)$. Its predecessors satisfy
-$C_n(n-2,n-1)=C_\infty(n-2,n-1)=f_{n-1}$ by \cref{lem:agree}, and the cells
-$(n-2,n)$ and $(n-2,n+1)$ are quiescent by \cref{lem:lightcone}, so the claim
-reads $\delta(f_{n-1},\Lq,\ast)\ne\delta(f_{n-1},\Lq,\Lq)$. This is impossible
+$i=n$ the claim concerns the cell $(n-1,n)$. Its left predecessor satisfies
+$C_n(n-2,n-1)=C_\infty(n-2,n-1)=f_{n-1}$ by \cref{lem:agree}, its middle
+predecessor $(n-2,n)$ is quiescent in both diagrams, and its right predecessor
+is the border in $C_n$ and the quiescent cell $(n-2,n+1)$ in $C_\infty$
+(\cref{lem:lightcone}). So the claim reads
+$\delta(f_{n-1},\Lq,\ast)\ne\delta(f_{n-1},\Lq,\Lq)$. This is impossible
 if $f_{n-1}=\Lq$, by \eqref{eq:quiescence}.
 \end{proof}
 
