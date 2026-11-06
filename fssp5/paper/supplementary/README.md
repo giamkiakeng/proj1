@@ -20,7 +20,7 @@ The proofs of Sections 2–5 need no computation. Section 6, Remark 3.5, the fig
 - **`check_quick.sh`** runs every check that needs no external SAT solver, including `write_formulas.sh --check`, the differential test `src/encoding_check.py` of the formula generators, and that of the second encoder `src/encode_independent.py` (Section 6.1).
 - **`check_certificates.sh`** generates every unsatisfiable formula of the paper, solves it with a proof, and checks the proof:
   - the LRAT proofs come from CaDiCaL directly, or from Kissat's DRAT proof via drat-trim;
-  - each proof is checked with `lrat-check`;
+  - each proof is checked with `lrat-check`, and also with the formally verified checker `cake_lpr` if the variable `CAKELPR` names its binary;
   - at the end, the regenerated proofs are compared with the digests recorded in `formulas/PROOFS.sha256` (CaDiCaL 3.0.1, Kissat 4.0.4 and drat-trim reproduce them byte for byte); the digests of the Balzer proofs are in `results/balzer.log`;
   - finally, it writes the eight formulas of the second encoder to `cnf/independent/` and refutes them in the same way, each proof checked with `lrat-check` (Section 6.1, check (5));
   - it writes about 10 GB to `cnf/`, including the directories `cnf/balzer_*/` of `src/balzer.py`.
@@ -35,6 +35,7 @@ These are the versions used for the recorded runs.
 - CaDiCaL 3.0.1; any version from 2.0 on writes LRAT. With another version the LRAT proofs differ, but they still verify.
 - Kissat 4.0.4.
 - drat-trim and lrat-check from https://github.com/marijnheule/drat-trim, commit 2e3b2dc.
+- Optional: cake_lpr from https://github.com/tanyongkiam/cake_lpr, commit 033aad5 (`make`, which assembles the released `cake_lpr.S` with gcc), a formally verified LRAT checker; `check_certificates.sh` uses it if the variable `CAKELPR` names its binary.
 
 ## Statements and checks
 
@@ -48,6 +49,7 @@ Each row gives the statement, the commands (as run by the scripts), and the expe
 | Theorem 6.1, Propositions 6.4 and 6.6: the eight unsatisfiable formulas | `write_formulas.sh` (`--check` in `check_quick.sh`) | every formula matches its digest in `formulas/SHA256SUMS`, and so does every published file `formulas/*.cnf.xz` |
 | §6.1, checks of the encodings, (2) (Table 2): Mazoyer's solution | `src/fsspcheck results/mazoyer6.txt 3 3000`<br>`src/validate_mazoyer.py 12 78 40`<br>`research/asymp.py` and `research/gfix.py … --fix results/mazoyer6.txt` | OK for all 3 ≤ n ≤ 3000<br>MT_6({3..12}; 78, 40) satisfiable<br>(G2), (G3) for T = 8 and all n ≥ 15: SAT (21 representative lengths; depth rows periodic from t0 = 42, p = 3) |
 | §6.1, checks of the encodings, (2) (Table 2): the table of δ14 fixed | `research/gfix.py FREE 5 <spec> --fix results/delta14.txt --solve cadical` | full:2-14 SAT; full:2-15 UNSAT; full:2-14 early:15-30:6 SAT; full:2-14 early:15-30:8 UNSAT |
+| §6.1, certificates: the eight proofs with the formally verified checker cake_lpr | `cake_lpr --CML_HEAP_SIZE=6000 FORMULA.cnf PROOF.lrat` for each formula and proof (in `check_certificates.sh` if `CAKELPR` is set) | each formula and proof matches its recorded digest; s VERIFIED UNSAT for all eight proofs (recorded run: `results/cake_lpr.log`) |
 | Theorem 6.1 (i) | `src/gencnf.py 4 9 cnf/mt4_9.cnf`<br>`research/certify_lrat.sh cnf/mt4_9.cnf` | 753 variables, 17,605 clauses, SHA-256 `d18d6548…`; s UNSATISFIABLE; c VERIFIED |
 | Theorem 6.1 (ii) | `GFIX_SHARE=1 research/gfix.py FREE 4 full:2-7 early:8-10:6 --cnf cnf/k4_G6.cnf`<br>`research/certify_lrat.sh cnf/k4_G6.cnf` | 919 variables, 22,960 clauses, SHA-256 `0e0ba286…`; c VERIFIED |
 | Theorem 6.1 (iii) | `GFIX_SHARE=1 research/gfix.py FREE 4 full:2-5 early:6-10:4 cone:6-10 --cnf cnf/k4_G4c.cnf`<br>`research/certify_lrat.sh cnf/k4_G4c.cnf` | 874 variables, 20,461 clauses, SHA-256 `124f0954…`; c VERIFIED |

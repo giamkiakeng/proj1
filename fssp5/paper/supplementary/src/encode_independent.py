@@ -8,7 +8,8 @@ clause schemas (E1)-(E5) of Appendix A, and shares no code with the generators g
 germcert.py, balzer.py and balzer_k.py.  It encodes the conditions literally: no structural sharing,
 no symmetry breaking, the cones of the right ends found by a search over predecessors, and the
 formulas G_k(T, N1, C) exactly as in Definition 5.4 (without the return chains of the complete
-lines, which Appendix A shows to be implied).
+lines, which Appendix A shows to be implied).  For its test it also encodes Balzer's conditions with
+(B2) only for the neighbourhoods without a border (border=False), the variant of Section 6.5.
 
   python3 encode_independent.py test [--quick]   differential test against the direct evaluation of
                                                  encoding_check.py, on the tables that it uses

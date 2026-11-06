@@ -81,6 +81,9 @@ REFS = {
     'CruzFilipeEtAl17': "Cruz-Filipe, L., Heule, M.~J.~H., Hunt, W.~A., Jr., Kaufmann, M., "
                         "Schneider-Kamp, P. (2017). Efficient certified RAT verification. In: "
                         "\\emph{Automated Deduction -- CADE 26}, " + LNCS + " 10395, pp.~220--236. Springer.",
+    'TanHeuleMyreen21': "Tan, Y.~K., Heule, M.~J.~H., Myreen, M.~O. (2021). cake\\_lpr: verified propagation "
+                        "redundancy checking in CakeML. In: \\emph{Tools and Algorithms for the Construction and "
+                        "Analysis of Systems (TACAS 2021)}, " + LNCS + " 12652, pp.~223--241. Springer.",
     'HeuleKullmannMarek16': "Heule, M.~J.~H., Kullmann, O., Marek, V.~W. (2016). Solving and verifying "
                             "the Boolean Pythagorean triples problem via cube-and-conquer. In: \\emph{Theory "
                             "and Applications of Satisfiability Testing (SAT 2016)}, " + LNCS + " 9710, "

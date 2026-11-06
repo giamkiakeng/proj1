@@ -10,6 +10,8 @@
 # the eight formulas of the second encoder (src/encode_independent.py, Section 6.1, check (5)) are
 # written to cnf/independent/ and refuted in the same way, each proof checked with lrat-check
 # (about another hour and 5 GB).  With the argument --second-encoder, only this last part is run.
+# If the variable CAKELPR names the binary of cake_lpr (https://github.com/tanyongkiam/cake_lpr, we used
+# commit 033aad5), every proof is also checked with this formally verified checker.
 set -e
 H=$(cd "$(dirname "$0")" && pwd)
 export CADICAL=${CADICAL:-$(command -v cadical || echo cadical)}
@@ -54,6 +56,19 @@ python3 balzer.py 11 1234s id | grep -E "SATISFIABLE|rule"
 
 sec "the regenerated proofs against the recorded digests"
 (cd "$H" && sha256sum -c formulas/PROOFS.sha256)
+
+if [ -n "$CAKELPR" ]; then
+sec "the same proofs checked again with cake_lpr, a formally verified checker"
+cd "$H/cnf"
+for f in mt4_9 k4_G6 k4_G4c k14_n10 w; do
+  echo "$f: $("$CAKELPR" --CML_HEAP_SIZE=6000 --CML_STACK_SIZE=4000 $f.cnf $f.lrat 2>&1)"
+done
+for d in balzer_*/; do
+  if [ -f "$d/f.lrat" ]; then
+    echo "$d: $("$CAKELPR" --CML_HEAP_SIZE=6000 --CML_STACK_SIZE=4000 "$d/f.cnf" "$d/f.lrat" 2>&1)"
+  fi
+done
+fi
 fi
 
 sec "Section 6.1, check (5): the eight formulas of the second encoder, with LRAT proofs"
@@ -72,3 +87,8 @@ echo "  drat-trim (exit code $?): $(grep '^s ' $I.drat-trim.log || echo 'no verd
 set -e
 "$LRATCHECK" $I.cnf $I.lrat | grep -E "VERIFIED|FAIL|ERROR" | sed 's/^/  /'
 sha256sum $I.cnf $I.lrat | sed 's/^/  /'
+if [ -n "$CAKELPR" ]; then
+  for f in mt4_9 k4_G6 k4_G4c k14_n10 balzer_AB_10 balzer_LA_9 balzer_LB_9 balzer_id_12; do
+    echo "$f, cake_lpr: $("$CAKELPR" --CML_HEAP_SIZE=6000 --CML_STACK_SIZE=4000 ../cnf/independent/$f.cnf ../cnf/independent/$f.lrat 2>&1)"
+  done
+fi
