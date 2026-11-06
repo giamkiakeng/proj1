@@ -1,12 +1,15 @@
 %% ---------------------------------------------------------------------------
 \section{Applications to Four and Five States}\label{sec:applications}
 
-We now combine the necessary conditions with satisfiability solvers. All
-statements of this section are computer-assisted. Each of them is either a
-finite simulation or enumeration, or the unsatisfiability of a propositional
-formula that is certified by a proof checked independently of the solver; the
-kind of evidence is stated for each result and summarized in
-\cref{tab:results}.
+We now combine the necessary conditions with satisfiability solvers. Each
+statement of this section rests on one or more of four kinds of evidence, which
+we state for each result and summarize in \cref{tab:results}: proofs in the
+text; exact finite computations, that is, simulations and exhaustive
+enumerations that decide a finite statement completely; satisfiable formulas,
+whose models we check by simulation; and unsatisfiable formulas, certified by
+proofs that an independent checker verifies. Statements that rest on finite
+simulations alone are observations about the simulated ranges. We mark them as
+such, and no proof uses them.
 
 \subsection{Method}\label{sec:method}
 
@@ -21,44 +24,78 @@ $2n-2$ for every $n\in\mathcal N$, the return chains of \cref{lem:return} for
 $n,n+1\in\mathcal N$, and $\PUMP(n,n')$ for $4\le n<n'\le N'$; the formula
 $\MT_k(\mathcal N;M)$ has no pumping clauses. The formula $\G_k(T,N_1,C)$ is
 encoded in the same way, with $M=2N_1$. Its regions are closed under
-predecessors, so the encoding is equivalent to \cref{def:G}.
+predecessors, so the encoding is equivalent to \cref{def:G}. \Cref{app:encoding}
+gives the clauses.
 
 \paragraph{Certificates}
 Every unsatisfiability claim is certified by a proof in the LRAT
 format~\cite{CruzFilipeEtAl17}, which is produced by the solver
 CaDiCaL~\cite{CaDiCaL2} or, for one formula, obtained from a DRAT proof of the
 solver Kissat~\cite{Kissat20} with \textsf{drat-trim}~\cite{WetzlerHeuleHunt14},
-and verified by the independent checker \texttt{lrat-check}. The formula
-generators, the enumerations and the simulations are trusted programs, and
-every model found by a solver was re-simulated by a checker that shares no code
-with the generators.
+and verified by the independent checker \texttt{lrat-check}. The eight
+unsatisfiable formulas are published with their SHA-256 digests, so that the
+proofs can be checked against exactly these formulas (\cref{app:artefacts}).
 
-\paragraph{Validation}
-As tests of the encodings, Mazoyer's solution, as extracted from Duprat's
-formal proof of its correctness~\cite{Duprat97}, satisfies
-$\MT_6(\{3,\dots,12\};78,40)$ and, with its table fixed, (G2) and (G3) for $T=8$
-and all $n\ge15$. With the table of the rule $\delta_{14}$ of \cref{sec:five}
-fixed, the formulas are satisfiable for the lines of lengths $2,\dots,14$ and
-unsatisfiable with the line of length $15$, or with the early rows ($T=8$, but
-not $T=6$) of the lines of lengths $15,\dots,30$, as simulation predicts
+\paragraph{Checks of the encodings}
+A checked proof shows that a formula is unsatisfiable, but not that the formula
+expresses the intended conditions; the programs that generate the formulas are
+trusted. We tested them in four independent ways.
+\begin{enumerate}[(1)]
+\item \emph{Differential test.} A program written for this purpose from the
+definitions of this paper, sharing no code with the generators, evaluates the
+conditions directly by simulating the lines and the half-line: the
+synchronization of the lines, the half-line up to an anti-diagonal,
+$\PUMP(n,n')$ with the cone of \cref{lem:cone}, (G1)--(G5) and (B1)--(B4) of
+\cref{sec:balzer}. With a rule table fixed by assumptions, each formula must be
+satisfiable exactly when the table satisfies its conditions. We compared the two
+on $34$ formulas (those of \cref{thm:four}, \cref{prop:sharp}~(b),
+\cref{prop:germs,prop:balzer} and \cref{tab:validation}, and variants for four,
+five and six states) and $3{,}582$ tables (the known rules, models of the
+satisfiable formulas, the $27$ partial rules of \cref{prop:sharp}~(a) completed
+at random, single and double mutations of these, and random tables): the
+answers agree on all $57{,}756$ pairs, $973$ of which are satisfiable. The
+clauses of (B1)--(B4) alone agree with the direct check on $5{,}200$ tables, and
+the cones found by search agree with \cref{lem:cone} for $2\le n<200$. No table
+satisfies the formulas of \cref{thm:four}, so for them the test can only confirm
+that violated conditions are detected; the same generators with other
+parameters agree with the direct evaluation on satisfiable tables as well.
+\item \emph{Known rules.} With the tables of Mazoyer's solution and of
+$\delta_{14}$ fixed, the formulas have the outcomes that simulation predicts
 (\cref{tab:validation}).
+\item \emph{Independent methods.} The formula of \cref{thm:four}~(i) and the
+exhaustive enumeration of \cref{prop:sharp}~(a), a separate program, agree that
+no four-state rule synchronizes the lines of lengths $2,\dots,9$. The germ
+enumeration of \cref{prop:germs} and the refutations of its $14$ remaining
+germs were each repeated by an independent program.
+\item \emph{Models.} Every model found by a solver was re-simulated by a checker
+that shares no code with the generators.
+\end{enumerate}
+These tests make an error in the generators unlikely, but they do not prove its
+absence; what remains trusted is that the generators, on the formulas of the
+paper, behave as on the tested ones.
 
 \begin{table}[t]
 \centering\small
-\caption{Tests of the encodings (\cref{sec:method}): formulas with a known rule
-table fixed, whose outcome is predicted by simulating that rule. The formula for
-all $n\ge15$ uses the representative lengths of \cref{cor:reduce}.}
+\caption{Known rules fixed in the formulas (\cref{sec:method}, check~(2)): the
+outcome is predicted by simulating the rule. The formula for all $n\ge15$ uses
+the representative lengths of \cref{cor:reduce}.}
 \label{tab:validation}
 \input{figures/tab_validation}
 \end{table}
 
 \paragraph{Reproducibility}
-The supplementary material contains the programs, the rule tables, the lists of
-half-line germs and the logs, with two scripts that rerun every computation:
-one for the simulations, enumerations and satisfiable formulas (about $7$
-minutes), and one that regenerates and checks every LRAT proof (about $30$
-minutes). The solver times, proof sizes and SHA-256 digests of all formulas and
-proofs are listed there; see the data availability statement at the end.
+Every computational statement can be repeated with the supplementary material,
+which is publicly available (see the data availability statement). It contains
+the programs, the rule tables, the germ lists, the eight unsatisfiable formulas
+with their SHA-256 digests, the logs, and three scripts: one writes the
+formulas with the generators and compares them with the recorded digests
+(about one minute); one reruns the simulations, enumerations, satisfiable
+formulas and the differential test (about $9$ minutes); and one regenerates
+every LRAT proof and checks it with \texttt{lrat-check} (about an hour and
+$5$\,GB). CaDiCaL~3.0.1 writes the same proof on every run, and Kissat~4.0.4
+with \textsf{drat-trim} reproduced the recorded proof of its case byte for byte,
+so the regenerated proofs can be compared with the recorded digests.
+\Cref{app:artefacts} lists each computational claim with its programs and files.
 
 \subsection{Four States}\label{sec:four}
 
@@ -203,9 +240,9 @@ $\Fq$, and there $\tau\le T\le n-3$ (\cref{fig:firstfire,tab:rules}).
 \caption{The rule $\delta_{14}$. Left: the line of length $14$ is synchronized
 at time $26$. Middle: on the line of length $15$, the cells $13$, $14$ and $15$
 fire at time $22$, that is, at the relative time $\tau=8$, six steps early.
-Right: the half-line for $0\le t\le63$. From time $3$ on, the cells $i\ge3$
-take only the values $\Lq$ and $\Bq$, and there $\delta_{14}$ acts as the
-elementary cellular automaton $22$.}
+Right: the half-line for $0\le t\le63$. In this range, and in our simulations
+up to $t<1500$, the cells $i\ge3$ take only the values $\Lq$ and $\Bq$ from time
+$3$ on, and there $\delta_{14}$ acts as the elementary cellular automaton $22$.}
 \label{fig:delta14}
 \end{figure}
 
@@ -242,16 +279,39 @@ $n>60$ the proposition rests on the certificates of \cref{tab:rules} and on
 For example, $\delta_{14}$ synchronizes the line of length $14$ at time $26$,
 whereas on the line of length $15$ the cells $13$, $14$ and $15$ fire at time
 $22$, eight steps after the front has reached the right end and six steps too
-early (\cref{fig:delta14}). For $3\le t<1500$ its half-line takes the values $\Lq,\Gq$ at cell $1$, $\Lq,\Aq$ at cell $2$ and
-$\Lq,\Bq$ at the cells $i\ge3$, and $\delta_{14}$ restricted to $\{\Lq,\Bq\}^3$
-is the elementary rule $22$~\cite{Wolfram83}. In the simulated ranges, neither
-barrier excludes this half-line: $\PUMP(n,n')$ holds for $4\le n<n'\le800$, and
+early (\cref{fig:delta14}). The following are observations from simulations,
+valid in the stated ranges. For $3\le t<1500$ the half-line of $\delta_{14}$
+takes the values $\Lq,\Gq$ at cell $1$, $\Lq,\Aq$ at cell $2$ and $\Lq,\Bq$ at
+the cells $i\ge3$, and $\delta_{14}$ restricted to $\{\Lq,\Bq\}^3$ is the
+elementary rule $22$~\cite{Wolfram83}. Neither barrier excludes this half-line
+in the ranges we checked: $\PUMP(n,n')$ holds for $4\le n<n'\le800$, and
 \cref{lem:left} does not apply for $n\le5000$, $s\le3$ and $\ell\le24$. The
-rules $\delta_{12}$ and $\delta_{13}$ synchronize the lines of lengths
-$2,\dots,12$ and $2,\dots,13$, respectively, and no other line of length at most
-$60$. Each of these seven rules has a line of some length $14\le n\le19$ with a
-cell in state $\Fq$ at a relative time $\tau\le9$, so none of them satisfies
-$\G_5(9,N_1)$ for $N_1\ge19$.
+following are exact finite computations. The rules $\delta_{12}$ and
+$\delta_{13}$ synchronize the lines of lengths $2,\dots,12$ and $2,\dots,13$,
+respectively, and no other line of length at most $60$. Each of the seven rules
+has a line of some length $14\le n\le19$ with a cell in state $\Fq$ at a
+relative time $\tau\le9$, so none of them satisfies $\G_5(9,N_1)$ for
+$N_1\ge19$.
+
+\paragraph{What is new}
+Synchronizing finitely many lengths is not difficult in itself: for every $k$
+there is a largest $N_k\in\{1,2,\dots\}\cup\{\infty\}$ such that some $k$-state
+rule synchronizes the lines of lengths $2,\dots,N_k$ in minimal time, and since
+there are finitely many rules, $N_k=\infty$ exactly when a $k$-state
+minimal-time solution exists. The question is how far $N_k$ reaches.
+Exhaustive searches give $N_4=8$ (Yun\`es~\cite{Yunes93};
+\cref{prop:sharp}~(a)), and six-state minimal-time solutions
+exist~\cite{Mazoyer87}. \Cref{prop:nearmiss} gives $N_5\ge14$. We are not aware
+of an earlier published bound for five states: the five-state constructions we
+know of synchronize restricted families of lengths, some of them in non-minimal
+time~\cite{UmeoYanagihara07,Yunes08}. The rules add three things to the method
+of this paper. First, a proof that five states do not suffice must use lines of
+length at least $15$, or conditions other than the synchronization of the lines
+of lengths $2,\dots,14$. Second, the statement that each rule fails for every
+$n\ge15$ is not a finite simulation: it combines the simulation of finitely
+many lengths with \cref{cor:reduce}. Third, the rules fail in the first rows
+after the reflection, which is what the formulas of \cref{sec:early} target.
+They are not candidates for minimal-time solutions.
 
 \subsection{Five States: Half-Lines of Low Complexity}\label{sec:germs}
 
@@ -323,8 +383,9 @@ besides $(\Lq,\Lq,\Lq)$; here \texttt{xyz>d} means $\delta(x,y,z)=d$. On these
 cells, the cells between roughly the cell $t/3$ and the front are in state
 $\Gq$, and the cells between the left border and roughly the cell $t/3$
 alternate between $\Aq$ and $\Lq$, periodically in time and space
-(\cref{fig:halflines}). By \cref{thm:left} no minimal-time solution has such a
-half-line, and \cref{lem:left} gives an explicit length.
+(\cref{fig:halflines}). If this pattern continued forever, \cref{thm:left}
+would exclude the half-line; \cref{lem:left} gives an explicit length without
+that assumption.
 
 \begin{corollary}\label{cor:germ12}
 No five-state rule that has the $22$ transitions above synchronizes the line of

@@ -6,8 +6,10 @@ fires at time $2n-2$. We show that the firing cell depends only on a cone of
 about $n/2$ cells of two anti-diagonals of the half-line. If two lines of
 different lengths received the same values on this cone, their right ends would
 fire at the same relative time, which is impossible (\cref{lem:pumping}). This
-pumping lemma is a condition on the half-line alone, and it implies the
-speed-$1/3$ barrier (\cref{thm:third}).
+pumping lemma is a condition on the half-line alone. It implies a lower bound
+on the times from which the cells behind the front of the half-line are
+periodic (\cref{thm:third}), which we also call the speed-$1/3$ barrier, for a
+reason explained after its proof.
 
 \subsection{Relative Coordinates and Determinacy}
 
@@ -170,7 +172,7 @@ J_n(\kappa)=\bigl(\Phi_{n-3+\kappa}(2\kappa-2),\ \Phi_{n-2+\kappa}(2\kappa-1)\bi
 the input cells at distance $\kappa$ from the right end lie on the depth rows
 $2\kappa-2$ and $2\kappa-1$.
 
-\begin{theorem}[speed-$1/3$ barrier]\label{thm:third}
+\begin{theorem}[late onset of periodicity]\label{thm:third}
 Let $\delta$ be a minimal-time solution. Every depth row $t\mapsto\Phi_t(j)$ is
 eventually periodic; let $\theta(j)$ be the least $t_0\ge j$ such that it is
 periodic on $[t_0,\infty)$. For every $n\ge4$ there is a depth $j\le n$ with
@@ -209,55 +211,69 @@ Then $\theta(j)\le n+j/2-5/2$ for all $j\le n$, which contradicts the first
 part.
 \end{proof}
 
-Depth row $j$ becomes periodic at the cell $(\theta(j),\theta(j)+1-j)$. If
-$\theta(j)\ge(3/2-\varepsilon)j$, then $j\le\theta(j)/(3/2-\varepsilon)$, and the
-position of this cell satisfies
+\Cref{thm:third} is a statement about the numbers $\theta(j)$, and only about
+infinitely many of them: it says that $\theta(j)\ge(3/2-\varepsilon)j$ for
+infinitely many $j$, and nothing about the other depths. Its geometric reading
+explains its second name. Depth row $j$ becomes periodic at the cell
+$(\theta(j),\theta(j)+1-j)$. If $\theta(j)\ge(3/2-\varepsilon)j$, then
+$j\le\theta(j)/(3/2-\varepsilon)$, and the position of this cell satisfies
 \[
 \theta(j)+1-j\ \ge\ \frac{1-2\varepsilon}{3-2\varepsilon}\,\theta(j)+1,
 \]
 where the factor $(1-2\varepsilon)/(3-2\varepsilon)$ tends to $1/3$ as
-$\varepsilon\to0$ (\cref{fig:theta}). So, for infinitely many $j$, depth row $j$ becomes periodic
-only at a time $t$ at which it is close to the cell $t/3$ or beyond: along
-these rows, the transient part of the half-line, which starts at the left
-border, reaches roughly the cell $t/3$ at time $t$. This is the sense of the
-name ``speed-$1/3$ barrier''.
+$\varepsilon\to0$ (\cref{fig:theta}). So, for infinitely many $j$, depth row $j$
+becomes periodic only at a time $t$ at which it is close to the cell $t/3$ or
+beyond. Equivalently, there is no $c<1/3$ such that, for all large $j$, depth
+row $j$ is periodic from the time at which it reaches the line $i=ct$; this is
+the sense in which we speak of a speed-$1/3$ barrier. The theorem does not say
+that the cells that are not yet periodic form a region bounded by a signal, nor
+that such a boundary moves at speed $1/3$, nor that it exists at all.
+\Cref{rem:division} discusses the constructions in which it does.
 
-\begin{remark}[an interpretation]\label{rem:division}
+\begin{remark}[a heuristic reading]\label{rem:division}
 In the classical constructions, the line is divided recursively, and the first
 division point is where a signal sent by the general meets the echo of the right
-end (\cref{fig:theta}(c)); a \emph{signal} of speed $v$ is a pattern that moves by $v$ cells per
-step. A signal of speed $v$ that leaves the general at time $0$ meets the echo,
-which leaves the right end at time $n-1$ at speed one, at the cell
-$v(2n-1)/(1+v)$. If, as for the two rules simulated below, this signal is the
-boundary between the transient and the periodic parts of the depth rows, then
-depth row $j$ meets it at the time $(j-1)/(1-v)$, so $\theta(j)\approx j/(1-v)$.
-\Cref{thm:third} then says that $v\ge1/3$ asymptotically, so the first division
-point, at the cell $v(2n-1)/(1+v)\ge(2n-1)/4$, is asymptotically never in the
-half of the line next to the general. Waksman's and Balzer's solutions divide
-the line in the middle, with $v=1/3$, and Mazoyer's solution divides it at two
-thirds of its length from the general, with $v=1/2$. In simulations of
-Mazoyer's solution up to time $2600$, $\theta(j)\in\{2j+1,2j+2\}$ for $1\le
-j<700$; for the five-state rule $\delta_{12}$ of \cref{sec:five}, which
-synchronizes the lines of lengths $2,\dots,12$, simulations up to time $1400$
-give $\theta(j)=\lceil 3j/2\rceil+2$ for $10\le j\le300$, and $\PUMP(n,n')$ holds
-for $4\le n<n'\le650$ (\cref{fig:theta,fig:halflines}). This reading is a heuristic and
-not a theorem: in general, the boundary of the periodic part need not be a
-signal.
+end (\cref{fig:theta}(c)); a \emph{signal} of speed $v$ is a pattern that moves by
+$v$ cells per step. A signal of speed $v$ that leaves the general at time $0$
+meets the echo, which leaves the right end at time $n-1$ at speed one, at the
+cell $v(2n-1)/(1+v)$. Suppose that the depth rows become periodic exactly where
+they cross this signal, as we observed for the two rules simulated below; this
+is an assumption, not a consequence of minimal time. Then depth row $j$ meets the
+signal at the time $(j-1)/(1-v)$, so $\theta(j)\approx j/(1-v)$, and
+\cref{thm:third} gives $v\ge1/3$ asymptotically: the first division point, at the
+cell $v(2n-1)/(1+v)\ge(2n-1)/4$, is then asymptotically never in the half of the
+line next to the general. Waksman's and Balzer's solutions divide the line in
+the middle, with $v=1/3$, and Mazoyer's solution divides it at two thirds of its
+length from the general, with $v=1/2$.
+
+Simulations can only approximate $\theta(j)$. For a horizon $T$, let
+$\theta_T(j)$ be the least $t_0\ge j$ such that $\Phi_t(j)=\Phi_{t+p}(j)$ for
+$t_0\le t\le T-p$, where $p\le12$ is the least period of depth row $j$ on its
+last $200$ simulated steps; if $p$ is a period of the row from $\theta(j)$ on,
+then $\theta_T(j)\le\theta(j)$. For Mazoyer's solution and $T=2600$,
+$\theta_T(j)\in\{2j+1,2j+2\}$ for $1\le j<700$. For the five-state rule
+$\delta_{12}$ of \cref{sec:five}, which synchronizes the lines of lengths
+$2,\dots,12$, and $T=1400$, $\theta_T(j)=\lceil 3j/2\rceil+2$ for $10\le
+j\le300$, and $\PUMP(n,n')$ holds for $4\le n<n'\le650$
+(\cref{fig:theta,fig:halflines}). These are observations on finite horizons,
+and the reading above need not apply to other rules.
 \end{remark}
 
 \begin{figure}[t]
 \centering
 \input{figures/fig_theta}
-\caption{(a)~The time $\theta(j)$ from which the depth row $j$ is periodic,
-observed on the half-lines of Mazoyer's six-state solution ($1\le j\le150$)
-and of the five-state rule $\delta_{12}$ ($10\le j\le150$), simulated up to
-time $700$; the dashed line is $3j/2$. In this range,
-$\theta(j)\in\{2j+1,2j+2\}$ for Mazoyer's solution and $\theta(j)=\lceil
-3j/2\rceil+2$ for $\delta_{12}$. (b)~The same data as the ratio $\theta(j)/j$ (from $j=3$ on for
-Mazoyer's solution). By \cref{thm:third}, every minimal-time solution has
-$\theta(j)/j\ge3/2-\varepsilon$ for infinitely many $j$; $\delta_{12}$, which
-synchronizes only the lines of lengths $2,\dots,12$, stays at this barrier.
-(c)~The heuristic of \cref{rem:division} on the line of length $n$: a signal of
+\caption{(a)~The observed onset $\theta_{700}(j)$ of periodicity of depth row
+$j$ (\cref{rem:division}) on the half-lines of Mazoyer's six-state solution
+($1\le j\le150$) and of the five-state rule $\delta_{12}$ ($10\le j\le150$),
+simulated up to time $700$; the dashed line is $3j/2$. In this range,
+$\theta_{700}(j)\in\{2j+1,2j+2\}$ for Mazoyer's solution and
+$\theta_{700}(j)=\lceil 3j/2\rceil+2$ for $\delta_{12}$. (b)~The same data as
+the ratio $\theta_{700}(j)/j$ (from $j=3$ on for Mazoyer's solution).
+\Cref{thm:third} says that every minimal-time solution has
+$\theta(j)/j\ge3/2-\varepsilon$ for infinitely many $j$; the values of
+$\delta_{12}$, which synchronizes only the lines of lengths $2,\dots,12$, lie at
+this bound in the simulated range.
+(c)~The heuristic reading of \cref{rem:division} on the line of length $n$: a signal of
 speed $v$ sent by the general meets the echo of the right end at the cell
 $v(2n-1)/(1+v)$, about $n/2$ for $v=1/3$ and $2n/3$ for $v=1/2$, and the depth
 row $j$ (grey) crosses the signal at about the time $j/(1-v)$ (dots). Shaded:
@@ -271,15 +287,16 @@ with the half-line.}
 \input{figures/fig_halflines}
 \caption{The half-lines of Mazoyer's six-state solution (left) and of the
 five-state rule $\delta_{12}$ (right) for $0\le t\le90$. The dashed lines are
-$i=t/2$ and $i=t/3$. The depth rows, that is, the cells at a fixed distance
-behind the front, become periodic to the right of the line $i=t/2$ for
-Mazoyer's solution and of the line $i=t/3$ for $\delta_{12}$
-(\cref{rem:division}); by \cref{thm:third}, no minimal-time solution can do
-this to the left of the line $i=t/3$, asymptotically. To the
-left of the line $i=t/3$, the half-line of $\delta_{12}$ alternates between
-$\Aq$ and $\Lq$, periodically in time and space. \Cref{thm:left} excludes such a
-wedge at the left border, and \cref{cor:germ12} makes this explicit for the
-line of length $518$.}
+$i=t/2$ and $i=t/3$. In this range, the depth rows, that is, the cells at a
+fixed distance behind the front, become periodic near the line $i=t/2$ for
+Mazoyer's solution and near the line $i=t/3$ for $\delta_{12}$
+(\cref{rem:division}). By \cref{thm:third}, in a minimal-time solution the
+depth rows cannot all become periodic before they reach a line $i=ct$ with
+$c<1/3$. In the range shown, the half-line of $\delta_{12}$ alternates between
+$\Aq$ and $\Lq$ to the left of the line $i=t/3$, periodically in time and
+space. \Cref{thm:left} excludes such a wedge at the left border if the pattern
+continues forever, and \cref{cor:germ12} excludes it for the line of length
+$518$ without this assumption.}
 \label{fig:halflines}
 \end{figure}
 

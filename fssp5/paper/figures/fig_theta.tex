@@ -6,8 +6,8 @@
     xmin=0,xmax=150,xtick={0,50,100,150},tick align=outside,
     every axis plot/.append style={line width=0.9pt}}}
   % (a) theta(j)
-  \begin{axis}[name=pa,ymin=0,ymax=320,ytick={0,100,200,300},ylabel={$\theta(j)$},clip=false,
-      title={(a) where the depth row $j$ becomes periodic},title style={font=\small,yshift=-1ex}]
+  \begin{axis}[name=pa,ymin=0,ymax=320,ytick={0,100,200,300},ylabel={$\theta_{700}(j)$},clip=false,
+      title={(a) when the depth row $j$ becomes periodic},title style={font=\small,yshift=-1ex}]
     \addplot[ink,densely dashed,line width=0.6pt,domain=0:150,samples=2] {1.5*x};
     \addplot[stC] table[x=j,y=theta] {figures/theta_mazoyer.dat};
     \addplot[stF] table[x=j,y=theta] {figures/theta_delta12.dat};
@@ -18,8 +18,8 @@
   % (b) theta(j)/j
   \begin{axis}[name=pb,at={(pa.south west)},anchor=north west,yshift=-1.25cm,
       ymin=1.25,ymax=2.6,ytick={1.5,2,2.5},yticklabels={$3/2$,$2$,$5/2$},
-      ylabel={$\theta(j)/j$},xlabel={depth $j$},
-      title={(b) the ratio $\theta(j)/j$},title style={font=\small,yshift=-1ex}]
+      ylabel={$\theta_{700}(j)/j$},xlabel={depth $j$},
+      title={(b) the ratio $\theta_{700}(j)/j$},title style={font=\small,yshift=-1ex}]
     \addplot[ink,densely dashed,line width=0.6pt,domain=0:150,samples=2] {1.5};
     \addplot[stC] table[x=j,y expr=\thisrow{theta}/\thisrow{j},restrict x to domain=3:150] {figures/theta_mazoyer.dat};
     \addplot[stF] table[x=j,y expr=\thisrow{theta}/\thisrow{j}] {figures/theta_delta12.dat};

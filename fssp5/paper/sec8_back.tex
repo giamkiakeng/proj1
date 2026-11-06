@@ -12,11 +12,19 @@ drafting and revising the text. The author reviewed and edited all content and
 takes full responsibility for it.
 
 \paragraph{Data availability}
-The programs, rule tables, germ lists and logs behind every computational
-statement, two scripts that rerun them, the solver times, proof sizes and
-SHA-256 digests, and the program that draws the figures are in the
-supplementary material and at \url{https://github.com/giamkiakeng/proj1}
-(directory \texttt{fssp5/paper/supplementary}).
+{\sloppy The programs, the rule tables, the germ lists and the logs behind every
+computational statement, the eight unsatisfiable formulas of
+\cref{thm:four,prop:germs,prop:balzer} with the SHA-256 digests of the formulas
+and of their proofs, the three scripts that rerun every computation, the solver
+times and proof sizes, and the program that draws the figures are in the
+supplementary material and in the public repository
+\url{https://github.com/giamkiakeng/proj1}, directory
+\texttt{fssp5/paper/supplementary}. The version described in this paper is
+commit \texttt{d0d991b}, with the permanent link
+\url{https://github.com/giamkiakeng/proj1/tree/d0d991bd293416fd620a3b13975acd2daf4c9e9e/fssp5/paper/supplementary}.
+The LRAT proofs, $4.4$\,GB in total, are too large for the repository; the
+third script regenerates them, checks them, and compares them with the recorded
+digests (\cref{sec:method,app:artefacts}).\par}
 
 %% ---------------------------------------------------------------------------
 \section*{Nomenclature}
@@ -41,9 +49,10 @@ J_n(\kappa) & the input word: the cells of the half-line on $t+i=2n-3$ and $2n-2
 \PUMP(n,n') & the conclusion of the pumping lemma & \cref{lem:pumping}\\
 \Phi_t(j) & the cell of the half-line at depth $j$ behind the front at time $t$ & \cref{sec:right}\\
 \theta(j) & the time from which depth row $j$ is periodic & \cref{thm:third}\\
+\theta_T(j) & the same, observed in a simulation up to time $T$ & \cref{rem:division}\\
 v_c(i),\ u_c(y) & the cells of chain $c$, in direct and in skewed coordinates & \cref{sec:left}\\
 E(T) & the first $T+1$ rows of a reflected triangle & \cref{sec:early}\\
-V_t,\ G_D & the first $D+1$ depth rows at time $t$, and the map that advances them & \cref{lem:certificate}\\
+V_t,\ \Gamma_D & the first $D+1$ depth rows at time $t$, and the map that advances them & \cref{lem:certificate}\\
 \G_k(T,N_1,C) & the early-row conditions (G1)--(G5) & \cref{def:G}\\
 \MT_k(\mathcal N;M,N') & the formula for the lines in $\mathcal N$, the half-line up to $t+i=M$ and $\PUMP$ up to $N'$ & \cref{sec:method}\\
 c_M(\delta) & the number of neighbourhoods besides $(\Lq,\Lq,\Lq)$ on the half-line up to $t+i=M$ & \cref{sec:germs}\\

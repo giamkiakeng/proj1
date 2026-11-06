@@ -178,11 +178,13 @@ configuration $C_\infty(t,1)\cdots C_\infty(t,t+1)$ at the time
 $t=t_1+r+\nu P$ is $w_0z_1^{a_1+\nu D_1}w_1\cdots z_m^{a_m+\nu D_m}w_m$. In
 words: from some time on, the half-line consists of finitely many periodic
 regions separated by signals of rational speeds; on signals in one-dimensional
-cellular automata see~\cite{MazoyerTerrier99}. In simulations, the half-line of
-the five-state rule $\delta_{12}$ of \cref{sec:five} looks like this
-(\cref{fig:halflines}): the cells between roughly the cell $t/3$ and the front
-are in state $\Gq$, and the cells between the left border and roughly the cell
-$t/3$ alternate between $\Aq$ and $\Lq$, both in time and in space.
+cellular automata see~\cite{MazoyerTerrier99}. The half-line of the five-state
+rule $\delta_{12}$ of \cref{sec:five} looks like this on all the cells that we
+simulated, those with $t+i\le1034$ (\cref{fig:halflines,fig:delta12}): the cells
+between roughly the cell $t/3$ and the front are in state $\Gq$, and the cells
+between the left border and roughly the cell $t/3$ alternate between $\Aq$ and
+$\Lq$, both in time and in space. Whether it continues in this way is not
+known, and \cref{cor:germ12} does not need it.
 
 \begin{corollary}\label{cor:regular}
 The half-line of a minimal-time solution is not eventually regular.
@@ -202,3 +204,12 @@ i\le\alpha t,\ t\ge t_0\}$ lies in the block of index $j(r)$ of its residue
 class, so $C_\infty$ is periodic with period $P$ in time and $q$ in space on
 this wedge (\cref{fig:wedge}(b)). This contradicts \cref{thm:left}.
 \end{proof}
+
+Eventual regularity means exactly the definition above, and \cref{cor:regular}
+excludes nothing beyond it. \Cref{thm:left}, from which it follows, excludes
+every half-line that is periodic in time and space on a wedge
+$\{(t,i):s\le i\le\alpha t,\ t\ge t_0\}$ with $\alpha>0$, whatever happens
+elsewhere. Neither result excludes periodic regions bounded away from the left
+border, periodic regions at the left border whose width grows sublinearly, or
+other kinds of regular behaviour that do not produce a periodic wedge at the
+left border.

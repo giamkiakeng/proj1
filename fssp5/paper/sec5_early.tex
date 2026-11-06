@@ -44,8 +44,8 @@ autonomously, and one period of it is a certificate for all later times.
 
 \begin{lemma}[periodicity certificate]\label{lem:certificate}
 Let $\delta$ be a rule, $D\ge0$, and $V_t:=(\Phi_t(0),\dots,\Phi_t(D))$ for
-$t\ge D$. There is a map $G_D$ on $W^{D+1}$, depending on $\delta$ and $D$
-only, with $V_{t+1}=G_D(V_t)$ whenever $t\ge D$ and $V_t\in W^{D+1}$. If
+$t\ge D$. There is a map $\Gamma_D$ on $W^{D+1}$, depending on $\delta$ and $D$
+only, with $V_{t+1}=\Gamma_D(V_t)$ whenever $t\ge D$ and $V_t\in W^{D+1}$. If
 $V_{t_0}=V_{t_0+p}$ for some $t_0\ge D$ and $p\ge1$, and $V_t\in W^{D+1}$ for
 $t_0\le t<t_0+p$, then $V_t\in W^{D+1}$ and $V_{t+p}=V_t$ for all $t\ge t_0$.
 \end{lemma}
@@ -54,10 +54,10 @@ $t_0\le t<t_0+p$, then $V_t\in W^{D+1}$ and $V_{t+p}=V_t$ for all $t\ge t_0$.
 For $t\ge D$ and $0\le j\le D$ we have $j\le t$, so the arguments in
 \eqref{eq:comoving} are $\Phi_t(j)$, $\Phi_t(j-1)$ and $\Phi_t(j-2)$, with
 indices at most $D$, and $\Lq$ for negative indices; none of them is the border
-symbol $\Phi_t(t+1)=\ast$. Hence $G_D(v)_j:=\delta(v_j,v_{j-1},v_{j-2})$, with
+symbol $\Phi_t(t+1)=\ast$. Hence $\Gamma_D(v)_j:=\delta(v_j,v_{j-1},v_{j-2})$, with
 $v_{-1}=v_{-2}=\Lq$, has the required property. For the second statement,
 suppose that $V_{t'}\in W^{D+1}$ and $V_{t'+p}=V_{t'}$ for $t_0\le t'\le t$,
-which is true for $t=t_0$. Then $V_{t+1+p}=G_D(V_{t+p})=G_D(V_t)=V_{t+1}$, and
+which is true for $t=t_0$. Then $V_{t+1+p}=\Gamma_D(V_{t+p})=\Gamma_D(V_t)=V_{t+1}$, and
 $V_{t+1}\in W^{D+1}$, by hypothesis if $t+1<t_0+p$ and because
 $V_{t+1}=V_{t+1-p}$ otherwise. Induction on $t$ concludes.
 \end{proof}

@@ -1,0 +1,93 @@
+%% ---------------------------------------------------------------------------
+\appendix
+\section{The Encodings}\label{app:encoding}
+
+Both formula generators build their formulas from the same pieces. Let $S$ be
+the set of $k$ states and $W=S\setminus\{\Fq\}$.
+\begin{enumerate}[(E1)]
+\item \emph{Rule table.} A variable $x_{e,s}$ for each neighbourhood $e$ and
+each $s\in S$, with the clause $\bigvee_s x_{e,s}$ and the clauses $\neg
+x_{e,s}\vee\neg x_{e,s'}$ for $s\ne s'$. The entries $\delta(\Lq,\Lq,\Lq)$ and
+$\delta(\Lq,\Lq,\ast)$ are fixed to $\Lq$.
+\item \emph{Cells.} A variable $y_{u,s}$ for each encoded cell $u$ and each
+$s\in W$, with exactly-one clauses as in (E1). So every encoded cell is in a
+working state. The cells at time $0$, the quiescent cells $t<i-1$
+(\cref{lem:lightcone}) and the borders are constants, and so is every cell of a
+firing row, with the value $\Fq$.
+\item \emph{Local rule.} For each encoded cell $u$ with predecessors
+$u_1,u_2,u_3$ and each choice $a,b,d$ of their values, let $e=(a,b,d)$ and let
+$P$ be the conjunction of $y_{u_1,a}$, $y_{u_2,b}$ and $y_{u_3,d}$, constants
+omitted. If $u$ is a working cell, the clauses are $P\wedge x_{e,s}\to y_{u,s}$
+for $s\in W$ and $P\to\neg x_{e,\Fq}$; if $u$ is in a firing row, the clause is
+$P\to x_{e,\Fq}$.
+\item \emph{Return chain.} For an encoded cell $u=(t,i)$ of the line of length
+$n$ with $t+i=2n-1$ that is not in its firing row, and the half-line cell
+$h=(t,i)$: the clauses $\neg y_{u,s}\vee\neg y_{h,s}$ for $s\in W$.
+\item \emph{Pumping.} For $\PUMP(n,n')$: the clause $\bigvee_p z_p$ over the
+positions $p$ of $\mathrm{cone}_n(n-1,0)$ (\cref{lem:cone}). The input cells
+$v_p$ of $J_n$ and $w_p$ of $J_{n'}$ at $p$ are compared by an auxiliary
+variable $z_p$ with the clauses $\neg z_p\vee\neg y_{v_p,s}\vee\neg y_{w_p,s}$
+for $s\in W$; constant cells are compared directly.
+\end{enumerate}
+
+$\MT_k(\mathcal N;M,N')$ consists of (E1); the half-line cells with $t+i\le M$
+and, for each $n\in\mathcal N$, the cells of $R_n$, with (E2) and (E3); (E4) for
+the lengths $n\in\mathcal N$ with $2n-1\le M$; and (E5) for $4\le n<n'\le N'$.
+$\G_k(T,N_1,C)$ consists of (E1) and, with (E2)--(E4), the half-line cells with
+$t+i\le 2N_1$, the cells of $R_n$ for $2\le n\le T+1$, the cells of $R_n$ with
+$\tau\le T$ for $T+2\le n\le N_1$, and the cone of the right end at the firing
+time for $T+2\le n\le C$. These regions are closed under predecessors, so with
+the table fixed every encoded cell is determined. The clauses (E4) for the
+complete lines $2\le n\le T+1$ are not part of \cref{def:G}, but they follow from
+(G1) and (G4) by the proof of \cref{lem:return}, in which (G4) gives
+$C_\infty(2n-2,1)\ne\Fq$; so the formula is equivalent to \cref{def:G}. For the
+formulas $\G_4$ of \cref{thm:four,prop:sharp}, the generator gives one variable
+to cells that compute the same function of the table, that is, cells with the
+same tree of predecessors down to the same half-line cells and borders; this
+does not change the satisfying assignments of the table variables. The formula
+of \cref{prop:germs} adds, for each germ $g$, a selector $s_g$ with the clauses
+$\neg s_g\vee x_{e,s}$ for the transitions $(e,s)$ of $g$, and the clause
+$\bigvee_g s_g$. The conditions (B1)--(B4) of \cref{prop:balzer} are unit and
+binary clauses on the variables $x_{e,s}$.
+
+%% ---------------------------------------------------------------------------
+\section{Computational Claims and Artefacts}\label{app:artefacts}
+
+\Cref{tab:artefacts} lists the computational claims of
+\cref{sec:applications} with the programs behind them and the published files.
+The digests are SHA-256 digests of the uncompressed files, abbreviated to their
+first eight hexadecimal digits; the supplementary material lists them in full.
+
+\begin{table}[ht]
+\centering\footnotesize
+\caption{The computational claims, their programs, and the unsatisfiable
+formulas with their LRAT proofs. The programs are in \texttt{src/} and
+\texttt{research/} of the supplementary material, and the formulas are the files
+\texttt{formulas/*.cnf.xz}. In the column Claim, $(\Aq\,\Bq)$ etc.\ is the
+involution $I$ of \cref{prop:balzer}. The proof of the last formula was obtained
+from a DRAT proof of Kissat (digest \texttt{2dd3e052}, $958$\,MB) with
+\textsf{drat-trim}.}
+\label{tab:artefacts}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{0.205\textwidth}lrrll@{}}
+\toprule
+Claim & Programs & Formula & Variables & Clauses & SHA-256 & LRAT proof\\
+\midrule
+\ref{thm:four}\,(i) & \texttt{gencnf.py} & \texttt{mt4\_9} & $753$ & $17{,}605$ & \texttt{d18d6548} & \texttt{1d511a75}, $177$\,MB\\
+\ref{thm:four}\,(ii) & \texttt{gfix.py} & \texttt{k4\_G6} & $919$ & $22{,}960$ & \texttt{0e0ba286} & \texttt{7943a698}, $167$\,MB\\
+\ref{thm:four}\,(iii) & \texttt{gfix.py} & \texttt{k4\_G4c} & $874$ & $20{,}461$ & \texttt{124f0954} & \texttt{7f76fe69}, $173$\,MB\\
+\ref{prop:germs} & \texttt{germcert.py} & \texttt{k14\_n10} & $17{,}266$ & $559{,}558$ & \texttt{4f9306a8} & \texttt{b2324436}, $11$\,MB\\
+\ref{prop:balzer}, $(\Aq\,\Bq)$ & \texttt{balzer.py} & \texttt{balzer\_AB\_10} & $1{,}496$ & $67{,}508$ & \texttt{d87457fe} & \texttt{18809db2}, $380$\,MB\\
+\ref{prop:balzer}, $(\Lq\,\Aq)$ & \texttt{balzer.py} & \texttt{balzer\_LA\_9} & $1{,}244$ & $49{,}571$ & \texttt{401ef851} & \texttt{d74de977}, $188$\,MB\\
+\ref{prop:balzer}, $(\Lq\,\Bq)$ & \texttt{balzer.py} & \texttt{balzer\_LB\_9} & $1{,}244$ & $49{,}571$ & \texttt{d7ba0d40} & \texttt{5784ee12}, $184$\,MB\\
+\ref{prop:balzer}, id & \texttt{balzer\_k.py} & \texttt{balzer\_id\_12} & $2{,}148$ & $114{,}965$ & \texttt{023b99e2} & \texttt{e0231f2f}, $3{,}078$\,MB\\
+\midrule
+\ref{prop:sharp}\,(a) & \texttt{fsspdfs.c} (enumeration) & \multicolumn{5}{l}{---}\\
+\ref{prop:sharp}\,(b) & \texttt{gfix.py}; models checked by \texttt{encoding\_check.py} & \multicolumn{5}{l}{satisfiable formulas}\\
+\ref{prop:nearmiss} & \texttt{fsspcheck.c}, \texttt{firstfire.py}, \texttt{failall.py} & \multicolumn{5}{l}{simulations; certificates $(t_0,p)$ in \cref{tab:rules}}\\
+\ref{prop:germs} & \texttt{germdfs.c}, \texttt{germdfs\_check.py}, \texttt{germinc.py}, \texttt{germext.c}, \texttt{germ\_k14\_check.py} & \multicolumn{5}{l}{enumeration of the $244$ germs; the $14$ refutations by \cref{lem:left}}\\
+\ref{cor:germ12} & \texttt{antidiag.py}, \texttt{germext.c} & \multicolumn{5}{l}{simulation of the cells with $t+i\le1034$}\\
+\ref{sec:method} & \texttt{encoding\_check.py}, \texttt{validate\_mazoyer.py}, \texttt{gfix.py} & \multicolumn{5}{l}{checks of the encodings; \cref{tab:validation}}\\
+\bottomrule
+\end{tabular}
+\end{table}

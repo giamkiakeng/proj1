@@ -1,18 +1,13 @@
 %% ---------------------------------------------------------------------------
 \section{Discussion}\label{sec:discussion}
 
-The two barriers constrain the half-line from opposite sides, and the
-five-state rules of \cref{sec:five} show how they complement each other. The
-half-line of $\delta_{12}$ meets the speed-$1/3$ barrier exactly in simulations,
-but its periodic region at the left border is excluded by the left-border
-barrier (\cref{cor:germ12}). From cell $3$ on, the half-line of $\delta_{14}$
-evolves under the elementary cellular automaton $22$ on the states $\Lq$ and
-$\Bq$; it passes both barriers in the simulated ranges, and the rule fails only
-in the first rows of the reflected triangle of the line of length $15$. All five rules of
-\cref{prop:nearmiss} fail in the first rows of their reflected triangles.
+The conditions of this paper are of two kinds. The barriers of
+\cref{sec:right,sec:left} are proved for every number of states and concern the
+half-line alone. The conditions of \cref{sec:early} concern the first rows after
+the reflection and the right ends, and we used them through satisfiability
+solvers, for four and five states.
 
-The early rows and the right ends of the reflected triangles are controlled by
-\cref{cor:reduce,lem:G}, but they do not exclude every rule. For the germ of
+The conditions of \cref{sec:early} do not exclude every rule. For the germ of
 $\delta_{14}^{\mathrm d}$, which has complexity $15$, conditions (G1)--(G3) with
 $T=10$ and all $n\ge12$ have a model, and so do (G1)--(G3) with $T=7$ and all
 $n\ge9$ together with (G5) for $9\le n\le20$. In the second model, the lines of
@@ -37,6 +32,13 @@ $120$ cells of $R_{15}$, the second $64$; condition (G5) constrains only the
 second.}
 \label{fig:model}
 \end{figure}
+
+The computational part has three limitations. Its results concern four and
+five states and, apart from the reduction of \cref{cor:reduce}, finitely many
+lengths. The formula generators are trusted programs, tested in
+\cref{sec:method} but not formally verified. And the behaviour of particular
+rules beyond the simulated ranges, such as the patterns of the half-lines of
+$\delta_{12}$ and $\delta_{14}$, is not known.
 
 We close with four questions.
 \begin{enumerate}[(1)]

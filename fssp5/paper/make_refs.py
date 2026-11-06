@@ -17,13 +17,13 @@ LNCS = 'Lecture Notes in Comput.\\ Sci.'
 
 REFS = {
     'Moore64': "Moore, E.~F. (1964). The firing squad synchronization problem. In: E.~F. Moore (ed.), "
-               "\\emph{Sequential Machines: Selected Papers}, pp.~213--214. Reading, MA: Addison-Wesley.",
+               "\\emph{Sequential Machines: Selected Papers}, pp.~213--214. Addison-Wesley.",
     'Goto62': "Goto, E. (1962). A minimal time solution of the firing squad problem. Dittoed course notes "
               "for Applied Mathematics~298, Harvard University, pp.~52--59.",
     'Waksman66': "Waksman, A. (1966). An optimum solution to the firing squad synchronization problem. "
                  "\\emph{Inform.\\ and Control}, 9, 66--78.",
     'Mazoyer86': "Mazoyer, J. (1988). An overview of the firing squad synchronization problem. In: "
-                 "C.~Choffrut (ed.), \\emph{Automata Networks}, " + LNCS + " 316, pp.~82--94. Springer.",
+                 "\\emph{Automata Networks}, " + LNCS + " 316, pp.~82--94. Springer.",
     'Umeo09': "Umeo, H. (2009). Firing squad synchronization problem in cellular automata. In: "
               "R.~A. Meyers (ed.), \\emph{Encyclopedia of Complexity and Systems Science}, pp.~3537--3574. "
               "Springer.",
@@ -40,7 +40,7 @@ REFS = {
                "fusiliers}. PhD thesis, Universit{\\'e} Paris~7. Available from HAL, tel-00139049.",
     'Sanders94': "Sanders, P. (1994). Massively parallel search for transition-tables of polyautomata. In: "
                  "\\emph{Parcella '94: Proceedings of the VI International Workshop on Parallel Processing "
-                 "by Cellular Automata and Arrays}, pp.~99--108. Berlin: Akademie Verlag.",
+                 "by Cellular Automata and Arrays}, pp.~99--108. Akademie Verlag.",
     'Clergue18': "Clergue, M., Verel, S., Formenti, E. (2018). An iterated local search to find many "
                  "solutions of the 6-states firing squad synchronization problem. \\emph{Appl.\\ Soft "
                  "Comput.}, 66, 449--461.",
@@ -62,7 +62,7 @@ REFS = {
                        "114, 60--65.",
     'Kobayashi19': "Kobayashi, K. (2019). Nonexistence of minimal-time solutions for some variations of the "
                    "firing squad synchronization problem having simple geometric configurations. "
-                   "arXiv:1909.10125.",
+                   "\\emph{J.\\ Cell.\\ Autom.}, 14, 351--396.",
     'MazoyerTerrier99': "Mazoyer, J., Terrier, V. (1999). Signals in one-dimensional cellular automata. "
                         "\\emph{Theoret.\\ Comput.\\ Sci.}, 217, 53--80.",
     'BerthiaumeEtAl04': "Berthiaume, A., Bittner, T., Perkovi{\\'c}, L., Settle, A., Simon, J. (2004). "
