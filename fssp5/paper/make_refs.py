@@ -83,7 +83,7 @@ REFS = {
                             "and Applications of Satisfiability Testing (SAT 2016)}, " + LNCS + " 9710, "
                             "pp.~228--245. Springer.",
     'Heule18': "Heule, M.~J.~H. (2018). Schur number five. In: \\emph{Proceedings of the Thirty-Second AAAI "
-               "Conference on Artificial Intelligence (AAAI-18)}, pp.~6598--6606.",
+               "Conference on Artificial Intelligence (AAAI-18)}, pp.~6598--6606. AAAI Press.",
     'CaDiCaL2': "Biere, A., Faller, T., Fazekas, K., Fleury, M., Froleyks, N., Pollitt, F. (2024). "
                 "CaDiCaL~2.0. In: \\emph{Computer Aided Verification (CAV 2024)}, " + LNCS + " 14681, "
                 "pp.~133--152. Springer.",
