@@ -19,7 +19,8 @@ involutions of {L, A, B}.  States:
 L=0, G=1, A=2, B=3, F=4.  (balzer_k.py generalizes this to k states and produces identical
 formulas for k = 5.)
 
-usage: balzer.py N CONDS [I] [--lrat]
+usage: balzer.py N CONDS [I] [--lrat] [--cnf=PATH]
+   --cnf=PATH writes the formula to PATH and exits without solving.
    CONDS: a subset of 1234, e.g. 1234 or 134, optionally with 's' for the
    strong readings of C1 (also for border neighbours: G changes only when
    both neighbours are G or the border) and C3 (no other neighbourhood
@@ -86,6 +87,13 @@ def main():
     inv = args[2] if len(args) > 2 else 'id'
     E = gencnf.build(5, N, symbreak=False)
     add_conditions(E, conds, inv)
+    out = [a[6:] for a in sys.argv[1:] if a.startswith('--cnf=')]
+    if out:
+        with open(out[0], 'w') as fh:
+            gencnf.write_dimacs(E, fh)
+        print('N=%d conds=%s I=%s vars=%d clauses=%d: wrote %s' % (
+            N, conds, inv if '2' in conds else '-', E.nv, len(E.clauses), out[0]))
+        return
     tmp = tempfile.mkdtemp(prefix='balzer_', dir=os.environ.get('TMPDIR', '/tmp'))
     cnf = os.path.join(tmp, 'f.cnf')
     with open(cnf, 'w') as fh:

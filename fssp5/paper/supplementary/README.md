@@ -4,24 +4,27 @@ for the paper
 
 > Kia Keng Giam, *Two barriers for minimal-time firing squads, with applications to four and five states*.
 
-This folder contains the programs and data behind every computer-assisted statement of the paper, two scripts that rerun them, and the program that draws the figures. Section and statement numbers below are those of the paper.
+This folder contains the programs and data behind every computer-assisted statement of the paper, the eight unsatisfiable formulas (SAT instances) with their SHA-256 digests, three scripts that rerun everything, and the program that draws the figures. Section and statement numbers below are those of the paper; Appendix B of the paper lists each computational claim with its programs and files.
 
 The proofs of Sections 2–5 need no computation. Section 6, Remark 3.5, the figures and the two models named in Section 7 do. Unsatisfiability is certified by LRAT proofs, which an independent checker verifies. Everything else is direct simulation, exhaustive enumeration, or a satisfiable formula.
 
 ## Quick start
 
 ```
-./check_quick.sh            # about 7 minutes; Python 3 with PySAT, and a C compiler
-./check_certificates.sh     # about 30 minutes; also CaDiCaL, Kissat, drat-trim and lrat-check
+./write_formulas.sh         # about 1 minute; Python 3 only
+./check_quick.sh            # about 9 minutes; Python 3 with PySAT, and a C compiler
+./check_certificates.sh     # about an hour; also CaDiCaL, Kissat, drat-trim and lrat-check
 ```
 
-- **`check_quick.sh`** runs every check that needs no external SAT solver. It also regenerates the three formulas of Theorem 6.1 and compares their SHA-256 digests with those recorded in `SHA256SUMS`.
+- **`write_formulas.sh`** writes the eight unsatisfiable formulas of Theorem 6.1 and Propositions 6.4 and 6.6 with the generators, without solving, compares them with the SHA-256 digests in `formulas/SHA256SUMS` (recorded when the proofs were made), and packs them as `formulas/*.cnf.xz`. With `--check` it compares the published `formulas/*.cnf.xz` with the same digests instead of rewriting them.
+- **`check_quick.sh`** runs every check that needs no external SAT solver, including `write_formulas.sh --check` and the differential test `src/encoding_check.py` of the formula generators (Section 6.1).
 - **`check_certificates.sh`** generates every unsatisfiable formula of the paper, solves it with a proof, and checks the proof:
   - the LRAT proofs come from CaDiCaL directly, or from Kissat's DRAT proof via drat-trim;
   - each proof is checked with `lrat-check`;
-  - it writes about 4 GB to `cnf/`, including the directories `cnf/balzer_*/` of `src/balzer.py`.
+  - at the end, the regenerated proofs are compared with the digests recorded in `formulas/PROOFS.sha256` (CaDiCaL 3.0.1, Kissat 4.0.4 and drat-trim reproduce them byte for byte); the digests of the Balzer proofs are in `results/balzer.log`;
+  - it writes about 5 GB to `cnf/`, including the directories `cnf/balzer_*/` of `src/balzer.py`.
 
-Both scripts can be started from any directory. Solver binaries are taken from the environment variables `CADICAL`, `KISSAT`, `DRATTRIM` and `LRATCHECK` if they are set, otherwise from the `PATH`.
+All scripts can be started from any directory. Solver binaries are taken from the environment variables `CADICAL`, `KISSAT`, `DRATTRIM` and `LRATCHECK` if they are set, otherwise from the `PATH`.
 
 ## Requirements
 
@@ -39,8 +42,10 @@ Each row gives the statement, the commands (as run by the scripts), and the expe
 | Statement of the paper | Commands | Expected result |
 |---|---|---|
 | Remark 3.5: θ(j) for Mazoyer's solution and for δ12, and PUMP for δ12 | `src/theta.py results/mazoyer6.txt 2600 699 1`<br>`src/theta.py results/uniformA_2-12.txt 1400 300 10`<br>`src/pumping.py results/uniformA_2-12.txt 650` | θ_T(j) − 2j ∈ {1, 2}, period 3<br>θ_T(j) − ⌈3j/2⌉ = 2, period 1<br>0 violations |
-| §6.1, *Validation* (Table 2): Mazoyer's solution | `src/fsspcheck results/mazoyer6.txt 3 3000`<br>`src/validate_mazoyer.py 12 78 40`<br>`research/asymp.py` and `research/gfix.py … --fix results/mazoyer6.txt` | OK for all 3 ≤ n ≤ 3000<br>MT_6({3..12}; 78, 40) satisfiable<br>(G2), (G3) for T = 8 and all n ≥ 15: SAT (21 representative lengths; depth rows periodic from t0 = 42, p = 3) |
-| §6.1, *Validation* (Table 2): the table of δ14 fixed | `research/gfix.py FREE 5 <spec> --fix results/delta14.txt --solve cadical` | full:2-14 SAT; full:2-15 UNSAT; full:2-14 early:15-30:6 SAT; full:2-14 early:15-30:8 UNSAT |
+| §6.1, checks of the encodings, (1): differential test | `src/encoding_check.py` | 34 formulas × 3,582 tables: 57,756 formula/table pairs, 973 satisfiable, 0 disagreements; the clauses of (B1)–(B4) on 5,200 tables, 0 disagreements; Lemma 3.2 by search for 2 ≤ n < 200: True (recorded run: `results/encoding_check.log`) |
+| Theorem 6.1, Propositions 6.4 and 6.6: the eight unsatisfiable formulas | `write_formulas.sh` (`--check` in `check_quick.sh`) | every formula matches its digest in `formulas/SHA256SUMS`, and so does every published file `formulas/*.cnf.xz` |
+| §6.1, checks of the encodings, (2) (Table 2): Mazoyer's solution | `src/fsspcheck results/mazoyer6.txt 3 3000`<br>`src/validate_mazoyer.py 12 78 40`<br>`research/asymp.py` and `research/gfix.py … --fix results/mazoyer6.txt` | OK for all 3 ≤ n ≤ 3000<br>MT_6({3..12}; 78, 40) satisfiable<br>(G2), (G3) for T = 8 and all n ≥ 15: SAT (21 representative lengths; depth rows periodic from t0 = 42, p = 3) |
+| §6.1, checks of the encodings, (2) (Table 2): the table of δ14 fixed | `research/gfix.py FREE 5 <spec> --fix results/delta14.txt --solve cadical` | full:2-14 SAT; full:2-15 UNSAT; full:2-14 early:15-30:6 SAT; full:2-14 early:15-30:8 UNSAT |
 | Theorem 6.1 (i) | `src/gencnf.py 4 9 cnf/mt4_9.cnf`<br>`research/certify_lrat.sh cnf/mt4_9.cnf` | 753 variables, 17,605 clauses, SHA-256 `d18d6548…`; s UNSATISFIABLE; c VERIFIED |
 | Theorem 6.1 (ii) | `GFIX_SHARE=1 research/gfix.py FREE 4 full:2-7 early:8-10:6 --cnf cnf/k4_G6.cnf`<br>`research/certify_lrat.sh cnf/k4_G6.cnf` | 919 variables, 22,960 clauses, SHA-256 `0e0ba286…`; c VERIFIED |
 | Theorem 6.1 (iii) | `GFIX_SHARE=1 research/gfix.py FREE 4 full:2-5 early:6-10:4 cone:6-10 --cnf cnf/k4_G4c.cnf`<br>`research/certify_lrat.sh cnf/k4_G4c.cnf` | 874 variables, 20,461 clauses, SHA-256 `124f0954…`; c VERIFIED |
@@ -86,7 +91,8 @@ For Proposition 6.6, the lrat-check times of the three CaDiCaL cases are 7.1, 3.
 
 | path | content |
 |---|---|
-| `check_quick.sh`, `check_certificates.sh` | the two scripts |
+| `write_formulas.sh`, `check_quick.sh`, `check_certificates.sh` | the three scripts |
+| `formulas/` | the eight unsatisfiable formulas (`*.cnf.xz`), their digests (`SHA256SUMS`) and the digests of the recorded proofs (`PROOFS.sha256`) |
 | `SHA256SUMS` | digests of the formulas of Theorem 6.1 and Proposition 6.4 |
 | `src/` | simulation, enumeration and encoding programs |
 | `research/` | the encoder of the formulas G_k(T, N1, C) and the programs of Sections 5–6 that build on it |
@@ -114,6 +120,7 @@ For Proposition 6.6, the lrat-check times of the three CaDiCaL cases are 7.1, 3.
 | `src/germcert.py` | one LRAT certificate for a list of refuted germs |
 | `src/germext.c` | extension of a germ's half-line, with the checks of Lemma 4.1 and PUMP |
 | `src/germ_k14_check.py` | independent check of the 14 half-line refutations of Proposition 6.4 |
+| `src/encoding_check.py` | the differential test of Section 6.1: the formula generators, used as black boxes, against a direct evaluation of the conditions written from the definitions of the paper |
 | `src/figures.py` | the data of Figures 1, 6, 7 and 12–18 (space-time diagrams, depth rows, regions, charts, an image), the table of δ14 (Table 4), and the cone counts of Section 7 |
 | `src/balzer.py`, `src/balzer_k.py` | formulas with Balzer's conditions |
 | `research/gfix.py` | the formulas of Definition 5.4, MT-type formulas and variants (regions `full`, `early`, `cone`), optionally with a germ or a whole table fixed |
@@ -122,7 +129,7 @@ For Proposition 6.6, the lrat-check times of the three CaDiCaL cases are 7.1, 3.
 | `research/models_check.py` | the models of Section 7 |
 | `research/certify_lrat.sh` | solve with CaDiCaL writing LRAT, check with lrat-check, print digests |
 
-`firstfire.py`, `antidiag.py`, `models_check.py` and `figures.py` were written for this supplement and are independent of the other programs. `certify_lrat.sh` takes its solver paths from the environment or the `PATH`. The other programs are those that produced the results; comments in them refer to the numbering of earlier versions of the paper, and the table of statements above gives the numbering of this paper.
+`firstfire.py`, `antidiag.py`, `models_check.py`, `encoding_check.py` and `figures.py` were written for this supplement and are independent of the other programs; `encoding_check.py` calls the generators only to build the formulas it tests. `germcert.py --cnf-only` and `balzer.py --cnf=PATH` write a formula without solving it. `certify_lrat.sh` takes its solver paths from the environment or the `PATH`. The other programs are those that produced the results; comments in them refer to the numbering of earlier versions of the paper, and the table of statements above gives the numbering of this paper.
 
 ### Data
 
@@ -136,7 +143,9 @@ For Proposition 6.6, the lrat-check times of the three CaDiCaL cases are 7.1, 3.
 | `results/germs/germs_K14.txt` | the 244 germs of Proposition 6.4 |
 | `results/germs/K14_n10.log`, `K14_refuted10.txt`, `germs_K14_surv10.txt` | the completion test of the 244 germs, the 230 refuted ones, the 14 others |
 | `results/germs/K14_ext3300.txt`, `CERTIFICATES.txt` | half-line extension of all 244 germs; digests of the germ certificate |
-| `results/balzer.log`, `results/theta_pump.log` | recorded runs for Proposition 6.6 and for Remark 3.5 |
+| `results/balzer.log`, `results/theta_pump.log` | recorded runs for Proposition 6.6 and for Remark 3.5; `balzer.log` also names a weak-reading rule `balzer_sym11_weak.txt` of the original runs, which no statement of the paper uses and which is not included |
+| `results/encoding_check.log` | recorded run of the differential test of Section 6.1 |
+| `formulas/*.cnf.xz` | the unsatisfiable formulas: `mt4_9`, `k4_G6`, `k4_G4c` (Theorem 6.1), `k14_n10` (Proposition 6.4), `balzer_AB_10`, `balzer_LA_9`, `balzer_LB_9`, `balzer_id_12` (Proposition 6.6; `balzer_id_12` is the file `cnf/w.cnf` of `check_certificates.sh`) |
 | `research/models/germ14d_T10.txt`, `d14d_T7c.txt` | the two models of Section 7 |
 
 Rule tables have a line `k <number of states>`, then one line `l c r d` per transition, with `*` for the border; lines starting with `#` are comments. Some of these comments name search programs that produced a rule; those programs are not needed to check anything here. A germ is one line `GERM lcr>d …`.

@@ -7,7 +7,8 @@ each fixed transition literal l of g, and the clause OR_g s_g.  The formula
 is unsatisfiable iff every germ of the list is refuted; CaDiCaL then emits an
 LRAT proof that is checked with lrat-check.
 
-usage: germcert.py germfile N out_prefix [M]
+usage: germcert.py germfile N out_prefix [M] [--cnf-only]
+   --cnf-only writes out_prefix.cnf and exits without solving.
 """
 import os
 import shutil
@@ -25,8 +26,9 @@ LRATCHECK = os.environ.get('LRATCHECK') or shutil.which('lrat-check') or '/home/
 
 
 def main():
-    germfile, N, pre = sys.argv[1], int(sys.argv[2]), sys.argv[3]
-    M = int(sys.argv[4]) if len(sys.argv) > 4 else 78
+    args = [a for a in sys.argv[1:] if not a.startswith('--')]
+    germfile, N, pre = args[0], int(args[1]), args[2]
+    M = int(args[3]) if len(args) > 3 else 78
     E = gencnf.build(5, N, minf=M, pump=min(40, M // 2), symbreak=False)
     sel = []
     ngerm = 0
@@ -43,6 +45,9 @@ def main():
     cnf = pre + '.cnf'
     with open(cnf, 'w') as fh:
         gencnf.write_dimacs(E, fh)
+    if '--cnf-only' in sys.argv:
+        print('%d germs, lengths 2..%d: wrote %s (%d variables, %d clauses)' % (ngerm, N, cnf, E.nv, len(E.clauses)))
+        return
     t0 = time.time()
     p = subprocess.run([CADICAL, '-q', '--lrat', '--binary=false', cnf, pre + '.lrat'],
                        capture_output=True, text=True)

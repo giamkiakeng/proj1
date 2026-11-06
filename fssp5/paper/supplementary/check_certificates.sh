@@ -3,8 +3,10 @@
 #
 # Needs CaDiCaL (version 2 or later, which writes LRAT; we used 3.0.1), Kissat (we used 4.0.4),
 # drat-trim and lrat-check.  Binaries: the variables CADICAL, KISSAT, DRATTRIM, LRATCHECK, else the PATH.
-# Writes the formulas and proofs to cnf/ (about 4 GB, most of it the proof of the Kissat case).
-# Times on one core: about 30 minutes, of which about 20 for the Kissat case of Proposition 6.6.
+# Writes the formulas and proofs to cnf/ (about 5 GB, most of it the proofs of the Kissat case).
+# Times on one core: about an hour, most of it for the Kissat case of Proposition 6.6 (Kissat about
+# 15 minutes, drat-trim about 30 minutes).  At the end, the proofs written to cnf/ are compared with
+# the digests recorded in formulas/PROOFS.sha256 (the Balzer proofs with results/balzer.log).
 set -e
 H=$(cd "$(dirname "$0")" && pwd)
 export CADICAL=${CADICAL:-$(command -v cadical || echo cadical)}
@@ -45,3 +47,5 @@ set -e
 sha256sum ../cnf/w.cnf ../cnf/w.lrat
 python3 balzer.py 11 1234s id | grep -E "SATISFIABLE|rule"
 
+sec "the regenerated proofs against the recorded digests"
+(cd "$H" && sha256sum -c formulas/PROOFS.sha256)
