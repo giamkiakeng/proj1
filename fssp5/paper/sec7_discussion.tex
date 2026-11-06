@@ -35,8 +35,10 @@ second.}
 
 The computational part has three limitations. Its results concern four and
 five states and, apart from the reduction of \cref{cor:reduce}, finitely many
-lengths. The formula generators are trusted programs, tested in
-\cref{sec:method} but not formally verified. And the behaviour of particular
+lengths. The formula generators are trusted programs: they are tested in
+\cref{sec:method} and cross-checked by a second, independent encoder, but they
+are not formally verified, and neither is the proof checker
+\texttt{lrat-check}. And the behaviour of particular
 rules beyond the simulated ranges, such as the patterns of the half-lines of
 $\delta_{12}$ and $\delta_{14}$, is not known.
 
@@ -47,5 +49,6 @@ We close with four questions.
 economical as \cref{lem:G}?
 \item Can the bound $(k-1)^{2s}\ell$ of \cref{lem:left} be made polynomial in
 $s$?
-\item Do Balzer's conditions exclude six states?
+\item Do Balzer's conditions exclude six states? Do they exclude five states
+without (B2) at the borders (\cref{sec:balzer})?
 \end{enumerate}

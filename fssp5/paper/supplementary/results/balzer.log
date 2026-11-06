@@ -2,7 +2,8 @@
 # Conditions as reported by Mazoyer (Publ. Dept. Math. Lyon 1A, 1986, Sect. 7) and
 # Yunes (thesis, Paris 7, 1993, Sect. 2.7):
 #   B1 G stable, B2 image solution (involution I), B3 pre-firing GGG/*GG/GG* -> F, B4 G dominant.
-# weak reading (conds 1234): B1 only for working neighbours; B3 without "only these produce F".
+# weak reading (conds 1234): B1 only for working neighbours; B3 without "only these produce F";
+#   B2 for every neighbourhood, including those with a border (in both readings).
 N=12    conds=1234 I=id  CaDiCaL with LRAT output stopped after 15 min (proof file > 2.7 GB);
         Kissat 4.0.4: UNSATISFIABLE in 16 min 6 s without proof (2148 vars, 114965 clauses);
         with proof: UNSATISFIABLE in 16 min 29 s, binary DRAT 958,390,731 bytes,
@@ -22,7 +23,8 @@ N=9     conds=1234 I=LA  UNSATISFIABLE 37.1 s  LRAT VERIFIED (187.6 MB, check 3.
 N=3..8  conds=1234 I=LB  SATISFIABLE
 N=9     conds=1234 I=LB  UNSATISFIABLE 36.9 s  LRAT VERIFIED (184.4 MB, check 3.3 s)
 N=3..11 conds=1234 I=id  SATISFIABLE (N=10: 156 s, N=11: 1.5 s); the N=11 rule
-        (results/balzer_sym11_weak.txt) synchronizes 2..11 (fsspcheck), fails n=12 (fires at 21 < 22)
+        (results/balzer_sym11_weak.txt, regenerated on 2026-11-06 with balzer.py 11 1234 id) synchronizes
+        2..11 (fsspcheck), fails n=12 (fires at 21 < 22)
 # strong reading
 N=8..11 conds=1234s I=id SATISFIABLE; the N=11 rule (results/balzer_sym11.txt) satisfies
         all strong conditions, synchronizes 2..11 (fsspcheck), fails n=12 (fires at 20 < 22)
@@ -46,4 +48,19 @@ id N=12 weak    cnf 023b99e247f9a1616a926d70e03e85f2ad54ad63e498df79b9cc87f3d3ac
 # e.g. (A,G,L), (B,G,L), (C,G,G), (C,G,L)); B2 holds for no involution; B3 holds in the strong
 # reading (no other neighbourhood produces F); B4 violated by (G,A,G), (G,C,G), (G,L,G).
 # This is exactly Mazoyer's own statement (Publ. Dept. Math. Lyon 1A, 1986, Sect. 7).
+# (Re-run on 2026-11-06 with src/balzer_mazoyer.py 150: the same result; B2 also fails for every
+# involution when it is required only for the neighbourhoods without a border.)
 id N=12 weak    lrat e0231f2f50b4278948e832b78a33f295f4df9792789f63af744818be7f3e873e (drat-trim -L)
+#
+# 2026-11-06: B2 only for the neighbourhoods without a border (conds 1234b), as in Yunes's statement
+# of the conditions (thesis, Paris 7, 1993, section 2.7).  Formulas of src/encode_independent.py,
+# balzer(N, I, border=False); CaDiCaL 3.0.1 or Kissat 4.0.4, without proofs.
+N=9     conds=1234b I=LA  SATISFIABLE 5.2 s (CaDiCaL)
+N=10    conds=1234b I=LA  UNSATISFIABLE 4 min 34 s (CaDiCaL)
+N=9     conds=1234b I=LB  SATISFIABLE 21.6 s (CaDiCaL)
+N=10    conds=1234b I=LB  UNSATISFIABLE 5 min 2 s (CaDiCaL)
+N=10,11,12 conds=1234b I=AB  undecided (CaDiCaL stopped after 21.8, 15.1 and 4.0 min)
+N=12    conds=1234b I=id  SATISFIABLE 14 min 46 s (Kissat); the model, results/balzer_noborder12.txt,
+        satisfies C1-C4 in this reading and in no other (src/balzer_rulecheck.py) and synchronizes
+        2..12 (fsspcheck), fails n=13 (only 5 of 13 cells fire at time 24).  So without C2 at the
+        borders the lengths up to 12 do not suffice (Section 6.5 of the paper, after Proposition 6.6).

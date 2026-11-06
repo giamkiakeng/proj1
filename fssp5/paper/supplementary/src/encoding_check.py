@@ -13,7 +13,7 @@ PUMP(n, n'); Definition 5.4: (G1)-(G5); Section 6.5: (B1)-(B4)); it shares no co
 generators, which are used as black boxes.
 
 Tables: the known rules (Mazoyer's, delta12, delta13, the five rules of Proposition 6.3,
-balzer_sym11), models of the satisfiable four-state formulas of Proposition 6.2 and Table 3, the
+balzer_sym11, balzer_noborder12), models of the satisfiable four-state formulas of Proposition 6.2 and Table 3, the
 27 partial four-state rules for the lengths 2..8 completed at random, single and double
 mutations of all of these, and uniformly random tables.  Every disagreement is printed, and the
 program exits with status 1 if there is one.
@@ -238,7 +238,8 @@ INV = {'id': {}, 'AB': {'A': 'B', 'B': 'A'}, 'LA': {'L': 'A', 'A': 'L'}, 'LB': {
 
 
 def direct_B(tab, conds, inv):
-    """(B1)-(B4) of Section 6.5 for five states; 's' in conds selects the strong reading"""
+    """(B1)-(B4) of Section 6.5 for five states; 's' in conds selects the strong reading of (B1)
+    and (B3), 'b' restricts (B2) to the neighbourhoods without a border"""
     strong = 's' in conds
     W = working(5)
     side = ['*'] + W
@@ -262,6 +263,8 @@ def direct_B(tab, conds, inv):
         def I(s):
             return INV[inv].get(s, s)
         for (x, y, z) in neighbourhoods(5):
+            if 'b' in conds and '*' in (x, z):
+                continue                          # 'b': (B2) only for neighbourhoods without a border
             if tab[(I(z), I(y), I(x))] != I(tab[(x, y, z)]):
                 return False
     return True
@@ -410,7 +413,7 @@ def run(seed, quick):
     print('five states (%.0f s)' % (time.time() - t0), flush=True)
     known5 = [load_table(os.path.join(RESULTS, f)) for f in
               ('uniformA_2-12.txt', 'delta13.txt', 'delta14.txt', 'delta14b.txt', 'delta14c.txt',
-               'delta14d.txt', 'delta14e.txt', 'balzer_sym11.txt')]
+               'delta14d.txt', 'delta14e.txt', 'balzer_sym11.txt', 'balzer_noborder12.txt')]
     five = [gfix_formula(5, ['full:2-14'])[0],                        # Table 2
             gfix_formula(5, ['full:2-15'])[0],
             gfix_formula(5, ['full:2-14', 'early:15-30:6'])[0],
@@ -418,8 +421,9 @@ def run(seed, quick):
             gfix_formula(5, ['full:2-12', 'early:13-20:4', 'cone:13-14'])[0],
             gencnf_formula(5, range(2, 11), 78, 39)[0],               # Proposition 6.4: MT_5({2..10}; 78, 39)
             gencnf_formula(5, range(2, 13), None, 12)[0]]
-    for N, conds, inv in ((11, '1234s', 'id'), (12, '1234', 'id'), (10, '1234', 'AB'),
-                          (9, '1234', 'LA'), (9, '1234', 'LB'), (11, '1234', 'id')):
+    for N, conds, inv in ((11, '1234s', 'id'), (12, '1234', 'id'), (10, '1234', 'AB'),     # Prop. 6.6
+                          (9, '1234', 'LA'), (9, '1234', 'LB'), (11, '1234', 'id'),
+                          (12, '1234b', 'id'), (9, '1234b', 'LA'), (10, '1234b', 'LA')):   # (B2) without borders
         def extra(E, conds=conds, inv=inv):
             balzer.add_conditions(E, conds, inv)
 
@@ -438,7 +442,7 @@ def run(seed, quick):
     # ---- the Balzer clauses alone, on tables built to satisfy or nearly satisfy them
     print('the clauses of (B1)-(B4) alone (%.0f s)' % (time.time() - t0), flush=True)
     Bstats = {'agree': 0, 'disagree': 0, 'holds': 0}
-    for conds in ('1234', '1234s', '13', '2', '134s'):
+    for conds in ('1234', '1234s', '1234b', '13', '2', '2b', '134s'):
         for inv in INV:
             E = gencnf.build(5, 2, symbreak=False)
             n0 = len(E.clauses)
@@ -515,6 +519,8 @@ def balzer_like(rng, conds, inv):
                 return INV[inv].get(s, s)
             for nb in neighbourhoods(5):
                 x, y, z = nb
+                if 'b' in conds and '*' in (x, z):
+                    continue
                 tab[(I(z), I(y), I(x))] = I(tab[nb])
     for nb, d in QUIESCENT.items():
         tab[nb] = d

@@ -140,7 +140,10 @@ exclude five states; for four states, the longest such range is $2,\dots,8$
 the cells of its half-line with $t+i\le78$, every five-state minimal-time
 solution uses at least $15$ distinct neighbourhoods besides the quiescent one
 (\cref{prop:germs}). Finally, a conditional five-state result reported by Balzer
-in 1967 holds, even in a weaker form (\cref{prop:balzer}). \Cref{tab:results}
+in 1967 holds, even in a weaker form (\cref{prop:balzer}); its symmetry
+condition has to be imposed at the borders of the line as well, since otherwise
+the lines of lengths up to $12$ do not suffice (\cref{sec:balzer}).
+\Cref{tab:results}
 lists the results with the kind of evidence behind each of them, and separately
 the observations from simulations that the paper reports but does not claim
 beyond the simulated ranges.
@@ -171,7 +174,7 @@ Sharpness of \cref{thm:four} & \ref{prop:sharp} & exhaustive enumeration; models
 Five rules for exactly the lengths $2,\dots,14$ & \ref{prop:nearmiss} & proof and exact finite simulation & Figs.~\ref{fig:delta14}, \ref{fig:firstfire}, Tables~\ref{tab:delta14}, \ref{tab:rules}\\
 At least $15$ neighbourhoods on the half-line of a five-state solution & \ref{prop:germs} & proof, exhaustive enumeration and certified computation & Fig.~\ref{fig:germs}, Table~\ref{tab:rules}\\
 The half-line of $\delta_{12}$ and $\delta_{13}$ cannot be completed & \ref{cor:germ12} & proof and exact finite simulation & Fig.~\ref{fig:delta12}\\
-Balzer's conditional five-state result & \ref{prop:balzer} & certified computation; a model checked by simulation & Table~\ref{tab:balzer}\\
+Balzer's conditional five-state result; (B2) at the borders is needed & \ref{prop:balzer}, \ref{sec:balzer} & certified computation; models checked by simulation & Table~\ref{tab:balzer}\\
 \midrule
 \emph{Observations:} the onset times $\theta_T(j)$ for Mazoyer's solution and $\delta_{12}$; the patterns of the half-lines of $\delta_{12}$ and $\delta_{14}$; $\PUMP$ and \cref{lem:left} in finite ranges & \ref{rem:division}, \ref{sec:left}, \ref{sec:five} & finite simulation only & Figs.~\ref{fig:theta}, \ref{fig:halflines}, \ref{fig:delta14}\\
 \bottomrule
@@ -179,16 +182,17 @@ Balzer's conditional five-state result & \ref{prop:balzer} & certified computati
 \end{table}
 
 \paragraph{Related work}
-Indistinguishability arguments, in which a solution cannot tell two situations
-apart and therefore fires too early, show that there is no minimal-time
-solution with one-way communication~\cite[Prop.~2]{Mazoyer96}. Through
-repetitions forced by the pigeonhole principle, they also exclude minimal-time
-solutions for variants with sub-generals~\cite{YamashitaEtAl14} and for some
+For the structure of minimal-time solutions see Mazoyer~\cite{Mazoyer96}.
+Nonexistence results for minimal-time solutions are known for variants of the
+problem, such as the variant with sub-generals~\cite{YamashitaEtAl14} and some
 geometric configurations~\cite{Kobayashi19}. Our pumping lemma and our
-left-border lemma use the same mechanism to constrain solutions of the original
-problem. That the behaviour behind the front of a cellular automaton is
-eventually periodic is classical~\cite{MazoyerTerrier99}; our contribution is a
-lower bound on where this periodicity can start. Lower bounds on the number of
+left-border lemma are indistinguishability arguments for the original problem:
+repetitions forced by the pigeonhole principle would make a solution unable to
+tell two situations apart, so that it would fire too early. The depth rows of
+the half-line are eventually periodic by a simple finite-state argument
+(\cref{thm:third}), and periodic regions separated by signals are a classical
+way to describe the behaviour of cellular automata~\cite{MazoyerTerrier99};
+our contribution is a lower bound on where this periodicity can start. Lower bounds on the number of
 states are known for restricted classes and for variants such as the
 ring~\cite{BerthiaumeEtAl04}; see the survey~\cite{Correa17}. Satisfiability
 solvers have been applied to cellular automata before~\cite{DAntonioDelzanno04},

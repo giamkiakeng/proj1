@@ -5,8 +5,11 @@
 # drat-trim and lrat-check.  Binaries: the variables CADICAL, KISSAT, DRATTRIM, LRATCHECK, else the PATH.
 # Writes the formulas and proofs to cnf/ (about 5 GB, most of it the proofs of the Kissat case).
 # Times on one core: about an hour, most of it for the Kissat case of Proposition 6.6 (Kissat about
-# 15 minutes, drat-trim about 30 minutes).  At the end, the proofs written to cnf/ are compared with
-# the digests recorded in formulas/PROOFS.sha256 (the Balzer proofs with results/balzer.log).
+# 15 minutes, drat-trim about 30 minutes).  Then the proofs written to cnf/ are compared with the
+# digests recorded in formulas/PROOFS.sha256 (the Balzer proofs with results/balzer.log).  Finally,
+# the eight formulas of the second encoder (src/encode_independent.py, Section 6.1, check (5)) are
+# written to cnf/independent/ and refuted in the same way, each proof checked with lrat-check
+# (about another hour and 5 GB).  With the argument --second-encoder, only this last part is run.
 set -e
 H=$(cd "$(dirname "$0")" && pwd)
 export CADICAL=${CADICAL:-$(command -v cadical || echo cadical)}
@@ -16,6 +19,8 @@ export LRATCHECK=${LRATCHECK:-$(command -v lrat-check || echo lrat-check)}
 mkdir -p "$H/cnf"
 export TMPDIR="$H/cnf"        # balzer.py and balzer_k.py write their formulas and proofs to $TMPDIR/balzer_*/
 sec() { echo; echo "=== $*"; }
+
+if [ "$1" != "--second-encoder" ]; then      # with --second-encoder, only the last section is run
 
 sec "Theorem 6.1 (i)-(iii): formulas, digests, LRAT proofs"
 (cd "$H/src" && python3 gencnf.py 4 9 ../cnf/mt4_9.cnf)
@@ -49,3 +54,21 @@ python3 balzer.py 11 1234s id | grep -E "SATISFIABLE|rule"
 
 sec "the regenerated proofs against the recorded digests"
 (cd "$H" && sha256sum -c formulas/PROOFS.sha256)
+fi
+
+sec "Section 6.1, check (5): the eight formulas of the second encoder, with LRAT proofs"
+cd "$H/src"
+python3 encode_independent.py write ../cnf/independent | sed 's/ written to .*//'
+for f in mt4_9 k4_G6 k4_G4c k14_n10 balzer_AB_10 balzer_LA_9 balzer_LB_9; do
+  echo "$f:"
+  "$H/research/certify_lrat.sh" ../cnf/independent/$f.cnf | sed 's/^/  /'
+done
+echo "balzer_id_12:"
+I=../cnf/independent/balzer_id_12
+set +e
+"$KISSAT" -q $I.cnf $I.drat | grep '^s ' | sed 's/^/  /'
+"$DRATTRIM" $I.cnf $I.drat -L $I.lrat > $I.drat-trim.log 2>&1
+echo "  drat-trim (exit code $?): $(grep '^s ' $I.drat-trim.log || echo 'no verdict line; the LRAT file is checked next')"
+set -e
+"$LRATCHECK" $I.cnf $I.lrat | grep -E "VERIFIED|FAIL|ERROR" | sed 's/^/  /'
+sha256sum $I.cnf $I.lrat | sed 's/^/  /'

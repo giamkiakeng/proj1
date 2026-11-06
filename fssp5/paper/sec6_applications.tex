@@ -9,7 +9,10 @@ enumerations that decide a finite statement completely; satisfiable formulas,
 whose models we check by simulation; and unsatisfiable formulas, certified by
 proofs that an independent checker verifies. Statements that rest on finite
 simulations alone are observations about the simulated ranges. We mark them as
-such, and no proof uses them.
+such, and no proof uses them. The theorem, the propositions and the corollary
+of this section are marked computer-assisted: their proofs use computations,
+whereas the results of \cref{sec:lines,sec:right,sec:left,sec:early} are
+proved without computation.
 
 \subsection{Method}\label{sec:method}
 
@@ -42,7 +45,7 @@ predicted by simulating that rule; they are tests, not claims of their own.
 \paragraph{Checks of the encodings}
 A checked proof shows that a formula is unsatisfiable, but not that the formula
 expresses the intended conditions; the programs that generate the formulas are
-trusted. We tested them in four independent ways.
+trusted. We tested them in five independent ways.
 \begin{enumerate}[(1)]
 \item \emph{Differential test.} A program written for this purpose from the
 definitions of this paper, sharing no code with the generators, evaluates the
@@ -51,17 +54,17 @@ synchronization of the lines, the half-line up to an anti-diagonal,
 $\PUMP(n,n')$ with the cone of \cref{lem:cone}, (G1)--(G5) and (B1)--(B4) of
 \cref{sec:balzer}. With a rule table fixed by assumptions, each formula must be
 satisfiable exactly when the table satisfies its conditions. We compared the two
-on $34$ formulas (those of \cref{thm:four}, \cref{prop:sharp}~(b),
+on $37$ formulas (those of \cref{thm:four}, \cref{prop:sharp}~(b),
 \cref{prop:germs,prop:balzer} and \cref{tab:validation}, and variants for four,
-five and six states) and $3{,}582$ tables (the known rules, models of the
+five and six states) and $3{,}684$ tables (the known rules, models of the
 satisfiable formulas, the $27$ partial rules of \cref{prop:sharp}~(a) completed
 at random, single and double mutations of these, and random tables): the
-answers agree on all $57{,}756$ pairs, $973$ of which are satisfiable. The
+answers agree on all $62{,}286$ pairs, $1{,}002$ of which are satisfiable. The
 formulas of \cref{thm:four,prop:balzer} in this test are identical to the
 published files (\cref{app:artefacts}), and that of \cref{prop:germs} becomes
 identical to its file when the selector clauses of its $230$ germs
 (\cref{app:encoding}) are added. The
-clauses of (B1)--(B4) alone agree with the direct check on $5{,}200$ tables, and
+clauses of (B1)--(B4) alone agree with the direct check on $7{,}280$ tables, and
 the cones found by search agree with \cref{lem:cone} for $2\le n<200$. No table
 satisfies the formulas of \cref{thm:four}, so for them the test can only confirm
 that violated conditions are detected; the same generators with other
@@ -77,10 +80,19 @@ enumeration of \cref{prop:germs} and the refutations of its $14$ remaining
 germs were each repeated by an independent program.
 \item \emph{Models.} Every model found by a solver was re-simulated by a checker
 that shares no code with the generators.
+\item \emph{Second encoder.} A second program, written from the definitions of
+this paper and from \cref{app:encoding} and sharing no code with the generators,
+builds the eight unsatisfiable formulas again. It encodes each condition
+literally: without the structural sharing of the generators, and with the cones
+of the right ends found by a search over predecessors. It agrees with the direct
+evaluation of~(1) on all $36{,}648$ pairs of $21$ of its formulas and $3{,}558$
+tables, $643$ of them satisfiable, and its eight formulas are unsatisfiable,
+with LRAT proofs verified by \texttt{lrat-check}. Each unsatisfiability claim thus rests on two formulas
+written by independent programs.
 \end{enumerate}
-These tests make an error in the generators unlikely, but they do not prove its
-absence; what remains trusted is that the generators, on the formulas of the
-paper, behave as on the tested ones.
+These tests make an error in the encodings unlikely, but they do not prove its
+absence: a misreading of a definition shared by both encoders and the direct
+evaluation would not be detected.
 
 \begin{table}[t]
 \centering\small
@@ -98,9 +110,10 @@ the programs, the rule tables, the germ lists, the eight unsatisfiable formulas
 with their SHA-256 digests, the logs, and three scripts: one writes the
 formulas with the generators and compares them with the recorded digests
 (about one minute); one reruns the simulations, enumerations, satisfiable
-formulas and the differential test (about $9$ minutes); and one regenerates
-every LRAT proof and checks it with \texttt{lrat-check} (about an hour and
-$5$\,GB). Run again with CaDiCaL~3.0.1, Kissat~4.0.4 and \textsf{drat-trim},
+formulas and the two differential tests (about $11$ minutes); and one
+regenerates every LRAT proof and checks it with \texttt{lrat-check}, and then
+refutes the formulas of the second encoder in the same way (about two hours and
+$10$\,GB). Run again with CaDiCaL~3.0.1, Kissat~4.0.4 and \textsf{drat-trim},
 this script reproduced all eight recorded proofs byte for byte (its log is in
 the Zenodo record of the data availability statement), so regenerated proofs
 can be compared with the recorded digests.
@@ -108,7 +121,7 @@ can be compared with the recorded digests.
 
 \subsection{Four States}\label{sec:four}
 
-\begin{theorem}\label{thm:four}
+\begin{theorem}[computer-assisted]\label{thm:four}
 No four-state rule satisfying \eqref{eq:quiescence}
 \begin{enumerate}[(i)]
 \item synchronizes all lines of lengths $2,\dots,9$ in minimal time;
@@ -161,7 +174,7 @@ programs. Parts (ii) and (iii) show how little information excludes four
 states: in (iii), only the lines of lengths up to $5$ are complete. These
 bounds are sharp in the following sense.
 
-\begin{proposition}[computational]\label{prop:sharp}
+\begin{proposition}[computer-assisted]\label{prop:sharp}
 \leavevmode
 \begin{enumerate}[(a)]
 \item Exactly $27$ partial four-state rules (rules restricted to the
@@ -216,7 +229,7 @@ $x$ & $y$ & $z=\Lq$ & $\Gq$ & $\Aq$ & $\Bq$ & $\ast$\\
 \end{tabular}
 \end{table}
 
-\begin{proposition}\label{prop:nearmiss}
+\begin{proposition}[computer-assisted]\label{prop:nearmiss}
 Each of the five-state rules $\delta_{14}$, $\delta_{14}^{\mathrm b}$,
 $\delta_{14}^{\mathrm c}$, $\delta_{14}^{\mathrm d}$ and $\delta_{14}^{\mathrm
 e}$ synchronizes the line of length $n$ at time $2n-2$ for $2\le n\le14$, and
@@ -337,7 +350,7 @@ below $78$ determines the conditions $\PUMP(n,n')$ for $n'\le40$. For example,
 $c_{78}=57$ for Mazoyer's solution, $22$ for $\delta_{12}$ and $16$ for
 $\delta_{14}$ (\cref{tab:rules}).
 
-\begin{proposition}\label{prop:germs}
+\begin{proposition}[computer-assisted]\label{prop:germs}
 Every five-state minimal-time solution $\delta$ satisfies $c_{78}(\delta)\ge15$.
 \end{proposition}
 
@@ -397,7 +410,7 @@ alternate between $\Aq$ and $\Lq$, periodically in time and space
 would exclude the half-line; \cref{lem:left} gives an explicit length without
 that assumption.
 
-\begin{corollary}\label{cor:germ12}
+\begin{corollary}[computer-assisted]\label{cor:germ12}
 No five-state rule that has the $22$ transitions above synchronizes the line of
 length $518$ in minimal time.
 \end{corollary}
@@ -430,30 +443,57 @@ $Y=259$.}
 
 \subsection{Balzer's Conditions}\label{sec:balzer}
 
-Balzer~\cite[p.~37]{Balzer67} reported that no five-state minimal-time
-solution satisfies the following four conditions:
+Balzer~\cite{Balzer67} reported that no five-state minimal-time solution
+satisfies four extra conditions. In Mazoyer's account~\cite[\S7]{Mazoyer86L},
+they are the stability of~$\Gq$, the condition of an image solution, that only
+the neighbourhoods $(\Gq,\Gq,\Gq)$, $(\ast,\Gq,\Gq)$ and $(\Gq,\Gq,\ast)$ give
+$\Fq$, and the transitions $(\Gq,v,\Gq)\mapsto\Gq$ for $v\ne\Gq$. We state them
+as follows:
 \begin{enumerate}[(B1)]
 \item $\delta(x,\Gq,y)=\Gq$ unless $x,y\in\{\Gq,\ast\}$;
-\item $\delta(I(z),I(y),I(x))=I(\delta(x,y,z))$ for an involution $I$ of the
-states with $I(\ast)=\ast$;
+\item $\delta(I(z),I(y),I(x))=I(\delta(x,y,z))$ for every neighbourhood
+$(x,y,z)$, including those with a border, where $I$ is an involution of the
+states, extended by $I(\ast)=\ast$;
 \item $\delta(\Gq,\Gq,\Gq)=\delta(\ast,\Gq,\Gq)=\delta(\Gq,\Gq,\ast)=\Fq$, and no
 other neighbourhood gives $\Fq$;
 \item $\delta(\Gq,v,\Gq)=\Gq$ for all $v\in W\setminus\{\Gq\}$.
 \end{enumerate}
-In the \emph{weak reading}~\cite{Yunes93}, (B1) is required only for working
-states $x,y$, and (B3) without its last clause. Since $\delta$ is defined only
-on neighbourhoods, which contain no $\Fq$, (B2) can hold for every
-neighbourhood only if $I$ maps $W$ to itself; hence $I(\Fq)=\Fq$. Then
-$I(\Gq)=\Gq$: otherwise $g:=I(\Gq)\in W\setminus\{\Gq\}$, and (B2) and (B4)
-give $\delta(g,\Gq,g)=I(\delta(\Gq,g,\Gq))=I(\Gq)=g$, whereas (B1) gives
-$\delta(g,\Gq,g)=\Gq$. So $I$ is one of the four involutions of
-$\{\Lq,\Aq,\Bq\}$, and (B1)--(B4) become unit and binary clauses.
+We call this the \emph{strong reading}. In the \emph{weak reading}, (B1) is
+required only for working states $x,y$, and (B3) without its last clause.
+Because (B2) is also required at the borders, the image of a computation is a
+computation: if $c$ is a configuration of the line of length $n$ in working
+states and $c'(i)=I(c(n+1-i))$ for $1\le i\le n$, then the successor of $c'$ is
+the image of the successor of~$c$.
+Yun\`es~\cite[\S2.7]{Yunes93} states (B1) and (B3) in the weak reading, but
+(B2) only for the neighbourhoods without a border, and he admits states other
+than~$\Gq$ in (B1), (B3) and (B4); we keep~$\Gq$, as in Mazoyer's account, and
+return to the borders after \cref{prop:balzer}.
 
-\begin{proposition}\label{prop:balzer}
+In both readings, $I$ fixes $\Fq$ and $\Gq$. Since $\delta$ is defined only on
+neighbourhoods, which contain no~$\Fq$, (B2) can hold only if $I$ maps $W$ to
+itself; hence $I(\Fq)=\Fq$. Then $I(\Gq)=\Gq$: otherwise
+$g:=I(\Gq)\in W\setminus\{\Gq\}$, and (B2) and (B4) give
+$\delta(g,\Gq,g)=I(\delta(\Gq,g,\Gq))=I(\Gq)=g$, whereas (B1) gives
+$\delta(g,\Gq,g)=\Gq$. The conclusion is the same if, as in~\cite{Yunes93},
+$\delta$ is defined on all triples of states and (B1), (B2) and (B4) are
+required for all of them: the same argument excludes $g=\Fq$, and then (B2) and
+(B3) give
+$I(\Fq)=I(\delta(\Gq,\Gq,\Gq))=\delta(I(\Gq),I(\Gq),I(\Gq))=\delta(\Gq,\Gq,\Gq)=\Fq$.
+So $I$ is one of the four involutions of $\{\Lq,\Aq,\Bq\}$, and (B1)--(B4)
+become unit and binary clauses. As a check of this formalization, we evaluated
+(B1)--(B4), extended to six states in the obvious way, on the transitions that
+Mazoyer's six-state solution uses on the lines of lengths $3,\dots,150$ (an
+exact finite simulation): (B1) in both readings, (B4), and (B2) for each of the
+$10$ involutions of $\{\Lq,\Aq,\Bq,\Cq\}$, even without the borders, are
+violated, and (B3) holds in the strong reading, in accordance with Mazoyer's
+statement that his solution satisfies only the third
+condition~\cite[\S7]{Mazoyer86L}.
+
+\begin{proposition}[computer-assisted]\label{prop:balzer}
 No five-state rule that satisfies (B1)--(B4) in the weak reading synchronizes
-all lines of lengths $2,\dots,12$ in minimal time;
-a fortiori, no rule in Balzer's form does. The lengths up to $11$ do not suffice
-to prove this.
+all lines of lengths $2,\dots,12$ in minimal time; a fortiori, no rule that
+satisfies them in the strong reading does. The lengths up to $11$ do not
+suffice to prove this.
 \end{proposition}
 
 \begin{proof}
@@ -462,18 +502,28 @@ $\MT_5(\{2,\dots,N\};2N-2)$. For $I=(\Aq\,\Bq)$ and $N=10$, and for $I=(\Lq\,\Aq
 and $I=(\Lq\,\Bq)$ and $N=9$, CaDiCaL refutes the formula with an LRAT proof.
 For $I$ the identity and $N=12$, Kissat refutes it; \textsf{drat-trim} turns its
 DRAT proof into an LRAT proof. Each of the four proofs is verified by
-\texttt{lrat-check}. The rule \texttt{results/balzer\_sym11.txt} satisfies
+\texttt{lrat-check}. The rule \texttt{balzer\_sym11} in \texttt{results/} of the
+supplementary material satisfies
 (B1)--(B4) in the strong reading with $I$ the identity and synchronizes every
 line of length at most $11$ (direct simulation); see \cref{tab:balzer}.
 \end{proof}
+
+The condition (B2) at the borders is needed in \cref{prop:balzer}. The rule
+\texttt{balzer\_noborder12} in \texttt{results/}, found by a solver, satisfies (B1)--(B4) in the weak reading with $I$ the
+identity, except that (B2) holds only for the neighbourhoods without a border,
+and synchronizes every line of length at most $12$ (direct simulation;
+\cref{tab:balzer}). So with (B2) as Yun\`es states it,
+the lines of lengths $2,\dots,12$ do not suffice, and we do not know whether
+longer lines do.
 
 \begin{table}[t]
 \centering\small
 \caption{The formulas of \cref{prop:balzer}: the clauses of (B1)--(B4) for the
 involution $I$ added to $\MT_5(\{2,\dots,N\};2N-2)$, where $2,\dots,N$ are the
 lengths in the second column. Every proof is verified by \texttt{lrat-check}.
-The last row is a rule, found by a solver and checked by direct simulation,
-that satisfies the strong reading, hence the weak one.}
+The last two rows are rules, found by a solver and checked by direct
+simulation: the first satisfies the strong reading, hence the weak one; the
+second satisfies the weak reading except (B2) at the borders.}
 \label{tab:balzer}
 \input{figures/tab_balzer}
 \end{table}

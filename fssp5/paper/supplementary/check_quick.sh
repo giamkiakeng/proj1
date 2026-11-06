@@ -1,9 +1,9 @@
 #!/bin/bash
 # check_quick.sh -- every computational statement of the paper that needs only Python 3 (with PySAT)
 # and a C compiler: simulations, enumerations, satisfiable formulas, the eight unsatisfiable formulas
-# and their digests, and the differential test of the formula generators.  The unsatisfiable
-# formulas themselves are certified by check_certificates.sh.  Run from any directory; about 9
-# minutes on one core.
+# and their digests, the differential test of the formula generators and that of the second
+# encoder.  The unsatisfiable formulas themselves are certified by check_certificates.sh.  Run
+# from any directory; about 11 minutes on one core.
 set -e
 H=$(cd "$(dirname "$0")" && pwd)
 mkdir -p "$H/cnf"
@@ -44,6 +44,9 @@ sec "Theorem 6.1, Propositions 6.4 and 6.6: the eight unsatisfiable formulas (ce
 
 sec "Section 6.1: differential test of the formula generators against a direct evaluation"
 (cd "$H/src" && python3 encoding_check.py | sed -n '/^formula/,$p')
+
+sec "Section 6.1, check (5): the second encoder against the same direct evaluation"
+(cd "$H/src" && python3 encode_independent.py test)
 
 sec "Proposition 6.2: sharpness (enumeration and satisfiable weakenings)"
 cd "$H/src"
@@ -105,6 +108,12 @@ python3 antidiag.py ../results/uniformA_2-12.txt 1034 1034 2 260 1033 2 259 | gr
 sec "Proposition 6.6: the rule for the lengths up to 11 (the formulas: check_certificates.sh)"
 ./fsspcheck ../results/balzer_sym11.txt 2 11
 ./fsspcheck ../results/balzer_sym11.txt 12 12 || true
+
+sec "Section 6.5: Balzer's conditions on Mazoyer's six-state solution, and the rules of Table 6"
+python3 balzer_mazoyer.py 150
+python3 balzer_rulecheck.py ../results/balzer_sym11.txt id
+python3 balzer_rulecheck.py ../results/balzer_noborder12.txt id
+./fsspcheck ../results/balzer_noborder12.txt 2 12
 
 sec "Section 7: the two models of the germ of delta14d"
 cd "$H/research"

@@ -1,20 +1,18 @@
 #!/usr/bin/env python3
 """balzer_k.py -- k-state rules under Balzer's extra conditions (k >= 5).
 
-Same conditions as balzer.py (Balzer, Inform. Control 10 (1967), p. 37; numbered as in
-Mazoyer's account): B1 G stable, B2 image solution for an involution I, B3 GGG, *GG, GG* -> F,
-B4 (G,V,G) -> G.  CONDS is a subset of 1234, with 's' for the strong reading (Balzer's
-wording: B1 also for border neighbours, and no other neighbourhood produces F).
-States: L=0, G=1, auxiliary 2..k-2, F=k-1.  I fixes the border, F and G (I(F)=F implies
-I(G)=G by B1, B2 and B4; note, Section 5); since the conditions treat the auxiliary states symmetrically, it suffices to
+The same conditions and readings as balzer.py (Section 6.5 of the paper): B1 G stable, B2 image
+solution for an involution I, B3 GGG, *GG, GG* -> F, B4 (G,V,G) -> G.  CONDS is a subset of
+1234 (the weak reading), with 's' for the strong reading of B1 and B3 and 'b' for B2 only on the
+neighbourhoods without a border.  States: L=0, G=1, auxiliary 2..k-2, F=k-1.  I fixes the border, F and G
+(Section 6.5); since the conditions treat the auxiliary states symmetrically, it suffices to
 take one involution of {L, aux} per type up to renaming of the auxiliary states:
   id         identity
   AB         (A B)
   LA         (L A)
   LA_BC      (L A)(B C)          (k >= 6)
-balzer.py is the program behind the five-state results of the note (its formulas are the
-ones whose digests are recorded in results/balzer.log); this script is used for six states and
-writes the formula of the five-state weak-reading case I = id, N = 12 for Kissat (--cnf).
+For k = 5 its formulas are identical to those of balzer.py; it writes the formula of the
+five-state case I = id, N = 12 for Kissat (--cnf).
 
 usage: balzer_k.py k N CONDS [I] [--lrat] [--timeout=SECONDS] [--cnf=PATH]
    --cnf=PATH writes the formula to PATH and exits without solving.
@@ -77,6 +75,8 @@ def add_conditions(E, conds, inv):
     if '2' in conds:
         I = involution(E.k, inv)
         for (x, y, z), vs in T.items():
+            if 'b' in conds and BND in (x, z):
+                continue                    # 'b': B2 only for neighbourhoods without a border
             m = (I[z], I[y], I[x])
             for d in range(E.k):
                 E.add([-vs[d], T[m][I[d]]])

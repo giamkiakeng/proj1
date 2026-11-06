@@ -1,30 +1,32 @@
 #!/usr/bin/env python3
-"""balzer.py -- five-state rules under Balzer's extra conditions.
+"""balzer.py -- five-state rules under Balzer's extra conditions (Section 6.5 of the paper).
 
-Balzer (Inform. Control 10 (1967), p. 37) reported that no five-state minimal-time solution
-satisfies four extra conditions.  Numbered as in Mazoyer's account (Publ. Dept. Math. Lyon 1986,
-section 7; Balzer lists C2 first and C1 second):
+Balzer (Inform. Control 10 (1967), 22-42) reported that no five-state minimal-time solution
+satisfies four extra conditions.  Numbered as in Mazoyer's account of them (Publ. Dept. Math.
+Lyon 1986, fascicule 1A, section 7), which is also the numbering (B1)-(B4) of the paper:
 
-  C1  stability of G:  delta(x,G,y) = G for all working x,y, (x,y) != (G,G)
-  C2  image solution:  there is an involution I of the states with
-                       delta(I(z),I(y),I(x)) = I(delta(x,y,z))
-  C3  pre-firing by G: delta(G,G,G) = delta(*,G,G) = delta(G,G,*) = F
+  C1  stability of G:  delta(x,G,y) = G unless x, y in {G, *}
+  C2  image solution:  delta(I(z),I(y),I(x)) = I(delta(x,y,z)) for every neighbourhood, for an
+                       involution I of the states, extended by I(*) = *
+  C3  pre-firing by G: delta(G,G,G) = delta(*,G,G) = delta(G,G,*) = F, and no other
+                       neighbourhood gives F
   C4  G dominant:      delta(G,V,G) = G for every working V != G
 
-Without 's', C1 and C3 are used in the weaker form of Yunes (thesis, Paris 7, 1993, section
-2.7): C1 only for working neighbours, C3 without "only these neighbourhoods produce F".  With
-'s' they are used in Balzer's own wording (the strong reading).  For C2 we take I(*) = *,
-I(F) = F; then I(G) = G by C1, C2 and C4 (note, Section 5), so I is one of the four
-involutions of {L, A, B}.  States:
-L=0, G=1, A=2, B=3, F=4.  (balzer_k.py generalizes this to k states and produces identical
-formulas for k = 5.)
+CONDS selects the conditions and their reading.  Without 's', C1 is required only for working
+neighbours x, y and C3 without its last clause (the weak reading of the paper); with 's', as
+stated above (the strong reading).  In both readings C2 is required for every neighbourhood,
+including those with a border.  With 'b', C2 is required only for the neighbourhoods without a
+border, as in the formulation of Yunes (thesis, Paris 7, 1993, section 2.7); with this weaker C2
+the lengths up to 12 do not suffice (results/balzer_noborder12.txt).  In every reading I(F) = F,
+since delta is defined only on neighbourhoods, which contain no F; then I(G) = G by C1, C2 and C4
+(Section 6.5), so I is one of the four involutions of {L, A, B}.  States: L=0, G=1, A=2, B=3, F=4.
+(balzer_k.py generalizes this to k states and produces identical formulas for k = 5.)
 
 usage: balzer.py N CONDS [I] [--lrat] [--cnf=PATH]
    --cnf=PATH writes the formula to PATH and exits without solving.
-   CONDS: a subset of 1234, e.g. 1234 or 134, optionally with 's' for the
-   strong readings of C1 (also for border neighbours: G changes only when
-   both neighbours are G or the border) and C3 (no other neighbourhood
-   produces F);  I: id, AB, LA, LB (for C2)
+   CONDS: a subset of 1234, optionally with 's' (strong reading of C1 and C3) and 'b' (C2
+   without the border neighbourhoods), e.g. 1234 (weak), 1234s (strong) or 1234b;
+   I: id, AB, LA, LB (for C2)
 """
 import os
 import shutil
@@ -76,6 +78,8 @@ def add_conditions(E, conds, inv):
         for s in range(E.k):
             I.setdefault(s, s)
         for (x, y, z), vs in T.items():
+            if 'b' in conds and BND in (x, z):
+                continue                    # 'b': C2 only for neighbourhoods without a border
             m = (I[z], I[y], I[x])
             for d in range(E.k):
                 E.add([-vs[d], T[m][I[d]]])

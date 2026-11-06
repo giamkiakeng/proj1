@@ -32,7 +32,7 @@ for $s\in W$; constant cells are compared directly.
 
 $\MT_k(\mathcal N;M,N')$ consists of (E1); the half-line cells with $t+i\le M$
 and, for each $n\in\mathcal N$, the cells of $R_n$, with (E2) and (E3); (E4) for
-the lengths $n\in\mathcal N$ with $2n-1\le M$; and (E5) for $4\le n<n'\le N'$.
+the lengths $n$ with $n,n+1\in\mathcal N$; and (E5) for $4\le n<n'\le N'$.
 $\G_k(T,N_1,C)$ consists of (E1) and, with (E2)--(E4), the half-line cells with
 $t+i\le 2N_1$, the cells of $R_n$ for $2\le n\le T+1$, the cells of $R_n$ with
 $\tau\le T$ for $T+2\le n\le N_1$, and the cone of the right end at the firing
@@ -88,7 +88,8 @@ Claim & Programs & Formula & Variables & Clauses & SHA-256 & LRAT proof\\
 \ref{prop:nearmiss} & \texttt{fsspcheck.c}, \texttt{firstfire.py}, \texttt{failall.py} & \multicolumn{5}{l}{simulations; certificates $(t_0,p)$ in \cref{tab:rules}}\\
 \ref{prop:germs} & \texttt{germdfs.c}, \texttt{germdfs\_check.py}, \texttt{germinc.py}, \texttt{germext.c}, \texttt{germ\_k14\_check.py} & \multicolumn{5}{l}{enumeration of the $244$ germs; the $14$ refutations by \cref{lem:left}}\\
 \ref{cor:germ12} & \texttt{antidiag.py}, \texttt{germext.c} & \multicolumn{5}{l}{simulation of the cells with $t+i\le1034$}\\
-\ref{sec:method} & \texttt{encoding\_check.py}, \texttt{validate\_mazoyer.py}, \texttt{gfix.py} & \multicolumn{5}{l}{checks of the encodings; \cref{tab:validation}}\\
+\ref{sec:balzer} & \texttt{balzer\_mazoyer.py}, \texttt{balzer\_rulecheck.py}, \texttt{fsspcheck.c} & \multicolumn{5}{l}{(B1)--(B4) on Mazoyer's solution and on the rules of \cref{tab:balzer}; simulation}\\
+\ref{sec:method} & \texttt{encoding\_check.py}, \texttt{encode\_\allowbreak independent.py}, \texttt{validate\_mazoyer.py}, \texttt{gfix.py} & \multicolumn{5}{l}{checks of the encodings, the second encoder; \cref{tab:validation}}\\
 \bottomrule
 \end{tabular}
 \end{table}

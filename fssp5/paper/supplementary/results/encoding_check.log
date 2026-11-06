@@ -1,9 +1,9 @@
 four states: building the formulas
-  36 models of the satisfiable formulas, 27 partial rules for 2..8 (25 s)
-five states (42 s)
-the clauses of (B1)-(B4) alone (61 s)
-six states (61 s)
-the published formulas (69 s)
+  36 models of the satisfiable formulas, 27 partial rules for 2..8 (27 s)
+five states (44 s)
+the clauses of (B1)-(B4) alone (67 s)
+six states (68 s)
+the published formulas (77 s)
 
 formula                                                        tables   sat  unsat  disagree
 gfix 4 full:2-7 early:8-10:6 share                               2490     0   2490         0
@@ -24,23 +24,26 @@ gfix 4 full:2-7 early:8-10:6 share norc=8,9,10                   2490    12   24
 gfix 4 full:2-7 early:8-10:6 norc=8,9,10                         2490    12   2478         0
 gencnf 4 lengths 2..9 M=16 pump=None                             2490     0   2490         0
 gencnf 4 lengths 2..8 M=14 pump=None                             2490   220   2270         0
-gfix 5 full:2-14 share                                            966    58    908         0
-gfix 5 full:2-15 share                                            966     0    966         0
-gfix 5 full:2-14 early:15-30:6 share                              966    45    921         0
-gfix 5 full:2-14 early:15-30:8 share                              966     9    957         0
-gfix 5 full:2-12 early:13-20:4 cone:13-14 share                   966    62    904         0
-gencnf 5 lengths 2..10 M=78 pump=39                               966   149    817         0
-gencnf 5 lengths 2..12 M=22 pump=12                               966    97    869         0
-gencnf 5 lengths 2..11 M=20 pump=None + (B) 1234s id              966     2    964         0
-gencnf 5 lengths 2..12 M=22 pump=None + (B) 1234 id               966     0    966         0
-gencnf 5 lengths 2..10 M=18 pump=None + (B) 1234 AB               966     0    966         0
-gencnf 5 lengths 2..9 M=16 pump=None + (B) 1234 LA                966     0    966         0
-gencnf 5 lengths 2..9 M=16 pump=None + (B) 1234 LB                966     0    966         0
-gencnf 5 lengths 2..11 M=20 pump=None + (B) 1234 id               966     2    964         0
-gencnf 6 lengths 3..12 M=78 pump=40                               126    25    101         0
-gfix 6 full:3-12 early:13-20:8 share                              126    26    100         0
-gfix 6 full:3-10 early:11-14:5 cone:11-14 share                   126    30     96         0
-(B1)-(B4) clauses alone: 5200 tables, 479 satisfying, 0 disagreements
+gfix 5 full:2-14 share                                           1068    58   1010         0
+gfix 5 full:2-15 share                                           1068     0   1068         0
+gfix 5 full:2-14 early:15-30:6 share                             1068    45   1023         0
+gfix 5 full:2-14 early:15-30:8 share                             1068     9   1059         0
+gfix 5 full:2-12 early:13-20:4 cone:13-14 share                  1068    62   1006         0
+gencnf 5 lengths 2..10 M=78 pump=39                              1068   149    919         0
+gencnf 5 lengths 2..12 M=22 pump=12                              1068   133    935         0
+gencnf 5 lengths 2..11 M=20 pump=None + (B) 1234s id             1068     2   1066         0
+gencnf 5 lengths 2..12 M=22 pump=None + (B) 1234 id              1068     0   1068         0
+gencnf 5 lengths 2..10 M=18 pump=None + (B) 1234 AB              1068     0   1068         0
+gencnf 5 lengths 2..9 M=16 pump=None + (B) 1234 LA               1068     0   1068         0
+gencnf 5 lengths 2..9 M=16 pump=None + (B) 1234 LB               1068     0   1068         0
+gencnf 5 lengths 2..11 M=20 pump=None + (B) 1234 id              1068     2   1066         0
+gencnf 5 lengths 2..12 M=22 pump=None + (B) 1234b id             1068    15   1053         0
+gencnf 5 lengths 2..9 M=16 pump=None + (B) 1234b LA              1068     0   1068         0
+gencnf 5 lengths 2..10 M=18 pump=None + (B) 1234b LA             1068     0   1068         0
+gencnf 6 lengths 3..12 M=78 pump=40                               126    17    109         0
+gfix 6 full:3-12 early:13-20:8 share                              126    19    107         0
+gfix 6 full:3-10 early:11-14:5 cone:11-14 share                   126    23    103         0
+(B1)-(B4) clauses alone: 7280 tables, 593 satisfying, 0 disagreements
 Lemma 3.2 (cone of the right end) by search for 2 <= n < 200: True
 tested formulas identical to formulas/*.cnf.xz (k14_n10: with the selectors of its 230 germs): mt4_9 True, k4_G6 True, k4_G4c True, balzer_AB_10 True, balzer_LA_9 True, balzer_LB_9 True, balzer_id_12 True, k14_n10 True
-57756 formula/table pairs, 0 disagreements (73 s)
+62286 formula/table pairs, 0 disagreements (79 s)

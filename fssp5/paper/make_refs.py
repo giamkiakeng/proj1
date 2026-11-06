@@ -36,6 +36,9 @@ REFS = {
                 "Braunschweig.",
     'Mazoyer87': "Mazoyer, J. (1987). A six-state minimal time solution to the firing squad synchronization "
                  "problem. \\emph{Theoret.\\ Comput.\\ Sci.}, 50, 183--238.",
+    'Mazoyer86L': "Mazoyer, J. (1986). A six states minimal time solution to the firing squad "
+                  "synchronization problem. \\emph{Publ.\\ D{\\'e}p.\\ Math.\\ (Lyon)}, 1A, 1--92. "
+                  "Available from Numdam.",
     'Yunes93': "Yun{\\`e}s, J.-B. (1993). \\emph{Synchronisation et automates cellulaires: la ligne de "
                "fusiliers}. PhD thesis, Universit{\\'e} Paris~7. Available from HAL, tel-00139049.",
     'Sanders94': "Sanders, P. (1994). Massively parallel search for transition-tables of polyautomata. In: "
