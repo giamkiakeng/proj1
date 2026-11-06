@@ -1,0 +1,92 @@
+# src/encode_independent.py: the second encoder of Section 6.1, check (5).  Recorded 2026-11-06.
+#
+# 1. python3 encode_independent.py test  (differential test against the direct evaluation of
+#    encoding_check.py; the same kinds of tables as encoding_check.py, seed 1)
+
+formula (independent encoder)                     tables   sat  unsat  disagree
+MT_4({2..9};16)  [Thm 6.1 (i)]                      2490     0   2490         0
+MT_4({2..8};14)                                     2490   220   2270         0
+G_4(6,10)  [Thm 6.1 (ii)]                           2490     0   2490         0
+G_4(4,10,10)  [Thm 6.1 (iii)]                       2490     0   2490         0
+G_4(5,30)                                           2490    18   2472         0
+G_4(6,9)                                            2490    13   2477         0
+G_4(4,30,9)                                         2490    25   2465         0
+G_4(3,30,12)                                        2490    39   2451         0
+G_4(6,10) without (G3)                              2490    12   2478         0
+(G1) for T = 4, (G5) for 6..12                      2490    17   2473         0
+MT_5({2..10};78,39)  [Prop 6.4, base]               1068   149    919         0
+MT_5({2..12};22,12)                                 1068   133    935         0
+MT_5({2..12}) + (B) 1234, I = id  [Prop 6.6]        1068     0   1068         0
+MT_5({2..10}) + (B) 1234, I = AB  [Prop 6.6]        1068     0   1068         0
+MT_5({2..9}) + (B) 1234, I = LA  [Prop 6.6]         1068     0   1068         0
+MT_5({2..9}) + (B) 1234, I = LB  [Prop 6.6]         1068     0   1068         0
+MT_5({2..11}) + (B) 1234, I = id                    1068     2   1066         0
+MT_5({2..12}) + (B) 1234b, I = id                   1068    15   1053         0
+MT_5({2..9}) + (B) 1234b, I = LA                    1068     0   1068         0
+MT_5({2..10}) + (B) 1234b, I = LA                   1068     0   1068         0
+the formula of Prop 6.4 (with the selectors)        1068     0   1068         0
+36648 formula/table pairs, 0 disagreements (43 s)
+
+# 2. check_certificates.sh --second-encoder with CAKELPR set  (CaDiCaL 3.0.1 with LRAT output,
+#    certify_lrat.sh; for balzer_id_12 Kissat 4.0.4, drat-trim -L and lrat-check, drat-trim commit
+#    2e3b2dc; then cake_lpr, commit 033aad5, on all eight proofs).  drat-trim writes its verdict
+#    "s VERIFIED" after a carriage return, which this run of the script did not show ("no verdict
+#    line"); the script now prints it.  The LRAT proof is checked by lrat-check and cake_lpr in any case.
+
+mt4_9         Theorem 6.1 (i)             vars=753    clauses=17605  
+k4_G6         Theorem 6.1 (ii)            vars=927    clauses=22613  
+k4_G4c        Theorem 6.1 (iii)           vars=882    clauses=20558  
+k14_n10       Proposition 6.4             vars=17266  clauses=559558 
+balzer_AB_10  Proposition 6.6, I = (A B)  vars=1496   clauses=67508  
+balzer_LA_9   Proposition 6.6, I = (L A)  vars=1244   clauses=49571  
+balzer_LB_9   Proposition 6.6, I = (L B)  vars=1244   clauses=49571  
+balzer_id_12  Proposition 6.6, I = id     vars=2148   clauses=114965 
+mt4_9:
+  c VERIFIED
+  times: cadical 26 s, lrat-check 2 s; size: 152145416 B LRAT
+  063a6191e144b8998c6a9bc8ecbd2981f8a6398576681ebe0737444c64538cc0  ../cnf/independent/mt4_9.cnf
+  1dcea6f95fb87f1ea878306e890a5337ea17682081cff9b821536fc2a187c63e  ../cnf/independent/mt4_9.lrat
+k4_G6:
+  c VERIFIED
+  times: cadical 31 s, lrat-check 3 s; size: 167703063 B LRAT
+  163caf88cc106f616cde8ff4a5e8e6ba0d4732ed6a13ec79813db7dc92ee39e6  ../cnf/independent/k4_G6.cnf
+  d37f7b68e024c7cb6accb69eade43d112827e0354029c707ba170f59d1b3cf4b  ../cnf/independent/k4_G6.lrat
+k4_G4c:
+  c VERIFIED
+  times: cadical 30 s, lrat-check 3 s; size: 167324797 B LRAT
+  85b3949107f4c16874e2e0072e22ed22203981ee6a7adf7cd3a65d04a5cbc2e4  ../cnf/independent/k4_G4c.cnf
+  bfa4caa15a84dba4fdae005e581cd01b511fee25c4110f3ed91b746d703f4f4c  ../cnf/independent/k4_G4c.lrat
+k14_n10:
+  c VERIFIED
+  times: cadical 4 s, lrat-check 0 s; size: 8240427 B LRAT
+  74e00ea0ec81d15350aed96c31ab0dd5a99c09d4c55ed9cc43dc2802efded72e  ../cnf/independent/k14_n10.cnf
+  e3e86d20b7e71d25e53f1cd21d4238e3560fce42c29057fe7548d517602b564a  ../cnf/independent/k14_n10.lrat
+balzer_AB_10:
+  c VERIFIED
+  times: cadical 76 s, lrat-check 5 s; size: 365204510 B LRAT
+  2253b7415430de40dad184550b05d6b99b4301d909ec75adaefdaaaec1ec9adb  ../cnf/independent/balzer_AB_10.cnf
+  7ddf791583d1610cbad2f8fa8b7df2ce882be1c5f9a6955626e69651f7f4be56  ../cnf/independent/balzer_AB_10.lrat
+balzer_LA_9:
+  c VERIFIED
+  times: cadical 29 s, lrat-check 3 s; size: 173125582 B LRAT
+  0ccd59e9047bd5effb1857f040e5d5126ad2167ff7f2212194bbf16e8708de64  ../cnf/independent/balzer_LA_9.cnf
+  09d146e6056a87bc00ee3cae6beed33d750b8de0f98818a383ce2c98376105bc  ../cnf/independent/balzer_LA_9.lrat
+balzer_LB_9:
+  c VERIFIED
+  times: cadical 32 s, lrat-check 3 s; size: 183276382 B LRAT
+  4cd90ae461bd7499ce1eed9e94e104f0c6a984d6c81e444aba516a0e7b7a37ff  ../cnf/independent/balzer_LB_9.cnf
+  f2c31b831b67106f51f474830a2565e1adc7430169b196cce4601469ae06ed5e  ../cnf/independent/balzer_LB_9.lrat
+balzer_id_12:
+  s UNSATISFIABLE
+  drat-trim (exit code 0): no verdict line; the LRAT file is checked next
+  c VERIFIED
+  7d14687f6c77fcbe01af8111b1b5d7f163382e40309fd7dd9e6fa958b6d1efde  ../cnf/independent/balzer_id_12.cnf
+  b095598c397fe283a9a39c28f3595d4522ab04d356048b8b8533c2cefb075084  ../cnf/independent/balzer_id_12.lrat
+mt4_9, cake_lpr: s VERIFIED UNSAT
+k4_G6, cake_lpr: s VERIFIED UNSAT
+k4_G4c, cake_lpr: s VERIFIED UNSAT
+k14_n10, cake_lpr: s VERIFIED UNSAT
+balzer_AB_10, cake_lpr: s VERIFIED UNSAT
+balzer_LA_9, cake_lpr: s VERIFIED UNSAT
+balzer_LB_9, cake_lpr: s VERIFIED UNSAT
+balzer_id_12, cake_lpr: s VERIFIED UNSAT

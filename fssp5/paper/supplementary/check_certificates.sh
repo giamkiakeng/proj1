@@ -48,7 +48,7 @@ python3 balzer_k.py 5 12 1234 id --cnf=../cnf/w.cnf
 set +e
 "$KISSAT" -q ../cnf/w.cnf ../cnf/w.drat | grep '^s '
 "$DRATTRIM" ../cnf/w.cnf ../cnf/w.drat -L ../cnf/w.lrat > ../cnf/w.drat-trim.log 2>&1
-echo "drat-trim (exit code $?): $(grep '^s ' ../cnf/w.drat-trim.log || echo 'no verdict line; the LRAT file is checked next')"
+echo "drat-trim (exit code $?): $(tr '\r' '\n' < ../cnf/w.drat-trim.log | grep '^s ' || echo 'no verdict line; the LRAT file is checked next')"
 set -e
 "$LRATCHECK" ../cnf/w.cnf ../cnf/w.lrat | grep -E "VERIFIED|FAIL|ERROR"
 sha256sum ../cnf/w.cnf ../cnf/w.lrat
@@ -83,7 +83,7 @@ I=../cnf/independent/balzer_id_12
 set +e
 "$KISSAT" -q $I.cnf $I.drat | grep '^s ' | sed 's/^/  /'
 "$DRATTRIM" $I.cnf $I.drat -L $I.lrat > $I.drat-trim.log 2>&1
-echo "  drat-trim (exit code $?): $(grep '^s ' $I.drat-trim.log || echo 'no verdict line; the LRAT file is checked next')"
+echo "  drat-trim (exit code $?): $(tr '\r' '\n' < $I.drat-trim.log | grep '^s ' || echo 'no verdict line; the LRAT file is checked next')"
 set -e
 "$LRATCHECK" $I.cnf $I.lrat | grep -E "VERIFIED|FAIL|ERROR" | sed 's/^/  /'
 sha256sum $I.cnf $I.lrat | sed 's/^/  /'
