@@ -98,9 +98,10 @@ formulas with the generators and compares them with the recorded digests
 (about one minute); one reruns the simulations, enumerations, satisfiable
 formulas and the differential test (about $9$ minutes); and one regenerates
 every LRAT proof and checks it with \texttt{lrat-check} (about an hour and
-$5$\,GB). CaDiCaL~3.0.1 writes the same proof on every run, and Kissat~4.0.4
-with \textsf{drat-trim} reproduced the recorded proof of its case byte for byte,
-so the regenerated proofs can be compared with the recorded digests.
+$5$\,GB). Run again with CaDiCaL~3.0.1, Kissat~4.0.4 and \textsf{drat-trim},
+this script reproduced all eight recorded proofs byte for byte (its log is in
+the Zenodo record of the data availability statement), so regenerated proofs
+can be compared with the recorded digests.
 \Cref{app:artefacts} lists each computational claim with its programs and files.
 
 \subsection{Four States}\label{sec:four}
