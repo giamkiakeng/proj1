@@ -82,22 +82,46 @@ def beat_audio(beat, is_chapter):
 
 
 def chunk_caption(text, maxlen=84):
-    """split a caption into pieces of at most maxlen characters, preferring breaks after punctuation"""
+    """split a caption into as few pieces of at most maxlen characters as possible, of balanced lengths
+    (no short leftover piece), preferring breaks after a comma, semicolon or colon"""
     words = text.split()
-    out, cur = [], ''
-    for w in words:
-        if cur and len(cur) + 1 + len(w) > maxlen:
-            m = max(cur.rfind(', '), cur.rfind('; '), cur.rfind(': '))
-            if m > maxlen * 0.45:
-                out.append(cur[:m + 1])
-                cur = cur[m + 2:]
-            else:
-                out.append(cur)
-                cur = ''
-        cur = (cur + ' ' + w).strip()
-    if cur:
-        out.append(cur)
-    return out
+    n = len(words)
+    total = len(' '.join(words))
+    if total <= maxlen:
+        return [' '.join(words)]
+
+    def seg(i, j):
+        return len(' '.join(words[i:j]))
+
+    k = -(-total // maxlen)
+    while True:
+        if k > n:                       # a single word longer than maxlen
+            return words
+        target = total / k
+        best = {(0, 0): (0.0, None)}
+        for j in range(1, n + 1):
+            for m in range(1, k + 1):
+                cand = None
+                for i in range(j - 1, -1, -1):
+                    if seg(i, j) > maxlen:
+                        break
+                    if (i, m - 1) not in best:
+                        continue
+                    c = best[(i, m - 1)][0] + (seg(i, j) - target) ** 2
+                    if j < n and words[j - 1][-1] in ',;:':
+                        c -= (0.3 * target) ** 2
+                    if cand is None or c < cand[0]:
+                        cand = (c, i)
+                if cand:
+                    best[(j, m)] = cand
+        if (n, k) in best:
+            out, j, m = [], n, k
+            while m:
+                i = best[(j, m)][1]
+                out.append(' '.join(words[i:j]))
+                j, m = i, m - 1
+            return out[::-1]
+        k += 1
 
 
 def two_lines(s, width=42):
