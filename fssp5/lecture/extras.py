@@ -50,8 +50,8 @@ itself to the certified computer proofs. Chapters 1-3 need no mathematics; chapt
 proofs; chapters 9-13 explain the computer-assisted results and how they are checked; chapter 14 lists \
 the open questions.
 
-The narration uses a computer-generated voice (Piper, voice en_US-ryan-high). English captions are \
-included.
+The narration uses a computer-generated clone of the author's voice, made from recordings of the author \
+(Qwen3-TTS). English captions are included.
 
 Chapters
 %s

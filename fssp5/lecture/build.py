@@ -142,6 +142,91 @@ def srt_time(t):
     return '%02d:%02d:%02d,%03d' % (ms // 3600000, ms // 60000 % 60, ms // 1000 % 60, ms % 1000)
 
 
+TAKE_LEAD, TAKE_END = 0.35, 1.5     # seconds of a beat before its first word; silence after the last word
+
+
+def _norm_words(t):
+    return ' '.join(re.sub(r"[^a-z0-9']+", ' ', t.lower()).split())
+
+
+def take_timeline(take, beats, pages, wav_out, partial=False):
+    """Beat times, sentence cues and the padded audio of a finished take (see voice_take.py).
+
+    The take's cues give the start and end of every chunk the narrator read, and its beat. A beat's slide
+    appears TAKE_LEAD seconds before its first word (or halfway through a shorter pause) and stays up until
+    the next beat's slide appears. Each sentence of the script is timed by matching its read text, word for
+    word, to the chunks of its beat; inside a chunk, time is shared out in proportion to the characters."""
+    take = os.path.abspath(take)
+    meta = json.load(open(os.path.splitext(take)[0] + '.cues.json'))
+    sj = os.path.join(os.path.dirname(os.path.dirname(take)), 'sentences.json')
+    sents = json.load(open(sj, encoding='utf-8'))
+    if sents['beats'] != [b['id'] for b in beats]:
+        raise SystemExit('the take was made from a different script (beats differ): rerun voice_take.py and the narrator')
+    now = [s['display'] for b in beats for p in b['paragraphs'] for s in p]
+    if now != [s['display'] for s in sents['sentences']]:
+        bad = next(i for i, (x, y) in enumerate(zip(now, [s['display'] for s in sents['sentences']])) if x != y) \
+            if len(now) == len(sents['sentences']) else -1
+        raise SystemExit('the script has changed since the take was made (sentence %d): re-narrate' % (bad + 1))
+    chunks = meta['chunks']
+    nb = len(beats)
+    if partial:                       # a test take of the first beats only
+        nb = max(c['beat'] for c in chunks)
+        beats, pages = beats[:nb], pages[:nb]
+    by_beat = {n: [c for c in chunks if c['beat'] == n] for n in range(1, nb + 1)}
+    missing = [n for n, cs in by_beat.items() if not cs]
+    if missing:
+        raise SystemExit('the take has no audio for the beats %s' % missing)
+    # audio: the take with silence before and after
+    with wave.open(take, 'rb') as w:
+        ch, sw, sr = w.getnchannels(), w.getsampwidth(), w.getframerate()
+        frames = w.readframes(w.getnframes())
+    pad0, pad1 = bytes(int(round(PAD_START * sr)) * ch * sw), bytes(int(round(TAKE_END * sr)) * ch * sw)
+    with wave.open(wav_out, 'wb') as w:
+        w.setnchannels(ch)
+        w.setsampwidth(sw)
+        w.setframerate(sr)
+        w.writeframes(pad0 + frames + pad1)
+    total = (len(pad0) + len(frames) + len(pad1)) / (ch * sw * sr)
+    # beats
+    first = [by_beat[n][0]['start'] + PAD_START for n in range(1, nb + 1)]
+    last = [by_beat[n][-1]['end'] + PAD_START for n in range(1, nb + 1)]
+    bound = [0.0] + [first[i] - min(TAKE_LEAD, (first[i] - last[i - 1]) / 2) for i in range(1, nb)] + [total]
+    timeline = [{'beat': b['id'], 'chapter': b['chapter'], 'start': bound[i], 'end': bound[i + 1], 'page': page,
+                 'anim': b['opts'].get('anim')} for i, (b, page) in enumerate(zip(beats, pages))]
+    # sentences -> times, beat by beat
+    cues, inexact = [], 0
+    for n in range(1, nb + 1):
+        ss = [s for s in sents['sentences'] if s['beat'] == n]
+        cs = by_beat[n]
+        stream, spans = '', []
+        for c in cs:
+            t = _norm_words(c['text'])
+            a0 = len(stream) + (1 if stream else 0)
+            stream = (stream + ' ' + t) if stream else t
+            spans.append((a0, len(stream), c['start'] + PAD_START, c['end'] + PAD_START))
+        words = [_norm_words(s['read']) for s in ss]
+        mine = ' '.join(words)
+        scale = 1.0
+        if mine != stream:
+            inexact += 1
+            scale = len(stream) / max(1, len(mine))
+
+        def at(x, side):
+            x *= scale
+            for a0, a1, t0, t1 in spans:
+                if (a0 <= x < a1) if side == 'start' else (a0 < x <= a1):
+                    return t0 + (t1 - t0) * (x - a0) / max(1, a1 - a0)
+            return spans[0][2] if side == 'start' else spans[-1][3]
+        pos = 0
+        for s, wd in zip(ss, words):
+            a0, a1 = pos, pos + len(wd)
+            cues.append({'start': at(a0, 'start'), 'end': at(a1, 'end'), 'text': s['display'], 'spoken': s['read']})
+            pos = a1 + 1
+    if inexact:
+        print('warning: %d beats whose read text differs from the take; their captions are timed by length' % inexact)
+    return timeline, cues, total
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--tex', default='lecture.tex')
@@ -151,6 +236,10 @@ def main():
     ap.add_argument('--chapters', default=None, help='comma-separated chapter ids to include (test builds)')
     ap.add_argument('--no-video', action='store_true')
     ap.add_argument('--script', default=None, help='glob of script files (default script*.txt)')
+    ap.add_argument('--take', default=None,
+                    help='a finished take (recording.wav with recording.cues.json, from the script that '
+                         'voice_take.py wrote) to use as the narration instead of synthesizing it')
+    ap.add_argument('--take-partial', action='store_true', help='the take covers only the first beats (test builds)')
     a = ap.parse_args()
     outdir = os.path.join(HERE, 'out')
     os.makedirs(outdir, exist_ok=True)
@@ -171,27 +260,32 @@ def main():
     chap_title = {c['id']: c['title'] for c in chapters}
 
     # ---- audio, cues and timeline
-    pcm = bytearray()
-    timeline, cues = [], []
-    for b, page in zip(beats, pages):
-        if sel and b['chapter'] not in sel:
-            continue
-        is_ch = b['id'].startswith('ch')
-        audio, bc = beat_audio(b, is_ch)
-        t0 = len(pcm) / 2 / L.SR
-        pcm += audio
-        t1 = len(pcm) / 2 / L.SR
-        timeline.append({'beat': b['id'], 'chapter': b['chapter'], 'start': t0, 'end': t1, 'page': page,
-                         'anim': b['opts'].get('anim')})
-        for c in bc:
-            cues.append(dict(c, start=c['start'] + t0, end=c['end'] + t0))
-    total = len(pcm) / 2 / L.SR
     wav = os.path.join(outdir, a.out + '.wav')
-    with wave.open(wav, 'wb') as w:
-        w.setnchannels(1)
-        w.setsampwidth(2)
-        w.setframerate(L.SR)
-        w.writeframes(bytes(pcm))
+    if a.take:
+        if sel:
+            raise SystemExit('--chapters cannot be combined with --take')
+        timeline, cues, total = take_timeline(a.take, beats, pages, wav, a.take_partial)
+    else:
+        pcm = bytearray()
+        timeline, cues = [], []
+        for b, page in zip(beats, pages):
+            if sel and b['chapter'] not in sel:
+                continue
+            is_ch = b['id'].startswith('ch')
+            audio, bc = beat_audio(b, is_ch)
+            t0 = len(pcm) / 2 / L.SR
+            pcm += audio
+            t1 = len(pcm) / 2 / L.SR
+            timeline.append({'beat': b['id'], 'chapter': b['chapter'], 'start': t0, 'end': t1, 'page': page,
+                             'anim': b['opts'].get('anim')})
+            for c in bc:
+                cues.append(dict(c, start=c['start'] + t0, end=c['end'] + t0))
+        total = len(pcm) / 2 / L.SR
+        with wave.open(wav, 'wb') as w:
+            w.setnchannels(1)
+            w.setsampwidth(2)
+            w.setframerate(L.SR)
+            w.writeframes(bytes(pcm))
     print('narration: %d beats, %d sentences, %.1f min' % (len(timeline), len(cues), total / 60))
 
     # ---- captions (SRT)
@@ -226,8 +320,9 @@ def main():
     # ---- transcript
     md = ['# Two barriers for minimal-time firing squads — lecture transcript', '']
     cur = None
+    shown = {e['beat'] for e in timeline}
     for b in beats:
-        if sel and b['chapter'] not in sel:
+        if b['id'] not in shown:
             continue
         if b['chapter'] != cur:
             cur = b['chapter']
@@ -287,7 +382,9 @@ def main():
            '-map', '0:v', '-map', '1:a', '-map', '2:s', '-map_metadata', '3', '-map_chapters', '3',
            '-c:v', 'libx264', '-preset', a.preset, '-crf', a.crf, '-tune', 'stillimage', '-pix_fmt', 'yuv420p',
            '-r', str(FPS), '-fps_mode', 'cfr', '-g', '300',
-           '-af', 'loudnorm=I=-16:TP=-1.5:LRA=11', '-c:a', 'aac', '-b:a', '96k', '-ar', '48000',
+           # a take comes mastered (and its dynamics matched to the speaker): keep it as it is
+           '-af', 'anull' if a.take else 'loudnorm=I=-16:TP=-1.5:LRA=11',
+           '-c:a', 'aac', '-b:a', '128k' if a.take else '96k', '-ar', '48000',
            '-c:s', 'mov_text', '-metadata:s:s:0', 'language=eng', '-metadata:s:a:0', 'language=eng',
            '-t', '%.3f' % total, '-movflags', '+faststart', mp4]
     sh(cmd)

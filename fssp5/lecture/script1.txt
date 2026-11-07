@@ -2,7 +2,7 @@
 
 # CHAPTER 00 | Welcome
 @ c00-title
-Welcome. This is a lecture on the paper "Two barriers for minimal-time firing squads, with applications to four and five states", by Kia Keng Giam, accepted for publication in the Journal of Cellular Automata. The narration uses a computer-generated voice, and English captions are available throughout.
+Welcome. This is a lecture on the paper "Two barriers for minimal-time firing squads, with applications to four and five states", by Kia Keng Giam, accepted for publication in the Journal of Cellular Automata. The narration uses a computer-generated clone of the author's voice, and English captions are available throughout.
 
 @ c00-question
 The paper is about one of the oldest puzzles in the theory of cellular automata: the firing squad synchronization problem. Its central question has been open since 1987. Can a firing squad be synchronized as fast as possible with only five states? The paper does not answer this question. Instead, it proves new conditions that every such fast solution must satisfy, and it uses them, together with computer proofs that anyone can check, to settle several smaller questions around it.
