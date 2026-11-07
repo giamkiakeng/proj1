@@ -1,0 +1,119 @@
+%% Style of the lecture slides (16:9).  Each page carries a hidden beat marker in the footline,
+%% which the build reads with pdftotext to tie the page to its narration.
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs,array}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,patterns,shapes.geometric,positioning}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepgfplotslibrary{groupplots}
+\usepackage{graphicx}
+\usepackage{adjustbox}
+\newcommand{\fig}[2][0.74]{\adjustbox{max width=\linewidth,max totalheight=#1\paperheight}{#2}}
+\usepackage[most]{tcolorbox}
+
+%% ---- the macros and colours of the paper (paper.tex) ----
+\newcommand{\Lq}{\mathsf L}
+\newcommand{\Gq}{\mathsf G}
+\newcommand{\Aq}{\mathsf A}
+\newcommand{\Bq}{\mathsf B}
+\newcommand{\Cq}{\mathsf C}
+\newcommand{\Fq}{\mathsf F}
+\newcommand{\G}{\mathcal G}
+\newcommand{\PUMP}{\mathrm{PUMP}}
+\newcommand{\MT}{\mathrm{MT}}
+\definecolor{stB}{HTML}{C6D5E6}
+\definecolor{stA}{HTML}{7C9DC2}
+\definecolor{stC}{HTML}{3F6894}
+\definecolor{stG}{HTML}{1A2638}
+\definecolor{stF}{HTML}{E8650E}
+\definecolor{rgAgree}{HTML}{E9EFF6}
+\definecolor{rgInput}{HTML}{B4C7DC}
+\definecolor{rgCone}{HTML}{4A75A3}
+\definecolor{rgReturn}{HTML}{6B3519}
+\definecolor{rgRefl}{HTML}{F5E6D7}
+\definecolor{rgRefl2}{HTML}{E4C8AE}
+\definecolor{ink}{HTML}{111111}
+\definecolor{grid}{HTML}{8A8A8A}
+\definecolor{diffSame}{HTML}{DCE6F1}
+\definecolor{diffDiff}{HTML}{8C3B12}
+\definecolor{gFull}{HTML}{4A75A3}
+\definecolor{gEarly}{HTML}{B4C7DC}
+\definecolor{gReturn}{HTML}{6B3519}
+\definecolor{gCone}{HTML}{F2C48D}
+\definecolor{gNone}{HTML}{F1F1F1}
+\definecolor{stUnknown}{HTML}{D9D9D9}
+\definecolor{coneR}{HTML}{F2C48D}
+\definecolor{coneM}{HTML}{A9C1DA}
+\tikzset{
+  coneRight/.style={fill=coneR},
+  coneMid/.style={fill=coneM,postaction={pattern=north east lines,pattern color=ink!55}},
+  coneBoth/.style={fill=coneR,postaction={pattern=north east lines,pattern color=ink!55}},
+  coneNone/.style={fill=gNone}}
+\newcommand{\staircase}[2]{(0,-#1) \foreach \i in {1,...,#2} { -- (\i,-#1+\i-1) -- (\i,-#1+\i) }}
+\newcommand{\swatch}[1]{\tikz[baseline=-0.6ex,x=1cm,y=1cm]\filldraw[fill=#1,draw=grid,line width=0.3pt] (0,-0.09) rectangle (0.24,0.15);}
+%% cross-references inside the paper's figures, resolved with the paper's numbering
+\input{paperrefs}
+\makeatletter
+\newcommand{\lecref@one}[1]{\@ifundefined{lref@#1}{??}{\csname lref@#1\endcsname}}
+\newcommand{\cref}[1]{\@for\lecref@x:=#1\do{\lecref@one{\lecref@x}\ }\unskip}
+\let\Cref\cref
+\AtBeginDocument{\renewcommand{\ref}[1]{\@ifundefined{lnum@#1}{??}{\csname lnum@#1\endcsname}}}
+\makeatother
+
+%% ---- lecture colours and theme ----
+\definecolor{bg}{HTML}{FFFFFF}
+\definecolor{navy}{HTML}{1A2638}
+\definecolor{accent}{HTML}{E8650E}
+\definecolor{soft}{HTML}{EEF3F9}
+\definecolor{mute}{HTML}{5B6573}
+\definecolor{okgreen}{HTML}{2E7D32}
+\setbeamercolor{background canvas}{bg=bg}
+\setbeamercolor{normal text}{fg=ink}
+\setbeamercolor{frametitle}{fg=white,bg=navy}
+\setbeamercolor{structure}{fg=navy}
+\setbeamercolor{alerted text}{fg=accent}
+\setbeamerfont{frametitle}{size=\Large,series=\bfseries}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\textcolor{accent}{\raisebox{0.15ex}{\scriptsize$\blacktriangleright$}}}
+\setbeamertemplate{itemize subitem}{\textcolor{accent}{\raisebox{0.2ex}{\tiny$\blacktriangleright$}}}
+\setbeamertemplate{enumerate item}{\insertenumlabel.}
+\setbeamercolor{enumerate item}{fg=navy}
+\addtobeamertemplate{itemize/enumerate body begin}{}{\setlength{\itemsep}{0.6ex}}
+\setbeamertemplate{frametitle}{%
+  \nointerlineskip
+  \begin{beamercolorbox}[wd=\paperwidth,ht=2.6ex,dp=1.3ex,leftskip=1.0em,rightskip=1.0em]{frametitle}%
+    \usebeamerfont{frametitle}\insertframetitle
+  \end{beamercolorbox}\vspace{0.4ex}}
+\newcommand{\currentchapter}{}
+\newcommand{\currentbeat}{NONE}
+\setbeamertemplate{footline}{%
+  \hbox to \paperwidth{\hspace{1.0em}{\color{mute}\scriptsize\currentchapter}\hfill
+    {\color{bg}\fontsize{2}{2}\selectfont BEAT:\currentbeat:END}\hspace{1.0em}}\vspace{0.8ex}%
+  \gdef\currentbeat{NONE}}
+\newcommand<>{\beat}[1]{\only#2{\gdef\currentbeat{#1}}}
+\newcommand{\setchapter}[2]{\gdef\currentchapter{#1\quad #2}}
+
+%% ---- building blocks ----
+\newtcolorbox{statement}[1]{enhanced,colback=soft,colframe=navy,boxrule=0.6pt,arc=2pt,
+  left=6pt,right=6pt,top=4pt,bottom=4pt,fonttitle=\bfseries,coltitle=white,colbacktitle=navy,title={#1}}
+\newtcolorbox{plainbox}{enhanced,colback=soft,colframe=soft,arc=2pt,left=6pt,right=6pt,top=4pt,bottom=4pt}
+\newcommand{\evid}[1]{\tikz[baseline=(e.base)]\node[fill=accent,text=white,rounded corners=2pt,inner sep=2pt,font=\scriptsize\bfseries](e){#1};}
+%% a magenta box that the build replaces by an animation; in the handout, a still of the animation
+\newif\ifhandout
+\newcommand{\animbox}[3]{\ifhandout\includegraphics[width=#1cm,height=#2cm]{stills/#3.png}\else\tikz\fill[fill={rgb,255:red,255;green,0;blue,255}] (0,0) rectangle (#1,#2);\fi}
+\newcommand{\fitfig}[2]{\resizebox{!}{#1}{#2}}
+\newcommand{\chapterslide}[3]{%
+  \begin{frame}[plain]
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[navy] (current page.south west) rectangle (current page.north east);
+    \node[anchor=south west,text=accent,font=\sffamily\bfseries\fontsize{60}{60}\selectfont,inner sep=0pt] at ($(current page.west)+(1.2,0.55)$) {#1};
+    \node[anchor=north west,text=white,font=\bfseries\fontsize{24}{29}\selectfont,text width=13.6cm,align=left,inner sep=0pt] (ttl) at ($(current page.west)+(1.2,0.1)$) {\hyphenpenalty=10000 #2};
+    \node[anchor=north west,text=white!80!navy,font=\large,text width=13.6cm,align=left,inner sep=0pt] at ($(ttl.south west)+(0,-0.5)$) {#3};
+  \end{tikzpicture}
+  \beat{ch#1}%
+  \hbox{}\vfill{\color{navy}\fontsize{2}{2}\selectfont BEAT:ch#1:END}
+  \end{frame}}

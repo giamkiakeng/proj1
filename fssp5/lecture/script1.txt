@@ -1,0 +1,117 @@
+%% Narration, chapters 0-4.  Markup {display|spoken}: captions show the first part, the voice says the second.
+
+# CHAPTER 00 | Welcome
+@ c00-title
+Welcome. This is a lecture on the paper "Two barriers for minimal-time firing squads, with applications to four and five states", by Kia Keng Giam, accepted for publication in the Journal of Cellular Automata. The narration uses a computer-generated voice, and English captions are available throughout.
+
+@ c00-question
+The paper is about one of the oldest puzzles in the theory of cellular automata: the firing squad synchronization problem. Its central question has been open since 1987. Can a firing squad be synchronized as fast as possible with only five states? The paper does not answer this question. Instead, it proves new conditions that every such fast solution must satisfy, and it uses them, together with computer proofs that anyone can check, to settle several smaller questions around it.
+
+@ c00-map
+Here is the plan. After this introduction there are fourteen chapters, and you can jump between them with the chapter markers of the video. Chapters one to three need no mathematics: they explain the puzzle, why it is hard, and the precise rules of the game. Chapters four to eight contain the mathematical results of the paper, and explain every proof step by step. Chapters nine to thirteen explain the results that use computers: how a computer can prove that something is impossible, and why we can trust such a proof. Chapter fourteen explains what remains open.
+
+@ c00-how
+If you are new to the subject, watch the first three chapters, and then the short summary at the end of each later chapter. If you already know cellular automata, you can start with chapter four. Every statement in this lecture comes from the paper, and each time the lecture tells you how it is known: by a proof in the paper, by an exact computation, by a computer proof that independent programs check, or only as an observation from a simulation.
+
+# CHAPTER 01 | The firing squad puzzle
+@ ch1
+Chapter one. The firing squad puzzle. For everyone; no mathematics needed.
+
+@ c01-story
+Imagine a long line of soldiers, with a general at one end. At some moment the general gives an order, and the goal is that all the soldiers fire at exactly the same moment. Two things make this hard. Each soldier can only talk to the two soldiers next to them. And each soldier has a tiny memory: at any moment it is in one of a few states, like a small lamp that can show only a few colours. Every soldier follows the same instructions, and these instructions must work whether the line has two soldiers, ten, or a million.
+
+@ c01-cells
+In mathematics, this is a one-dimensional cellular automaton. The soldiers are called cells, and they are numbered from one to n, from left to right. Time runs in steps, zero, one, two, and so on. At each step, every cell looks at its own state and at the states of its two neighbours, and all cells change their state at the same time, according to one fixed rule. At time zero, the leftmost cell is the general, in a special state called G, and all the other cells are quiescent, which means at rest, in the state L. The goal is that all cells enter the firing state F at the same time, and that no cell enters it earlier.
+
+@ c01-rule
+The rule is just a table. For every combination of three neighbouring states, the left neighbour, the cell itself, and the right neighbour, the table says what the cell's next state is. The two cells at the ends have only one neighbour, so they see a special border symbol instead, drawn as a star. One condition is built in: a quiescent cell with quiescent neighbours stays quiescent, and so does a quiescent cell next to the right border. Otherwise the line could wake up by itself, without any order from the general.
+
+@ c01-anim anim=mazoyer24
+Let us watch a real solution at work. This is the solution that Mazoyer published in 1987. It uses six states: the quiescent state L, the general G, three helper states A, B and C, and the firing state F. The line has twenty-four cells. On the right you see the line itself at the current time, with the letter of each state. On the left you see its whole history, one row per time step, with time running downwards. A picture like this is called a space-time diagram. Watch how signals travel through the line, bounce off the right end, and cut the line into smaller and smaller pieces, until, at time forty-six, every cell fires at once.
+
+@ c01-fast anim=front_echo
+Why time forty-six? For a line of n cells, no solution can fire before time {2n − 2|two n minus two}, and for twenty-four cells that is forty-six. Here is the intuition. The general's order can move at most one cell per step, so it needs n minus one steps to reach the far end of the line. Until then, no cell can know where the line ends. And the news that the line ends there needs another n minus one steps to travel back to the general. Before that, the general cannot know how long the line is, so it cannot know when to fire. A solution that fires every line exactly at time {2n − 2|two n minus two} is called a minimal-time solution. Chapter four turns this intuition into a proof.
+
+@ c01-history
+The problem was posed by Myhill in 1957 and made popular by Moore. Goto, in 1962, and Waksman, in 1966, showed that the minimal time {2n − 2|two n minus two} can actually be reached. Waksman's solution used sixteen states. Then a race for fewer states began. Balzer found a solution with eight states in 1967. In 1987, Gerken found one with seven, and Mazoyer the one with six that we just watched. Many other six-state solutions are known today.
+
+@ c01-four
+In the other direction, Balzer reported in 1967 that a computer search had found no minimal-time solution with four states. Sanders confirmed this with a search of his own, and Yunès repeated the search and observed that the lines of lengths two to nine already suffice to exclude four states. Solutions with five states or fewer are known for special families of lengths, such as the powers of two, some of them slower than the minimal time. So the smallest number of states of a minimal-time solution is either five or six, and which of the two it is has been open since 1987. That is the question behind this paper: does a minimal-time solution with five states exist?
+
+@ c01-summary
+In one sentence: a firing squad is a line of identical cells that follow one common rule; the fastest possible firing time is {2n − 2|two n minus two}; six states are known to be enough, four are known to be too few, and five is the open case.
+
+# CHAPTER 02 | Why lower bounds are hard
+@ ch2
+Chapter two. Why lower bounds are hard. For everyone.
+
+@ c02-count
+How could one prove that five states are not enough? A five-state rule is a table with ninety-six entries, one for each possible neighbourhood. Two of these entries are fixed by the condition that quiescent cells stay quiet. Each of the other ninety-four table entries can be any one of the five states. So there are five to the power ninety-four rules, which is more than ten to the power sixty-five. No computer could ever try them one by one.
+
+@ c02-asym
+There is also an asymmetry. To show that one particular rule is not a solution, it is enough to find a single line that it fails to synchronize. But a solution has to synchronize every line, of every length. So a proof that five states are not enough has to exclude every one of these rules.
+
+@ c02-finite
+Fortunately, the problem can be made finite. There are only finitely many rules. If no five-state solution exists, each rule fails on some shortest length; take the largest of these lengths, and call it N. Then no five-state rule synchronizes all the lines of lengths two to N. So a negative answer can consist of finitely many conditions. The difficulty is to find conditions that are strong enough to exclude every rule, and cheap enough to check.
+
+@ c02-paper
+This paper does two things. First, it proves such conditions, for every number of states. Most of them concern a single object, which every line shares: the behaviour of an infinitely long line, which we will call the half-line. Second, it measures how far these conditions reach for four and five states, using programs called satisfiability solvers, whose answers come with proofs that independent programs check.
+
+@ c02-summary
+In one sentence: there are far too many rules to try, so we need necessary conditions that every solution must satisfy, and the art is to find conditions that are both strong and cheap.
+
+# CHAPTER 03 | The precise rules of the game
+@ ch3
+Chapter three. The precise rules of the game. Definitions.
+
+@ c03-states
+Now let us make everything precise. We have a finite set S of states, and k is the number of states. S contains three special states: the quiescent state L, the general G, and the firing state F. The other states are called auxiliary; in this lecture they are A, B, and, for Mazoyer's solution, C. The working states are all states except F; we write W for this set. The border is a separate symbol, the star, which is not a state.
+
+@ c03-nbhd
+A neighbourhood is a triple {(x, y, z)|x, y, z}: the left neighbour x, the cell y itself, and the right neighbour z. The middle entry is a working state. The outer entries are working states or the border, but not both borders at once, since every line has at least two cells. A rule is a map {δ|delta} from neighbourhoods to states, with {δ(L, L, L) = L|delta of L, L, L equal to L}, and {δ(L, L, ∗) = L|delta of L, L, star equal to L}. With k states there are {(k − 1)²(k + 1)|k minus one squared, times k plus one} neighbourhoods: forty-five for four states, ninety-six for five, and one hundred and seventy-five for six.
+
+@ c03-line
+The line of length n is described by its space-time diagram. We write {Cₙ(t, i)|C n of t comma i} for the state of cell i at time t. At time zero, cell one is the general and all the other cells are quiescent. At each step, every cell applies the rule to its neighbourhood. A cell stays defined only as long as nothing in its neighbourhood, the cell itself included, has fired. We say that the rule synchronizes the line of length n at time T if all n cells are in state F at time T, and no cell is in state F before. A minimal-time solution synchronizes the line of length n at time {2n − 2|two n minus two}, for every n of at least two.
+
+@ c03-halfline
+The most important object of the paper is the half-line. It starts exactly like a line, with the general in cell one and quiescent cells everywhere else, but it has no right end: the cells go on forever. We write {C∞(t, i)|C infinity of t comma i} for its states. In all pictures, time runs downwards and the cells run from left to right. The front is the diagonal on which t equals i minus one: at time t, it is the cell that the general's signal has just reached. An anti-diagonal is a set of cells on which t plus i is constant; it runs from the lower left to the upper right.
+
+@ c03-summary
+In one sentence: a rule is a table on neighbourhoods; a line of length n is the space-time diagram that it produces; and the half-line is the same diagram without a right end.
+
+# CHAPTER 04 | The line and the half-line
+@ ch4
+Chapter four. The line and the half-line. Paper, section two.
+
+@ c04-intro
+This chapter contains the first idea of the paper. Until the echo of its right end comes back, a line cannot tell that it is finite. So every line looks like the half-line for a long time, and it can differ from the half-line only in a triangle next to its right end.
+
+@ c04-lightcone
+We start with the light cone. Information travels at most one cell per step, so the cells that the general cannot have influenced yet stay quiescent. Lemma 2.1 says: for every rule, the state at time t and cell i is L whenever t is less than i minus one, in every line and in the half-line. The proof is by induction on time, which means: we check the statement at time zero, and then show that if it holds at one time, it holds at the next. At time zero it is the initial condition. At a later time, the three cells that determine cell i, namely the cells i minus one, i, and i plus one at the previous time, satisfy the same inequality. So they are quiescent, or the right border, and the quiescence condition of the rule gives L again.
+
+@ c04-agree
+Now the key observation. The right end of the line of length n is first felt by cell n at time n minus one, when the front arrives there. Its influence then travels back to the left, again at most one cell per step. So the right end can reach cell i only from time n minus one plus n minus i onwards. Lemma 2.2, the agreement lemma, makes this precise: for every rule, the line of length n and the half-line agree on every cell with {t + i ≤ 2n − 2|t plus i at most two n minus two}. The proof is again an induction on time. For the last cell, cell n, the light cone shows that both diagrams are still quiescent there.
+
+@ c04-figline
+Here is the picture for Mazoyer's solution and the line of length twenty-four. On the left is the line, in the middle the half-line, and on the right each cell of the line compared with the same cell of the half-line. Light cells have the same state in both, dark cells have different states. Above the dashed staircase, where t plus i is at most forty-six, the two diagrams agree everywhere, exactly as the lemma says. Below the staircase is a triangle next to the right end, which we call the reflected triangle, {Rₙ|R n}. It consists of the cells with t plus i at least {2n − 1|two n minus one}, up to the firing time {2n − 2|two n minus two}.
+
+@ c04-lowerbound
+The agreement lemma proves that time {2n − 2|two n minus two} is optimal, which is Remark 2.3. Suppose a rule synchronizes every line, and the line of length n fires at some time T of at most {2n − 3|two n minus three}. The cell one at time T satisfies t plus i at most {2n − 2|two n minus two}, so it agrees with the half-line: the half-line's first cell is in state F at time T. By the agreement lemma again, the first cell of every longer line is also in state F at time T. But take a line longer than T plus one. By the light cone, its last cell is still quiescent at time T. So this line has a cell that fires while another cell is still at rest, and it can never be synchronized. This contradiction shows that no line can be synchronized before time {2n − 2|two n minus two}.
+
+@ c04-return
+The first anti-diagonal of the reflected triangle, where t plus i equals {2n − 1|two n minus one}, is where the line can first differ from the half-line. We call it the return chain. Lemma 2.4, the return chain lemma, says that in a minimal-time solution the line differs from the half-line on the whole return chain. Precisely: if the rule synchronizes the lines of lengths n and n plus one at their minimal times, then every cell of the return chain of the line of length n differs from the same cell of the half-line. Moreover, the front cell just before the right end, at time n minus two and cell n minus one, is not quiescent.
+
+@ c04-rp1
+The proof climbs the return chain from the bottom left. It starts at cell one, at time {2n − 2|two n minus two}. There the line of length n is in state F, because it fires. But the half-line agrees there with the line of length n plus one, which does not fire before time two n. So the two diagrams differ at the first cell of the chain.
+
+@ c04-rp2
+Now suppose that cell number i of the chain differs. Its left and middle predecessors, the cells that determine it from the previous time step, lie on the two anti-diagonals just above the chain, where the line agrees with the half-line. Two of its three inputs are the same in both diagrams, and the result is different. So the third input must differ too, and that is the right predecessor, which is cell number i plus one of the chain. The difference climbs the chain, cell by cell, up to cell n at time n minus one.
+
+@ c04-rp3
+At the top, the last cell of the chain is computed, in the line, from the front cell f, a quiescent cell, and the border; and in the half-line from f, a quiescent cell, and another quiescent cell. If f were quiescent, both results would be L, by the quiescence condition of the rule, and they could not differ. So the front cell f is not quiescent.
+
+@ c04-neverfire
+One more consequence, equation 2 of the paper: a minimal-time solution never fires on the half-line. Given any cell of the half-line, take a line so long that the cell lies above its staircase. There the half-line agrees with the line, and the line has not fired yet. So every cell of the half-line is in a working state.
+
+@ c04-summary
+In one sentence: a minimal-time solution consists of one half-line, shared by all lengths, and, for each length n, a reflected triangle in which the line reacts to its right end; and the first anti-diagonal of that triangle always differs from the half-line.

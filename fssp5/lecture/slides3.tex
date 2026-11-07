@@ -1,0 +1,617 @@
+%% Slides, chapters 9-14.
+
+%% ------------------------------------------------------------------ 9
+\chapterslide{9}{Proofs by computer}{and why we can trust them (paper, section 6.1 and appendix A)}
+\setchapter{9}{Proofs by computer}
+
+\begin{frame}{Can a computer prove impossibility?}
+\beat{c09-intro}
+\vspace{5ex}
+\begin{center}\Large
+A computer says: \emph{``no rule satisfies these conditions''}.\\[2ex]
+Why should we believe it?
+\end{center}
+\end{frame}
+
+\begin{frame}{Satisfiability solvers}
+\beat{c09-sat}
+\begin{itemize}
+\item Input: a formula of \textbf{yes/no variables} joined by \emph{and}, \emph{or}, \emph{not}.
+\item Output: values that make it true --- or \textbf{``unsatisfiable''}.
+\item Variables of our formulas, for example:
+\begin{center}
+$x_{e,s}$: ``the table entry of the neighbourhood $e$ is $s$'' \qquad $y_{u,s}$: ``the cell $u$ is in state $s$''
+\end{center}
+\item Clauses: exactly one value per entry and per cell; every cell follows the rule; the lines are synchronized as required.
+\end{itemize}
+\begin{plainbox}\centering a rule with the required properties \ $\Longleftrightarrow$\ \ a solution of the formula\end{plainbox}
+\end{frame}
+
+\begin{frame}{The formulas (appendix A)}
+\beat{c09-encodings}
+\begin{itemize}
+\item $\MT_k(\mathcal N;M,N')$: the lines of lengths $n\in\mathcal N$ synchronized at $2n-2$, the half-line up to $t+i=M$, the return chains, and $\PUMP(n,n')$ for $4\le n<n'\le N'$.
+\item $\G_k(T,N_1,C)$: the early-row conditions of Definition 5.4.
+\end{itemize}
+\vspace{1ex}
+\textbf{Clauses} in five groups:\\[0.5ex]
+(E1) rule table \quad (E2) cells \quad (E3) local rule \quad (E4) return chains \quad (E5) pumping
+\end{frame}
+
+\begin{frame}{Certificates of unsatisfiability}
+\beat{c09-certificates}
+\begin{center}
+\fig[0.30]{\begin{tikzpicture}[node distance=0.55cm,b/.style={draw=navy,thick,fill=soft,rounded corners,align=center,font=\small,minimum height=1.1cm,text width=2.25cm}]
+  \node[b] (g) {formula\\ generator};
+  \node[b,right=of g] (f) {formula\\ (DIMACS)};
+  \node[b,right=of f] (s) {solver\\ CaDiCaL, Kissat};
+  \node[b,right=of s] (p) {proof\\ (LRAT)};
+  \node[b,right=of p,fill=white,draw=okgreen] (c) {checkers\\ lrat-check\\ cake\_lpr};
+  \foreach \a/\bb in {g/f,f/s,s/p,p/c} {\draw[-{Stealth},thick] (\a) -- (\bb);}
+  \draw[-{Stealth},thick,okgreen] (f.south) to[bend right=18] (c.south);
+  \node[font=\small,okgreen,below=0.9cm of p] {each proof is checked against exactly its formula};
+\end{tikzpicture}}
+\end{center}
+\vspace{1ex}
+\begin{itemize}
+\item CaDiCaL writes LRAT directly; for one formula, Kissat's DRAT proof is converted to LRAT by \textsf{drat-trim}.
+\item \textbf{lrat-check}: a small independent checker.
+\item \textbf{cake\_lpr}: formally verified in the theorem prover HOL4, compiled with the verified compiler CakeML.
+\item So ``unsatisfiable'' does \textbf{not} rest on trusting the solver.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The gap}
+\beat{c09-gap}
+\vspace{4ex}
+\begin{plainbox}\large
+A checked proof shows that the \textbf{formula} is unsatisfiable --- not that the formula correctly expresses the \textbf{mathematical conditions}.
+\end{plainbox}
+\vspace{2ex}
+\begin{center}the programs that write the formulas are trusted \ $\Rightarrow$ \ tested in five independent ways\end{center}
+\end{frame}
+
+\begin{frame}{Checks of the encodings (1) and (2)}
+\beat{c09-check1}
+\small
+\begin{enumerate}[(1)]
+\item \textbf{Differential test}: a separate program, sharing no code with the generators, evaluates the conditions directly. $37$ formulas $\times$ $3{,}684$ tables: all $62{,}286$ answers agree.
+\item \textbf{Known rules} fixed in the formulas (Table 2):
+\end{enumerate}
+\vspace{0.5ex}
+\centering\fig[0.38]{\input{figures/tab_validation}}
+\end{frame}
+
+\begin{frame}{Checks of the encodings (3)--(5)}
+\beat{c09-check2}
+\begin{enumerate}[(1)]\setcounter{enumi}{2}
+\item \textbf{Independent methods}: for four states, the formula and a separate exhaustive search agree; the germ enumeration of chapter 12 was repeated by an independent program.
+\item \textbf{Models}: every solution found by a solver is simulated again by independent code.
+\item \textbf{Second encoder}: a separate program builds all eight unsatisfiable formulas again, literally. It agrees with the direct evaluation on all $36{,}648$ test pairs, and its eight formulas are unsatisfiable, with proofs verified by both checkers.
+\end{enumerate}
+\begin{plainbox}\centering each impossibility claim rests on \textbf{two} formulas written by independent programs\end{plainbox}
+\end{frame}
+
+\begin{frame}{An honest limit}
+\beat{c09-honest}
+\vspace{5ex}
+\begin{plainbox}\large
+These tests make an error in the encodings \textbf{unlikely}, but they cannot prove its absence: a misreading of a definition shared by both encoders and the direct evaluation would not be detected.
+\end{plainbox}
+\end{frame}
+
+\begin{frame}{Everything can be repeated}
+\beat{c09-repro}
+\renewcommand{\arraystretch}{1.3}\small
+\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{6.4cm}l@{}}
+\toprule
+script & what it does & time\\
+\midrule
+\texttt{write\_formulas.sh} & writes the eight formulas, compares their digests & about 1 minute\\
+\texttt{check\_quick.sh} & simulations, enumerations, satisfiable formulas, differential tests & about 11 minutes\\
+\texttt{check\_certificates.sh} & regenerates and checks every proof & about 2 hours\\
+\bottomrule
+\end{tabular}
+\vspace{2ex}
+\begin{itemize}
+\item Rerun with the same solvers: all eight proofs reproduced \textbf{byte for byte}.
+\item All data, including the proofs ($4.4$\,GB), archived at Zenodo.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Appendix B: every computational claim and its files}
+\beat{c09-artefacts}
+\centering\fig[0.72]{{\setlength{\textwidth}{1.9\textwidth}\footnotesize\setlength{\tabcolsep}{3pt}\input{tab_artefacts_src}}}\\[0.8ex]
+\footnotesize SHA-256: first eight hexadecimal digits \quad\textbullet\quad last proof: converted from DRAT by \textsf{drat-trim}
+\end{frame}
+
+\begin{frame}{Table 1: every result and its evidence}
+\beat{c09-evidence}
+\centering\fig[0.78]{\begin{minipage}{1.12\textwidth}\small\input{tab_results_src}\end{minipage}}
+\end{frame}
+
+\begin{frame}{Chapter 9 in one sentence}
+\beat{c09-summary}
+\vspace{4ex}
+\begin{plainbox}\large
+Computer proofs of impossibility come with \textbf{certificates} checked by independent and formally verified programs, and the formulas themselves are \textbf{cross-checked} by several independent tests.
+\end{plainbox}
+\end{frame}
+
+%% ------------------------------------------------------------------ 10
+\chapterslide{10}{Four states}{Paper, section 6.2}
+\setchapter{10}{Four states}
+
+\begin{frame}{Four states: known to be impossible}
+\beat{c10-intro}
+\vspace{5ex}
+\begin{center}\Large
+The answer is known: \textbf{no four-state minimal-time solution}.\\[3ex]
+\large New: a \textbf{certified} proof, and \textbf{how little information} is needed.
+\end{center}
+\end{frame}
+
+\begin{frame}{Theorem 6.1}
+\beat{c10-theorem}
+\begin{statement}{Theorem 6.1 (computer-assisted)}
+No four-state rule satisfying $\delta(\Lq,\Lq,\Lq)=\delta(\Lq,\Lq,\ast)=\Lq$
+\begin{enumerate}[(i)]
+\item synchronizes all lines of lengths $2,\dots,9$ in minimal time;
+\item satisfies $\G_4(6,10)$: the lines of lengths $2,\dots,7$ complete and, for the lines of lengths $8$, $9$ and $10$, the first seven rows after the reflection, with the return chains on these rows;
+\item satisfies $\G_4(4,10,10)$: the lines of lengths $2,\dots,5$ complete and, for the lines of lengths $6,\dots,10$, the first five rows after the reflection, with the return chains on these rows, and the right ends.
+\end{enumerate}
+In particular, no four-state minimal-time solution exists.
+\end{statement}
+\end{frame}
+
+\begin{frame}{The certificates}
+\beat{c10-proof}
+\renewcommand{\arraystretch}{1.3}
+\begin{center}
+\begin{tabular}{@{}llrrl@{}}
+\toprule
+part & formula & variables & clauses & proof\\
+\midrule
+(i) & $\MT_4(\{2,\dots,9\};16)$ & $753$ & $17{,}605$ & LRAT, CaDiCaL\\
+(ii) & $\G_4(6,10)$ & $919$ & $22{,}960$ & LRAT, CaDiCaL\\
+(iii) & $\G_4(4,10,10)$ & $874$ & $20{,}461$ & LRAT, CaDiCaL\\
+\bottomrule
+\end{tabular}
+\end{center}
+\vspace{1ex}
+\begin{itemize}
+\item Every proof verified by \texttt{lrat-check} and by \texttt{cake\_lpr}. \evid{certified}
+\item (i) certifies the bound observed by Yun\`es; earlier proofs rested on the correctness of search programs.
+\item (iii): only the lines of lengths up to $5$ are complete.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Figure 13 again: how little is constrained}
+\beat{c10-regions}
+\centering\fig[0.78]{\input{figures/fig_regions}}
+\end{frame}
+
+\begin{frame}{The bounds are sharp (Proposition 6.2)}
+\beat{c10-sharp}
+\begin{statement}{Proposition 6.2 (computer-assisted)}
+\begin{enumerate}[(a)]
+\item Exactly $27$ partial four-state rules synchronize all lines of lengths $2,\dots,8$ in minimal time; none synchronizes all lines of lengths $2,\dots,9$.
+\item Six weakened formulas are satisfiable, for example $\G_4(5,30)$, $\G_4(6,9)$, $\G_4(6,10)$ without (G3), $\G_4(4,30,9)$, $\G_4(3,30,12)$.
+\end{enumerate}
+\end{statement}
+\small \evid{exact computation} exhaustive enumeration \qquad models checked by simulation
+\end{frame}
+
+\begin{frame}{Table 3: the four-state formulas}
+\beat{c10-table}
+\centering\fig[0.70]{\input{figures/tab_four}}
+\end{frame}
+
+\begin{frame}{Chapter 10 in one sentence}
+\beat{c10-summary}
+\vspace{4ex}
+\begin{plainbox}\large
+Four states are excluded by the lines of lengths $2,\dots,5$ together with small parts of the lines of lengths $6,\dots,10$, with a \textbf{certified} proof --- and these bounds cannot be improved in several directions.
+\end{plainbox}
+\end{frame}
+
+%% ------------------------------------------------------------------ 11
+\chapterslide{11}{Five states: rules for\\ the lengths up to 14}{Paper, section 6.3}
+\setchapter{11}{Five states: rules for the lengths up to 14}
+
+\begin{frame}{Close to minimal time}
+\beat{c11-intro}
+\vspace{5ex}
+\begin{center}\Large
+Five-state rules that synchronize\\ \textbf{every line of length $2$ to $14$} in minimal time.
+\end{center}
+\end{frame}
+
+\begin{frame}{Proposition 6.3}
+\beat{c11-prop}
+\vspace{1ex}
+\begin{statement}{Proposition 6.3 (computer-assisted)}
+Each of the five-state rules $\delta_{14}$, $\delta_{14}^{\mathrm b}$, $\delta_{14}^{\mathrm c}$, $\delta_{14}^{\mathrm d}$ and $\delta_{14}^{\mathrm e}$ synchronizes the line of length $n$ at time $2n-2$ for $2\le n\le14$, and for no $n\ge15$. More precisely, for every $n\ge15$, some cell of the line of length $n$ is $\Fq$ at a relative time $\tau\le\min(T,n-2)$, where $T=10,14,22,12,14$, respectively.
+\end{statement}
+\end{frame}
+
+\begin{frame}{$\delta_{14}$ on the lines of lengths 14 and 15}
+\beat{c11-anim}
+\centering\animbox{14}{6.6}{delta14}
+\end{frame}
+
+\begin{frame}{Table 4: the rule $\delta_{14}$}
+\beat{c11-table}
+\centering\fig[0.70]{%
+\setlength{\tabcolsep}{4.2pt}%
+\begin{tabular}{@{}cc|ccccc@{\hspace{2.2em}}cc|ccccc@{}}
+\toprule
+$x$ & $y$ & $z=\Lq$ & $\Gq$ & $\Aq$ & $\Bq$ & $\ast$ &
+$x$ & $y$ & $z=\Lq$ & $\Gq$ & $\Aq$ & $\Bq$ & $\ast$\\
+\midrule
+\input{figures/tab_delta14}
+\end{tabular}}\\[1ex]
+\small the entry in row $(x,y)$ and column $z$ is $\delta_{14}(x,y,z)$
+\end{frame}
+
+\begin{frame}{Proof for infinitely many lengths}
+\beat<1>{c11-proof1}\beat<2>{c11-proof2}
+\begin{enumerate}
+\item Simulate the lines of lengths $2,\dots,60$.
+\item The half-line has no $\Fq$ before time $3000$: for $n\le1500$, an early firing lies in $R_n$.
+\item<2-> A certificate $(t_0,p)$ for the depth rows $0,\dots,2T+4$ (Lemma 5.2); then finitely many representative lengths (Corollary 5.3):
+\end{enumerate}
+\onslide<2->{\renewcommand{\arraystretch}{1.15}\small
+\begin{center}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+& $\delta_{14}$ & $\delta_{14}^{\mathrm b}$ & $\delta_{14}^{\mathrm c}$ & $\delta_{14}^{\mathrm d}$ & $\delta_{14}^{\mathrm e}$\\
+\midrule
+$T$ & $10$ & $14$ & $22$ & $12$ & $14$\\
+$(t_0,p)$ & $(51,8)$ & $(66,3)$ & $(257,192)$ & $(95,48)$ & $(56,2)$\\
+lengths simulated & $35$ & $39$ & $413$ & $116$ & $28$\\
+largest & $49$ & $53$ & $427$ & $130$ & $42$\\
+\bottomrule
+\end{tabular}
+\end{center}}
+\end{frame}
+
+\begin{frame}{Figure 15: the first firing on the lines $15,\dots,60$}
+\beat{c11-firstfire}
+\centering\fig[0.78]{\input{figures/fig_firstfire}}
+\end{frame}
+
+\begin{frame}{Figure 14: the rule $\delta_{14}$}
+\beat{c11-halfline}
+\centering\fig[0.62]{\input{figures/fig_delta14}}\\[0.5ex]
+\small\tikz[baseline=(e.base)]\node[fill=mute,text=white,rounded corners=2pt,inner sep=2pt,font=\scriptsize\bfseries](e){observation};\
+$3\le t<1500$: cells $\ge3$ only $\Lq,\Bq$ (elementary rule $22$);\ $\PUMP$ holds up to $n'=800$;\ Lemma 4.1 does not apply for $n\le5000$, $s\le3$, $\ell\le24$
+\end{frame}
+
+\begin{frame}{Table 5: the seven five-state rules}
+\beat{c11-rules}
+\centering\fig[0.62]{\input{figures/tab_rules}}
+\end{frame}
+
+\begin{frame}{What is new}
+\beat{c11-new}
+\begin{plainbox}
+$N_k$ := the largest $N$ such that some $k$-state rule synchronizes all lines of lengths $2,\dots,N$ in minimal time.\\ Since there are finitely many rules: $N_k=\infty$ $\Longleftrightarrow$ a $k$-state minimal-time solution exists.
+\end{plainbox}
+\vspace{1ex}
+\renewcommand{\arraystretch}{1.3}
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+$N_4=8$ & exhaustive searches & Yun\`es; Proposition 6.2 (a)\\
+$N_5\ge14$ & \textbf{the five rules} & Proposition 6.3\\
+$N_6=\infty$ & six-state solutions & Mazoyer 1987
+\end{tabular}
+\end{center}
+\small The paper is not aware of an earlier published bound for five states.
+\end{frame}
+
+\begin{frame}{What the rules add}
+\beat{c11-meaning}
+\begin{enumerate}
+\item A proof that five states do not suffice must use lines of length \textbf{at least 15}, or conditions other than the synchronization of the lines of lengths $2,\dots,14$.
+\item ``Fails for every $n\ge15$'' is \textbf{not a finite simulation}: it combines finitely many simulations with Corollary 5.3.
+\item The rules fail in the \textbf{first rows after the reflection} --- exactly what the formulas of chapter 8 target.
+\end{enumerate}
+\vspace{1ex}
+\begin{center}\color{mute} They are not candidates for minimal-time solutions.\end{center}
+\end{frame}
+
+\begin{frame}{Chapter 11 in one sentence}
+\beat{c11-summary}
+\vspace{4ex}
+\begin{plainbox}\large
+Five states can synchronize every line up to length 14, but these rules \textbf{provably fail on every longer line} --- and any proof of impossibility for five states must look beyond length 14.
+\end{plainbox}
+\end{frame}
+
+%% ------------------------------------------------------------------ 12
+\chapterslide{12}{Five states: half-lines\\ of low complexity}{Paper, section 6.4}
+\setchapter{12}{Five states: half-lines of low complexity}
+
+\begin{frame}{How simple can the half-line be?}
+\beat{c12-intro}
+\vspace{5ex}
+\begin{center}\Large
+The barriers constrain the half-line.\\[2ex]
+How \textbf{simple} can the half-line of a five-state\\ minimal-time solution be?
+\end{center}
+\end{frame}
+
+\begin{frame}{Germs and complexity}
+\beat{c12-germ}
+\begin{itemize}
+\item The \textbf{germ below $M$}: the rule restricted to the neighbourhoods of the half-line cells with $t\ge1$, $t+i\le M$.
+\item Its \textbf{complexity} $c_M(\delta)$: the number of these neighbourhoods other than $(\Lq,\Lq,\Lq)$.
+\item $M=78$: the half-line below $t+i=78$ contains the input anti-diagonals of all lines of lengths $n\le40$, so the germ determines $\PUMP(n,n')$ for $n'\le40$.
+\end{itemize}
+\vspace{1ex}
+\begin{center}
+$c_{78}$:\quad Mazoyer $57$ \qquad $\delta_{12}$ $22$ \qquad $\delta_{14}$ $16$
+\end{center}
+\end{frame}
+
+\begin{frame}{Proposition 6.4}
+\beat{c12-prop}
+\vspace{4ex}
+\begin{statement}{Proposition 6.4 (computer-assisted)}
+Every five-state minimal-time solution $\delta$ satisfies $c_{78}(\delta)\ge15$.
+\end{statement}
+\vspace{2ex}
+\begin{center}on the cells with $t\ge1$ and $t+i\le78$, the half-line uses at least $15$ different neighbourhoods besides $(\Lq,\Lq,\Lq)$\end{center}
+\end{frame}
+
+\begin{frame}{Proof: all germs of complexity at most 14}
+\beat{c12-proof1}
+\begin{enumerate}
+\item Suppose $c_{78}(\delta)\le14$; exchanging $\Aq$ and $\Bq$, assume $\Aq$ occurs before $\Bq$.
+\item The germ produces no $\Fq$, never puts $\Lq$ at the front, and satisfies $\PUMP(n,n')$ for $4\le n<n'\le40$.
+\item A depth-first search, choosing the value of each neighbourhood at its first occurrence, visits about $10^8$ nodes and finds exactly \textbf{$244$ germs}.
+\item An independent re-implementation finds the same $244$. \evid{exact computation}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Figure 16: the case analysis}
+\beat<1>{c12-proof2}\beat<2>{c12-germfig}
+\centering\fig[0.66]{\input{figures/fig_germs}}\\[0.5ex]
+\small
+\only<1>{$230$ germs: one formula with a selector per germ is unsatisfiable (\evid{certified}).\quad $14$ germs: Lemma 4.1 with $s=1$, for some $n\le163$, $\ell\le5$.}%
+\only<2>{germ $10$, $n=28$: $\Gq$ on cells $1,\dots,19$ of $t+i=54$; $\Aq$ on cells $1,\dots,18$ of $t+i=53$: \ $Y-s=18>16=(k-1)^{2s}\ell$.}
+\end{frame}
+
+\begin{frame}{Complexity 15 does occur}
+\beat{c12-occurs}
+\vspace{5ex}
+\begin{center}\Large
+$c_{78}(\delta_{14}^{\mathrm c})=c_{78}(\delta_{14}^{\mathrm d})=15$,\\[1ex]
+and both rules synchronize the lines of lengths $2,\dots,14$.
+\end{center}
+\end{frame}
+
+\begin{frame}{The half-line of $\delta_{12}$ and $\delta_{13}$}
+\beat{c12-delta12}
+\small The same half-line on $t+i\le78$, with the $22$ neighbourhoods (\texttt{xyz>d} means $\delta(x,y,z)=d$)
+\begin{center}\footnotesize
+\texttt{*GL>A GLL>G *AG>B AGL>L *BL>A BLG>L LGL>B *AL>G ALB>A LBG>L BGL>G}\\
+\texttt{*GA>A GAL>L ALG>B LGG>G GGL>G BGG>L GGG>G ALL>A LLG>L ALA>A LAL>L}
+\end{center}
+\vspace{1ex}
+\begin{statement}{Corollary 6.5 (computer-assisted)}
+No five-state rule that has these $22$ transitions synchronizes the line of length $518$ in minimal time.
+\end{statement}
+\end{frame}
+
+\begin{frame}{Proof of Corollary 6.5}
+\beat{c12-d12proof}
+\begin{enumerate}
+\item With these transitions and $\delta(\Lq,\Lq,\Lq)=\Lq$, no other neighbourhood occurs on the cells with $t+i\le1034$: every such rule has the same half-line there.
+\item On $t+i=1034$ the cells $2,\dots,259$ are $\Aq$; on $t+i=1033$ the cells $2,\dots,258$ are $\Lq$.
+\item Lemma 4.1 with $k=5$, $n=518$, $s=2$, $\ell=1$, $Y=259$ would give
+\[Y-s=257\ \le\ 4^4=256 .\]
+False --- so the line of length $518$ cannot be synchronized.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Figure 17: the half-line of $\delta_{12}$ up to $t+i=1034$}
+\beat{c12-d12fig}
+\centering\fig[0.78]{\input{figures/fig_delta12}}
+\end{frame}
+
+\begin{frame}{Chapter 12 in one sentence}
+\beat{c12-summary}
+\vspace{4ex}
+\begin{plainbox}\large
+The half-line of a five-state minimal-time solution must use \textbf{at least 15 different neighbourhoods} early on, and the simple half-line of $\delta_{12}$ can never be completed to a solution.
+\end{plainbox}
+\end{frame}
+
+%% ------------------------------------------------------------------ 13
+\chapterslide{13}{Balzer's conditions}{Paper, section 6.5}
+\setchapter{13}{Balzer's conditions}
+
+\begin{frame}{A claim from 1967}
+\beat{c13-intro}
+\vspace{5ex}
+\begin{center}\Large
+Balzer (1967): no five-state minimal-time solution\\ satisfies four extra conditions.\\[3ex]
+\large Checked here with certified computations --- and one detail matters.
+\end{center}
+\end{frame}
+
+\begin{frame}{Balzer's conditions}
+\beat{c13-conds}
+\begin{enumerate}[(B1)]
+\item $\delta(x,\Gq,y)=\Gq$ unless $x,y\in\{\Gq,\ast\}$;\hfill\textcolor{mute}{stability of $\Gq$}
+\item $\delta(I(z),I(y),I(x))=I(\delta(x,y,z))$ for \textbf{every} neighbourhood $(x,y,z)$, \textbf{including those with a border}, where $I$ is an involution of the states, $I(\ast)=\ast$;\hfill\textcolor{mute}{symmetry}
+\item $\delta(\Gq,\Gq,\Gq)=\delta(\ast,\Gq,\Gq)=\delta(\Gq,\Gq,\ast)=\Fq$, and no other neighbourhood gives $\Fq$;
+\item $\delta(\Gq,v,\Gq)=\Gq$ for all $v\in W\setminus\{\Gq\}$.
+\end{enumerate}
+\vspace{1ex}
+\small following Mazoyer's account of the conditions
+\end{frame}
+
+\begin{frame}{Two readings}
+\beat{c13-readings}
+\begin{itemize}
+\item \textbf{Strong reading}: as stated.
+\item \textbf{Weak reading}: (B1) only for working states $x,y$; (B3) without ``no other neighbourhood gives $\Fq$''.
+\item Because (B2) holds at the borders, the \textbf{mirror image of a computation is a computation}:
+\[c'(i)=I\bigl(c(n+1-i)\bigr)\quad\Rightarrow\quad \text{the successor of }c'\text{ is the image of the successor of }c.\]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The involution fixes $\Fq$ and $\Gq$}
+\beat{c13-involution}
+\begin{itemize}
+\item $\delta$ is defined only on neighbourhoods, which contain no $\Fq$: so $I$ maps $W$ to itself, and $I(\Fq)=\Fq$.
+\item If $g:=I(\Gq)\ne\Gq$: (B2) and (B4) give $\delta(g,\Gq,g)=I(\delta(\Gq,g,\Gq))=I(\Gq)=g$, but (B1) gives $\delta(g,\Gq,g)=\Gq$. So $I(\Gq)=\Gq$.
+\item Hence $I$ is one of the \textbf{four involutions} of $\{\Lq,\Aq,\Bq\}$: the identity, $(\Aq\,\Bq)$, $(\Lq\,\Aq)$, $(\Lq\,\Bq)$.
+\item With $I$ fixed, (B1)--(B4) become \textbf{unit and binary clauses}.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{A check of the formalization: Mazoyer's solution}
+\beat{c13-mazoyer}
+\evid{exact computation}\ the transitions used on the lines of lengths $3,\dots,150$\\[2ex]
+\renewcommand{\arraystretch}{1.3}
+\begin{center}
+\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{10.5cm}@{}}
+\toprule
+condition & Mazoyer's six-state solution\\
+\midrule
+(B1) & violated, in both readings\\
+(B2) & violated for each of the $10$ involutions of $\{\Lq,\Aq,\Bq,\Cq\}$, even without the borders\\
+(B3) & holds, in the strong reading\\
+(B4) & violated\\
+\bottomrule
+\end{tabular}
+\end{center}
+\vspace{1ex}
+\small in agreement with Mazoyer's statement that his solution satisfies only the third condition
+\end{frame}
+
+\begin{frame}{Proposition 6.6}
+\beat{c13-prop}
+\begin{statement}{Proposition 6.6 (computer-assisted)}
+No five-state rule that satisfies (B1)--(B4) in the weak reading synchronizes all lines of lengths $2,\dots,12$ in minimal time; a fortiori, no rule that satisfies them in the strong reading does. The lengths up to $11$ do not suffice to prove this.
+\end{statement}
+\renewcommand{\arraystretch}{1.2}
+\begin{center}\small
+\begin{tabular}{@{}lll@{}}
+\toprule
+involution & lengths & certificate\\
+\midrule
+$(\Aq\,\Bq)$ & $2,\dots,10$ & LRAT proof of CaDiCaL\\
+$(\Lq\,\Aq)$, $(\Lq\,\Bq)$ & $2,\dots,9$ & LRAT proofs of CaDiCaL\\
+identity & $2,\dots,12$ & DRAT proof of Kissat, turned into LRAT by drat-trim\\
+\bottomrule
+\end{tabular}
+\end{center}
+\small all four proofs verified by \texttt{lrat-check} and \texttt{cake\_lpr} \evid{certified}
+\end{frame}
+
+\begin{frame}{Length 11 is not enough}
+\beat{c13-sharp}
+\vspace{4ex}
+\begin{plainbox}\large
+The rule \texttt{balzer\_sym11} satisfies (B1)--(B4) in the \textbf{strong} reading, with $I$ the identity, and synchronizes every line of length at most $11$.
+\end{plainbox}
+\small\centering found by a solver; checked by direct simulation
+\end{frame}
+
+\begin{frame}{(B2) at the borders is needed}
+\beat{c13-borders}
+\begin{itemize}
+\item Yun\`es states (B2) only for the neighbourhoods \textbf{without} a border.
+\item The rule \texttt{balzer\_noborder12} satisfies (B1)--(B4) in the weak reading with $I$ the identity, except (B2) at the borders, and synchronizes \textbf{every line of length at most $12$}.
+\end{itemize}
+\vspace{2ex}
+\begin{plainbox}
+With (B2) as Yun\`es states it, the lines of lengths $2,\dots,12$ do not suffice --- and it is not known whether longer lines do.
+\end{plainbox}
+\end{frame}
+
+\begin{frame}{Table 6: Balzer's conditions}
+\beat{c13-table}
+\centering\fig[0.70]{\input{figures/tab_balzer}}
+\end{frame}
+
+\begin{frame}{Chapter 13 in one sentence}
+\beat{c13-summary}
+\vspace{4ex}
+\begin{plainbox}\large
+Balzer's conditional result for five states is confirmed with certified proofs, even under a weaker reading --- but only when the symmetry condition also holds \textbf{at the borders} of the line.
+\end{plainbox}
+\end{frame}
+
+%% ------------------------------------------------------------------ 14
+\chapterslide{14}{What remains open}{Paper, section 7}
+\setchapter{14}{What remains open}
+
+\begin{frame}{Two kinds of conditions}
+\beat{c14-twokinds}
+\begin{columns}[T]
+\column{0.47\textwidth}
+\begin{plainbox}\textbf{Barriers} (chapters 5--7)\\ proved for every number of states; about the \textbf{half-line} alone.\end{plainbox}
+\column{0.47\textwidth}
+\begin{plainbox}\textbf{Early rows and right ends} (chapter 8)\\ used through SAT solvers, for four and five states.\end{plainbox}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Figure 18: a rule that the conditions do not exclude}
+\beat<1>{c14-models}\beat<2>{c14-middle}
+\centering\fig[0.64]{\input{figures/fig_model}}\\[0.5ex]
+\small
+\only<1>{the germ of $\delta_{14}^{\mathrm d}$: (G1)--(G3) with $T=7$ for all $n\ge9$, and (G5) for $9\le n\le20$, have a model; the lines $9$, $11,\dots,17$, $19$ fire both end cells, but not all cells, at $2n-2$}%
+\only<2>{the cone of the middle cell of the firing row of $R_{15}$: $76$ of $120$ cells; the cone of the right end: $64$}
+\end{frame}
+
+\begin{frame}{Limitations of the computational part}
+\beat{c14-limits}
+\begin{enumerate}
+\item Results for \textbf{four and five states} and, apart from Corollary 5.3, \textbf{finitely many lengths}.
+\item The formula generators are tested and cross-checked, but, unlike the proof checker \texttt{cake\_lpr}, they are \textbf{not formally verified}.
+\item The behaviour of particular rules \textbf{beyond the simulated ranges} (e.g.\ the half-lines of $\delta_{12}$ and $\delta_{14}$) is not known.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Open questions}
+\beat{c14-questions}
+\begin{enumerate}
+\item Does a \textbf{five-state} minimal-time solution exist?
+\item Is there a condition on the \textbf{middle} of the reflected triangles that is as economical as the early-row conditions?
+\item Can the bound $(k-1)^{2s}\ell$ of the left border lemma be made \textbf{polynomial in $s$}?
+\item Do Balzer's conditions exclude \textbf{six} states? Do they exclude five states without (B2) at the borders?
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{The paper in a nutshell}
+\beat{c14-recap}
+\begin{itemize}
+\item Every line agrees with the half-line until the echo of its right end returns.
+\item \textbf{Two barriers}, for any number of states:
+\begin{itemize}
+\item the depth rows cannot all become periodic early: $\limsup\theta(j)/j\ge\frac32$;
+\item no periodic wedge at the left border of the half-line.
+\end{itemize}
+\item The early rows of all lengths reduce to \textbf{finitely many}.
+\item \textbf{Certified}: four states excluded with very little information; five-state solutions need $c_{78}\ge15$; Balzer's conditional result.
+\item Five-state rules for \textbf{exactly the lengths $2,\dots,14$}.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Data and programs}
+\beat{c14-data}
+\begin{itemize}
+\item \textbf{Supplementary material} (programs, rule tables, formulas, logs):\\
+\footnotesize\url{https://github.com/giamkiakeng/proj1/tree/8f3996cc242690d139bac913f5de652914ecb5ae/fssp5/paper/supplementary}\normalsize\\
+commit \texttt{8f3996c}
+\item \textbf{All data}, including the LRAT proofs ($4.4$\,GB):\quad Zenodo, \url{https://doi.org/10.5281/zenodo.24002680}
+\end{itemize}
+\vspace{5ex}
+\begin{center}{\LARGE Thank you for watching.}\end{center}
+\end{frame}

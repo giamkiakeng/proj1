@@ -1,0 +1,22 @@
+\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{0.205\textwidth}lrrll@{}}
+\toprule
+Claim & Programs & Formula & Variables & Clauses & SHA-256 & LRAT proof\\
+\midrule
+\ref{thm:four}\,(i) & \texttt{gencnf.py} & \texttt{mt4\_9} & $753$ & $17{,}605$ & \texttt{d18d6548} & \texttt{1d511a75}, $177$\,MB\\
+\ref{thm:four}\,(ii) & \texttt{gfix.py} & \texttt{k4\_G6} & $919$ & $22{,}960$ & \texttt{0e0ba286} & \texttt{7943a698}, $167$\,MB\\
+\ref{thm:four}\,(iii) & \texttt{gfix.py} & \texttt{k4\_G4c} & $874$ & $20{,}461$ & \texttt{124f0954} & \texttt{7f76fe69}, $173$\,MB\\
+\ref{prop:germs} & \texttt{germcert.py} & \texttt{k14\_n10} & $17{,}266$ & $559{,}558$ & \texttt{4f9306a8} & \texttt{b2324436}, $11$\,MB\\
+\ref{prop:balzer}, $(\Aq\,\Bq)$ & \texttt{balzer.py} & \texttt{balzer\_AB\_10} & $1{,}496$ & $67{,}508$ & \texttt{d87457fe} & \texttt{18809db2}, $380$\,MB\\
+\ref{prop:balzer}, $(\Lq\,\Aq)$ & \texttt{balzer.py} & \texttt{balzer\_LA\_9} & $1{,}244$ & $49{,}571$ & \texttt{401ef851} & \texttt{d74de977}, $188$\,MB\\
+\ref{prop:balzer}, $(\Lq\,\Bq)$ & \texttt{balzer.py} & \texttt{balzer\_LB\_9} & $1{,}244$ & $49{,}571$ & \texttt{d7ba0d40} & \texttt{5784ee12}, $184$\,MB\\
+\ref{prop:balzer}, id & \texttt{balzer\_k.py} & \texttt{balzer\_id\_12} & $2{,}148$ & $114{,}965$ & \texttt{023b99e2} & \texttt{e0231f2f}, $3{,}078$\,MB\\
+\midrule
+\ref{prop:sharp}\,(a) & \texttt{fsspdfs.c} (enumeration) & \multicolumn{5}{l}{---}\\
+\ref{prop:sharp}\,(b) & \texttt{gfix.py}; models checked by \texttt{encoding\_check.py} & \multicolumn{5}{l}{satisfiable formulas}\\
+\ref{prop:nearmiss} & \texttt{fsspcheck.c}, \texttt{firstfire.py}, \texttt{failall.py} & \multicolumn{5}{l}{simulations; certificates $(t_0,p)$ in \cref{tab:rules}}\\
+\ref{prop:germs} & \texttt{germdfs.c}, \texttt{germdfs\_check.py}, \texttt{germinc.py}, \texttt{germext.c}, \texttt{germ\_k14\_check.py} & \multicolumn{5}{l}{enumeration of the $244$ germs; the $14$ refutations by \cref{lem:left}}\\
+\ref{cor:germ12} & \texttt{antidiag.py}, \texttt{germext.c} & \multicolumn{5}{l}{simulation of the cells with $t+i\le1034$}\\
+\ref{sec:balzer} & \texttt{balzer\_mazoyer.py}, \texttt{balzer\_rulecheck.py}, \texttt{fsspcheck.c} & \multicolumn{5}{l}{(B1)--(B4) on Mazoyer's solution and on the rules of \cref{tab:balzer}; simulation}\\
+\ref{sec:method} & \texttt{encoding\_check.py}, \texttt{encode\_\allowbreak independent.py}, \texttt{validate\_mazoyer.py}, \texttt{gfix.py} & \multicolumn{5}{l}{checks of the encodings, the second encoder; \cref{tab:validation}}\\
+\bottomrule
+\end{tabular}

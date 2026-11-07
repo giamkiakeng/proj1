@@ -1,0 +1,185 @@
+%% Narration, chapters 5-8.
+
+# CHAPTER 05 | The right end and the pumping lemma
+@ ch5
+Chapter five. The right end, and the pumping lemma. Paper, sections three point one and three point two.
+
+@ c05-intro
+We now look at the reflected triangle from its right end. The main result of this chapter is a pumping lemma: a condition that the half-line must satisfy, so that the right ends of lines of different lengths can fire at their different times.
+
+@ c05-coords
+It helps to use relative coordinates. Tau, written {τ = t − (n − 1)|tau equals t minus n plus one}, is the time since the front reached the right end, and kappa, written {κ = n − i|kappa equals n minus i}, is the distance from the right end. In these coordinates the reflected triangle is the set of cells with kappa between zero and tau, and tau at most n minus one. The right border is at kappa equals minus one, the left border at kappa equals n. The return chain is the diagonal on which tau equals kappa, and the firing row is tau equals n minus one.
+
+@ c05-input
+Every cell of the reflected triangle is computed from cells of the triangle itself, from the two borders, or from the two anti-diagonals just above it, where t plus i equals {2n − 3|two n minus three} and {2n − 2|two n minus two}. On these two anti-diagonals the line agrees with the half-line. So we collect them into the input word, {Jₙ|J n}. At each distance kappa from the right end, it contains two cells of the half-line: the lower input cell, on the anti-diagonal {2n − 3|two n minus three}, and the upper input cell, on the anti-diagonal {2n − 2|two n minus two}.
+
+@ c05-anatomy
+This picture shows the anatomy of the line of length twelve, coloured by region rather than by state. The upper part, in very light blue, agrees with the half-line. The two input anti-diagonals are drawn in a stronger blue. Below them lies the reflected triangle, in beige, and its first anti-diagonal, in brown, is the return chain. The star marks the right end at the firing time, and the dark blue input cells are the only ones it depends on, as we will see in a moment.
+
+@ c05-determinacy
+Lemma 3.1, the determinacy lemma, says that the reflected triangle is a function of its input word. There is a map Psi, which depends only on the rule, that computes every cell of {Rₙ|R n} from the input word {Jₙ|J n} and the length n. It simply applies the local rule, row by row, starting from the input word and the two borders. Moreover, each cell depends only on the input cells and the borders in its backward dependency cone: those that can be reached from it by going back to predecessors, again and again.
+
+@ c05-cone
+Lemma 3.2 describes the cone of the most important cell: the right end at the firing time, at relative position {τ = n − 1, κ = 0|tau equals n minus one, kappa equals zero}. Its cone never touches the left border. It consists of the upper input cell at kappa zero, both input cells at every kappa from one up to n over two, rounded down, and, if n is odd, one more lower input cell, at kappa equals n plus one, over two. So the firing of the right end depends on only about half of the two input anti-diagonals: the half next to the right end.
+
+@ c05-coneproof
+The reason is counting. Each step back to a predecessor goes back one unit of time and moves at most one position sideways. Suppose a path from the right end at the firing time reaches an input cell at distance kappa. It has moved kappa positions to the left, so it took at least kappa steps. And it started at relative time n minus one, and the input cell lies at relative time kappa minus one or kappa minus two, so it took at most n plus one minus kappa steps. Hence kappa is at most n plus one minus kappa: two kappa is at most n plus one. For an upper input cell the path is one step shorter, and two kappa is at most n. Conversely, all these input cells are actually reached, apart from the lower one at kappa zero, which no cell of the triangle uses: by moving to the left and then straight up, with one last step to the left for a lower input cell.
+
+@ c05-pumping
+Now the pumping lemma, Lemma 3.3. Take two lengths n smaller than n prime, and a rule that synchronizes both lines at their minimal times. Then their input words, {Jₙ|J n} and {Jₙ′|J n prime}, must differ somewhere on the cone of the right end of the shorter line.
+
+@ c05-pumpproof
+The proof is short. Suppose the two input words agree on this cone. The cone does not touch the left border, so the same positions also form the cone of the same relative cell in the longer triangle. By determinacy, that cell of the longer line has the same state as in the shorter line, which is F. So the right end of the line of length n prime fires at the time n prime plus n minus two. But that is earlier than its correct firing time, two n prime minus two, because n is smaller than n prime. This is a contradiction.
+
+@ c05-pumpfig
+The left part of this figure shows the argument for the lengths eight and twelve. Time runs downwards, and kappa runs to the left from the thick right border. Above each triangle lie its input cells. The right end of the short triangle, marked by the star, depends only on the dark input cells. If the long triangle received the same values at the same positions, its cell at the same relative position would fire too, four steps too early.
+
+@ c05-pumpcond
+We write {PUMP(n, n′)|pump of n and n prime} for the conclusion of the lemma. It is a condition on the half-line alone, because the input words come from the half-line. In words: the half-line must keep supplying new information to the right ends of longer and longer lines. If it became too regular, two lengths would receive the same information on their cones, and one of them would fire at the wrong time.
+
+@ c05-summary
+In one sentence: the right end of each line fires according to about half of two anti-diagonals of the half-line, and two different lengths must never receive the same values there.
+
+# CHAPTER 06 | The late onset of periodicity
+@ ch6
+Chapter six. The late onset of {periodicity|pier-ee-oh-DISS-it-ee}: the first barrier. Paper, sections three point three and three point four.
+
+@ c06-intro
+The pumping lemma has a striking consequence for the half-line of every minimal-time solution: the cells behind its front cannot all become periodic early. This is the first barrier of the paper, Theorem 3.4.
+
+@ c06-depth
+To state it, we locate the cells of the half-line by their distance behind the front. We write {Φₜ(j)|phi t of j} for the state, at time t, of the cell that is j cells behind the front cell. The front cell itself has depth zero. The depth row j is the sequence of these states as time goes on: it starts in cell one at time j, and then moves to the right with the front, one cell per step, always j cells behind it.
+
+@ c06-comoving
+In these coordinates the local rule takes a very simple form, equation 3 of the paper. The cell at depth j at the next time step is computed from the cells at depths j, j minus one, and j minus two, at the present time. Cells ahead of the front count as quiescent. So information only travels to larger depths: each depth row is driven by itself and by the two rows in front of it. And the input word of the line of length n lies on these rows: its two cells at distance kappa from the right end lie on the depth rows {2κ − 2|two kappa minus two} and {2κ − 1|two kappa minus one}.
+
+@ c06-eventual
+In a minimal-time solution, every depth row is eventually periodic, which means: from some time on, it repeats with a fixed period. Depth row zero is driven only by quiescent cells, so it is a finite-state machine without input, and it must eventually repeat. Depth row one is a finite-state machine driven by an eventually periodic input, so it is eventually periodic too; and so on, by induction on the depth. All its values are working states, because the half-line never fires. We write {θ(j)|theta of j} for the time at which depth row j becomes periodic: the earliest time, at least j, from which the row is periodic forever. We call {θ(j)|theta of j} the onset of periodicity.
+
+@ c06-theorem
+Theorem 3.4 says that these onset times cannot all be small. For every n of at least four, there is a depth j of at most n with {θ(j) > n + j/2 − 5/2|theta of j greater than n plus j over two minus five halves}. As a consequence, the limit superior of {θ(j)/j|theta of j over j} is at least three halves. In plain words: for every small positive number epsilon, there are infinitely many depths j at which periodicity starts only after the time three halves minus epsilon, times j.
+
+@ c06-proof1
+Here is the proof. Fix n of at least four, and let P be a common period of the depth rows zero to n minus one, for example the product of their periods. Compare the input words of the lines of lengths n and n plus P, on the cone of the right end of the shorter line. All input cells of that cone lie on the depth rows zero to n minus one, apart from one cell, which is quiescent in both lines. Going from the length n to the length n plus P moves each of these input cells exactly P steps further along its own depth row.
+
+@ c06-proof2
+Now suppose that each of these input cells already lies in the periodic part of its row. Moving it P steps along the row does not change its value, because P is a period of the row. So the two input words agree on the whole cone, and that contradicts the pumping lemma. Therefore at least one input cell of the cone, of some depth j at most n, lies before the onset of periodicity of its row. Working out the time of that cell, from its position on the input word, gives exactly {θ(j) > n + j/2 − 5/2|theta of j greater than n plus j over two minus five halves}.
+
+@ c06-proof3
+For the limit statement, suppose the opposite: that {θ(j) ≤ αj + β|theta of j is at most alpha j plus beta} for all j, with some alpha below three halves and some constant beta. Then, for all j up to n, theta of j minus j over two is at most alpha minus one half, times n, plus beta. Since alpha minus one half is less than one, this is less than n minus five halves once n is large, which contradicts the first part. So the limit superior is at least three halves.
+
+@ c06-geometry
+What does this mean geometrically? Depth row j becomes periodic at the time {θ(j)|theta of j}, when it is at the cell theta of j plus one minus j. If theta of j is at least three halves times j, then j is at most two thirds of theta of j, so this cell is beyond one third of theta of j. So, for infinitely many depths, the depth row becomes periodic only at a time t at which it is near the cell t over three, or further right. Equivalently, there is no constant c below one third such that all large depth rows are periodic from the moment they cross the line {i = ct|i equals c t}. This is why the paper also calls the theorem the speed one-third barrier.
+
+@ c06-caveat
+The name describes this bound, and nothing more. The theorem concerns infinitely many depth rows, not all of them. It does not say that the cells that are not yet periodic form a region with a clean boundary, nor that such a boundary moves at speed one third, nor even that such a boundary exists.
+
+@ c06-heuristic
+There is a heuristic way to read the bound, which the paper states as an assumption, not as a consequence. In the classical solutions, the line is cut recursively, and the first cutting point is where a signal sent by the general, at some speed v, meets the echo coming back from the right end. They meet at the cell {v(2n − 1)/(1 + v)|v times two n minus one, over one plus v}. If the depth rows become periodic where they cross this signal, then {θ(j) ≈ j/(1 − v)|theta of j is about j over one minus v}, and the theorem forces v to be at least one third. The first cutting point is then at least at the cell {(2n − 1)/4|two n minus one, over four}: asymptotically, never in the half of the line next to the general. Waksman's and Balzer's solutions cut the line in the middle, with v equal to one third, exactly at the bound. Mazoyer's solution cuts it at two thirds of its length, with v equal to one half.
+
+@ c06-observed
+What do actual rules do? The following are observations from simulations, valid only in the stated ranges. For Mazoyer's solution, simulated up to time two thousand six hundred, the observed onset of depth row j is two j plus one or two j plus two, for every j below seven hundred. For a five-state rule called δ₁₂, which synchronizes the lines of lengths two to twelve, and which we will meet again, the observed onset is three j over two, rounded up, plus two, for j from ten to three hundred: right on the bound of the theorem.
+
+@ c06-thetafig
+This chart shows these observed onsets, up to depth one hundred and fifty, in a simulation up to time seven hundred. At the top left is the onset itself, and below it the ratio of the onset to the depth: for Mazoyer's solution the ratio stays near two, and for δ₁₂ it approaches three halves, the bound of the theorem. The panel on the right illustrates the heuristic reading: a signal of speed v sent by the general, the echo of the right end, and the depth rows crossing the signal. Remember that δ₁₂ is not a minimal-time solution: it synchronizes only the lines up to length twelve.
+
+@ c06-halflines
+Here are both half-lines. On the left, Mazoyer's solution: its depth rows become periodic near the line {i = t/2|i equals t over two}. On the right, δ₁₂: they become periodic near the line {i = t/3|i equals t over three}. Behind that line, the half-line of δ₁₂ alternates between the states A and L, periodically in time and in space. Keep this picture in mind: the second barrier, in chapter seven, says that this pattern cannot go on forever in a minimal-time solution.
+
+@ c06-rightband
+The same pigeonhole idea also works along the right border, in the direction of time. The pigeonhole principle says: if more pigeons than holes are put into holes, two pigeons share a hole. Lemma 3.6, the right band lemma, looks at the d cells next to the right border. They form a finite-state machine, driven by the column at distance d, and this machine has to reach its all-firing state exactly at the firing time. If the driving column were periodic over a long stretch of time, the machine would repeat its state at two times whose difference is a multiple of the period, and it would then fire too early. Precisely: if the column is periodic with period l from the relative time {τ₀|tau zero} up to n minus two, then n minus one minus tau zero is at most {(k − 1)ᵈ·l|k minus one to the power d, times l}.
+
+@ c06-summary
+In one sentence: the cells behind the front of the half-line of a minimal-time solution cannot all become periodic early; for infinitely many depths j, periodicity starts only after about three halves times j.
+
+# CHAPTER 07 | The left end
+@ ch7
+Chapter seven. The left end: the second barrier. Paper, section four.
+
+@ c07-intro
+The second barrier concerns the left end of the line, next to the general. The echo of the right end arrives there last, and the cells near the left border must fire exactly when it arrives. The paper shows that this forces the half-line to stay irregular at its left border.
+
+@ c07-chains
+We cut the reflected triangle into the anti-diagonals where t plus i equals {2n − 1|two n minus one}, two n, and so on. They follow the echo of the right end, and we call them chains. Chain minus one and chain zero are the two input anti-diagonals, and chain one is the return chain. Each cell of a chain is computed from a cell of the chain two steps earlier, a cell of the previous chain, and its right neighbour on its own chain; this is equation 4. In a line that fires at time {2n − 2|two n minus two}, the cell number i fires exactly on chain number i, and on no earlier chain.
+
+@ c07-chainfig
+This picture shows the lower left corner of the line of length twelve, coloured by chain. The cell i of the firing row lies on chain i. The outlined groups of cells will be explained next.
+
+@ c07-slices
+Now group the cells differently. In skewed coordinates, the slice number y collects one cell from each of the first chains. It forms a small staircase that starts just below the two input cells at position y, and descends to the right. The recursion shows that each slice is computed from the slice to its right and from the two input cells at its own position. So, reading the input anti-diagonals from right to left, the slices behave like a finite-state machine: its state is the slice, and its input is the pair of input cells.
+
+@ c07-lemma
+Lemma 4.1, the left border lemma, turns this into a number. Let the rule have k states and synchronize the line of length n at time {2n − 2|two n minus two}. Suppose that the two input anti-diagonals are periodic, with period l, on the stretch from cell s to cell Y, where Y is at most n minus s. Then the length of this stretch, Y minus s, is at most {(k − 1)²ˢ·l|k minus one to the power two s, times l}.
+
+@ c07-proof1
+The proof uses the slices of the first two s chains. Each such slice is a list of two s working states, so there are at most k minus one to the power two s different slices. Consider the pairs made of a slice and its position, modulo l. If the periodic stretch were longer than k minus one to the power two s, times l, then by the pigeonhole principle two of these pairs would coincide: the slices at two positions {y₁|y one} and {y₂|y two} would be equal, and their distance h would be divisible by the period l.
+
+@ c07-proof2
+From there, the machine is trapped in a loop. The inputs are periodic, and the slices at y one and y two are equal, so the slices to their left are equal too, step by step: the slice at y equals the slice at y plus h, all the way down to the slice s plus one. One more step shows that the last cell of the slice at position s plus h has the same state as the last cell of the slice at position s, which lies in the firing row and is F. But this last cell of the slice s plus h is the cell two s plus h at time {2n − 2 − h|two n minus two minus h}: it lies h steps above the firing row, and it would fire h steps too early. This contradiction proves the lemma.
+
+@ c07-prooffig
+The figure shows the proof for the line of length twenty, with s equal to two and period two. Each outlined group is a slice, computed from the slice to its right and from two input cells. If two slices are equal, then the hatched cell would fire h steps too early. The bound is exponential in s, but for s equal to one or two it is small enough to be useful in computations, as we will see in chapter twelve.
+
+@ c07-theorem
+Applied to all lengths at once, this gives the second barrier, Theorem 4.2, the left border barrier. In a minimal-time solution, there is no wedge at the left border of the half-line, of the form: {s ≤ i ≤ αt, t ≥ t₀|s at most i at most alpha t, for t at least t zero}, with alpha positive, on which the half-line is periodic both in time and in space.
+
+@ c07-thmproof
+Here is why. Suppose there were such a wedge, with a period p in time and a period q in space, and let l be the product of p and q. A step of l positions along an anti-diagonal can be made of q steps of p in time and p steps of q in space, all inside the wedge, so it does not change the state. Hence the two input anti-diagonals of every long line are periodic, with period l, from cell s up to about the cell {2αn/(1 + α)|two alpha n over one plus alpha}. This stretch grows linearly with n. But the left border lemma bounds it by a constant, k minus one to the power two s, times l. For large n, that is a contradiction.
+
+@ c07-wedgefig
+The left part of this figure shows the wedge and the long periodic stretch on the input anti-diagonals. The right part shows the notion that we discuss next.
+
+@ c07-regular
+The theorem has a corollary about regular behaviour. Call a half-line eventually regular if, from some time on, it consists of finitely many periodic blocks, separated by signals of rational speeds; the length of each block grows linearly in time or stays constant. Corollary 4.3 says: the half-line of a minimal-time solution is not eventually regular in this sense. The reason is that the first block that grows starts at a fixed cell, so it contains a wedge at the left border on which the half-line is periodic in time and in space, and the theorem excludes such a wedge.
+
+@ c07-scope
+It is important to be precise about what this excludes. The corollary excludes exactly this definition of eventual regularity. The theorem excludes every half-line that is periodic in time and space on a wedge at its left border, whatever happens elsewhere. Neither result excludes periodic regions away from the left border, periodic regions at the left border whose width grows more slowly than linearly, or other kinds of regular behaviour that do not produce such a wedge.
+
+@ c07-delta12
+Remember the half-line of δ₁₂: in the simulated range, it alternates between A and L, periodically, between the left border and the line {i = t/3|i equals t over three}. If this pattern continued forever, the theorem would exclude it. But a simulation only shows finitely many cells. The left border lemma gives an exact answer without any assumption about the future, as we will see in chapter twelve: no rule with this half-line synchronizes the line of length five hundred and eighteen.
+
+@ c07-summary
+In one sentence: the cells next to the left border fire exactly when the echo arrives, so the half-line cannot be periodic on a wedge at its left border, and a periodic stretch that is too long already rules out a specific length.
+
+# CHAPTER 08 | The first rows after the reflection
+@ ch8
+Chapter eight. The first rows after the reflection. Paper, section five.
+
+@ c08-intro
+The third part of the theory concerns the first few steps after the front reaches the right end. This is exactly where the best five-state rules found by computers fail: they synchronize all the short lines, but on longer lines some cell fires a few steps after the front has reached the right end. Checking that this never happens seems to require infinitely many lengths. The paper shows that, for a given half-line, it reduces to finitely many lengths, with a certificate that can be computed.
+
+@ c08-early
+For T of at least zero, let {E(T)|E of T} be the first T plus one rows of a reflected triangle: its cells at the relative times zero to T. If the line has length at least T plus two, these rows lie inside the reflected triangle, and none of them is the firing row.
+
+@ c08-lemma51
+Lemma 5.1, the early rows lemma, says: if two lines, both of length at least T plus two, have input words that agree at the distances zero to T plus one from the right end, then their first T plus one rows agree too. The reason is that these rows can only see the right border and the input cells up to the distance T plus one. Information from further away, including the left border, cannot reach them in time.
+
+@ c08-earlyfig
+The left part of this figure shows the lemma for T equal to three, and the lengths nine and thirteen: the first four rows depend only on the input cells near the right border.
+
+@ c08-autonomous
+These input cells lie on the depth rows of depth at most {2T + 1|two T plus one}. And as we saw in chapter six, each depth row is driven only by itself and by the two rows in front of it. So the vector of the first {2T + 2|two T plus two} depth rows evolves on its own, like a finite-state machine without input.
+
+@ c08-certificate
+Lemma 5.2, the periodicity certificate, makes this useful. Let {Vₜ|V t} be the vector of the first D plus one depth rows at time t. There is a map Gamma, depending only on the rule and on D, that sends {Vₜ|V t} to the vector at the next time. Therefore, if the vector at some time {t₀|t zero} equals the vector at time {t₀ + p|t zero plus p}, and the vectors in between contain no firing state, then the vector is periodic with period p forever after. One period, found by a finite simulation, is a certificate for all later times.
+
+@ c08-reduce
+Corollary 5.3 combines the two lemmas. Take D equal to two T plus one, and a certificate t zero and p. Then, for every n of at least t zero plus three, the input words of the lengths n and n plus p agree on the first T plus two positions. So, for any N zero of at least T plus two, every reflected triangle of a length of at least {N₀|N zero} agrees, on its first T plus one rows, with the triangle of one of finitely many lengths: from N zero up to, but not including, the larger of N zero and t zero plus three, plus p. To check that no long line fires early, it is enough to check these finitely many lengths.
+
+@ c08-deltafig
+The right part of the figure shows this for the rule {δ₁₄|delta fourteen}. Here are its depth rows zero to twenty-four, at the times twenty-four to one hundred and thirty. From time fifty-one on, the vector of these rows is periodic, with period eight. The simulation checks this for the times fifty-one to one hundred and fifty-two, and the lemma extends it to all later times. The outlined input cells of the lengths sixty and sixty-eight therefore carry the same values.
+
+@ c08-exist
+For a minimal-time solution, all depth rows are eventually periodic, so such a certificate always exists. Thus the condition that no line fires in its first T plus one rows, which concerns infinitely many lengths, always reduces to finitely many.
+
+@ c08-defG
+For a search over all rules, the half-line is not known in advance. So the paper collects the necessary conditions into formulas that a computer can handle. Definition 5.4 defines the conditions {G_k(T, N₁, C)|G k of T, N one, C}, in five parts. G1: the lines of lengths two to T plus one are synchronized at their minimal times. G2: for the lines of lengths T plus two to N one, no cell fires up to the relative time T. G3: on these lines, the return chain differs from the half-line, up to the relative time T. G4: the half-line does not fire, up to the anti-diagonal two N one. And G5: for the lengths T plus two to C, everything in the dependency cone of the right end at the firing time is correct: no cell there fires early, the right end fires on time, and the return chain differs from the half-line inside the cone.
+
+@ c08-lemmaG
+Lemma 5.5 says that every minimal-time solution with k states satisfies all these conditions, for all admissible values of the parameters. Each condition is one of the facts already proved: the definition of synchronization, the return chain lemma, and the fact that the half-line never fires. So if a computer shows that no rule satisfies them, then no minimal-time solution with k states exists.
+
+@ c08-regions
+This figure shows which cells the two most important formulas constrain, for the lines of lengths two to ten. In the left formula, the lines up to length seven are complete, and the lines of lengths eight to ten are constrained only up to the relative time six. In the right formula, only the lines up to length five are complete. For the lengths six to ten, it sees only the first five rows, the return chain on these rows, and the cone of the right end.
+
+@ c08-summary
+In one sentence: whether long lines fire early depends on finitely many lengths, which a periodicity certificate identifies, and all the necessary conditions can be written as finite formulas for a computer.

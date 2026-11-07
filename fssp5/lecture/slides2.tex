@@ -1,0 +1,549 @@
+%% Slides, chapters 5-8.
+
+%% ------------------------------------------------------------------ 5
+\chapterslide{5}{The right end and\\ the pumping lemma}{Paper, sections 3.1 and 3.2}
+\setchapter{5}{The right end and the pumping lemma}
+
+\begin{frame}{Looking from the right end}
+\beat{c05-intro}
+\vspace{4ex}
+\begin{center}\Large
+The right ends of lines of different lengths\\ must fire at \textbf{different} times.\\[3ex]
+\large$\Downarrow$\\[2ex]
+a condition on the \textbf{half-line}: the pumping lemma
+\end{center}
+\end{frame}
+
+\begin{frame}{Relative coordinates}
+\beat{c05-coords}
+\begin{columns}[T]
+\column{0.55\textwidth}
+\begin{itemize}
+\item $\tau:=t-(n-1)$: time since the front reached the right end
+\item $\kappa:=n-i$: distance from the right end
+\item $R_n(\tau,\kappa):=C_n(n-1+\tau,\,n-\kappa)$
+\item $R_n=\{(\tau,\kappa):\ 0\le\kappa\le\tau\le n-1\}$
+\item right border $\kappa=-1$, left border $\kappa=n$
+\item return chain $\tau=\kappa$, firing row $\tau=n-1$
+\end{itemize}
+\column{0.41\textwidth}
+\begin{tikzpicture}[x=0.5cm,y=0.5cm]
+  \fill[rgRefl] (0,0) -- (0,-9) -- (-9,-9) -- cycle;
+  \draw[thick] (0,1) -- (0,-9.5) node[below,font=\scriptsize] {right border};
+  \draw[rgReturn,very thick] (0,0) -- (-9,-9) node[pos=0.45,above left,font=\scriptsize,text=rgReturn] {return chain $\tau=\kappa$};
+  \draw[stF,line width=2pt] (-9,-9) -- (0,-9);
+  \node[font=\scriptsize,text=stF,anchor=north] at (-4.5,-9.2) {firing row $\tau=n-1$};
+  \draw[-{Stealth},thick] (0.6,0) -- (0.6,-3) node[right,font=\small] {$\tau$};
+  \draw[-{Stealth},thick] (0,0.6) -- (-3,0.6) node[above,font=\small] {$\kappa$};
+\end{tikzpicture}
+\end{columns}
+\end{frame}
+
+\begin{frame}{The input word}
+\beat{c05-input}
+\begin{itemize}
+\item The predecessors of a cell of $R_n$ lie in $R_n$, on a border, or on the anti-diagonals $t+i=2n-3$ and $t+i=2n-2$, where the line agrees with the half-line.
+\item The \textbf{input word} of $R_n$:
+\[J_n(\kappa):=\bigl(\underbrace{C_\infty(n-3+\kappa,\,n-\kappa)}_{\text{lower: }t+i=2n-3},\;\underbrace{C_\infty(n-2+\kappa,\,n-\kappa)}_{\text{upper: }t+i=2n-2}\bigr),\qquad 0\le\kappa\le n-1.\]
+\item Both components are cells of the \textbf{half-line}.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Figure 4: anatomy of a line ($n=12$)}
+\beat{c05-anatomy}
+\centering\fig[0.78]{\input{figures/fig_anatomy}}
+\end{frame}
+
+\begin{frame}{Determinacy}
+\beat{c05-determinacy}
+\begin{statement}{Lemma 3.1 (determinacy)}
+There is a partial map $\Psi$, depending on $\delta$ only, such that for all $n\ge2$ and $(\tau,\kappa)\in R_n$ the values $R_n(\tau,\kappa)$ and $\Psi(J_n,n;\tau,\kappa)$ are both undefined or both defined and equal. Moreover, $\Psi(J,m;\tau,\kappa)$ depends only on the input cells and the borders in the \textbf{backward dependency cone} of $(\tau,\kappa)$.
+\end{statement}
+\vspace{1ex}
+In words: the reflected triangle is computed row by row by the local rule, from the input word and the two borders.
+\end{frame}
+
+\begin{frame}{The cone of the right end}
+\beat{c05-cone}
+\begin{statement}{Lemma 3.2 (cone of the right end)}
+For $n\ge2$, the cone $\mathrm{cone}_n(n-1,0)$ avoids the left border. It consists of
+\begin{itemize}
+\item the upper input cell at $\kappa'=0$,
+\item both input cells at $1\le\kappa'\le\lfloor n/2\rfloor$,
+\item and, if $n$ is odd, the lower input cell at $\kappa'=(n+1)/2$.
+\end{itemize}
+\end{statement}
+\vspace{1ex}
+\begin{center}the right end fires according to about \textbf{half} of the two input anti-diagonals\end{center}
+\end{frame}
+
+\begin{frame}{Why the cone is so small}
+\beat{c05-coneproof}
+\begin{itemize}
+\item Each step to a predecessor: $\tau$ decreases by $1$, $\kappa$ changes by at most $1$.
+\item A path from $(n-1,0)$ to an input cell at distance $\kappa'$, after $r$ steps:
+\[\kappa'\le r\qquad\text{and}\qquad n-1-r\in\{\kappa'-1,\kappa'-2\}\ \Rightarrow\ r\le n+1-\kappa'.\]
+\item Hence $2\kappa'\le n+1$ (and $2\kappa'\le n$ for upper cells).
+\item Conversely: steps to the left, then straight up (and, for a lower cell, one last step to the left) reach each such cell, except the lower cell at $\kappa'=0$, which no cell of $R_n$ uses.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The pumping lemma}
+\beat{c05-pumping}
+\vspace{2ex}
+\begin{statement}{Lemma 3.3 (pumping)}
+Let $2\le n<n'$, and let $\delta$ synchronize the lines of lengths $n$ and $n'$ at times $2n-2$ and $2n'-2$. Then $J_n$ and $J_{n'}$ \textbf{differ} on $\mathrm{cone}_n(n-1,0)$.
+\end{statement}
+\end{frame}
+
+\begin{frame}{Proof of the pumping lemma}
+\beat{c05-pumpproof}
+\begin{enumerate}
+\item Suppose $J_n$ and $J_{n'}$ agree on $\mathrm{cone}_n(n-1,0)$.
+\item The relative cell $(n-1,0)$ lies in $R_{n'}$, and its cone there has the same positions, away from the left border $\kappa=n'$.
+\item By determinacy, it has the value of the cell $(n-1,0)$ of $R_n$:\quad $C_n(2n-2,n)=\Fq$.
+\item So $C_{n'}(n'+n-2,\,n')=\Fq$, although $n'+n-2<2n'-2$. \quad\textbf{Contradiction.}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Figure 5: the pumping lemma and the late onset}
+\beat{c05-pumpfig}
+\centering\fig[0.78]{\input{figures/fig_pumping}}
+\end{frame}
+
+\begin{frame}{$\PUMP(n,n')$: a condition on the half-line}
+\beat{c05-pumpcond}
+\vspace{2ex}
+\begin{plainbox}
+$\PUMP(n,n')$:\quad $J_n$ and $J_{n'}$ differ on $\mathrm{cone}_n(n-1,0)$.
+\end{plainbox}
+\vspace{2ex}
+\begin{itemize}
+\item The input words are cells of the half-line, so this is a condition on the \textbf{half-line alone}.
+\item The half-line must keep supplying \textbf{new information} to the right ends of longer and longer lines.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Chapter 5 in one sentence}
+\beat{c05-summary}
+\vspace{4ex}
+\begin{plainbox}\large
+The right end of each line fires according to about half of two anti-diagonals of the half-line, and \textbf{two different lengths must never receive the same values there}.
+\end{plainbox}
+\end{frame}
+
+%% ------------------------------------------------------------------ 6
+\chapterslide{6}{The late onset of periodicity}{The first barrier (paper, sections 3.3 and 3.4)}
+\setchapter{6}{The late onset of periodicity}
+
+\begin{frame}{The first barrier}
+\beat{c06-intro}
+\vspace{5ex}
+\begin{center}\Large
+In a minimal-time solution, the cells behind the front of the half-line\\ \textbf{cannot all become periodic early}.\\[3ex]
+\normalsize\color{mute} Theorem 3.4
+\end{center}
+\end{frame}
+
+\begin{frame}{Depth rows}
+\beat{c06-depth}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\begin{itemize}
+\item $\Phi_t(j):=C_\infty(t,\,t+1-j)$, $0\le j\le t$:\\ the cell at \textbf{depth} $j$ behind the front.
+\item The front cell has depth $0$.
+\item \textbf{Depth row} $j$: the sequence $t\mapsto\Phi_t(j)$, $t\ge j$.\\ It starts in cell $1$ at time $j$ and moves right with the front.
+\end{itemize}
+\column{0.46\textwidth}
+\fig[0.66]{\begin{tikzpicture}[x=0.38cm,y=0.38cm]
+  \draw[grid] (0,0) rectangle (14,-14);
+  \draw[accent,very thick] (0,0) -- (14,-14);
+  \node[font=\scriptsize,text=accent,anchor=south west] at (6.2,-5.6) {depth 0 (front)};
+  \foreach \j/\c in {2/stA,4/stC,6/stG} {\draw[\c,very thick] (0,-\j) -- (14-\j,-14);
+    \node[font=\scriptsize,anchor=east] at (0,-\j-0.4) {depth $\j$};}
+  \node[font=\scriptsize,anchor=south] at (0.5,0) {cell 1};
+  \draw[-{Stealth}] (14.6,0) -- (14.6,-4) node[right,font=\scriptsize] {$t$};
+\end{tikzpicture}}
+\end{columns}
+\end{frame}
+
+\begin{frame}{The rule in the frame of the front}
+\beat{c06-comoving}
+\begin{statement}{Equation (3)}
+\[\Phi_{t+1}(j)=\delta\bigl(\Phi_t(j),\,\Phi_t(j-1),\,\Phi_t(j-2)\bigr),\qquad \Phi_t(-1)=\Phi_t(-2)=\Lq,\ \ \Phi_t(t+1)=\ast.\]
+\end{statement}
+\begin{itemize}
+\item Information travels only to \textbf{larger depths}: row $j$ is driven by itself and the rows $j-1$, $j-2$.
+\item The input word lies on depth rows:
+\[J_n(\kappa)=\bigl(\Phi_{n-3+\kappa}(2\kappa-2),\ \Phi_{n-2+\kappa}(2\kappa-1)\bigr).\]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Every depth row is eventually periodic}
+\beat{c06-eventual}
+\begin{itemize}
+\item Row $0$: $\Phi_{t+1}(0)=\delta(\Phi_t(0),\Lq,\Lq)$ --- a finite-state machine without input.
+\item Row $j$: a finite-state machine driven by the rows $j-1$, $j-2$; if these are eventually periodic, so is row $j$ (induction).
+\item All values lie in $W$, because the half-line never fires.
+\end{itemize}
+\vspace{1ex}
+\begin{plainbox}
+$\theta(j)$ := the least $t_0\ge j$ such that depth row $j$ is periodic on $[t_0,\infty)$.
+\end{plainbox}
+\end{frame}
+
+\begin{frame}{The late onset of periodicity}
+\beat{c06-theorem}
+\begin{statement}{Theorem 3.4 (late onset of periodicity)}
+Let $\delta$ be a minimal-time solution. Every depth row is eventually periodic. For every $n\ge4$ there is a depth $j\le n$ with
+\[\theta(j)>n+\frac j2-\frac52 .\]
+Hence $\displaystyle\limsup_{j\to\infty}\frac{\theta(j)}{j}\ge\frac32$.
+\end{statement}
+\vspace{1ex}
+\begin{center}for every $\varepsilon>0$: \ $\theta(j)\ge(\tfrac32-\varepsilon)\,j$ \ for infinitely many $j$\end{center}
+\end{frame}
+
+\begin{frame}{Proof of Theorem 3.4}
+\beat<1>{c06-proof1}\beat<2>{c06-proof2}\beat<3>{c06-proof3}
+\begin{enumerate}
+\item Fix $n\ge4$; let $P$ be a common period of the depth rows $0,\dots,n-1$.
+\item Compare $J_n$ and $J_{n+P}$ on $\mathrm{cone}_n(n-1,0)$: its input cells lie on depth rows $\le n-1$ (apart from one quiescent cell), and $n\mapsto n+P$ moves each of them \textbf{$P$ steps along its row}.
+\item<2-> If every one of them lies in the periodic part of its row, then $J_{n+P}=J_n$ on the cone --- contradicting the pumping lemma.
+\item<2-> So some input cell of depth $j\le n$ lies before the onset: $\theta(j)>n-3+\kappa$, with $\kappa=\frac{j+2}2$ or $\frac{j+1}2$, so $\theta(j)>n+\frac j2-\frac52$.
+\item<3-> If $\theta(j)\le\alpha j+\beta$ for all $j$, with $\alpha<\frac32$: then $\theta(j)-\frac j2\le(\alpha-\frac12)n+\beta<n-\frac52$ for all $j\le n$, once $n$ is large. Contradiction.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{The speed-$1/3$ barrier}
+\beat{c06-geometry}
+\begin{itemize}
+\item Depth row $j$ becomes periodic at the cell $\bigl(\theta(j),\,\theta(j)+1-j\bigr)$.
+\item If $\theta(j)\ge(\frac32-\varepsilon)j$, then
+\[\theta(j)+1-j\ \ge\ \frac{1-2\varepsilon}{3-2\varepsilon}\,\theta(j)+1,\qquad \frac{1-2\varepsilon}{3-2\varepsilon}\ \to\ \frac13 .\]
+\item For infinitely many $j$: depth row $j$ becomes periodic only at a time $t$ when it is near the cell $t/3$, or beyond.
+\item Equivalently: \textbf{no} $c<\frac13$ such that all large depth rows are periodic from the moment they cross the line $i=ct$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{What the theorem does \emph{not} say}
+\beat{c06-caveat}
+\vspace{2ex}
+The name \emph{speed-$1/3$ barrier} describes the bound only. The theorem
+\begin{itemize}
+\item concerns \textbf{infinitely many} depth rows, not all of them;
+\item does \textbf{not} say that the cells that are not yet periodic form a region with a clean boundary;
+\item does \textbf{not} say that such a boundary moves at speed $1/3$,
+\item nor that such a boundary exists at all.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{A heuristic reading (Remark 3.5)}
+\beat{c06-heuristic}
+\begin{itemize}
+\item Classical solutions cut the line recursively. The first cut is where a signal of speed $v$, sent by the general, meets the echo of the right end: at the cell $\dfrac{v(2n-1)}{1+v}$.
+\item \textbf{Assumption} (not a consequence): depth rows become periodic where they cross this signal. Then $\theta(j)\approx\dfrac{j}{1-v}$, and Theorem 3.4 forces $v\ge\frac13$.
+\item Then the first cut is at a cell $\ge\frac{2n-1}4$: asymptotically never in the half next to the general.
+\item Waksman, Balzer: $v=\frac13$, cut in the middle.\quad Mazoyer: $v=\frac12$, cut at two thirds.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{What actual rules do}
+\beat{c06-observed}
+\tikz[baseline=(e.base)]\node[fill=mute,text=white,rounded corners=2pt,inner sep=2pt,font=\scriptsize\bfseries](e){observation};\ finite simulations, valid only in the stated ranges\\[2ex]
+$\theta_H(j)$: the onset observed in a simulation up to time $H$.
+\vspace{1ex}
+\begin{itemize}
+\item \textbf{Mazoyer's solution}, $H=2600$:\quad $\theta_H(j)\in\{2j+1,\,2j+2\}$ for $1\le j<700$.
+\item \textbf{The five-state rule $\delta_{12}$} (synchronizes the lengths $2,\dots,12$), $H=1400$:
+\[\theta_H(j)=\lceil 3j/2\rceil+2\qquad\text{for }10\le j\le300 ,\]
+on the bound of Theorem 3.4.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Figure 6: observed onsets}
+\beat{c06-thetafig}
+\centering\fig[0.78]{\input{figures/fig_theta}}
+\end{frame}
+
+\begin{frame}{Figure 7: two half-lines}
+\beat{c06-halflines}
+\centering\fig[0.78]{\input{figures/fig_halflines}}
+\end{frame}
+
+\begin{frame}{The right band}
+\beat{c06-rightband}
+\begin{columns}[T]
+\column{0.42\textwidth}
+\begin{statement}{Lemma 3.6 (right band)}\small
+Let $\delta$ have $k$ states and synchronize the line of length $n$ at time $2n-2$. Let $1\le d\le\tau_0\le n-2$, $\ell\ge1$, and suppose that the column $\tau\mapsto R_n(\tau,d)$ is $\ell$-periodic on $[\tau_0,n-2]$. Then
+\[n-1-\tau_0\le(k-1)^d\,\ell .\]
+\end{statement}
+\small \textbf{Pigeonhole}: the band of the $d$ cells next to the right border repeats a state at two times $h$ apart, $\ell\mid h$, and would fire $h$ steps early.
+\column{0.56\textwidth}
+\fig[0.74]{\input{figures/fig_rightband}}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Chapter 6 in one sentence}
+\beat{c06-summary}
+\vspace{4ex}
+\begin{plainbox}\large
+The cells behind the front of the half-line of a minimal-time solution cannot all become periodic early: for \textbf{infinitely many} depths $j$, periodicity starts only after about $\frac32\,j$.
+\end{plainbox}
+\end{frame}
+
+%% ------------------------------------------------------------------ 7
+\chapterslide{7}{The left end}{The second barrier (paper, section 4)}
+\setchapter{7}{The left end}
+
+\begin{frame}{The second barrier}
+\beat{c07-intro}
+\vspace{5ex}
+\begin{center}\Large
+The cells next to the left border must fire\\ exactly when the echo of the right end arrives.\\[3ex]
+\large$\Downarrow$\\[2ex]
+the half-line stays \textbf{irregular} at its left border
+\end{center}
+\end{frame}
+
+\begin{frame}{Chains}
+\beat{c07-chains}
+\begin{itemize}
+\item The \textbf{chains}: the anti-diagonals $t+i=2n-2+c$,\quad $v_c(i):=C_n(2n-2+c-i,\,i)$.
+\item Chains $-1$ and $0$: the input anti-diagonals.\quad Chain $1$: the return chain.
+\item Equation (4):
+\[v_c(i)=\delta\bigl(v_{c-2}(i-1),\,v_{c-1}(i),\,v_c(i+1)\bigr)\qquad(c\ge1).\]
+\item If the line fires at $2n-2$: cell $i$ fires on chain $i$, $v_i(i)=\Fq$, and $v_c(i)\ne\Fq$ for $c<i$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Figure 9: chains near the left border ($n=12$)}
+\beat{c07-chainfig}
+\centering\fig[0.78]{\input{figures/fig_chains}}
+\end{frame}
+
+\begin{frame}{Slices: a finite automaton}
+\beat{c07-slices}
+\begin{itemize}
+\item Skewed coordinates: $u_c(y):=v_c(y+\lfloor c/2\rfloor)$. Equation (5):
+\[u_c(y)=\delta\bigl(u_{c-2}(y),\,u_{c-1}(y+\varepsilon_c),\,u_c(y+1)\bigr),\quad \varepsilon_c=1\text{ for even }c,\ 0\text{ for odd }c.\]
+\item The \textbf{slice} $y$: $(u_1(y),u_2(y),\dots)$, a staircase below the input cells at position $y$.
+\end{itemize}
+\vspace{1ex}
+\begin{center}
+\begin{tikzpicture}[box/.style={draw=navy,thick,fill=soft,rounded corners,minimum height=0.9cm,minimum width=2.4cm,font=\small}]
+  \node[box] (a) {slice $y+1$};
+  \node[box,left=2.2cm of a] (b) {slice $y$};
+  \node[draw=grid,fill=white,font=\small,above=0.5cm of b] (inp) {inputs $u_{-1}(y),\,u_0(y)$};
+  \draw[-{Stealth},thick] (a) -- (b);
+  \draw[-{Stealth},thick] (inp) -- (b);
+  \node[font=\small,mute,below=0.25cm of b,xshift=1.9cm] {reading the input anti-diagonals from right to left};
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+\begin{frame}{The left border lemma}
+\beat{c07-lemma}
+\vspace{2ex}
+\begin{statement}{Lemma 4.1 (left border)}
+Let $\delta$ have $k$ states and synchronize the line of length $n$ at time $2n-2$. Let $s,\ell\ge1$ and $s\le Y\le n-s$, and suppose that the words
+\begin{gather*}y\mapsto C_\infty(2n-2-y,\,y)\quad\text{for } s\le y\le Y,\\ y\mapsto C_\infty(2n-3-y,\,y)\quad\text{for } s\le y\le Y-1\end{gather*}
+are $\ell$-periodic. Then\qquad $Y-s\le(k-1)^{2s}\,\ell$.
+\end{statement}
+\end{frame}
+
+\begin{frame}{Proof of the left border lemma}
+\beat<1>{c07-proof1}\beat<2>{c07-proof2}
+\begin{enumerate}
+\item $\mathbf u(y):=(u_1(y),\dots,u_{2s}(y))$, a word of $2s$ working states;\quad $\mathbf u(y)=\Gamma(\mathbf u(y+1),u_{-1}(y),u_0(y))$.
+\item The pairs $(\mathbf u(y),\,y\bmod\ell)$, $s+1\le y\le Y$, take at most $(k-1)^{2s}\ell$ values. If $Y-s>(k-1)^{2s}\ell$: \textbf{pigeonhole} gives $y_1<y_2$ with $\mathbf u(y_1)=\mathbf u(y_2)$ and $\ell\mid h:=y_2-y_1$.
+\item<2-> Downward induction (periodic inputs): $\mathbf u(y)=\mathbf u(y+h)$ for $s+1\le y\le y_1$.
+\item<2-> Then $u_{2s}(s+h)=u_{2s}(s)=\Fq$. But $u_{2s}(s+h)$ is the cell $2s+h$ at time $2n-2-h$: it would fire \textbf{$h$ steps too early}. Contradiction.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Figure 10: the proof of the left border lemma}
+\beat{c07-prooffig}
+\centering\fig[0.78]{\input{figures/fig_leftproof}}
+\end{frame}
+
+\begin{frame}{No periodic wedge at the left border}
+\beat{c07-theorem}
+\vspace{2ex}
+\begin{statement}{Theorem 4.2 (left-border barrier)}
+Let $\delta$ be a minimal-time solution. There are no $s\ge1$, $\alpha>0$, $t_0$ and $p,q\ge1$ such that $C_\infty(t+p,i)=C_\infty(t,i)$ and $C_\infty(t,i+q)=C_\infty(t,i)$ whenever the cells involved lie in the wedge
+\[\Omega:=\{(t,i):\ s\le i\le\alpha t,\ t\ge t_0\}.\]
+\end{statement}
+\end{frame}
+
+\begin{frame}{Proof of Theorem 4.2}
+\beat{c07-thmproof}
+\begin{enumerate}
+\item Put $\ell:=pq$. A step of $\ell$ along an anti-diagonal, $(t,i)\to(t-\ell,i+\ell)$, is $q$ time periods and $p$ space periods inside $\Omega$: the state is unchanged.
+\item So the input anti-diagonals of the line of length $n$ are $\ell$-periodic from cell $s$ to cell
+\[Y_n=\Bigl\lfloor\frac{\alpha(2n-3)}{1+\alpha}\Bigr\rfloor\ \approx\ \frac{2\alpha n}{1+\alpha}\qquad\text{(linear in $n$)}.\]
+\item The left border lemma bounds the stretch by the constant $(k-1)^{2s}\ell$. For large $n$: contradiction.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Figure 11: the wedge, and eventual regularity}
+\beat{c07-wedgefig}
+\centering\fig[0.78]{\input{figures/fig_wedge}}
+\end{frame}
+
+\begin{frame}{Eventual regularity}
+\beat{c07-regular}
+\textbf{Eventually regular}: from some time $t_1$ on, with a period $P$, the configuration at time $t=t_1+r+\nu P$ is
+\[w_0\,z_1^{a_1+\nu D_1}\,w_1\cdots z_m^{a_m+\nu D_m}\,w_m :\]
+finitely many periodic blocks, separated by signals of rational speeds; each block grows linearly or keeps its length.\\[1ex]
+\begin{statement}{Corollary 4.3}
+The half-line of a minimal-time solution is not eventually regular in this sense.
+\end{statement}
+\small Proof: the first growing block starts at a fixed cell, so it contains a periodic wedge at the left border, which Theorem 4.2 excludes.
+\end{frame}
+
+\begin{frame}{What is \emph{not} excluded}
+\beat{c07-scope}
+\begin{itemize}
+\item Corollary 4.3 excludes \textbf{exactly} the definition of eventual regularity above.
+\item Theorem 4.2 excludes every half-line that is periodic in time and space on a wedge $\{s\le i\le\alpha t,\ t\ge t_0\}$, $\alpha>0$ --- whatever happens elsewhere.
+\item \textbf{Neither} excludes:
+\begin{itemize}
+\item periodic regions away from the left border,
+\item periodic regions at the left border whose width grows sublinearly,
+\item other kinds of regular behaviour without a periodic wedge at the left border.
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Back to $\delta_{12}$}
+\beat{c07-delta12}
+\centering\fig[0.62]{\input{figures/fig_halflines}}\\[1ex]
+\small $\delta_{12}$, in the simulated range: alternating $\Aq$/$\Lq$ left of $i=t/3$ --- excluded by Theorem 4.2 \emph{if} it continued forever;\\ Lemma 4.1 excludes the line of length $518$ \emph{without} this assumption (chapter 12).
+\end{frame}
+
+\begin{frame}{Chapter 7 in one sentence}
+\beat{c07-summary}
+\vspace{4ex}
+\begin{plainbox}\large
+The cells next to the left border fire exactly when the echo arrives, so the half-line \textbf{cannot be periodic on a wedge at its left border} --- and a periodic stretch that is too long already rules out a specific length.
+\end{plainbox}
+\end{frame}
+
+%% ------------------------------------------------------------------ 8
+\chapterslide{8}{The first rows after the reflection}{Paper, section 5}
+\setchapter{8}{The first rows after the reflection}
+
+\begin{frame}{Where the best five-state rules fail}
+\beat{c08-intro}
+\centering\fig[0.78]{\input{figures/fig_delta14}}
+\end{frame}
+
+\begin{frame}{The first rows}
+\beat{c08-early}
+\vspace{3ex}
+\begin{plainbox}
+$E(T):=\{(\tau,\kappa):\ 0\le\kappa\le\tau\le T\}$: the first $T+1$ rows of a reflected triangle,\\ its cells at the relative times $0,\dots,T$.
+\end{plainbox}
+\vspace{2ex}
+If $n\ge T+2$: \ $E(T)\subseteq R_n$, and no cell of $E(T)$ lies in the firing row $\tau=n-1$.
+\end{frame}
+
+\begin{frame}{The early rows lemma}
+\beat{c08-lemma51}
+\vspace{2ex}
+\begin{statement}{Lemma 5.1 (early rows)}
+Let $\delta$ be a rule, $T\ge0$, and $n,n'\ge T+2$ such that $J_n(\kappa)$ and $J_{n'}(\kappa)$ coincide for $0\le\kappa\le T+1$. Then for every $(\tau,\kappa)\in E(T)$ the values $R_n(\tau,\kappa)$ and $R_{n'}(\tau,\kappa)$ are both undefined or both defined and equal.
+\end{statement}
+\vspace{1ex}
+Why: these rows see only the right border and the input cells at $\kappa\le T+1$ --- never the left border.
+\end{frame}
+
+\begin{frame}{Figure 12: early rows and a certificate}
+\beat{c08-earlyfig}
+\centering\fig[0.78]{\input{figures/fig_early}}
+\end{frame}
+
+\begin{frame}{An autonomous system}
+\beat{c08-autonomous}
+\vspace{3ex}
+\begin{itemize}
+\item The input word on $[0,T+1]$ lies on the depth rows of depth $\le 2T+1$.
+\item By equation (3), each depth row is driven only by itself and the two rows of the next smaller depths.
+\item So the vector of the first $2T+2$ depth rows \textbf{evolves on its own}.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The periodicity certificate}
+\beat{c08-certificate}
+\begin{statement}{Lemma 5.2 (periodicity certificate)}
+Let $\delta$ be a rule, $D\ge0$, and $V_t:=(\Phi_t(0),\dots,\Phi_t(D))$ for $t\ge D$. There is a map $\Gamma_D$ on $W^{D+1}$, depending on $\delta$ and $D$ only, with $V_{t+1}=\Gamma_D(V_t)$ whenever $t\ge D$ and $V_t\in W^{D+1}$. If $V_{t_0}=V_{t_0+p}$ for some $t_0\ge D$, $p\ge1$, and $V_t\in W^{D+1}$ for $t_0\le t<t_0+p$, then
+\[V_t\in W^{D+1}\quad\text{and}\quad V_{t+p}=V_t\qquad\text{for all }t\ge t_0 .\]
+\end{statement}
+\begin{center}one period, found by a finite simulation, certifies all later times\end{center}
+\end{frame}
+
+\begin{frame}{Finitely many early rows}
+\beat{c08-reduce}
+\begin{statement}{Corollary 5.3 (finitely many early rows)}
+Let $\delta$, $T\ge0$, $D:=2T+1$, $t_0\ge D$ and $p\ge1$ satisfy the hypothesis of Lemma 5.2. Then $J_n(\kappa)=J_{n+p}(\kappa)\in W^2$ for all $0\le\kappa\le T+1$ and $n\ge t_0+3$. Hence, for every $N_0\ge T+2$, every $R_n$ with $n\ge N_0$ coincides on $E(T)$ with $R_{n'}$ for one of the finitely many lengths
+\[N_0\le n'<\max(N_0,\,t_0+3)+p .\]
+\end{statement}
+\end{frame}
+
+\begin{frame}{Figure 12 (b): the certificate of $\delta_{14}$}
+\beat{c08-deltafig}
+\centering\fig[0.72]{\input{figures/fig_early}}\\[0.5ex]
+\small $t_0=51$,\ $p=8$:\ \ $V_t=V_{t+8}$ checked for $51\le t\le152$; \ $J_{60}=J_{68}$ on $1\le\kappa\le11$
+\end{frame}
+
+\begin{frame}{A certificate always exists}
+\beat{c08-exist}
+\vspace{5ex}
+\begin{center}\large
+In a minimal-time solution all depth rows are eventually periodic (Theorem 3.4),\\ so $t_0$ and $p$ always exist.\\[3ex]
+\textbf{No early firing for all $n\ge N_0$}\quad$\Longleftrightarrow$\quad \textbf{finitely many lengths}
+\end{center}
+\end{frame}
+
+\begin{frame}{Early-row formulas}
+\beat{c08-defG}
+\begin{statement}{Definition 5.4 \ $\G_k(T,N_1,C)$, \ with $k\ge3$, $T\ge1$, $N_1\ge T+2$, $T+1\le C\le N_1$}\small
+\begin{enumerate}[(G1)]
+\item $\delta$ synchronizes the line of length $n$ at time $2n-2$ for $2\le n\le T+1$;
+\item for $T+2\le n\le N_1$, $1\le i\le n$, $t\le n-1+T$:\ $C_n(t,i)\in W$;
+\item for $T+2\le n\le N_1$, $1\le i\le n$ with $t:=2n-1-i\le n-1+T$:\ $C_n(t,i)\ne C_\infty(t,i)$;
+\item $C_\infty(t,i)\in W$ whenever $t+i\le 2N_1$;
+\item for $T+2\le n\le C$: $R_n(\tau,\kappa)\in W$ on the cone $\tau+\kappa\le n-1$, $\tau<n-1$;\ $R_n(n-1,0)=\Fq$;\ $R_n(\kappa,\kappa)\ne C_\infty(n-1+\kappa,n-\kappa)$ for $2\kappa\le n-1$.
+\end{enumerate}
+\end{statement}
+\end{frame}
+
+\begin{frame}{Every solution satisfies them}
+\beat{c08-lemmaG}
+\vspace{2ex}
+\begin{statement}{Lemma 5.5}
+Every $k$-state minimal-time solution satisfies $\G_k(T,N_1,C)$ for all admissible $T$, $N_1$, $C$.
+\end{statement}
+\vspace{1ex}
+\begin{itemize}
+\item (G1), (G2): the definition of a minimal-time solution.
+\item (G3), and the return chain in (G5): the return chain lemma.
+\item (G4): the half-line never fires, equation (2).
+\end{itemize}
+\vspace{1ex}
+\begin{center}no rule satisfies $\G_k$\quad$\Rightarrow$\quad no $k$-state minimal-time solution\end{center}
+\end{frame}
+
+\begin{frame}{Figure 13: the cells that two formulas constrain}
+\beat{c08-regions}
+\centering\fig[0.78]{\input{figures/fig_regions}}
+\end{frame}
+
+\begin{frame}{Chapter 8 in one sentence}
+\beat{c08-summary}
+\vspace{4ex}
+\begin{plainbox}\large
+Whether long lines fire early depends on \textbf{finitely many lengths}, which a periodicity certificate identifies --- and all the necessary conditions can be written as finite formulas for a computer.
+\end{plainbox}
+\end{frame}

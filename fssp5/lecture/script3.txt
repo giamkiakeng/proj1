@@ -1,0 +1,202 @@
+%% Narration, chapters 9-14.
+
+# CHAPTER 09 | Proofs by computer
+@ ch9
+Chapter nine. Proofs by computer, and why we can trust them. Paper, section six point one, and appendix A.
+
+@ c09-intro
+The second half of the paper uses computers. This raises an important question: how can we trust a computer when it says that something is impossible? This chapter explains the method and its safeguards.
+
+@ c09-sat
+The tool is a satisfiability solver, or SAT solver. You give it a formula built from yes-or-no variables, joined by and, or, and not. The solver either finds values of the variables that make the formula true, or it reports that no such values exist. In our formulas, one variable says, for example: the entry of the rule table for the neighbourhood L, G, L is the state A. Other variables describe the states of individual cells. The clauses say that each table entry and each cell has exactly one value, that every cell follows the rule, and that the lines are synchronized as required. Then a rule with the required properties corresponds exactly to a solution of the formula.
+
+@ c09-encodings
+Two families of formulas are used. The formula {MT|M T} describes lines that are synchronized at their minimal times, the half-line up to some anti-diagonal, the return chains, and the pumping conditions. The formula G describes the early-row conditions of definition 5.4. Appendix A of the paper lists all the clauses, in five groups: the rule table, the cells, the local rule, the return chains, and the pumping conditions.
+
+@ c09-certificates
+If the solver finds a solution, we can simply check it: we simulate the rule and see that it does what is claimed. But if the solver says unsatisfiable, we need more than its word. So the solvers used here also write a proof: a step-by-step derivation that the clauses contradict each other. The solver CaDiCaL writes it directly in a format called LRAT; for one formula, the solver Kissat wrote a proof in the related format DRAT, which the program drat-trim converted to LRAT. A small, separate program, lrat-check, verifies every step of the proof. And each proof is also verified by cake_lpr, a checker that is itself formally verified, in the theorem prover HOL4, and compiled with the verified compiler CakeML. So the unsatisfiability of each formula does not depend on trusting the solver.
+
+@ c09-gap
+But there is a gap, and the paper states it openly. A checked proof shows that the formula is unsatisfiable. It does not show that the formula correctly expresses the mathematical conditions. The programs that write the formulas still have to be trusted. So the paper tests them, in five independent ways.
+
+@ c09-check1
+First, a differential test. A separate program, written from the definitions of the paper and sharing no code with the formula generators, evaluates the conditions directly, by simulating the lines and the half-line. With a rule table fixed, each formula must be satisfiable exactly when the table satisfies its conditions. The two were compared on thirty-seven formulas and three thousand six hundred and eighty-four tables, and they agree on all sixty-two thousand two hundred and eighty-six pairs. Second, known rules. With Mazoyer's solution or δ₁₄ fixed inside the formulas, the solver gives exactly the outcomes that simulation predicts, as this table shows.
+
+@ c09-check2
+Third, independent methods. For four states, a formula and a completely separate exhaustive search agree; and the enumeration of germs in chapter twelve was repeated by an independent program. Fourth, every solution found by a solver is simulated again by a program that shares no code with the generators. Fifth, a second encoder. A separate program, written from the definitions and from appendix A, builds all eight unsatisfiable formulas again, literally, without the structural sharing of the main generators. It agrees with the direct evaluation on all thirty-six thousand six hundred and forty-eight test pairs, and its eight formulas are unsatisfiable too, with proofs verified by both checkers. So each claim of impossibility rests on two formulas, written by independent programs.
+
+@ c09-honest
+These tests make an error in the encodings unlikely, but they cannot prove that there is none: a misreading of a definition, shared by both encoders and by the direct evaluation, would not be detected. The paper says so explicitly.
+
+@ c09-repro
+Everything can be repeated. The supplementary material contains the programs, the rule tables, the formulas, and three scripts. The first writes the formulas and compares them with their recorded digests, in about a minute. The second reruns every simulation, enumeration, satisfiable formula and differential test, in about eleven minutes. The third regenerates every proof and checks it, in about two hours. When this script was run again, the eight proofs were reproduced byte for byte. All data, including the proofs, which take four point four gigabytes, are archived at Zenodo.
+
+@ c09-artefacts
+Appendix B of the paper lists every computational claim with the programs behind it. For each of the eight unsatisfiable formulas, it gives the numbers of variables and clauses, the first digits of the SHA-256 digest of the formula, and the digest and size of its LRAT proof, so that each proof can be checked against exactly its formula. The largest formula, for the germs of chapter twelve, has more than half a million clauses, and the largest proof, for Balzer's conditions with the identity as involution, takes about three gigabytes.
+
+@ c09-evidence
+Throughout the paper, every result is labelled by the kind of evidence behind it: a proof in the text; an exact finite computation, such as a simulation or an exhaustive enumeration; a satisfiable formula whose solution was checked; or an unsatisfiable formula with a certified proof. Statements that rest only on finite simulations are called observations, and no proof uses them. This table, from the introduction of the paper, lists every result with its evidence.
+
+@ c09-summary
+In one sentence: computer proofs of impossibility come with certificates that independent and formally verified programs check, and the formulas themselves are cross-checked by several independent tests.
+
+# CHAPTER 10 | Four states
+@ ch10
+Chapter ten. Four states. Paper, section six point two.
+
+@ c10-intro
+We now apply the method to four states, where the answer is already known: there is no four-state minimal-time solution. What is new is a certified proof, and a measurement of how little information is needed.
+
+@ c10-theorem
+Theorem 6.1 says that no four-state rule does any of the following three things. First: synchronize all the lines of lengths two to nine in minimal time. Second: satisfy {G₄(6, 10)|G four of six and ten}, that is, synchronize the lines of lengths two to seven completely, and, for the lines of lengths eight, nine and ten, get the first seven rows after the reflection right, with the return chains on these rows. Third: satisfy {G₄(4, 10, 10)|G four of four, ten and ten}, that is, synchronize the lines of lengths two to five completely, and, for the lines of lengths six to ten, get the first five rows after the reflection right, with the return chains on these rows, and the right ends.
+
+@ c10-proof
+The three formulas are small: seven hundred and fifty-three, nine hundred and nineteen, and eight hundred and seventy-four variables, with between seventeen and twenty-three thousand clauses. CaDiCaL refutes each of them with an LRAT proof, and both checkers verify every proof. In particular, there is no four-state minimal-time solution. The first part certifies the bound observed by Yunès; the earlier proofs rested on the correctness of search programs. The third part shows how little information excludes four states: only the lines of lengths up to five are complete.
+
+@ c10-regions
+Here again are the cells that these two formulas constrain. In the third formula, the cells outside the coloured regions are not constrained at all, apart from the condition G4 on the half-line, which is not drawn; even so, no rule satisfies it.
+
+@ c10-sharp
+These bounds are sharp, in the sense of Proposition 6.2. An exhaustive enumeration finds exactly twenty-seven partial four-state rules, that is, rules restricted to the neighbourhoods they use, that synchronize all the lines of lengths two to eight, and none that synchronizes the lines of lengths two to nine. And six weaker formulas are satisfiable: the solver finds rules for them, and these rules are then checked by simulation. For example, the second formula becomes satisfiable if one row is removed, even when the lines up to length thirty are added; or if the line of length ten is removed; or if the return chains are removed. The third formula becomes satisfiable if the right end of the line of length ten is removed, or if one row is removed. So the formulas of the theorem are right at the edge of what suffices.
+
+@ c10-table
+This table summarizes all the four-state formulas: which conditions they contain, for which lengths, and whether a rule satisfies them.
+
+@ c10-summary
+In one sentence: four states are excluded by the lines of lengths two to five, together with small parts of the lines of lengths six to ten, with a certified proof, and these bounds cannot be improved in several directions.
+
+# CHAPTER 11 | Five states: rules for the lengths up to fourteen
+@ ch11
+Chapter eleven. Five states: rules for the lengths up to fourteen. Paper, section six point three.
+
+@ c11-intro
+Now the open case: five states. The first result is positive. There are five-state rules that come remarkably close to minimal time.
+
+@ c11-prop
+Proposition 6.3: each of five rules, called {δ₁₄|delta fourteen}, and {δ₁₄ᵇ, δ₁₄ᶜ, δ₁₄ᵈ and δ₁₄ᵉ|delta fourteen b, c, d and e}, synchronizes the line of length n at time {2n − 2|two n minus two} for every n from two to fourteen, and for no n of fifteen or more. More precisely, for every n of at least fifteen, some cell of the line fires at a relative time of at most the smaller of T and n minus two, where T is ten, fourteen, twenty-two, twelve and fourteen for the five rules. Since n minus two is less than n minus one, the line fires before its minimal time.
+
+@ c11-anim anim=delta14
+Let us watch δ₁₄. On the left is the line of length fourteen: it is synchronized at time twenty-six, exactly at its minimal time. On the right is the line of length fifteen. At time twenty-two, eight steps after the front has reached the right end, the cells thirteen, fourteen and fifteen fire: six steps too early.
+
+@ c11-table
+This is the complete rule δ₁₄. It uses the states L, G, A, B and F, and its entries were found by a satisfiability solver. How it was found plays no role: every statement about it is checked directly on this table.
+
+@ c11-proof1
+How can one prove that the rule fails on every length from fifteen on, which is infinitely many lines? Here the theory of chapter eight is used. First, the lines of lengths two to sixty are simulated directly. Second, the half-line is simulated: it has no firing cell before time three thousand, so for the lines up to length one thousand five hundred, any early firing must happen inside the reflected triangle.
+
+@ c11-proof2
+Third, a periodicity certificate is computed from the half-line. For δ₁₄, the depth rows zero to twenty-four are periodic from time fifty-one, with period eight. By Corollary 5.3, the first rows of every long reflected triangle agree with those of one of finitely many representative lengths. For δ₁₄, thirty-five lengths are simulated, the largest being forty-nine, and in each of them some cell fires at a relative time of at most ten. So every line of length fifteen or more fires early. The other four rules are handled in the same way, with the certificates sixty-six and three, two hundred and fifty-seven and one hundred and ninety-two, ninety-five and forty-eight, and fifty-six and two.
+
+@ c11-firstfire
+This chart shows, for each of the five rules and every length from fifteen to sixty, the relative time of the first firing cell. Every dot lies on or below the thick line, which is the bound of the proposition. For longer lines, the proposition rests on the certificates, not on this chart.
+
+@ c11-halfline
+The half-line of δ₁₄ is remarkably simple, in the simulated range. From time three on, cell one takes only the values L and G, cell two only L and A, and all the other cells only L and B; and on the states L and B, the rule acts as the elementary cellular automaton number twenty-two. Yet this half-line passes the finite tests of both barriers in the ranges that were checked: the pumping conditions hold for all lengths up to eight hundred, and the left border lemma does not apply up to length five thousand, for s up to three and periods up to twenty-four. These are observations from simulations, valid in the stated ranges.
+
+@ c11-rules
+The rules δ₁₂ and δ₁₃ synchronize the lines of lengths two to twelve, and two to thirteen, respectively, and no other line up to length sixty. Each of the seven rules has a line of some length between fourteen and nineteen with a cell that fires at a relative time of at most nine. This table collects all seven rules, with their certificates.
+
+@ c11-new
+What is new here? For every number of states k, let {N_k|N k} be the largest N such that some k-state rule synchronizes all the lines of lengths two to N in minimal time. Since there are finitely many rules, {N_k|N k} is infinite exactly when a k-state minimal-time solution exists. Exhaustive searches give {N₄ = 8|N four equals eight}. Six-state solutions exist, so N six is infinite. The five rules show that {N₅|N five} is at least fourteen. The paper is not aware of any earlier published bound for five states: the constructions with at most five states that it knows of synchronize restricted families of lengths, some of them in non-minimal time.
+
+@ c11-meaning
+The rules add three things to the method. First, a proof that five states do not suffice must use lines of length at least fifteen, or conditions other than the synchronization of the lines of lengths two to fourteen. Second, the statement that each rule fails for every length from fifteen on is not a finite simulation: it combines finitely many simulations with the reduction of chapter eight. Third, the rules fail in the first rows after the reflection, which is exactly what the formulas of chapter eight target. They are not candidates for minimal-time solutions.
+
+@ c11-summary
+In one sentence: five states can synchronize every line up to length fourteen, but these rules provably fail on every longer line, and any proof of impossibility for five states must look beyond length fourteen.
+
+# CHAPTER 12 | Five states: half-lines of low complexity
+@ ch12
+Chapter twelve. Five states: half-lines of low complexity. Paper, section six point four.
+
+@ c12-intro
+The barriers constrain the half-line. So it is natural to ask how simple the half-line of a five-state minimal-time solution could be.
+
+@ c12-germ
+The paper measures simplicity by counting neighbourhoods. The germ below M of a rule is its restriction to the neighbourhoods that occur on its half-line, at the cells with t at least one and t plus i at most M. Its complexity, {c_M|c M}, is the number of these neighbourhoods, apart from the quiescent neighbourhood L, L, L. The paper uses M equal to seventy-eight: the half-line below this anti-diagonal contains the input anti-diagonals of all the lines of lengths up to forty, so the germ determines the pumping conditions for these lengths. For example, the complexity is fifty-seven for Mazoyer's solution, twenty-two for δ₁₂, and sixteen for δ₁₄.
+
+@ c12-prop
+Proposition 6.4: every five-state minimal-time solution has complexity at least fifteen. In other words, on the cells with t plus i at most seventy-eight, its half-line must use at least fifteen different neighbourhoods besides the quiescent one.
+
+@ c12-proof1
+The proof is a case analysis. Suppose that the complexity is at most fourteen. By exchanging the names of A and B if necessary, we may assume that A appears before B. The germ must produce no firing state, it must never put L at the front, and it must satisfy the pumping conditions for all pairs of lengths up to forty. A depth-first search, which chooses the value of each neighbourhood at its first occurrence, enumerates all germs with these properties, visiting about one hundred million nodes. There are exactly {two hundred and forty-four|244} such germs, and an independent re-implementation finds the same {two hundred and forty-four|244}.
+
+@ c12-proof2
+For two hundred and thirty of them, the minimal-time formula for the lines of lengths two to ten, with the half-line up to the anti-diagonal seventy-eight and the pumping conditions up to length thirty-nine, is unsatisfiable. A single formula covers all two hundred and thirty, with one selector variable for each germ, and its LRAT proof is verified by both checkers. Each of the remaining fourteen germs determines the half-line far beyond the region where it was defined, and there the left border lemma applies, with s equal to one: for some length n of at most one hundred and sixty-three, the two input anti-diagonals are periodic over a stretch that is too long. An independent simulation confirms this.
+
+@ c12-germfig
+Here is one of these fourteen germs. For the line of length twenty-eight, the upper input anti-diagonal is in state G on the cells one to nineteen, and the lower one is in state A on the cells one to eighteen. So the stretch has length Y minus s equal to eighteen, which exceeds the bound, k minus one squared times one, which is sixteen. So no rule that contains this germ synchronizes the line of length twenty-eight in minimal time.
+
+@ c12-occurs
+Complexity fifteen does occur for rules that synchronize many lines: the germs of {δ₁₄ᶜ|delta fourteen c} and {δ₁₄ᵈ|delta fourteen d} have complexity fifteen, and both rules synchronize the lines of lengths two to fourteen.
+
+@ c12-delta12
+The rules δ₁₂ and δ₁₃ have the same half-line on the cells with t plus i at most seventy-eight, where they use twenty-two neighbourhoods besides the quiescent one. Corollary 6.5 says: no five-state rule that has these twenty-two transitions synchronizes the line of length five hundred and eighteen in minimal time.
+
+@ c12-d12proof
+The proof: with these transitions, no other neighbourhood occurs on the cells with t plus i up to one thousand and thirty-four, so every such rule has the same half-line there. On the anti-diagonal one thousand and thirty-four, the cells two to two hundred and fifty-nine are all in state A, and on the anti-diagonal one thousand and thirty-three, the cells two to two hundred and fifty-eight are all in state L. The left border lemma, with five states, the length five hundred and eighteen, s equal to two, and period one, would give two hundred and fifty-seven at most four to the power four, which is two hundred and fifty-six. That is false. So the line of length five hundred and eighteen cannot be synchronized.
+
+@ c12-d12fig
+Here is the half-line of δ₁₂ up to the anti-diagonal one thousand and thirty-four, one pixel per cell. The dark region, in state G, lies between roughly the line {i = t/3|i equals t over three} and the front, and the region behind it alternates between A and L. The thick segment marks the stretch used in the proof, and the small square is magnified on the right.
+
+@ c12-summary
+In one sentence: the half-line of a five-state minimal-time solution must use at least fifteen different neighbourhoods early on, and the simple half-line of δ₁₂ can never be completed to a solution.
+
+# CHAPTER 13 | Balzer's conditions
+@ ch13
+Chapter thirteen. Balzer's conditions. Paper, section six point five.
+
+@ c13-intro
+In 1967, Balzer reported that no five-state minimal-time solution satisfies four extra conditions. The paper checks this claim with certified computations, and finds that one detail of the formulation matters.
+
+@ c13-conds
+Following Mazoyer's account of them, the paper states the conditions as follows. B1, stability of the general: {δ(x, G, y) = G|delta of x, G, y equals G}, unless both x and y are G or the border. B2, symmetry: there is an involution I of the states, that is, a renaming of the states that gives back the original names when it is applied twice, such that {δ(I(z), I(y), I(x)) = I(δ(x, y, z))|delta of I of z, I of y, I of x, equals I of delta of x, y, z}, for every neighbourhood, including those with a border. B3: the neighbourhoods G, G, G and border, G, G and G, G, border give F, and no other neighbourhood does. B4: {δ(G, v, G) = G|delta of G, v, G equals G} for every working state v other than G.
+
+@ c13-readings
+This is the strong reading. In the weak reading, B1 is required only when both neighbours are working states, and B3 only requires that these three neighbourhoods give F, without forbidding others. Because B2 is required at the borders too, the mirror image of a computation is again a computation: mirroring a configuration and renaming its states commutes with taking one step of the rule.
+
+@ c13-involution
+In both readings, the involution I must keep F and G fixed. It keeps F fixed because rules are only defined on neighbourhoods of working states. And if it sent G to another working state g, then B2 and B4 would force {δ(g, G, g)|delta of g, G, g} to be g, while B1 forces it to be G. So I is one of the four involutions of the states L, A and B: the identity, or one of the three swaps. Once I is fixed, the conditions become simple clauses on the rule table.
+
+@ c13-mazoyer
+As a check of this formalization, the conditions were evaluated on the transitions that Mazoyer's six-state solution uses on the lines of lengths three to one hundred and fifty. B1, B4, and B2 for each of the ten involutions of the states L, A, B and C are violated, and B3 holds, even in the strong reading, in agreement with Mazoyer's own statement that his solution satisfies only the third condition.
+
+@ c13-prop
+Proposition 6.6: no five-state rule that satisfies B1 to B4, even in the weak reading, synchronizes all the lines of lengths two to twelve in minimal time; so certainly no rule does that satisfies them in the strong reading. For the swap of A and B, the lines up to length ten suffice, and for the swaps of L with A or with B, the lines up to length nine. CaDiCaL refutes these formulas with LRAT proofs. For the identity, the lines up to length twelve are needed. Kissat refutes this formula, and the program drat-trim turns its proof into an LRAT proof. All four proofs are verified by both checkers.
+
+@ c13-sharp
+The lengths up to eleven do not suffice: a rule found by a solver satisfies all four conditions in the strong reading, with the identity as involution, and synchronizes every line of length at most eleven.
+
+@ c13-borders
+And the condition B2 at the borders is needed. Yunès, in his thesis, states B2 only for the neighbourhoods without a border. With that formulation, another rule found by a solver satisfies the conditions in the weak reading and synchronizes every line of length at most twelve. So with B2 as Yunès states it, the lines up to length twelve do not suffice, and it is not known whether longer lines do.
+
+@ c13-table
+This table collects all the Balzer formulas and the two rules.
+
+@ c13-summary
+In one sentence: Balzer's conditional result for five states is confirmed with certified proofs, even under a weaker reading of his conditions, but only when the symmetry condition also holds at the borders of the line.
+
+# CHAPTER 14 | What remains open
+@ ch14
+Chapter fourteen. What remains open. Paper, section seven.
+
+@ c14-twokinds
+Let us step back. The conditions of this paper are of two kinds. The barriers of chapters five to seven are proved for every number of states, and they concern the half-line alone. The conditions of chapter eight concern the first rows after the reflection and the right ends, and they were used through satisfiability solvers, for four and five states.
+
+@ c14-models
+These conditions do not exclude every rule. For the germ of δ₁₄ᵈ, which has complexity fifteen, the conditions G1 to G3 with T equal to ten, for all lengths from twelve on, have a solution. So do G1 to G3 with T equal to seven, for all lengths from nine on, together with G5 for the lengths nine to twenty. In this second solution, the lines of lengths nine, eleven to seventeen, and nineteen have both end cells, but not all cells, in state F at the minimal time, and no cell in state F before.
+
+@ c14-middle
+This suggests that excluding such rules needs conditions on the middle cells of the firing row, which are expensive to encode. For the line of length fifteen, the dependency cone of the middle cell of the firing row contains seventy-six of the one hundred and twenty cells of the reflected triangle, whereas the cone of the right end contains sixty-four.
+
+@ c14-limits
+The computational part has three limitations. Its results concern four and five states and, apart from the reduction of chapter eight, finitely many lengths. The formula generators are tested and cross-checked, but, unlike the proof checker cake_lpr, they are not formally verified. And the behaviour of particular rules beyond the simulated ranges, such as the patterns of the half-lines of δ₁₂ and δ₁₄, is not known.
+
+@ c14-questions
+The paper closes with four open questions. One: does a five-state minimal-time solution exist? Two: is there a condition on the middle of the reflected triangles that is as economical as the early-row conditions? Three: can the bound, k minus one to the power two s, times l, of the left border lemma be made polynomial in s? And four: do Balzer's conditions exclude six states, and do they exclude five states without the symmetry condition at the borders?
+
+@ c14-recap
+To recap the whole paper. Every line agrees with the half-line until the echo of its right end returns. From this, the paper proves two barriers, for any number of states: the depth rows behind the front cannot all become periodic early, with the bound three halves; and the half-line cannot be periodic on a wedge at its left border. It reduces the early rows of all lengths to finitely many. And with certified computations, it excludes four states using very little information, shows that every five-state solution needs at least fifteen neighbourhoods early on its half-line, confirms Balzer's conditional result, and finds five-state rules for exactly the lengths two to fourteen.
+
+@ c14-data
+All programs, rule tables, formulas and proofs are public. The supplementary material is on GitHub, at the commit shown on the screen, and all data are archived at Zenodo, under the DOI shown on the screen. Thank you for watching.

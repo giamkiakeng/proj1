@@ -1,0 +1,450 @@
+%% Slides, chapters 0-4.  One page per beat; \beat<k>{id} names the beat of overlay k.
+
+%% ------------------------------------------------------------------ 0
+\setchapter{}{Welcome}
+\begin{frame}[plain]
+\beat{c00-title}
+\begin{tikzpicture}[remember picture,overlay]
+  \fill[navy] (current page.north west) rectangle ($(current page.north east)+(0,-3.5)$);
+  \node[anchor=north west,text=white,font=\bfseries\fontsize{20}{26}\selectfont,text width=14.6cm,align=left]
+    at ($(current page.north west)+(0.9,-0.75)$) {Two barriers for minimal-time firing squads,\\ with applications to four and five states};
+  \node[anchor=north west,font=\Large,text=ink] at ($(current page.north west)+(0.9,-3.9)$) {A lecture on the paper by \textbf{Kia Keng Giam}};
+  \node[anchor=north west,font=\large,text=mute] at ($(current page.north west)+(0.9,-4.75)$) {Accepted for publication in the \emph{Journal of Cellular Automata}};
+  \node[anchor=north west,font=\normalsize,text=mute,text width=14cm] at ($(current page.north west)+(0.9,-6.0)$)
+    {15 chapters \quad$\cdot$\quad narration by a computer-generated voice \quad$\cdot$\quad English captions};
+  \foreach \s/\x in {G/0,A/1,B/2,C/3,F/5} {\fill[st\s] ($(current page.south east)+(-6.2+0.8*\x,0.9)$) rectangle +(0.62,0.62);}
+  \fill[white] ($(current page.south east)+(-6.2+3.2,0.9)$) rectangle +(0.62,0.62);
+  \draw[grid] ($(current page.south east)+(-6.2+3.2,0.9)$) rectangle +(0.62,0.62);
+\end{tikzpicture}
+\vfill{\color{bg}\fontsize{2}{2}\selectfont BEAT:c00-title:END}
+\end{frame}
+
+\begin{frame}{The question}
+\beat{c00-question}
+\vspace{1ex}
+\begin{center}
+{\LARGE Is there a minimal-time firing squad\\[0.6ex] with only \textcolor{accent}{\textbf{five}} states?}\\[2ex]
+{\large\color{mute} open since 1987}
+\end{center}
+\vspace{2ex}
+\begin{columns}[T]
+\column{0.46\textwidth}
+\begin{plainbox}\textbf{The paper proves}\\ new necessary conditions that every minimal-time solution satisfies, for any number of states.\end{plainbox}
+\column{0.46\textwidth}
+\begin{plainbox}\textbf{The paper computes}\\ with satisfiability solvers whose proofs of impossibility are checked independently.\end{plainbox}
+\end{columns}
+\end{frame}
+
+\begin{frame}{The plan of the lecture}
+\beat{c00-map}
+\small
+\begin{columns}[T]
+\column{0.48\textwidth}
+\textbf{\color{accent}For everyone}
+\begin{enumerate}
+\item The firing squad puzzle
+\item Why lower bounds are hard
+\item The precise rules of the game
+\end{enumerate}
+\textbf{\color{accent}Mathematics: theorems and proofs}
+\begin{enumerate}\setcounter{enumi}{3}
+\item The line and the half-line
+\item The right end and the pumping lemma
+\item The late onset of periodicity
+\item The left end
+\item The first rows after the reflection
+\end{enumerate}
+\column{0.48\textwidth}
+\textbf{\color{accent}Computation: certified results}
+\begin{enumerate}\setcounter{enumi}{8}
+\item Proofs by computer
+\item Four states
+\item Five states: rules for lengths up to 14
+\item Five states: half-lines of low complexity
+\item Balzer's conditions
+\end{enumerate}
+\textbf{\color{accent}Outlook}
+\begin{enumerate}\setcounter{enumi}{13}
+\item What remains open
+\end{enumerate}
+\end{columns}
+\end{frame}
+
+\begin{frame}{How to watch}
+\beat{c00-how}
+\begin{columns}[T]
+\column{0.47\textwidth}
+\begin{plainbox}\textbf{New to the subject?}\\ Chapters 1--3, then the one-sentence summary at the end of each chapter.\end{plainbox}
+\column{0.47\textwidth}
+\begin{plainbox}\textbf{Know cellular automata?}\\ Start with chapter 4; use the chapter markers to jump.\end{plainbox}
+\end{columns}
+\vspace{3ex}
+\textbf{Every statement says how it is known:}\\[1ex]
+\evid{proof}\ in the text \qquad \evid{exact computation}\ simulation or enumeration \qquad \evid{certified}\ checked proof of impossibility\\[1.2ex]
+\tikz[baseline=(e.base)]\node[fill=mute,text=white,rounded corners=2pt,inner sep=2pt,font=\scriptsize\bfseries](e){observation};\ from a finite simulation only, valid in the stated range
+\end{frame}
+
+%% ------------------------------------------------------------------ 1
+\chapterslide{1}{The firing squad puzzle}{For everyone: no mathematics needed}
+\setchapter{1}{The firing squad puzzle}
+
+\begin{frame}{A line of soldiers}
+\beat{c01-story}
+\begin{center}
+\begin{tikzpicture}[x=1.15cm,y=1cm]
+  \foreach \i in {1,...,11} {\draw[grid,thick,fill=white] (\i,0) rectangle +(0.9,0.9);}
+  \fill[stG] (1,0) rectangle +(0.9,0.9); \node[white,font=\bfseries] at (1.45,0.45) {G};
+  \foreach \i in {2,...,11} {\node at (\i+0.45,0.45) {L};}
+  \node[font=\small,mute] at (1.45,-0.35) {general};
+  \foreach \i in {5,6} {\draw[<->,accent,very thick] (\i+0.62,1.15) -- (\i+1.28,1.15);}
+  \node[accent,font=\small] at (6.45,1.6) {talk only to neighbours};
+  \node[font=\Large] at (12.45,0.45) {$\cdots$};
+\end{tikzpicture}
+\end{center}
+\vspace{2ex}
+\begin{itemize}
+\item Each cell sees only its \textbf{two neighbours}.
+\item Each cell is in one of a \textbf{few states} (a lamp with a few colours).
+\item Every cell follows the \textbf{same rule}.
+\item The rule must work for \textbf{every length} $n$: 2 cells, 10 cells, a million cells.
+\item Goal: all cells \textbf{fire at the same moment}, none earlier.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{A one-dimensional cellular automaton}
+\beat{c01-cells}
+\begin{center}
+\begin{tikzpicture}[x=1.0cm,y=1cm]
+  \node[anchor=east,font=\small] at (0.8,2.45) {time $t$};
+  \node[anchor=east,font=\small] at (0.8,0.45) {time $t+1$};
+  \foreach \i/\s in {1/x,2/y,3/z} {\draw[grid,thick,fill=soft] (\i,2) rectangle +(0.9,0.9); \node at (\i+0.45,2.45) {$\s$};}
+  \node[font=\scriptsize,mute] at (1.45,3.15) {$i-1$}; \node[font=\scriptsize,mute] at (2.45,3.15) {$i$}; \node[font=\scriptsize,mute] at (3.45,3.15) {$i+1$};
+  \draw[grid,thick,fill=white] (2,0) rectangle +(0.9,0.9); \node at (2.45,0.45) {$\delta(x,y,z)$};
+  \foreach \i in {1,2,3} {\draw[-{Stealth},thick,navy] (\i+0.45,1.95) -- (2.45,0.95);}
+  \begin{scope}[xshift=6cm]
+  \node[anchor=west,font=\small] at (0,2.9) {at time 0:};
+  \foreach \i in {1,...,8} {\draw[grid,fill=white] (\i*0.8,2.0) rectangle +(0.7,0.7);}
+  \fill[stG] (0.8,2.0) rectangle +(0.7,0.7); \node[white] at (1.15,2.35) {G};
+  \foreach \i in {2,...,8} {\node at (\i*0.8+0.35,2.35) {L};}
+  \node[anchor=west,font=\small] at (0,1.2) {goal, at one time $T$:};
+  \foreach \i in {1,...,8} {\fill[stF] (\i*0.8,0.3) rectangle +(0.7,0.7); \node[white] at (\i*0.8+0.35,0.65) {F};}
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+\vspace{1ex}
+\begin{itemize}
+\item Cells $1,\dots,n$ from left to right; time steps $0,1,2,\dots$
+\item All cells update \textbf{simultaneously} from the states of their neighbourhood.
+\item $\Gq$ = general, $\Lq$ = quiescent (at rest), $\Fq$ = firing.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The rule is a table}
+\beat{c01-rule}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\small Some entries of Mazoyer's rule:\\[1ex]
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{cccc}
+\toprule
+left & cell & right & next state\\
+\midrule
+$\Lq$ & $\Lq$ & $\Lq$ & $\Lq$\\
+$\Lq$ & $\Lq$ & $\ast$ & $\Lq$\\
+$\ast$ & $\Gq$ & $\Lq$ & $\Aq$\\
+$\Gq$ & $\Lq$ & $\Lq$ & $\Cq$\\
+$\Aq$ & $\Lq$ & $\Lq$ & $\Gq$\\
+$\Gq$ & $\Gq$ & $\Gq$ & $\Fq$\\
+\bottomrule
+\end{tabular}
+\column{0.46\textwidth}
+\begin{itemize}
+\item One entry for every triple\\ (left, cell, right).
+\item $\ast$ = the \textbf{border}, seen by the two end cells.
+\item Built in: \textbf{quiescent cells stay quiet},
+\[\delta(\Lq,\Lq,\Lq)=\delta(\Lq,\Lq,\ast)=\Lq,\]
+so the line cannot wake up by itself.
+\end{itemize}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Mazoyer's six-state solution (1987), line of length 24}
+\beat{c01-anim}
+\centering\animbox{14}{6.6}{mazoyer24}
+\end{frame}
+
+\begin{frame}{Why time $2n-2$?}
+\beat{c01-fast}
+\centering\animbox{14}{6.6}{front_echo}
+\end{frame}
+
+\begin{frame}{A race for fewer states}
+\beat{c01-history}
+\begin{center}
+\fig[0.42]{\begin{tikzpicture}[x=1cm,y=1cm]
+  \draw[thick,-{Stealth}] (-0.7,0) -- (14.2,0);
+  \foreach \x/\yr/\who/\what/\dir in {0/1957/Myhill/posed the problem/1,2.6/1962/Goto/time $2n-2$ is possible/-1,5.2/1966/Waksman/16 states/1,7.8/1967/Balzer/8 states/-1,10.4/1987/Gerken/7 states/1,13.0/1987/Mazoyer/6 states/-1} {
+    \fill[accent] (\x,0) circle (0.1);
+    \draw[accent!60] (\x,0) -- (\x,0.75*\dir);
+    \node[font=\small\bfseries] at (\x,1.0*\dir) {\yr\ \who};
+    \node[font=\small] at (\x,1.5*\dir) {\what};}
+\end{tikzpicture}}
+\end{center}
+\vspace{2ex}
+\begin{itemize}
+\item Goto and Waksman: the minimal time $2n-2$ \textbf{can be reached}.
+\item Today: \textbf{many} six-state minimal-time solutions are known.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Fewer than six states?}
+\beat{c01-four}
+\begin{itemize}
+\item \textbf{Four states are too few}: computer search by Balzer (1967);\\
+confirmed by Sanders; Yun\`es: the lines of lengths $2,\dots,9$ already suffice.
+\item \textbf{At most five states}: solutions known for special families of lengths, such as powers of two (some of them not in minimal time).
+\end{itemize}
+\vspace{3ex}
+\begin{center}
+\begin{tikzpicture}
+  \node[draw=navy,thick,rounded corners,fill=soft,inner sep=10pt,font=\Large] {smallest number of states:\quad \textbf{5} or \textbf{6}?};
+\end{tikzpicture}\\[1.5ex]
+{\color{mute} open since Mazoyer's construction (1987)}
+\end{center}
+\end{frame}
+
+\begin{frame}{Chapter 1 in one sentence}
+\beat{c01-summary}
+\vspace{4ex}
+\begin{plainbox}\large
+A firing squad is a line of identical cells that follow one common rule; the fastest possible firing time is $2n-2$; six states are enough, four are too few, and \textbf{five is the open case}.
+\end{plainbox}
+\end{frame}
+
+%% ------------------------------------------------------------------ 2
+\chapterslide{2}{Why lower bounds are hard}{For everyone}
+\setchapter{2}{Why lower bounds are hard}
+
+\begin{frame}{Too many rules to try}
+\beat{c02-count}
+\begin{center}
+\vspace{2ex}
+{\large a five-state rule: a table with $96$ entries, $2$ of them fixed}\\[3ex]
+{\Huge $5^{94}\;>\;10^{65}$}\\[1ex]
+{\large rules}\\[3ex]
+{\color{mute} far too many to try one by one}
+\end{center}
+\end{frame}
+
+\begin{frame}{An asymmetry}
+\beat{c02-asym}
+\vspace{3ex}
+\begin{columns}[T]
+\column{0.46\textwidth}
+\begin{plainbox}\textbf{To refute one rule}\\ one line that it fails to synchronize is enough.\end{plainbox}
+\column{0.46\textwidth}
+\begin{plainbox}\textbf{A solution}\\ must synchronize \emph{every} line, of every length.\end{plainbox}
+\end{columns}
+\vspace{4ex}
+\begin{center}\large $\Rightarrow$ a proof that five states do not suffice must exclude \textbf{every} rule.\end{center}
+\end{frame}
+
+\begin{frame}{The problem can be made finite}
+\beat{c02-finite}
+\begin{itemize}
+\item There are \textbf{finitely many} rules.
+\item If no five-state solution exists, each rule fails on a shortest length.
+\item Let $N$ be the largest of these lengths. Then
+\begin{center}\textbf{no five-state rule synchronizes all the lines of lengths $2,\dots,N$.}\end{center}
+\item So a negative answer consists of \textbf{finitely many conditions}.
+\end{itemize}
+\vspace{2ex}
+\begin{plainbox}The difficulty: conditions that are \textbf{strong} enough to exclude every rule, and \textbf{cheap} enough to check.\end{plainbox}
+\end{frame}
+
+\begin{frame}{What the paper does}
+\beat{c02-paper}
+\begin{enumerate}
+\item \textbf{Proves} necessary conditions, for \emph{every} number of states --- most of them about one object that all lines share: \textbf{the half-line}, an infinitely long line.
+\item \textbf{Measures} how far they reach for four and five states, with satisfiability (SAT) solvers whose answers come with \textbf{independently checked proofs}.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Chapter 2 in one sentence}
+\beat{c02-summary}
+\vspace{4ex}
+\begin{plainbox}\large
+There are far too many rules to try, so we need \textbf{necessary conditions} that every solution must satisfy --- and the art is to find conditions that are both strong and cheap.
+\end{plainbox}
+\end{frame}
+
+%% ------------------------------------------------------------------ 3
+\chapterslide{3}{The precise rules of the game}{Definitions (paper, section 2.1)}
+\setchapter{3}{The precise rules of the game}
+
+\begin{frame}{States}
+\beat{c03-states}
+\begin{itemize}
+\item A finite set $S$ of \textbf{states}; $k=|S|$.
+\item Three special states:\quad \swatch{white}\,$\Lq$ quiescent \quad \swatch{stG}\,$\Gq$ general \quad \swatch{stF}\,$\Fq$ firing.
+\item \textbf{Auxiliary} states: \swatch{stA}\,$\Aq$, \swatch{stB}\,$\Bq$, and for Mazoyer's solution \swatch{stC}\,$\Cq$.
+\item \textbf{Working states}: $W:=S\setminus\{\Fq\}$.
+\item The \textbf{border} $\ast$ is a separate symbol, not a state.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Neighbourhoods and rules}
+\beat{c03-nbhd}
+\begin{itemize}
+\item A \textbf{neighbourhood} is a triple
+\[(x,y,z)\in(W\cup\{\ast\})\times W\times(W\cup\{\ast\}),\qquad (x,z)\ne(\ast,\ast).\]
+\item A \textbf{rule} is a map $\delta$ from neighbourhoods to $S$ with
+\[\delta(\Lq,\Lq,\Lq)=\delta(\Lq,\Lq,\ast)=\Lq.\]
+\item Number of neighbourhoods: $(k-1)^2(k+1)$ = $45$ ($k=4$), $96$ ($k=5$), $175$ ($k=6$).
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Lines and synchronization}
+\beat{c03-line}
+\begin{itemize}
+\item The \textbf{line of length $n$}: $C_n(t,i)$ = state of cell $i$ at time $t$;\quad $C_n(0,1)=\Gq$,\ $C_n(0,i)=\Lq$ for $i\ge2$,
+\[C_n(t+1,i)=\delta\bigl(C_n(t,i-1),C_n(t,i),C_n(t,i+1)\bigr),\]
+borders $C_n(t,0)=C_n(t,n+1)=\ast$; a cell is undefined once a cell of its neighbourhood (itself included) has fired.
+\item $\delta$ \textbf{synchronizes} the line of length $n$ at time $T$ if all its cells are $\Fq$ at time $T$ and none is $\Fq$ before.
+\item A \textbf{minimal-time solution} synchronizes the line of length $n$ at time $2n-2$, for every $n\ge2$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The half-line}
+\beat{c03-halfline}
+\begin{columns}[T]
+\column{0.52\textwidth}
+\begin{itemize}
+\item Started like a line, but \textbf{no right end}: $C_\infty(t,i)$, $i=1,2,3,\dots$
+\item Time runs \textbf{down}, cells run \textbf{right}.
+\item The \textbf{front}: the diagonal $t=i-1$.
+\item An \textbf{anti-diagonal}: the cells with $t+i=m$.
+\end{itemize}
+\column{0.44\textwidth}
+\begin{tikzpicture}[x=0.42cm,y=0.42cm]
+  \foreach \t in {0,...,11} {\foreach \i in {1,...,12} {\ifnum\numexpr\t-\i+1\relax<0 \else \fill[stB] (\i-1,-\t) rectangle +(1,-1);\fi}}
+  \fill[stG] (0,0) rectangle (1,-1);
+  \draw[grid] (0,0) rectangle (12,-12);
+  \draw[accent,very thick] (0,0) -- (12,-12) node[pos=0.55,above right,font=\small] {front $t=i-1$};
+  \draw[navy,very thick,dashed] (0,-9) -- (9,0) node[pos=0.25,below left,font=\small,fill=white,inner sep=1pt] {$t+i=m$};
+  \node[anchor=east,font=\scriptsize] at (0,-0.5) {$t=0$};
+  \node[anchor=south,font=\scriptsize] at (0.5,0) {$1$};
+  \node[anchor=south,font=\scriptsize] at (11.5,0) {$i$};
+\end{tikzpicture}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Chapter 3 in one sentence}
+\beat{c03-summary}
+\vspace{4ex}
+\begin{plainbox}\large
+A rule is a table on neighbourhoods; a line of length $n$ is the space-time diagram it produces; and the \textbf{half-line} is the same diagram without a right end.
+\end{plainbox}
+\end{frame}
+
+%% ------------------------------------------------------------------ 4
+\chapterslide{4}{The line and the half-line}{Paper, section 2: agreement, the reflected triangle, the return chain}
+\setchapter{4}{The line and the half-line}
+
+\begin{frame}{The first idea}
+\beat{c04-intro}
+\begin{center}
+\vspace{2ex}
+{\Large Until the echo of its right end comes back,\\[0.5ex] a line cannot tell that it is finite.}\\[4ex]
+\begin{tikzpicture}[x=0.42cm,y=0.3cm]
+  \fill[rgAgree] (0,0) -- (8,-8) -- (0,-14) -- cycle;
+  \fill[rgRefl] (8,-8) -- (8,-14) -- (0,-14) -- cycle;
+  \draw[thick] (0,0) -- (0,-14) -- (8,-14) -- (8,-8);
+  \draw[accent,thick] (0,0) -- (8,-8);
+  \draw[navy,thick,dashed] (8,-8) -- (0,-14);
+  \node[font=\small,anchor=west] at (8.3,-8) {the front reaches the right end};
+  \node[font=\small,anchor=west] at (8.3,-11.5) {the reflected triangle: the line reacts to its right end};
+  \node[font=\small] at (2.6,-6) {agrees with the half-line};
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+\begin{frame}{The light cone}
+\beat{c04-lightcone}
+\begin{statement}{Lemma 2.1 (light cone)}
+For every rule, $C_n(t,i)=C_\infty(t,i)=\Lq$ whenever $t<i-1$ (and $i\le n$ for $C_n$).
+\end{statement}
+\vspace{2ex}
+\textbf{Proof} (induction on $t$):
+\begin{itemize}
+\item $t=0$: the initial condition.
+\item $t\ge1$: the cells $(t-1,i')$, $i'\in\{i-1,i,i+1\}$, satisfy $t-1<i'-1$, so each is $\Lq$ or the right border; $\delta(\Lq,\Lq,\Lq)=\delta(\Lq,\Lq,\ast)=\Lq$ gives $\Lq$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Agreement}
+\beat{c04-agree}
+\begin{itemize}
+\item The right border is first felt by cell $n$ at time $n-1$; its influence travels left at speed $\le1$.
+\end{itemize}
+\vspace{1ex}
+\begin{statement}{Lemma 2.2 (agreement)}
+For every rule, every $n\ge2$, $1\le i\le n$ and $t\ge0$ with $t+i\le 2n-2$, the values $C_n(t,i)$ and $C_\infty(t,i)$ are both undefined, or both defined and equal.
+\end{statement}
+\vspace{1ex}
+\textbf{Proof}: induction on $t$. For $i=n$: $t\le n-2<i-1$, both are $\Lq$ by the light cone. For $i<n$: the three predecessors satisfy $(t-1)+j\le 2n-2$.
+\end{frame}
+
+\begin{frame}{Figure 1: the line and the half-line (Mazoyer, $n=24$)}
+\beat{c04-figline}
+\centering\fig[0.72]{\input{figures/fig_line}}\\[0.5ex]
+\small reflected triangle\quad $R_n:=\{(t,i):\ 1\le i\le n,\ t+i\ge 2n-1,\ t\le 2n-2\}$
+\end{frame}
+
+\begin{frame}{Why $2n-2$ is optimal (Remark 2.3)}
+\beat{c04-lowerbound}
+\centering\fig[0.50]{\input{figures/fig_lowerbound}}
+\begin{itemize}\small
+\item If the line of length $n$ fired at $T\le2n-3$: $T+1\le2n-2$, so $C_\infty(T,1)=C_n(T,1)=\Fq$.
+\item Then every longer line has $\Fq$ in cell $1$ at time $T$, while for $n'>T+1$ its cell $n'$ is still quiescent: it can never be synchronized.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The return chain}
+\beat{c04-return}
+\begin{statement}{Lemma 2.4 (return chain)}
+Let $n\ge2$. If $\delta$ synchronizes the lines of lengths $n$ and $n+1$ at times $2n-2$ and $2n$, then
+\[C_n(2n-1-i,i)\ne C_\infty(2n-1-i,i)\qquad\text{for }1\le i\le n,\]
+and the front cell $f_{n-1}:=C_\infty(n-2,n-1)$ is not $\Lq$.
+\end{statement}
+\vspace{1ex}
+\begin{center}the \textbf{return chain}: the anti-diagonal $t+i=2n-1$, the first anti-diagonal of $R_n$\end{center}
+\end{frame}
+
+\begin{frame}{Proof of the return chain lemma (Figure 3)}
+\beat<1>{c04-rp1}\beat<2>{c04-rp2}\beat<3>{c04-rp3}
+\centering\fig[0.52]{\input{figures/fig_return}}\\[1ex]
+\begin{plainbox}\small
+\only<1>{\textbf{Start}, cell $(2n-2,1)$: $C_n=\Fq$ (it fires), but $C_\infty=C_{n+1}\ne\Fq$ there (the line of length $n+1$ fires only at time $2n$).}%
+\only<2>{\textbf{Step} (b): the left and middle predecessors lie on $t+i=2n-3,\,2n-2$, where line and half-line agree ($=$). The cell differs ($\ne$), so its \textbf{right} predecessor --- the next cell of the chain --- differs.}%
+\only<3>{\textbf{Top} (c): the last cell is $\delta(f,\Lq,\ast)$ in the line and $\delta(f,\Lq,\Lq)$ in the half-line. If $f=\Lq$, both are $\Lq$: impossible. So $f\ne\Lq$.}
+\end{plainbox}
+\end{frame}
+
+\begin{frame}{The half-line never fires}
+\beat{c04-neverfire}
+\vspace{2ex}
+\begin{statement}{Equation (2)}
+In a minimal-time solution,\qquad $C_\infty(t,i)\in W$\quad for all $t\ge0$ and $i\ge1$.
+\end{statement}
+\vspace{2ex}
+\textbf{Why}: take $n\ge t+i+1$. Then $C_\infty(t,i)=C_n(t,i)$ by agreement, and $t<2n-2$, so the line of length $n$ has not fired there.
+\end{frame}
+
+\begin{frame}{Chapter 4 in one sentence}
+\beat{c04-summary}
+\vspace{4ex}
+\begin{plainbox}\large
+A minimal-time solution consists of \textbf{one half-line}, shared by all lengths, and, for each length $n$, a \textbf{reflected triangle} in which the line reacts to its right end; its first anti-diagonal, the return chain, always differs from the half-line.
+\end{plainbox}
+\end{frame}
