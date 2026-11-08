@@ -44,17 +44,15 @@ The build checks that the slides and the script have the same beats in the same 
 
 ## The narration
 
-The published video is narrated by a computer-generated clone of the author's voice, made from recordings
-of the author with Qwen3-TTS; the voice itself is not part of this repository. It reads the script that
-`voice_take.py` writes:
+The published video is narrated by the author, who reads the script that `voice_take.py` writes:
 
     python3 voice_take.py take --narrator DIR     # take/script.md, take/voice/direction.json, take/sentences.json
     # the narrator reads take/script.md into take/voice/recording.wav and take/voice/recording.cues.json
     python3 build.py --take take/voice/recording.wav
 
 `voice_take.py` puts one beat per slide, joins the paragraphs of a beat with a pause, asks for longer pauses
-around the chapter titles, and spells out symbols and acronyms (`CLONE_SPOKEN` in `lecture_lib.py`); names
-are respelled only where the clone's audio showed the plain spelling to be wrong. `build.py --take` shows each
+around the chapter titles, and spells out symbols and acronyms (`NARRATOR_SPOKEN` in `lecture_lib.py`); names
+are respelled only where a test reading showed the plain spelling to be read wrongly. `build.py --take` shows each
 slide from just before its first word to just before the next slide's, and times each caption by matching
 its sentence to the chunks the narrator read. Without `--take`, `build.py` synthesizes the narration with
 Piper (voice `en_US-ryan-high`, `synth_all.py`), and the welcome sentence should then be changed to say so.

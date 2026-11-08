@@ -34,22 +34,24 @@ SPOKEN = [
 ]
 
 
-# for a narrator that reads plain English (voice_take.py): symbols and acronyms only, no respelled names;
-# letter-digit labels (B1, G4) are split so that the digit is read as a number
-CLONE_SPOKEN = [
+# for a narrator that reads plain English (voice_take.py): symbols and acronyms spelled out, names respelled
+# only where needed; letter-digit labels (B1, G4) are split so that the digit is read as a number
+NARRATOR_SPOKEN = [
     ('drat-trim', 'DRAT trim'), ('lrat-check', 'LRAT check'), ('cake_lpr', 'cake L P R'), ('HOL4', 'HOL four'),
     ('CakeML', 'Cake M L'), ('SHA-256', 'S H A two fifty-six'), ('PUMP', 'pump'), ('SAT', 'sat'),
     ('δ₁₂', 'delta twelve'), ('δ₁₃', 'delta thirteen'), ('δ₁₄ᵇ', 'delta fourteen b'), ('δ₁₄ᶜ', 'delta fourteen c'),
     ('δ₁₄ᵈ', 'delta fourteen d'), ('δ₁₄ᵉ', 'delta fourteen e'), ('δ₁₄', 'delta fourteen'),
-    # respelled only where the clone's audio (phoneme check) proved the plain spelling wrong
+    # respelled only where a test reading (phoneme check) proved the plain spelling wrong
     ('Mazoyer', 'Mah-zwah-yay'), ('LRAT', 'L-RAT'), ('DRAT', 'D-RAT'), ('Zenodo', 'Zen-oh-doe'),
 ]
 # what the speech recognizer writes for those respellings, so that the narrator's re-listen accepts them
-CLONE_HEARD = {
+NARRATOR_HEARD = {
     'Mah-zwah-yay': ['ma soie', 'maswaye', 'mazwaye', 'mazoya', 'maths ya', 'ma swa ye', 'mazwa ye', 'mazoyer'],
     'L-RAT': ['lret', 'lrat', 'l ret', 'el rat', 'l red', 'larrat', 'el ret', 'elrat'],
     'D-RAT': ['dred', 'd red', 'drat', 'dee rat', 'd ret', 'dee red'],
     'Zen-oh-doe': ['zenodo', 'zen odo', 'zenoda', 'zen oh doe'],
+    'Ghiam': ['giam', 'jiam', 'gi am', 'yum', 'gyam', 'ghee am', 'guiyam', 'guiyang'],
+    'Kheng': ['keng', 'kang', 'kenning'],
 }
 
 
@@ -57,7 +59,7 @@ def spoken_form(text, table=None):
     s = re.sub(r'\{([^{}|]*)\|([^{}]*)\}', lambda m: m.group(2), text)
     for a, b in (SPOKEN if table is None else table):
         s = re.sub(r'(?<![\w-])' + re.escape(a) + r'(?![\w])', b, s)
-    if table is CLONE_SPOKEN:
+    if table is NARRATOR_SPOKEN:
         s = re.sub(r'\b([A-Z])([0-9])\b', r'\1 \2', s)
     return s
 

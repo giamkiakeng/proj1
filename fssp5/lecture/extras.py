@@ -43,15 +43,14 @@ print('\n'.join(lines))
 mins = int(tl['total'] / 60 + 0.5)
 desc = """Two barriers for minimal-time firing squads: a lecture
 
-A narrated lecture (%d minutes) on the paper "Two barriers for minimal-time firing squads, with \
-applications to four and five states" by Kia Keng Giam, accepted for publication in the Journal of \
-Cellular Automata. It explains every result of the paper, from the firing squad synchronization problem \
+A lecture (%d minutes) on the paper "Two barriers for minimal-time firing squads, with applications to \
+four and five states" by Kia Keng Giam, accepted for publication in the Journal of Cellular Automata, \
+narrated by the author. It explains every result of the paper, from the firing squad synchronization problem \
 itself to the certified computer proofs. Chapters 1-3 need no mathematics; chapters 4-8 explain the \
 proofs; chapters 9-13 explain the computer-assisted results and how they are checked; chapter 14 lists \
 the open questions.
 
-The narration uses a computer-generated clone of the author's voice, made from recordings of the author \
-(Qwen3-TTS). English captions are included.
+English captions are included.
 
 Chapters
 %s
