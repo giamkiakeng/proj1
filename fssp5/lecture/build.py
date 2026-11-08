@@ -384,7 +384,7 @@ def main():
            '-r', str(FPS), '-fps_mode', 'cfr', '-g', '300',
            # a take comes mastered (and its dynamics matched to the speaker): keep it as it is
            '-af', 'anull' if a.take else 'loudnorm=I=-16:TP=-1.5:LRA=11',
-           '-c:a', 'aac', '-b:a', '128k' if a.take else '96k', '-ar', '48000',
+           '-c:a', 'aac', '-b:a', '192k' if a.take else '96k', '-ar', '48000',
            '-c:s', 'mov_text', '-metadata:s:s:0', 'language=eng', '-metadata:s:a:0', 'language=eng',
            '-t', '%.3f' % total, '-movflags', '+faststart', mp4]
     sh(cmd)

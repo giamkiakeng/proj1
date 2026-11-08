@@ -42,7 +42,7 @@ In one sentence: the right end of each line fires according to about half of two
 
 # CHAPTER 06 | The late onset of periodicity
 @ ch6
-Chapter six. The late onset of {periodicity|pier-ee-oh-DISS-it-ee}: the first barrier. Paper, sections three point three and three point four.
+Chapter six. The late onset of periodicity: the first barrier. Paper, sections three point three and three point four.
 
 @ c06-intro
 The pumping lemma has a striking consequence for the half-line of every minimal-time solution: the cells behind its front cannot all become periodic early. This is the first barrier of the paper, Theorem 3.4.
@@ -112,7 +112,7 @@ Now group the cells differently. In skewed coordinates, the slice number y colle
 Lemma 4.1, the left border lemma, turns this into a number. Let the rule have k states and synchronize the line of length n at time {2n − 2|two n minus two}. Suppose that the two input anti-diagonals are periodic, with period l, on the stretch from cell s to cell Y, where Y is at most n minus s. Then the length of this stretch, Y minus s, is at most {(k − 1)²ˢ·l|k minus one to the power two s, times l}.
 
 @ c07-proof1
-The proof uses the slices of the first two s chains. Each such slice is a list of two s working states, so there are at most k minus one to the power two s different slices. Consider the pairs made of a slice and its position, modulo l. If the periodic stretch were longer than k minus one to the power two s, times l, then by the pigeonhole principle two of these pairs would coincide: the slices at two positions {y₁|y one} and {y₂|y two} would be equal, and their distance h would be divisible by the period l.
+The proof uses the slices of the first {two s|two ess} chains. Each such slice is a list of two s working states, so there are at most k minus one to the power two s different slices. Consider the pairs made of a slice and its position, modulo l. If the periodic stretch were longer than k minus one to the power two s, times l, then by the pigeonhole principle two of these pairs would coincide: the slices at two positions {y₁|y one} and {y₂|y two} would be equal, and their distance h would be divisible by the period l.
 
 @ c07-proof2
 From there, the machine is trapped in a loop. The inputs are periodic, and the slices at y one and y two are equal, so the slices to their left are equal too, step by step: the slice at y equals the slice at y plus h, all the way down to the slice s plus one. One more step shows that the last cell of the slice at position s plus h has the same state as the last cell of the slice at position s, which lies in the firing row and is F. But this last cell of the slice s plus h is the cell two s plus h at time {2n − 2 − h|two n minus two minus h}: it lies h steps above the firing row, and it would fire h steps too early. This contradiction proves the lemma.

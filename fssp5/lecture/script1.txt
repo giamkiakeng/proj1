@@ -65,7 +65,7 @@ In one sentence: there are far too many rules to try, so we need necessary condi
 Chapter three. The precise rules of the game. Definitions.
 
 @ c03-states
-Now let us make everything precise. We have a finite set S of states, and k is the number of states. S contains three special states: the quiescent state L, the general G, and the firing state F. The other states are called auxiliary; in this lecture they are A, B, and, for Mazoyer's solution, C. The working states are all states except F; we write W for this set. The border is a separate symbol, the star, which is not a state.
+Now let us make everything precise. We have a finite set S of states, and k is the number of states. {S|Ess} contains three special states: the quiescent state L, the general G, and the firing state F. The other states are called auxiliary; in this lecture they are A, B, and, for Mazoyer's solution, C. The working states are all states except F; we write W for this set. The border is a separate symbol, the star, which is not a state.
 
 @ c03-nbhd
 A neighbourhood is a triple {(x, y, z)|x, y, z}: the left neighbour x, the cell y itself, and the right neighbour z. The middle entry is a working state. The outer entries are working states or the border, but not both borders at once, since every line has at least two cells. A rule is a map {δ|delta} from neighbourhoods to states, with {δ(L, L, L) = L|delta of L, L, L equal to L}, and {δ(L, L, ∗) = L|delta of L, L, star equal to L}. With k states there are {(k − 1)²(k + 1)|k minus one squared, times k plus one} neighbourhoods: forty-five for four states, ninety-six for five, and one hundred and seventy-five for six.

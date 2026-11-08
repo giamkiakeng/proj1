@@ -1,6 +1,6 @@
 # Video lecture: *Two barriers for minimal-time firing squads*
 
-A narrated video lecture (78 minutes, 15 chapters, English captions) that explains every result of the
+A narrated video lecture (93 minutes, 15 chapters, English captions) that explains every result of the
 paper, from the puzzle itself to the certified computations. Chapters 1–3 need no mathematics; chapters
 4–8 explain the proofs of Sections 2–5; chapters 9–13 explain the computer-assisted results of
 Section 6 and how they are checked; chapter 14 is Section 7. These are its sources; the video is built
