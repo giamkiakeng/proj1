@@ -30,6 +30,7 @@ to 6.5 are proved by hand.
 | `wenum.c` | second enumerator for the stable-general class, independent of `mdfs.c` |
 | `enumtree.py`, `covercheck.py` | enumeration of every closed node of a tree search; check that the closed nodes cover the tree |
 | `certtree.py`, `germsat_cert.py` | LRAT / DRAT certificates for the closed nodes |
+| `fix_open.py`, `recheck_ct.py` | for `certtree.py`: collect the nodes with a complete half-line that were not refuted within the time limit (they are then certified with a long limit); second check of the certified cubes, all or a random sample, with `lrat-check` and `cake_lpr` |
 | `gcert.py` | the tree search of `gsat.py` with a certificate for every closed node: a new CaDiCaL process per node with a time limit and an LRAT proof, checked by `lrat-check` and, if `CAKELPR` names its binary, by the verified checker `cake_lpr`; a node that is not refuted in time is split. Resumable; `--recheck` rebuilds every cube formula, compares the SHA-256 digests and verifies the proofs again |
 | `gcover.py` | checks without a solver that the certified cubes of `gcert.py` are a complete case split; shares no code with `gcert.py` |
 | `weakwalls.py` | redundant clauses of Lemmas 6.4 and 6.5 (weak reading); `gsat.py --wwalls`, `gcert.py --wwalls` |
@@ -655,6 +656,15 @@ $(L\,B)$ 216 s, $(L\,A)$ 220 s, $(A\,B)$ 664 s; for the identity ($N=13$) Kissat
 left the quiescent state never returns to it; `gsat.py 5 N --neq ... --front1`): rules for $2,\dots,8$ and for
 $2,\dots,9$ are found (2 s, 538 s); for $2,\dots,10$ no rule in the first 30,000 nodes, and the tree is
 estimated at $4\cdot10^6$ nodes (standard error $2.4\cdot10^6$). Not pursued.
+
+**Stable generals, nodes with a complete half-line (15 November).** `certtree.py` splits a node that CaDiCaL does
+not refute in 4 s; a node whose 12 to 15 transitions already determine the whole half-line up to the
+anti-diagonal 27 cannot be split. Three such nodes occurred so far (half-lines of low complexity, one of them
+the pattern of Pascal's triangle modulo 2 over $\{L,B\}$ behind the cells `GAAB`); each is refuted and
+certified in 6 to 7 s with a longer limit (`cert/g14_parts_open.txt`). The 36 top nodes and these three
+were verified again with `cake_lpr` (`recheck_ct.py`), with the recorded digests. Without (B1): (B3w), (B4)
+and (B2) without borders for the identity are estimated at $1.7\cdot10^9$ nodes at $N=13$, so the stable
+general is what makes the image classes small.
 
 **One condition of Yunès's form dropped (15 November, estimates).** Without (B4): $2.1\cdot10^4$ nodes at
 $N=13$ and $2.2\cdot10^4$ at $N=14$ for the identity, $2.1\cdot10^3$ at $N=11$ for $(A\,B)$. Without (B3) and
