@@ -45,6 +45,7 @@ ap.add_argument('--wake', type=int, default=0); ap.add_argument('--period', type
 ap.add_argument('--margin', type=int, default=0)
 ap.add_argument('--wwalls', action='store_true', help='redundant clauses for the weak reading of (B1) with GGG, *GG, GG* -> F (weakwalls.py)')
 ap.add_argument('--nointerior', default='', help='class: this state never occurs in an interior cell (cells 2..n-1 of the lines, cells i >= 2 of the half-line)')
+ap.add_argument('--noghws', action='store_true', help='with --strict: no G in a half-line cell i >= 2 with t + i <= 2N-4 (the wall lemma for the lines 2..N only)')
 ap.add_argument('--set', default='', help='class condition: transitions xyz=d, comma-separated (unit clauses of F)')
 ap.add_argument('--neq', default='', help='class condition: delta(x,y,z) != d for xyz=d, comma-separated (unit clauses of F)')
 a = ap.parse_args()
@@ -58,6 +59,10 @@ if a.wwalls:
     weakwalls.add_weak_walls(M, noghw=a.noghw)
 E = M.E
 _c = {NAMES[x]: x for x in range(k - 1)}; _c['*'] = BND; _c['F'] = k - 1
+if a.noghws:
+    for (_t, _i), _x in sorted(M.Hc.items()):
+        if _i >= 2 and _t + _i <= 2 * N - 4:
+            E.add([-_x[1]])
 XI = _c[a.nointerior] if a.nointerior else None
 if XI is not None:
     for (_t, _i), _x in sorted(M.Hc.items()):
@@ -161,7 +166,7 @@ def dfs(pos, assum, names, maxaux):
     for v in W:
         if v == 0 and i == t + 1 and t <= NFRONT:
             continue
-        if v == 1 and (a.nogh or (a.noghw and i >= 2)):
+        if v == 1 and (a.nogh or (a.noghw and i >= 2) or (a.noghws and i >= 2 and t + i <= 2 * N - 4)):
             continue
         if XI is not None and v == XI and i >= 2:
             continue
@@ -224,7 +229,7 @@ def knuth_probe(rng):
         e = (cv(t - 1, i - 1), cv(t - 1, i), cv(t - 1, i + 1))
         openc = []
         for v in W:
-            if (v == 0 and i == t + 1 and t <= NFRONT) or (v == 1 and (a.nogh or (a.noghw and i >= 2))) or (v >= 2 and v > maxaux + 1) or (XI is not None and v == XI and i >= 2):
+            if (v == 0 and i == t + 1 and t <= NFRONT) or (v == 1 and (a.nogh or (a.noghw and i >= 2) or (a.noghws and i >= 2 and t + i <= 2 * N - 4))) or (v >= 2 and v > maxaux + 1) or (XI is not None and v == XI and i >= 2):
                 continue
             est += weight
             S.conf_budget(a.budget)

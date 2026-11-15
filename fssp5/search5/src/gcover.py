@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """gcover.py -- do the certified cubes of gcert.py form a complete case split of the half-lines?  No solver.
 
-usage: gcover.py K N FILE... [--nogh] [--noghw] [--gstatic T] [--strict] [--front1] [--nh NH] [--root CUBE] [--init X] [--nointerior Y]
+usage: gcover.py K N FILE... [--nogh] [--noghw] [--gstatic T] [--strict] [--front1] [--nh NH] [--root CUBE] [--init X] [--nointerior Y] [--noghws]
 
 Reads the lines 'U cube | ...' of the FILEs.  Starting from the root (no transition fixed, or --root), a node is
 covered if it is one of the cubes or if it has a next transition to branch on and all its children are covered.
@@ -10,7 +10,7 @@ t + i = 2, ..., M (within one by increasing time), whose value the transitions f
 M = 2 NH - 1 (2 NH - 2 with --strict), NH = N unless --nh is given (longest line of the formula).
 Children: all working states except
   (a) L for a front cell (t, t+1), t <= NFRONT = NH - 2 (+1 with --front1, -1 with --strict);
-  (b) G for a cell i >= 2 with --nogh or --noghw; with --nogh the first cell is G and is not branched on; with
+  (b) G for a cell i >= 2 with --nogh or --noghw (with --noghws only if t + i <= 2N - 4); with --nogh the first cell is G and is not branched on; with
       --gstatic T the first cell at times t >= T has the only child G; with --nointerior Y the state Y for a
       cell i >= 2;
   (c) an auxiliary state before all auxiliary states of smaller index have occurred (the initial state X of
@@ -30,6 +30,7 @@ def flag(name, has_val=False):
 nogh, noghw, strict, front1 = flag('--nogh'), flag('--noghw'), flag('--strict'), flag('--front1')
 gstatic, nh, root, init = flag('--gstatic', True), flag('--nh', True), flag('--root', True), flag('--init', True)
 noint = flag('--nointerior', True)
+noghws = flag('--noghws')
 K, N = int(args[0]), int(args[1])
 NH = int(nh) if nh else N
 MM = 2 * NH - 2 if strict else 2 * NH - 1
@@ -79,7 +80,7 @@ def walk(trs, tab, mx):
         for v in range(K - 1):
             if v == 0 and i == t + 1 and t <= NFRONT:
                 continue
-            if v == 1 and (nogh or (noghw and i >= 2)):
+            if v == 1 and (nogh or (noghw and i >= 2) or (noghws and i >= 2 and t + i <= 2 * N - 4)):
                 continue
             if noint and v == num[noint] and i >= 2:
                 continue

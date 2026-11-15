@@ -439,7 +439,8 @@ synchronize $2,\dots,10$, satisfy the formula with the clauses at $N=8$ (`check_
 
 Sizes (estimates by random descents in the tree of `gsat.py`, 30 descents each, budget 3000; standard errors
 30 to 50 per cent, and such estimates tend to be too low): the weak class with (B3) in the strong reading,
-lines $2,\dots,14$: $3.5\cdot10^6$ nodes; with (B3w): $1.3\cdot10^7$; the strong class of this section:
+lines $2,\dots,14$: $4\cdot10^6$ to $2\cdot10^7$ nodes in four runs, with or without the clauses of Lemmas
+6.4 and 6.5, which do not make the tree smaller; with (B3w): $1.3\cdot10^7$; the strong class of this section:
 $1.1\cdot10^6$. The parts of the weak class outside the strong class are defined by $\delta(\ast,G,y)\ne G$ or
 $\delta(x,G,\ast)\ne G$ for one $x$ or $y$. With (B3) in the strong reading $\delta(\ast,G,L)=G$ is forced by
 the line 2; the four other parts estimated so far have $1.6\cdot10^6$ to $7\cdot10^6$ nodes each, so
@@ -555,7 +556,8 @@ No descent ended in a model unless stated.
 |---|---|---|---|
 | no class (the open problem) | 2..15 | $3\cdot10^{18}$ | same order |
 | stable general, Section 6 (`--b1s --b3 --nogh --wimp --wgap`) | 2..14 | $1.07\cdot10^6$ | $0.41\cdot10^6$ |
-| (B1) weak, (B3) strong (`--b1 --b3 --noghw`) | 2..14 | $3.6\cdot10^6$ | $1.0\cdot10^6$ |
+| (B1) weak, (B3) strong (`--b1 --b3 --noghw`) | 2..14 | $3.6\cdot10^6$; with another seed $1.7\cdot10^7$ | $1.0\cdot10^6$; $0.8\cdot10^7$ |
+| the same with the clauses of Lemmas 6.4, 6.5 (`--wwalls`) and PUMP (`--pump 14`) | 2..14 | $1.2\cdot10^7$; $5.2\cdot10^6$ (two seeds) | $0.7\cdot10^7$; $1.7\cdot10^6$ |
 | (B1) weak, (B3) weak (`--b1 --b3w --noghw`) | 2..14 | $1.3\cdot10^7$ | $0.4\cdot10^7$ |
 | (B1) weak, (B3) weak, (B4) | 2..14 | $9\cdot10^7$ | $5\cdot10^7$ |
 | Yunès's form, $I$ identity (Proposition 7.2) | 2..13; 2..14 | $2.4\cdot10^4$; $2.2\cdot10^4$ | $0.5\cdot10^4$ |

@@ -42,6 +42,7 @@ ap.add_argument('--recheck', action='store_true', help='re-verify the certified 
 ap.add_argument('--sample', type=int, default=0, help='with --recheck: only this many cubes, chosen at random (seed 1)')
 ap.add_argument('--init', default='G', help='initial state of the first cell (default G); the class conditions speak about G')
 ap.add_argument('--nointerior', default='', help='class: this state never occurs in an interior cell (cells 2..n-1 of the lines, cells i >= 2 of the half-line)')
+ap.add_argument('--noghws', action='store_true', help='with --strict: no G in a half-line cell i >= 2 with t + i <= 2N-4 (the wall lemma for the lines 2..N only)')
 ap.add_argument('--set', default='', help='class condition: transitions xyz=d, comma-separated (unit clauses of F)')
 ap.add_argument('--neq', default='', help='class condition: delta(x,y,z) != d for xyz=d, comma-separated (unit clauses of F)')
 a = ap.parse_args()
@@ -60,6 +61,10 @@ if a.wwalls:
     weakwalls.add_weak_walls(M, noghw=a.noghw)
 E = M.E
 _c = {NAMES[x]: x for x in range(k - 1)}; _c['*'] = BND; _c['F'] = k - 1
+if a.noghws:
+    for (_t, _i), _x in sorted(M.Hc.items()):
+        if _i >= 2 and _t + _i <= 2 * N - 4:
+            E.add([-_x[1]])
 XI = _c[a.nointerior] if a.nointerior else None
 if XI is not None:
     for (_t, _i), _x in sorted(M.Hc.items()):
@@ -117,7 +122,7 @@ def next_branch(cube):
             for v in W:
                 if v == 0 and i == t + 1 and t <= NFRONT:
                     continue
-                if v == 1 and (a.nogh or (a.noghw and i >= 2)):
+                if v == 1 and (a.nogh or (a.noghw and i >= 2) or (a.noghws and i >= 2 and t + i <= 2 * N - 4)):
                     continue
                 if XI is not None and v == XI and i >= 2:
                     continue
