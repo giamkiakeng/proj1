@@ -650,6 +650,26 @@ of them (299 s, 244 s, 795 s). The recheck of the 2550 cubes for the identity is
 tree, Kissat refutes each of the three formulas $F_I$, written by `writef.py`, as a whole (no proof kept):
 $(L\,B)$ 216 s, $(L\,A)$ 220 s, $(A\,B)$ 664 s; for the identity ($N=13$) Kissat is running.
 
+**No return to the quiescent state (15 November).** The class $\delta(x,y,z)\ne L$ for $y\ne L$ (a cell that has
+left the quiescent state never returns to it; `gsat.py 5 N --neq ... --front1`): rules for $2,\dots,8$ and for
+$2,\dots,9$ are found (2 s, 538 s); for $2,\dots,10$ no rule in the first 30,000 nodes, and the tree is
+estimated at $4\cdot10^6$ nodes (standard error $2.4\cdot10^6$). Not pursued.
+
+**One condition of Yunès's form dropped (15 November, estimates).** Without (B4): $2.1\cdot10^4$ nodes at
+$N=13$ and $2.2\cdot10^4$ at $N=14$ for the identity, $2.1\cdot10^3$ at $N=11$ for $(A\,B)$. Without (B3) and
+(B4), that is (B1w) and (B2) without borders only: $3.9\cdot10^4$ nodes at $N=13$ for the identity; with (B4)
+but without (B3): $3.6\cdot10^4$. So the tree is small because of the image condition; (B3) and (B4) hardly
+matter. With (B4) and (B3) strong but without the image condition the weak class is estimated at
+$4.2\cdot10^6$ nodes. The certified search for (B1w) with (B2) without borders, for all ten involutions, is
+running (`chain_b1b2.sh`).
+
+**A note on running several searches at once.** The kernel of the machine groups processes by session
+(`sched_autogroup_enabled`), and the nice value of a process only counts within its group. Several searches
+started from different shells therefore shared the processors equally, whatever their nice values: for
+some hours the four processes of the main certification had two thirds of one core. Since 19:35 the
+grouping is switched off. Timings of runs between about 16:00 and 19:35 on this day are not comparable
+with the others.
+
 **Other probes (15 November), not pursued.** Rules in which one working state never occurs in an interior cell
 (`gsat.py 5 N --nointerior X --front1`): for each of $X=G,A,B$ a rule for $2,\dots,8$ is found in seconds;
 $2,\dots,9$ was not decided in 250 s. Rules that synchronize at a time chosen by the solver (`ftime.py`):
