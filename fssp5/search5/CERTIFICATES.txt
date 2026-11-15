@@ -1,0 +1,18 @@
+# LRAT certificates of the unsatisfiable formulas of README.md, Section 4 (five-state local images of Mazoyer's solution)
+# formula: `facsat.py ARGS --cnf FILE` (deterministic); proof: cadical --lrat --no-binary (CaDiCaL 3.0.1); checker: lrat-check (drat-trim, commit 2e3b2dc)
+# columns: command | windows, constraints | variables, clauses | formula SHA-256 | proof bytes | proof SHA-256 | lrat-check
+# the formula of the radius-1 case, generated first, is facsat.py 5 80 1
+facsat.py 5 80 1 | 117 windows, 649 constraints | 1065, 160483 | 2cd5566c96f9a7106bb7caee654577ada42a310353f96d40b541b55c333573f0 | 4795447 | 6ab00777ae4f3eab6ab9b53da91fa78ce67d44979c0035824a806f1745bd3cdb | VERIFIED
+facsat.py 5 80 0 | 5 windows, 117 constraints | 505, 26929 | a610654c931bff9543523af001d0437add39fcce5673148f689889562e306bf6 | 199897 | 86914262298f717fe6315b3578478f4af38863d12a211668efcfda6182ec5b7f | VERIFIED
+facsat.py 5 80 0 --past 0 | 23 windows, 254 constraints | 595, 59811 | 75aeed6d80e25d9a252820d62cb2e0704def264c140ae0556606a3ebab1efe1f | 728715 | 22fceef683e22732cc2ba2299ef76d8926cfcef0dba901406bc808dcd02d668b | VERIFIED
+facsat.py 5 80 0 --past 1 | 116 windows, 647 constraints | 1060, 158376 | e2ad52fa5954938f9486fdb914f7a43ae962dec196a4b50fda85f92abbd913c8 | 61856849 | 4553b91a69d24fe851b6cc18d0e65a77875940c37d5819ef1644358bfef86a91 | VERIFIED
+facsat.py 5 80 1 --past 0 | 144 windows, 744 constraints | 1200, 182886 | 109e081e8ca8322ba1a6383604e1aadb83eae3d31f83b62f467407f0068c2b4a | 4159536 | 62dd7edce2fd520c381de1ef4c82f2d8dcb30564bb1b22a6ce881fa65b8d2c46 | VERIFIED
+facsat.py 5 60 0 --tmod 2 | 10 windows, 179 constraints | 530, 41118 | db3d5c14b164ed7c2eef6ea99e0272abc63ceb9354ed7a354d7ab0478a7481a1 | 437350 | e10e02a0330fb55ff9baa335fb0c59feb57b2da714264d62b060b5f322301a6b | VERIFIED
+facsat.py 5 60 0 --imod 2 | 10 windows, 225 constraints | 530, 51503 | 6962db838a2f8c3d288b3d1ad442a8924f3ad7bcf8b4316777663cc458264546 | 529388 | dfe8bf49b810a7e250306a0e217fc2463b35b3c8ac9f1eb95e6d83fe3d17cea1 | VERIFIED
+facsat.py 5 60 0 --tmod 2 --imod 2 | 20 windows, 340 constraints | 580, 77577 | 1a2995a5ec97d9cbe876d950acb7e096a8e2b116493934e9cf24438a1ed72782 | 731278 | b630decf2e1f821f6a43df1f39428bd543ed05b68781af06b9ba92a82a538c82 | VERIFIED
+facsat.py 5 60 0 --tmod 3 | 15 windows, 345 constraints | 555, 77899 | 4f07d89bdf1db5e01d558a2bdc3eb5ac4663536638972f11a1d14ffd0cad1f0d | 894259 | 3b2c9111a0117ad8dcb09cb2249bc16f61796bb3376a038c84e7b876727d1560 | VERIFIED
+facsat.py 5 60 0 --dmod 3 | 15 windows, 317 constraints | 555, 76205 | d1cccc1f4634db960bb49648f64c034ad814e7b920e443bc08a01f8ee2dc61fe | 827459 | 720acbba22a274e364d790c274614dc9d7252056063e673a4babcbb65377b633 | VERIFIED
+facsat.py 5 60 0 --tmod 6 | 30 windows, 527 constraints | 630, 119442 | b1cbfe33ced4527bf084435fe55fd09088a7551d17cb3c0406b1bc7da137e8f7 | 1328081 | 79a7ae0be79a73c1ee1ad499e7c072f7985601f8e763d783f1606c2fbebb9d95 | VERIFIED
+facsat.py 5 60 1 --tmod 2 | 179 windows, 799 constraints | 1375, 196561 | 8084b0248d14f72d9a65b901b08d2c5b5f86860a99d03722fb8c6f8339186314 | 4589794 | dbf9e09f15ced96c347a02c91fee0ca04ed42a18321ff8e0ba782f9ab783358c | VERIFIED
+facsat.py 5 60 1 --imod 2 | 225 windows, 1127 constraints | 1605, 277825 | 821676e78c273c4b09286553c3d8b3f4b26da386bfb2d98bfb9233712159043b | 6249365 | 4df9949155c7b3c30347eb60600d1e96960ede8f64bbbf4752b5b8f6258e22f1 | VERIFIED
+facsat.py 5 80 1 --past 1 | 254 windows, 1102 constraints | 1750, 273412 | 32ac704a20cf6eeb43fa755d9e34b508575aad39434e84033703ab1c7a936c99 | 283163934 | 9d1164345a594dc2683c67886eca274e926a711703fda7d41c24d70c6951ee8b | VERIFIED

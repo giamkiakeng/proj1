@@ -7,9 +7,8 @@ search restricted classes of five-state rules, and this file records what each s
 Conventions. States `L` (quiescent), `G` (general), auxiliary `A`, `B`, firing `F`; `*` is the border. A
 *line* is the diagram $C_n$ of the line of length $n$; a rule *synchronizes* $n$ if $C_n$ is all `F` at time
 $2n-2$ and has no `F` before. "UNSAT" means that a SAT solver or an exhaustive enumeration proved that the
-class is empty for the stated lengths; "unknown" means that the run was stopped. No proof certificate
-(DRAT/LRAT) has been produced yet for the results below, so they have the status of solver answers,
-cross-checked where the table says so.
+class is empty for the stated lengths; "unknown" means that the run was stopped. Proof certificates (LRAT) exist for the results of Section 4 where stated there; the other results have the
+status of solver answers, cross-checked where the tables say so.
 
 ## 1. Programs (`src/`)
 
@@ -116,6 +115,11 @@ configurations of Mazoyer's diagrams. They were collected from the lines 3..80.
 | radius 1, with $\pi$ depending on $t\bmod 2$ or on $i\bmod 2$ (lines 3..60) | 179, 225 | 799, 1,127 | UNSAT (5 s, 6 s) |
 
 Controls: with six states and the single-cell window the formula is satisfiable and returns Mazoyer's rule.
+
+Certificates. For every row of the table except radius 2, and for the variants with residues of $t$ and $i$
+below, CaDiCaL 3.0.1 refutes the formula with an LRAT proof that `lrat-check` verifies; `CERTIFICATES.txt`
+lists the commands, the SHA-256 digests of the formulas and of the proofs, and the proof sizes (0.2 MB to
+283 MB). The formulas are written deterministically by `facsat.py ... --cnf FILE`.
 
 Variants. Restricted to the lines 10..90, 20..90 or 40..90 the radius-1 formula is still unsatisfiable (7 s
 each), so the short lines are not the obstruction. With six states, a radius-1 image that maps at most
