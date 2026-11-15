@@ -570,10 +570,11 @@ formulas are unsatisfiable. For five states and $s=2$ a stretch with $Y-s=20$ ex
 decided in 240 s. Three states say nothing: no three-state rule synchronizes a single line of length 4, 5
 or 6.
 
-**Proposition 8.2 (proved by hand).** Let $k$ be odd, $s\ge2$ and $\ell=1$. Under the hypotheses of Lemma 4.1,
-$Y-s\le(k-1)^{2s}-1$: the bound is not attained.
+**Proposition 8.2 (proved by hand).** Let $k$ be odd and $s\ge2$. Under the hypotheses of Lemma 4.1,
+$Y-s\le(k-1)^{2s}\ell-1$: the bound is not attained. (The proof is written out for all $\ell$ in
+`notes/stable_general.pdf`, last section; here it is given for $\ell=1$.)
 
-*Proof.* Put $q=k-1$ (even), $m=2s\ge4$, and suppose $Y-s=q^m$. In the notation of the proof of Lemma 4.1 the
+*Proof for $\ell=1$.* Put $q=k-1$ (even), $m=2s\ge4$, and suppose $Y-s=q^m$. In the notation of the proof of Lemma 4.1 the
 band vectors $X_j=\mathbf u(Y-j)\in W^m$, $0\le j<q^m$, are pairwise distinct, so they are all of $W^m$, and
 $X_{j+1}=\Gamma_0(X_j)$, where the component $c$ of $\Gamma_0(X)$ depends on the components $1,\dots,c$ of
 $X$ only (the inputs are constant).
@@ -596,7 +597,7 @@ $G$, so $G$ is a cycle of length $q$, an odd permutation because $q$ is even. Bu
 $\prod_{(\alpha,\beta)}\operatorname{sgn}(\delta(\alpha,\beta,\cdot))^{q^{m-3}}=1$, because $q^{m-3}$ is even.
 $\square$
 
-So for five states the bound $(k-1)^{2s}\ell$ is sharp for $s=1$ and not for $s\ge2$ (at $\ell=1$). The
+So for five states the bound $(k-1)^{2s}\ell$ is sharp for $s=1$, $\ell=1$, and it is not attained for $s\ge2$. The
 argument removes only one from the bound. On the other hand the band alone, as an automaton, can run
 exponentially long: with $q=4$ and the states read as pairs (bit, carry), the components $c,c-2,c-4,\dots$
 form a binary counter with ripple carry, since the component $c$ sees the new state of the component $c-2$;
