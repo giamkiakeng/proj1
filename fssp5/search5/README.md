@@ -581,6 +581,14 @@ condition for the identity, nor a firing condition alone, nor the open problem.
 --workers 2`: 5552 s, 2550 certified leaves, 1176 splits, no node left open, no model; 5219 s of CaDiCaL
 time on the leaves; cubes of 4 to 12 transitions (most have 8 or 9).
 
+**Yunès's form, the other involutions, and second checks (15 November).** `gcert.py 5 10 ...` for $(L\,A)$,
+$(L\,B)$, $(A\,B)$: 278 s, 185 s and 616 s; no node left open, no model. `gcert.py ... --recheck` on the three
+files: every cube formula is rebuilt with the same SHA-256 digest, CaDiCaL produces the same proof (same
+digest) for each of the 131, 89 and 265 cubes, and `lrat-check` and the verified checker `cake_lpr` accept all
+of them (299 s, 244 s, 795 s). The recheck of the 2550 cubes for the identity is running. Independently of the
+tree, Kissat refutes each of the three formulas $F_I$, written by `writef.py`, as a whole (no proof kept):
+$(L\,B)$ 216 s, $(L\,A)$ 220 s, $(A\,B)$ 664 s; for the identity ($N=13$) Kissat is running.
+
 **Other probes (15 November), not pursued.** Rules in which one working state never occurs in an interior cell
 (`gsat.py 5 N --nointerior X --front1`): for each of $X=G,A,B$ a rule for $2,\dots,8$ is found in seconds;
 $2,\dots,9$ was not decided in 250 s. Rules that synchronize at a time chosen by the solver (`ftime.py`):

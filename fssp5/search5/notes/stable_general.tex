@@ -10,17 +10,18 @@
 \newtheorem{remark}[lemma]{Remark}
 \newcommand{\Lq}{\mathtt{L}}\newcommand{\Gq}{\mathtt{G}}\newcommand{\Aq}{\mathtt{A}}\newcommand{\Bq}{\mathtt{B}}\newcommand{\Fq}{\mathtt{F}}
 \newcommand{\MT}{\mathrm{MT}}
-\title{Five-state firing squads with a stable general\\[2pt]\large Working note for Section~6 of the manuscript}
+\title{Five-state firing squads with a stable general\\[2pt]\large Working note on Section~6.5 of the manuscript (Balzer's conditions)}
 \author{}
 \date{}
 \begin{document}
 \maketitle
 
 \noindent\textbf{Status of the statements.}
-Lemmas~\ref{lem:fire}--\ref{lem:gap} and Corollary~\ref{cor:front} are proved here.
-Proposition~\ref{prop:b1b2} is computer-assisted; every formula in its proof has a proof certificate that an
-independent checker verified. Section~\ref{sec:search} describes a computation that is not finished; nothing is
-claimed from it yet.
+Lemmas~\ref{lem:fire}--\ref{lem:gap}, Corollary~\ref{cor:front}, Lemmas~\ref{lem:Fsound} and~\ref{lem:split},
+Lemmas~\ref{lem:iwall} and~\ref{lem:gapweak} and Corollary~\ref{cor:gapclauses} are proved here.
+Propositions~\ref{prop:b1b2} and~\ref{prop:yunes} are computer-assisted; every formula in their proofs has a
+proof certificate that an independent checker verified. Section~\ref{sec:search} describes a computation that
+is not finished; nothing is claimed from it yet.
 
 \section{Setting}
 
@@ -216,5 +217,251 @@ described in \texttt{README.md}, Section~6: a depth-first search over the transi
 by Corollary~\ref{cor:front} is a diagram over three states, with an incremental SAT solver at every node, for
 the lengths $2,\dots,14$ and the conclusions of Lemmas~\ref{lem:fire}--\ref{lem:gap} as redundant clauses. If
 every node of this search closes, no five-state rule with \eqref{eq:B1} synchronizes all lengths $2,\dots,16$.
+
+\section{The search over half-lines}\label{sec:method}
+
+The formulas of the next sections are refuted by a case split over the half-line. We describe the split and
+prove that it is complete.
+
+\paragraph{The formula.} Fix the number of states and $N\ge3$, and put $M:=2N-1$. The formula $F$ has one-hot
+variables $[\delta(e)=d]$ for every neighbourhood $e$ and state $d$, a one-hot variable vector over $W$ for
+every cell $(t,i)$ of the half-line with $t\ge1$, $1\le i\le t+1$, $t+i\le M$, and one for every cell
+$(t,i)$ of the lines $n\le N$ with $t+i\ge2n-1$, $t\le2n-3$; the other cells of the lines are identified with
+cells of the half-line (agreement lemma) or are constants. Its clauses say that
+\begin{enumerate}[label=\textup{(F\arabic*)},nosep]
+\item every cell with variables is the image under $\delta$ of the three cells above it;
+\item for $2\le n\le N$, every cell of the line $n$ at time $2n-3$ has a neighbourhood that $\delta$ maps to
+$\Fq$ (cells with variables are in working states by construction);
+\item $C_N(2N-1-i,i)\ne C_\infty(2N-1-i,i)$ for $2\le i\le N$, and the same for the lines $n<N$;
+\item the front cells $(t,t+1)$, $1\le t\le N-1$, are not $\Lq$;
+\item the clauses of the class under consideration, among them unit clauses $C_\infty(t,i)\ne\Gq$ for all
+half-line cells with $i\ge2$ if the class has a wall lemma (Lemma~\ref{lem:wall} or~\ref{lem:wallweak}).
+\end{enumerate}
+
+\begin{lemma}\label{lem:Fsound}
+Let $\delta$ be a rule of the class that synchronizes all lengths $2,\dots,N+2$. Then the assignment
+$[\delta(e)=d]$, with the cells of the diagrams of $\delta$, satisfies $F$.
+\end{lemma}
+\begin{proof}
+The half-line cells with $t+i\le M=2N-1$ agree with the line $N+1$, at times $t\le 2N-2<2(N+1)-2$; so they are
+in working states, and (F1) holds for them and for the cells of the lines $n\le N$ before time $2n-2$. (F2) is
+the synchronization of the lines $n\le N$. (F3) is the return-chain lemma for $n\le N$, which uses the line
+$n+1\le N+1$. (F4): by the return-chain lemma the front cell $(n-2,n-1)$ is not $\Lq$ if $n$ and $n+1$ are
+synchronized; with $n\le N+1$ this gives the cells $(t,t+1)$ for $t\le N-1$. (F5): the wall lemmas give
+$C_\infty(t,i)\ne\Gq$ for $i\ge2$ and $t+i\le 2(N+2)-4=2N$.
+\end{proof}
+
+\paragraph{The tree.} Order the half-line cells with variables by
+$(t,i)\prec(t',i')$ if $t+i<t'+i'$, or $t+i=t'+i'$ and $t<t'$. The cells $(t-1,i-1)$, $(t-1,i)$,
+$(t-1,i+1)$ above a cell $(t,i)$ precede it in this order, or they are constants (a border, a cell of the
+initial row, or a cell $i'>t'+1$, which is $\Lq$). A \emph{node} is a partial rule $\gamma$, a map from a finite
+set of neighbourhoods to $W$. It determines the states of an initial segment of the cells in the order
+$\prec$; let $c(\gamma)$ be the first cell that it does not determine, and $e(\gamma)\notin\operatorname{dom}\gamma$ the
+neighbourhood above it. If $c(\gamma)$ exists, the \emph{children} of $\gamma$ are the nodes
+$\gamma\cup\{e(\gamma)\mapsto v\}$ for all $v\in W$ except
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item $v=\Lq$ if $c(\gamma)$ is a front cell $(t,t+1)$ with $t\le N-1$;
+\item $v=\Gq$ if $c(\gamma)=(t,i)$ with $i\ge2$ and the class has a wall lemma;
+\item for $W=\{\Lq,\Gq,\Aq,\Bq\}$: $v=\Bq$ if $\Aq$ is not a value of $\gamma$.
+\end{enumerate}
+The root is the empty partial rule.
+
+\begin{lemma}[complete case split]\label{lem:split}
+Let the class be invariant under exchanging the names $\Aq$ and $\Bq$. Let $\mathcal U$ be a finite set of
+nodes such that the root is \emph{covered}, where a node is covered if it belongs to $\mathcal U$, or if
+$c(\gamma)$ exists and all its children are covered. If $F\wedge\bigwedge_{e\in\operatorname{dom}\gamma}[\delta(e)=\gamma(e)]$
+is unsatisfiable for every $\gamma\in\mathcal U$, then no rule of the class synchronizes all lengths
+$2,\dots,N+2$.
+\end{lemma}
+\begin{proof}
+Let $\delta$ be such a rule. Consider the neighbourhoods above the cells of the half-line of $\delta$, in the
+order $\prec$ of the cells; if the first of them whose image is an auxiliary state has the image $\Bq$,
+exchange the names $\Aq$ and $\Bq$. The new rule is in the class, synchronizes the same lengths, and satisfies
+$F$ by Lemma~\ref{lem:Fsound}. We show by induction that every covered node $\gamma\subseteq\delta$ has a
+descendant in $\mathcal U$ that is contained in $\delta$; for the root this contradicts the hypothesis. If
+$\gamma\in\mathcal U$, there is nothing to show. Otherwise $c(\gamma)$ exists, and
+$\gamma':=\gamma\cup\{e(\gamma)\mapsto\delta(e(\gamma))\}\subseteq\delta$. The cells before $c(\gamma)$ have the
+same states under $\gamma$ and $\delta$, so $c(\gamma)$ has the state $v=\delta(e(\gamma))$ in the diagram of
+$\delta$. By (F4), $v\ne\Lq$ in case (a); by (F5), $v\ne\Gq$ in case (b); and in case (c), $v\ne\Bq$, because
+$e(\gamma)$ is then the first neighbourhood of the half-line with an auxiliary image. So $\gamma'$ is a child
+of $\gamma$, hence covered, and the induction applies to it; the tree below the root is finite because every
+child fixes one more of finitely many neighbourhoods.
+\end{proof}
+
+\paragraph{Programs and certificates.} \texttt{gcert.py} walks this tree depth-first. For a node $\gamma$ it
+writes $F$ and the unit clauses of $\gamma$ to a file and runs CaDiCaL~3.0.1 on it with a time limit and an
+LRAT proof. If the answer is \textsc{unsatisfiable}, the proof ends with the empty clause and
+\texttt{lrat-check} accepts it, the node is put into $\mathcal U$ and the SHA-256 digests of the formula file
+and of the proof are recorded; if the solver does not answer in time, the children of the node are treated;
+if it finds a model, the search stops with a rule for $2,\dots,N$. The program \texttt{gcover.py}, which
+shares no code with \texttt{gcert.py}, reads $\mathcal U$ and checks that the root is covered.
+\texttt{gcert.py --recheck} rebuilds the formula file of every node of $\mathcal U$, compares the digests,
+and has \texttt{lrat-check} and the formally verified checker \texttt{cake\_lpr} verify a fresh proof.
+For a class that is not invariant under the exchange of $\Aq$ and $\Bq$, such as (B2) with $I=(\Lq\,\Aq)$,
+the exchange maps it onto another class of the same kind, and both are searched.
+
+\section{The weak reading}\label{sec:weak}
+
+In the weak reading of the manuscript the two end cells are not protected:
+\begin{align}
+&\delta(x,\Gq,y)=\Gq\quad\text{for all }x,y\in W\text{ with }(x,y)\ne(\Gq,\Gq), \tag{B1w}\label{eq:B1w}\\
+&\delta(\Gq,\Gq,\Gq)=\delta(\ast,\Gq,\Gq)=\delta(\Gq,\Gq,\ast)=\Fq. \tag{B3w}\label{eq:B3w}
+\end{align}
+Other neighbourhoods may give $\Fq$ as well, and $\delta(\ast,\Gq,y)$, $\delta(x,\Gq,\ast)$ are arbitrary for
+$x,y\ne\Gq$. A rule with \eqref{eq:B1w} and \eqref{eq:B3w} in which $\delta(\ast,\Gq,y)=\delta(x,\Gq,\ast)=\Gq$
+for all $x,y\in W'$ satisfies \eqref{eq:B1}; conversely, by Lemma~\ref{lem:fire}, a rule with \eqref{eq:B1}
+that synchronizes $2$ and $3$ satisfies \eqref{eq:B3w}. So the class of this section consists of the class
+of Section~\ref{sec:search} and of the rules in which one of these $2|W'|$ transitions has another value.
+We call the cells $2,\dots,n-1$ of the line of length $n$ its \emph{interior} cells.
+
+\begin{lemma}[interior walls]\label{lem:iwall}
+Let $\delta$ satisfy \eqref{eq:B1w} and \eqref{eq:B3w} and synchronize the line of length $n\ge3$. Then in this
+line
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item at no time $t\le2n-4$ are three adjacent positions in $\{\Gq,\ast\}$, where the positions $0$ and $n+1$
+are the borders;
+\item an interior cell in state $\Gq$ at a time $t\le2n-4$ is in state $\Gq$ at time $t+1$;
+\item if some interior cell is in state $\Gq$ at time $2n-3$, then every cell is in state $\Gq$ at time
+$2n-3$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(a) Since $n\ge2$, the two borders are not adjacent to the same cell. So the middle position is a cell in state
+$\Gq$ whose neighbourhood at time $t$ is $(\Gq,\Gq,\Gq)$, $(\ast,\Gq,\Gq)$ or $(\Gq,\Gq,\ast)$, and by
+\eqref{eq:B3w} it is in state $\Fq$ at time $t+1$. Hence $t+1\ge2n-2$.
+(b) Both neighbours of an interior cell are cells; at time $t\le2n-4$ they are in working states, and by (a)
+not both in state $\Gq$. Now apply \eqref{eq:B1w}.
+(c) Let the interior cell $i$ be in state $\Gq$ at time $2n-3$, and let $x,y\in W$ be the states of its
+neighbours at that time. Then $\Fq=C_n(2n-2,i)=\delta(x,\Gq,y)$, and \eqref{eq:B1w} gives $x=y=\Gq$. The same
+argument applies to the cell $i-1$ if $i-1\ge2$ and to the cell $i+1$ if $i+1\le n-1$; by induction all cells
+are in state $\Gq$.
+\end{proof}
+
+So a line either has no interior cell in state $\Gq$ at any time before it fires, or it fires from the
+row $\Gq^n$. With (B3) in the strong reading every line fires from $\Gq^n$, since no other neighbourhood
+gives $\Fq$.
+
+\begin{lemma}[gaps, weak reading]\label{lem:gapweak}
+Let $\delta$ satisfy \eqref{eq:B1w} and \eqref{eq:B3w} and synchronize the line of length $n\ge3$, and let
+$t\le2n-4$. Put $M(1)=|W'|$, $M(\ell)=|W'|^{\ell}+M(\ell-1)$ as in Lemma~\ref{lem:gap}, and
+\[
+M_{\mathrm b}(1)=|W'|,\qquad M_{\mathrm b}(\ell)=|W|\,|W'|^{\ell-1}+M_{\mathrm b}(\ell-1)\quad(\ell\ge2).
+\]
+\begin{enumerate}[label=\textup{(\arabic*)},nosep]
+\item If the interior cells $p<q$ are in state $\Gq$ at time $t$, $q-p=\ell+1\ge2$, and no cell between them
+is in state $\Gq$ at time $t$, then $2n-3-t\le M(\ell)$.
+\item If the interior cell $q$ is in state $\Gq$ at time $t$ and no interior cell to its left is, then
+$2n-3-t\le M_{\mathrm b}(q-1)$. If the interior cell $p$ is in state $\Gq$ at time $t$ and no interior cell
+to its right is, then $2n-3-t\le M_{\mathrm b}(n-p)$.
+\end{enumerate}
+For five states, $M(1),M(2),M(3)=3,12,39$ and $M_{\mathrm b}(1),M_{\mathrm b}(2),M_{\mathrm b}(3)=3,15,51$.
+\end{lemma}
+\begin{proof}
+By Lemma~\ref{lem:iwall}\,(b) an interior cell in state $\Gq$ at a time $u\le 2n-3$ is in state $\Gq$ at all
+times in $[u,2n-3]$, and since such a cell exists, every cell is in state $\Gq$ at time $2n-3$ by
+Lemma~\ref{lem:iwall}\,(c). Both sequences $M$ and $M_{\mathrm b}$ are increasing.
+
+(1) During $[t,2n-3]$ the $\ell$ cells between $p$ and $q$ have the constant neighbours $\Gq$ on both sides, so
+their configuration at time $u+1$ is a function of their configuration at time $u$, for $t\le u<2n-3$. Let
+$s\ge t$ be the least time at which one of them is in state $\Gq$; then $s\le2n-3$. The configurations at the
+times $t,\dots,s-1$ lie in $W'^{\ell}$ and are pairwise distinct: if those at the times $u<u'\le s-1$ were
+equal, the configurations at all times in $[u,2n-3]$ would be among those at the times $u,\dots,u'-1$, and
+none of the $\ell$ cells would be in state $\Gq$ at time $2n-3$. Hence $s-t\le|W'|^{\ell}$. If $s=2n-3$, the
+claim follows. Let $s\le2n-4$. If $\ell=1$, the positions $p,p+1,p+2$ are in state $\Gq$ at time $s$,
+contrary to Lemma~\ref{lem:iwall}\,(a); so this case does not occur for $\ell=1$, and $2n-3-t\le|W'|=M(1)$. If
+$\ell\ge2$, by Lemma~\ref{lem:iwall}\,(a) one of the $\ell$ cells is not in state $\Gq$ at time $s$. It lies
+between two cells $p'<q'$ in $[p,q]$ that are in state $\Gq$ at time $s$ with no cell in state $\Gq$ between
+them; these are interior cells, and $q'-p'=\ell'+1$ with $1\le\ell'<\ell$. By induction on $\ell$,
+$2n-3-s\le M(\ell')\le M(\ell-1)$, and $2n-3-t\le|W'|^{\ell}+M(\ell-1)=M(\ell)$.
+
+(2) We prove the first statement by induction on $\ell:=q-1\ge1$; the second is its mirror image. During
+$[t,2n-3]$ the cells $1,\dots,\ell$ have the border on the left and the constant state $\Gq$ on the right, so
+again their configuration evolves on its own. Let $\ell=1$. If the cell $1$ were in state $\Gq$ at a time
+$u\in[t,2n-4]$, the positions $0,1,2$ would contradict Lemma~\ref{lem:iwall}\,(a). So its states at the times
+$t,\dots,2n-4$ lie in $W'$; they are pairwise distinct, because otherwise the cell would not be in state
+$\Gq$ at time $2n-3$. Hence $2n-3-t\le|W'|=M_{\mathrm b}(1)$. Let $\ell\ge2$, and let $s\ge t$ be the least
+time at which one of the cells $2,\dots,\ell$ is in state $\Gq$; then $s\le2n-3$. The configurations of the
+cells $1,\dots,\ell$ at the times $t,\dots,s-1$ lie in $W\times W'^{\ell-1}$ and are pairwise distinct, by the
+argument of (1). Hence $s-t\le|W|\,|W'|^{\ell-1}$. If $s=2n-3$, the claim follows. Otherwise $s\le 2n-4$; let
+$q'\in\{2,\dots,\ell\}$ be the leftmost of the cells $2,\dots,\ell$ in state $\Gq$ at time $s$. It is an
+interior cell with no interior cell in state $\Gq$ to its left at time $s$, and $q'-1<\ell$. By induction,
+$2n-3-s\le M_{\mathrm b}(q'-1)\le M_{\mathrm b}(\ell-1)$.
+\end{proof}
+
+\begin{corollary}\label{cor:gapclauses}
+Under the hypotheses of Lemma~\ref{lem:gapweak}, let $t\le2n-4$ and $\rho:=2n-3-t$. No two interior cells at a
+distance $d\ge2$ with $M(d-1)<\rho$ are both in state $\Gq$ at time $t$, and no interior cell $y$ with
+$M_{\mathrm b}(y-1)<\rho$ or $M_{\mathrm b}(n-y)<\rho$ is in state $\Gq$ at time $t$.
+\end{corollary}
+\begin{proof}
+Let the interior cells $x<y$ be in state $\Gq$ at time $t$, $y-x=d\ge2$. By Lemma~\ref{lem:iwall}\,(a) the
+cells $x,\dots,y$ are not all in state $\Gq$, so there are cells $p'<q'$ in $[x,y]$ in state $\Gq$ with
+$q'-p'\ge2$ and no cell in state $\Gq$ between them, and Lemma~\ref{lem:gapweak}\,(1) gives
+$\rho\le M(q'-p'-1)\le M(d-1)$. Let the interior cell $y$ be in state $\Gq$ at time $t$, and let $q\le y$ be
+the leftmost interior cell in state $\Gq$ at time $t$. Lemma~\ref{lem:gapweak}\,(2) gives
+$\rho\le M_{\mathrm b}(q-1)\le M_{\mathrm b}(y-1)$; the right side is symmetric.
+\end{proof}
+
+\section{Balzer's conditions as Yun\`es states them}\label{sec:yunes}
+
+Proposition~6.6 of the manuscript excludes five states under Balzer's four conditions when the image
+condition also holds at the borders, and Section~6.5 there leaves open the form in which Yun\`es states the
+conditions: \eqref{eq:B1w}, \eqref{eq:B3w},
+\begin{align}
+&\delta(\Gq,v,\Gq)=\Gq\quad\text{for all }v\in W\setminus\{\Gq\}, \tag{B4}\label{eq:B4}\\
+&\delta(I(z),I(y),I(x))=I(\delta(x,y,z))\quad\text{for all }x,y,z\in W, \tag{B2$^\circ$}\label{eq:B2o}
+\end{align}
+for an involution $I$ of $W$. The rule \texttt{balzer\_noborder12} of the manuscript satisfies the four
+conditions with $I$ the identity and synchronizes all lengths $2,\dots,12$.
+
+\begin{proposition}[computer-assisted, certified]\label{prop:yunes}
+No five-state rule that satisfies \eqref{eq:B1w}, \eqref{eq:B3w}, \eqref{eq:B4} and \eqref{eq:B2o} for some
+involution $I$ of $\{\Lq,\Gq,\Aq,\Bq\}$ synchronizes all lengths $2,\dots,15$. If $I$ is not the identity, no
+such rule synchronizes all lengths $2,\dots,12$.
+\end{proposition}
+
+\begin{proof}
+First, $I(\Gq)=\Gq$: otherwise $g:=I(\Gq)\in W\setminus\{\Gq\}$, and \eqref{eq:B2o} for the neighbourhood
+$(\Gq,g,\Gq)$ and \eqref{eq:B4} give $\delta(g,\Gq,g)=I(\delta(\Gq,g,\Gq))=I(\Gq)=g$, whereas \eqref{eq:B1w}
+gives $\delta(g,\Gq,g)=\Gq$. So $I$ is the identity, $(\Aq\,\Bq)$, $(\Lq\,\Aq)$ or $(\Lq\,\Bq)$. The classes for
+the identity and for $(\Aq\,\Bq)$ are invariant under exchanging the names $\Aq$ and $\Bq$, and the exchange
+maps the class for $(\Lq\,\Aq)$ onto the class for $(\Lq\,\Bq)$.
+
+For each of the four involutions let $F_I$ be the formula of Section~\ref{sec:method} for the class, with
+$N=13$ for the identity and $N=10$ otherwise; the wall lemma is Lemma~\ref{lem:wallweak}, whose hypotheses are
+\eqref{eq:B1w} and $\delta(\Gq,\Gq,\Gq)=\Fq$. Table~\ref{tab:yunes} gives the size of $F_I$ and of the set
+$\mathcal U_I$ of nodes that \texttt{gcert.py} closed; every node of $\mathcal U_I$ has an LRAT refutation
+that \texttt{lrat-check} verified, and \texttt{gcover.py} reports that the root is covered by
+$\mathcal U_I$. By Lemma~\ref{lem:split}, applied to the identity and to $(\Aq\,\Bq)$ separately and to the
+union of the classes for $(\Lq\,\Aq)$ and $(\Lq\,\Bq)$ (the proof of the lemma goes through for a union of
+classes that the exchange of names maps to itself), no rule of the four classes synchronizes all lengths
+$2,\dots,N+2$.
+\end{proof}
+
+\begin{table}[ht]
+\centering\small
+\caption{The four formulas of Proposition~\ref{prop:yunes}. ``Split'' and ``closed'' count the nodes of the
+search tree; the time is the CaDiCaL time on the closed nodes, and the last column is the total size of their
+LRAT proofs. For $(\Aq\,\Bq)$, $(\Lq\,\Aq)$ and $(\Lq\,\Bq)$ all proofs were verified a second time with
+\texttt{cake\_lpr}.}\label{tab:yunes}
+\begin{tabular}{lrrrrrrr}
+\toprule
+$I$ & $N$ & variables & clauses & split & closed & time & proofs\\
+\midrule
+identity & 13 & 2608 & 259\,770 & 1176 & 2550 & 5219 s & 34.5 GB\\
+$(\Aq\,\Bq)$ & 10 & 1536 & 121\,456 & 137 & 265 & 556 s & 2.7 GB\\
+$(\Lq\,\Aq)$ & 10 & 1536 & 121\,456 & 62 & 131 & 243 s & 1.1 GB\\
+$(\Lq\,\Bq)$ & 10 & 1536 & 121\,456 & 40 & 89 & 169 s & 0.9 GB\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent\textbf{Remarks.} (1) For the identity, the largest $N$ such that a rule of the class synchronizes
+all lengths $2,\dots,N$ is $12$, $13$ or $14$. (2) The statement refers to the state $\Gq$ of the general. A
+rule in which another state $g$ is stable in the sense of \eqref{eq:B1w}, fires in threes and satisfies
+\eqref{eq:B4} is not covered; Lemma~\ref{lem:wallweak} holds for such a state as well, since its proof does not
+use the initial configuration. (3) Without \eqref{eq:B4} and \eqref{eq:B2o} the class of \eqref{eq:B1w} and
+\eqref{eq:B3w} has not been decided; random descents in its search tree for the lengths $2,\dots,14$ suggest
+some $10^7$ nodes, against $3.7\cdot10^3$ nodes for the identity above.
 
 \end{document}
