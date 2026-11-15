@@ -16,3 +16,5 @@ facsat.py 5 60 0 --tmod 6 | 30 windows, 527 constraints | 630, 119442 | b1cbfe33
 facsat.py 5 60 1 --tmod 2 | 179 windows, 799 constraints | 1375, 196561 | 8084b0248d14f72d9a65b901b08d2c5b5f86860a99d03722fb8c6f8339186314 | 4589794 | dbf9e09f15ced96c347a02c91fee0ca04ed42a18321ff8e0ba782f9ab783358c | VERIFIED
 facsat.py 5 60 1 --imod 2 | 225 windows, 1127 constraints | 1605, 277825 | 821676e78c273c4b09286553c3d8b3f4b26da386bfb2d98bfb9233712159043b | 6249365 | 4df9949155c7b3c30347eb60600d1e96960ede8f64bbbf4752b5b8f6258e22f1 | VERIFIED
 facsat.py 5 80 1 --past 1 | 254 windows, 1102 constraints | 1750, 273412 | 32ac704a20cf6eeb43fa755d9e34b508575aad39434e84033703ab1c7a936c99 | 283163934 | 9d1164345a594dc2683c67886eca274e926a711703fda7d41c24d70c6951ee8b | VERIFIED
+# radius 2: Kissat 4.0.4 with a binary DRAT proof, checked by drat-trim (commit 2e3b2dc): "s VERIFIED" (869 s)
+facsat.py 5 80 2 | 649 windows, 2185 constraints | 3725, 551100 | 13bd2876e52d5523869797865d908c7f3f43c480499a5a4f898c04d29f7acdbb | 554067405 (DRAT) | 6f4b16ee0f29ec61ce2b49a0273c8bf919c40592a14243128886703d55cfd9f5 | VERIFIED (drat-trim)

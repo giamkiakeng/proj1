@@ -110,14 +110,15 @@ configurations of Mazoyer's diagrams. They were collected from the lines 3..80.
 | the cell and radius 1 one step earlier | 116 | 647 | UNSAT (29 s) |
 | radius 1 and the same cell one step earlier | 144 | 744 | UNSAT (3 s) |
 | radius 1 and radius 1 one step earlier | 254 | 1,102 | UNSAT (73 s) |
-| radius 2 | 649 | 2,185 | UNSAT (Kissat, 1,171 s) |
+| radius 2 | 649 | 2,185 | UNSAT (Kissat, 1,171 s; again 1,050 s with a DRAT proof of 554 MB that drat-trim verifies) |
 | the cell, with $\pi$ depending on $t \bmod 2$, on $i \bmod 2$, on both, on $t\bmod 3$, on $(t+i)\bmod 3$, or on $t\bmod 6$ (lines 3..60) | 10 to 30 | 179 to 527 | UNSAT (< 1 s each) |
 | radius 1, with $\pi$ depending on $t\bmod 2$ or on $i\bmod 2$ (lines 3..60) | 179, 225 | 799, 1,127 | UNSAT (5 s, 6 s) |
 
 Controls: with six states and the single-cell window the formula is satisfiable and returns Mazoyer's rule.
 
-Certificates. For every row of the table except radius 2, and for the variants with residues of $t$ and $i$
-below, CaDiCaL 3.0.1 refutes the formula with an LRAT proof that `lrat-check` verifies; `CERTIFICATES.txt`
+Certificates. For every row of the table and for the variants with residues of $t$ and $i$ below, the
+refutation is certified: for radius 2 by Kissat's DRAT proof and drat-trim, for the others by CaDiCaL 3.0.1 with
+an LRAT proof that `lrat-check` verifies; `CERTIFICATES.txt`
 lists the commands, the SHA-256 digests of the formulas and of the proofs, and the proof sizes (0.2 MB to
 283 MB). The formulas are written deterministically by `facsat.py ... --cnf FILE`.
 
