@@ -660,7 +660,7 @@ estimated at $4\cdot10^6$ nodes (standard error $2.4\cdot10^6$). Not pursued.
 **Stable generals, nodes with a complete half-line (15 November).** `certtree.py` splits a node that CaDiCaL does
 not refute in 4 s; a node whose 12 to 15 transitions already determine the whole half-line up to the
 anti-diagonal 27 cannot be split. Three such nodes occurred so far (half-lines of low complexity, one of them
-the pattern of Pascal's triangle modulo 2 over $\{L,B\}$ behind the cells `GAAB`); each is refuted and
+a Sierpinski-like pattern over $\{L,B\}$ to the right of the constant cells `GAAB`); each is refuted and
 certified in 6 to 7 s with a longer limit (`cert/g14_parts_open.txt`). The 36 top nodes and these three
 were verified again with `cake_lpr` (`recheck_ct.py`), with the recorded digests. Without (B1): (B3w), (B4)
 and (B2) without borders for the identity are estimated at $1.7\cdot10^9$ nodes at $N=13$, so the stable
