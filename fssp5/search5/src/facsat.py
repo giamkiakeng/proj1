@@ -22,7 +22,9 @@ ap.add_argument('k', type=int); ap.add_argument('N', type=int); ap.add_argument(
 ap.add_argument('--past', type=int, default=-1); ap.add_argument('--target', default='mazoyer6.txt')
 ap.add_argument('--n0', type=int, default=3); ap.add_argument('--time', type=int, default=3000)
 ap.add_argument('--solver', default='kissat'); ap.add_argument('--out'); ap.add_argument('--cnf')
-ap.add_argument('--lrat', action='store_true')
+ap.add_argument('--tmod', type=int, default=1, help='pi may depend on t mod TMOD')
+ap.add_argument('--imod', type=int, default=1, help='pi may depend on i mod IMOD')
+ap.add_argument('--dmod', type=int, default=1, help='pi may depend on (t + i) mod DMOD')
 a = ap.parse_args()
 kt, ttab = load(a.target)
 k, W, F = a.k, list(range(a.k - 1)), a.k - 1
@@ -33,6 +35,7 @@ def window(rows, n, t, i):
     w = tuple(rows[t][j - 1] if 1 <= j <= n else '*' for j in range(i - r, i + r + 1))
     if q >= 0:
         w += ('|',) + (tuple(rows[t - 1][j - 1] if 1 <= j <= n else '*' for j in range(i - q, i + q + 1)) if t >= 1 else ('^',) * (2 * q + 1))
+    w += ('#%d.%d.%d' % (t % a.tmod, i % a.imod, (t + i) % a.dmod),)
     return wid.setdefault(w, len(wid))
 
 cons, init = set(), {}
@@ -100,7 +103,7 @@ for s in range(2, k - 2):
         cur = new()
         cl.append([-cur, P[w][s]] + ([prev] if prev is not None else []))
         prev = cur
-print('k=%d radius %d%s: %d variables, %d clauses' % (k, r, '' if q < 0 else ' + past radius %d' % q, nv, len(cl)), flush=True)
+print('k=%d radius %d%s, mod (t %d, i %d, t+i %d): %d variables, %d clauses' % (k, r, '' if q < 0 else ' + past radius %d' % q, a.tmod, a.imod, a.dmod, nv, len(cl)), flush=True)
 import tempfile
 cnf = a.cnf or os.path.join(tempfile.gettempdir(), 'fac_%d_%d_%d_%d_%d.cnf' % (k, a.N, r, q, os.getpid()))
 with open(cnf, 'w') as f:

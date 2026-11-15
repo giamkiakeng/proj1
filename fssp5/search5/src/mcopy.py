@@ -139,7 +139,7 @@ def chain(n, a, mmin, mfun=None):
 
 class Model:
     def __init__(self, k, N, a=2, s0=2, mmin=3, nmin=2, copy=True, half=None, rev=True, sym=True, levels=99,
-                 mfun=None, wake=0, margin=0, gstatic=None, period=0, ctheta=2):
+                 mfun=None, wake=0, margin=0, gstatic=None, period=0, ctheta=2, b3=False, b1=False, b4=False):
         self.wake, self.margin = wake, margin
         self.period, self.ctheta = period, ctheta
         self.E = E = Enc(k, rev)
@@ -173,6 +173,18 @@ class Model:
                 t = 2 * n - 1 - i
                 if t + i <= self.M and t <= 2 * n - 3:
                     E.differ(self.cell(n, t, i), self.H(t, i))
+        E.level = 0
+        if b3:        # (B3), strong reading: exactly the neighbourhoods GGG, *GG and GG* give F
+            for e, vs in E.T.items():
+                E.add([vs[E.F]] if e in ((1, 1, 1), (BND, 1, 1), (1, 1, BND)) else [-vs[E.F]])
+        if b1:        # (B1), weak reading: delta(x, G, y) = G for working states x, y, not both G
+            for e, vs in E.T.items():
+                if e[1] == 1 and e[0] != BND and e[2] != BND and (e[0], e[2]) != (1, 1):
+                    E.add([vs[1]])
+        if b4:        # (B4): delta(G, v, G) = G for v != G
+            for e, vs in E.T.items():
+                if e[0] == 1 and e[2] == 1 and e[1] != 1:
+                    E.add([vs[1]])
         if gstatic is not None:
             for t in range(gstatic, self.M):
                 E.level = max(nmin, (t + 1 + 2) // 2)
@@ -238,14 +250,21 @@ class Model:
             if e in self.E.T:
                 self.E.add([self.E.T[e][code[d]]])
 
-    def write(self, path):
+    def write(self, path, perm=None):
         E = self.E
+        self.perm = perm
         with open(path, 'w') as f:
             f.write('p cnf %d %d\n' % (E.nv, len(E.cl)))
-            f.write(''.join(' '.join(map(str, c)) + ' 0\n' for c in E.cl))
+            if perm == 'rev':          # reverse the numbering: the table variables get the largest indices
+                nv = E.nv
+                f.write(''.join(' '.join(str((nv + 1 - v) if v > 0 else -(nv + 1 + v)) for v in c) + ' 0\n' for c in E.cl))
+            else:
+                f.write(''.join(' '.join(map(str, c)) + ' 0\n' for c in E.cl))
 
     def table(self, model):
         E = self.E
+        if getattr(self, 'perm', None) == 'rev':
+            model = [(E.nv + 1 - v) if v > 0 else -(E.nv + 1 + v) for v in model]
         pos = set(v for v in model if v > 0)
         nm = lambda s: '*' if s == BND else ('F' if s == self.k - 1 else NAMES[s])
         return {(nm(l), nm(c), nm(r)): nm(next(d for d in range(self.k) if vs[d] in pos))
@@ -292,11 +311,15 @@ def main():
     ap.add_argument('--margin', type=int, default=0)
     ap.add_argument('--gstatic', type=int)
     ap.add_argument('--period', type=int, default=0)
+    ap.add_argument('--perm')
+    ap.add_argument('--b3', action='store_true')
+    ap.add_argument('--b1', action='store_true')
+    ap.add_argument('--b4', action='store_true')
     ap.add_argument('--ctheta', type=int, default=2)
     a = ap.parse_args()
     t0 = time.time()
     M = Model(a.k, a.N, a.a, a.s0, a.mmin, a.nmin, not a.nocopy, a.half, not a.norev, not a.nosym, a.levels,
-              None, a.wake, a.margin, a.gstatic, a.period, a.ctheta)
+              None, a.wake, a.margin, a.gstatic, a.period, a.ctheta, a.b3, a.b1, a.b4)
     if a.fix:
         sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
         from simlib import load
@@ -306,7 +329,7 @@ def main():
           % (a.k, a.N, a.a, a.s0, a.mmin, a.wake, E.nv, len(E.cl), E.ntrans, len(M.Hc), len(M.Rc), time.time() - t0), flush=True)
     cnf = a.cnf or os.path.join(tempfile.gettempdir(), 'mc_k%d_N%d_a%d_s%d_m%d_%d.cnf' % (
         a.k, a.N, a.a, a.s0, a.mmin, os.getpid()))
-    M.write(cnf)
+    M.write(cnf, a.perm)
     if not a.solve:
         return
     t1 = time.time()

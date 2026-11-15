@@ -20,6 +20,7 @@ ap.add_argument('--nmin', type=int, default=2); ap.add_argument('--time', type=i
 ap.add_argument('--solver', default='kissat'); ap.add_argument('--out')
 ap.add_argument('--keepL', action='store_true'); ap.add_argument('--keepG', action='store_true')
 ap.add_argument('--keepL1', action='store_true', help='target blank => cell blank')
+ap.add_argument('--keepW', action='store_true', help='static G of the target (G at t and t+1) => cell G')
 ap.add_argument('--nodec', action='store_true', help='no decoding constraints (only the preservation constraints)')
 ap.add_argument('--keepL2', action='store_true', help='cell blank => target blank')
 a = ap.parse_args()
@@ -51,6 +52,8 @@ for n in range(a.n0, a.N + 1):
                     E.add([x[0]] if tgt == 0 else [-x[0]])
                 if a.keepG:
                     E.add([x[1]] if tgt == 1 else [-x[1]])
+                if a.keepW and tgt == 1 and t + 1 <= 2 * n - 3 and rows[t + 1][i - 1] == 'G':
+                    E.add([x[1]])
             if a.dec == 'R':
                 cs = [M.cell(n, t, i), M.cell(n, t, i + 1)]
             elif a.dec == 'L':
@@ -68,7 +71,7 @@ for n in range(a.n0, a.N + 1):
             for combo in itertools.product(*[lits(c) for c in cs]):
                 E.add([-v for _, v in combo if v is not None] + [PHI(tuple(s for s, _ in combo))[tgt]])
             ncon += 1
-print('k=%d N=%d decoder %s%s%s: %d vars, %d clauses, %d decode constraints, %d phi entries' % (a.k, a.N, a.dec, ' keepL' if a.keepL else (' keepL1' if a.keepL1 else (' keepL2' if a.keepL2 else '')), ' keepG' if a.keepG else '', E.nv, len(E.cl), ncon, len(phi)), flush=True)
+print('k=%d N=%d decoder %s%s%s: %d vars, %d clauses, %d decode constraints, %d phi entries' % (a.k, a.N, a.dec, ' keepL' if a.keepL else (' keepL1' if a.keepL1 else (' keepL2' if a.keepL2 else '')), (' keepG' if a.keepG else '') + (' keepW' if a.keepW else ''), E.nv, len(E.cl), ncon, len(phi)), flush=True)
 import tempfile
 cnf = os.path.join(tempfile.gettempdir(), 'sim_%d_%d_%s_%d.cnf' % (a.k, a.N, a.dec, os.getpid()))
 M.write(cnf)

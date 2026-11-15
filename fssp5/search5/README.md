@@ -67,8 +67,8 @@ static general 2, $(P,c)=(3,2)$; unsatisfiable for $s_0=1$, for $a=1$, for wake 
 
 | conditions | result |
 |---|---|
-| copies, wake 4, static general 2, periodic (3, 2) | satisfiable for $N\le 10$ (`mcopy.py` 51 s; `mcopy_inc.py` 42 s); the rule found synchronizes exactly 2..10 (`rules/strict_2-10.txt`) |
-| the same, $N\ge 11$ | unknown (see the log at the end) |
+| copies, wake 4, static general 2, periodic (3, 2) | satisfiable for $N\le 11$ (`mcopy.py` $N=10$: 51 s; `mcopy_inc.py` $N=10$: 42 s, $N=11$: 15 min); the rules found synchronize exactly 2..10 and 2..11 (`rules/strict_2-10.txt`, `rules/strict_2-11.txt`) |
+| the same, $N\ge 12$ | unknown |
 | copies only; copies and wake 4 | satisfiable for $N\le 9$; $N\ge 10$ unknown |
 
 `mdfs.c` cannot exhaust these classes: the lines 5 to 7, which are too short to contain a copy, admit millions
@@ -111,10 +111,30 @@ configurations of Mazoyer's diagrams. They were collected from the lines 3..80.
 | the cell and radius 1 one step earlier | 116 | 647 | UNSAT (29 s) |
 | radius 1 and the same cell one step earlier | 144 | 744 | UNSAT (3 s) |
 | radius 1 and radius 1 one step earlier | 254 | 1,102 | UNSAT (73 s) |
-| radius 2 | 649 | 2,185 | unknown (90 s; a longer run is in the log) |
+| radius 2 | 649 | 2,185 | UNSAT (Kissat, 1,171 s) |
+| the cell, with $\pi$ depending on $t \bmod 2$, on $i \bmod 2$, on both, on $t\bmod 3$, on $(t+i)\bmod 3$, or on $t\bmod 6$ (lines 3..60) | 10 to 30 | 179 to 527 | UNSAT (< 1 s each) |
+| radius 1, with $\pi$ depending on $t\bmod 2$ or on $i\bmod 2$ (lines 3..60) | 179, 225 | 799, 1,127 | UNSAT (5 s, 6 s) |
 
 Controls: with six states and the single-cell window the formula is satisfiable and returns Mazoyer's rule.
 
-## 5. Log of long runs
+## 5. Other classes
+
+All without copies; "incremental" is `mcopy_inc.py`, which reports the largest $N$ reached, not an upper limit.
+
+| class | result |
+|---|---|
+| static general: the first cell is `G` from time 1 (or 2) on | satisfiable for 2..12 (incremental, 9 min); $N=13$ running |
+| (B3) of the paper in the strong reading: exactly `GGG`, `*GG`, `GG*` give `F` (the line fires from the row `G...G`) | satisfiable for 2..11 (14 s) |
+| (B3) and (B4) ($\delta(G,v,G)=G$) | satisfiable for 2..12 (29 s) |
+| (B3) and (B1) weak ($\delta(x,G,y)=G$ for working $x,y$, not both `G`); (B3), (B1) and (B4) | satisfiable for 2..11 (7 s; 12 s) |
+| walls of Mazoyer's solution: a cell is `G` wherever Mazoyer's diagram has `G` at $t$ and $t+1$ (`msim.py --keepW --nodec`, lines 3..N) | satisfiable for 3..11 (17 s; incremental 10 s) |
+| walls of Mazoyer's solution, and quiescent wherever Mazoyer's diagram is quiescent | 3..9 satisfiable; 3..10 and 3..11 UNSAT (< 1 s) |
+| quiescent wherever Mazoyer's diagram is quiescent | 3..10 satisfiable (29 s); 3..11 unknown |
+
+The strict class of Section 2 has a rule for 2..11 (`rules/strict_2-11.txt`, incremental, 15 min); it fires
+early on the line 16, and so do all rules found so far in these classes on some line shortly after $N$: with
+$N\le 12$ the structure does not yet force a rule that generalizes.
+
+## 6. Log of long runs
 
 (appended as runs finish)

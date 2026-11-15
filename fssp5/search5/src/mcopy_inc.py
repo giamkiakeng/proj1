@@ -19,13 +19,34 @@ ap.add_argument('--gstatic', type=int); ap.add_argument('--period', type=int, de
 ap.add_argument('--ctheta', type=int, default=2); ap.add_argument('--nocopy', action='store_true')
 ap.add_argument('--start', type=int, default=0); ap.add_argument('--time', type=int, default=0)
 ap.add_argument('--solver', default='cadical153'); ap.add_argument('--out')
+ap.add_argument('--b3', action='store_true'); ap.add_argument('--b1', action='store_true'); ap.add_argument('--b4', action='store_true')
+ap.add_argument('--walls', help='target rule: its static G cells (G at t and t+1) must be G')
+ap.add_argument('--blanks', help='target rule: its quiescent cells must be quiescent')
+ap.add_argument('--skel0', type=int, default=3, help='first line with skeleton constraints')
 a = ap.parse_args()
 M = Model(a.k, a.N, a.a, a.s0, a.mmin, a.nmin, not a.nocopy, None, True, True, 99, None, a.wake, a.margin,
-          a.gstatic, a.period, a.ctheta)
+          a.gstatic, a.period, a.ctheta, a.b3, a.b1, a.b4)
 E = M.E
 by = {}
 for c, l in zip(E.cl, E.lev):
     by.setdefault(l, []).append(c)
+if a.walls or a.blanks:
+    from simlib import load, sim
+    tt = load(a.walls or a.blanks)[1]
+    nsk = 0
+    for n in range(max(a.skel0, a.nmin), a.N + 1):
+        rows = sim(tt, n)
+        assert len(rows) - 1 == 2 * n - 2
+        for t in range(1, 2 * n - 2):
+            for i in range(1, n + 1):
+                x = M.cell(n, t, i)
+                if isinstance(x, int):
+                    continue
+                if a.walls and rows[t][i - 1] == 'G' and t + 1 <= 2 * n - 3 and rows[t + 1][i - 1] == 'G':
+                    by.setdefault(n, []).append([x[1]]); nsk += 1
+                if a.blanks and rows[t][i - 1] == 'L':
+                    by.setdefault(n, []).append([x[0]]); nsk += 1
+    print('%d skeleton clauses' % nsk, flush=True)
 print('%d variables, %d clauses, levels %d..%d' % (E.nv, len(E.cl), min(by), max(by)), flush=True)
 S = Solver(name=a.solver)
 t0 = time.time()

@@ -34,7 +34,6 @@ static long long nodes, sols, maxnodes = 0;
 static int print_sols;
 static int maxaux;
 static long long pass[512];
-static int deepest;
 static int ncell, cap, pcap;
 
 static int newcell(int v) {
@@ -66,14 +65,76 @@ static cut_t cuts[512][16];
 static int ncut[512];
 static int *idx[512]; /* idx[n][t*(n+2)+i]: cell index of C_n(t,i), 0<=t<=2n-3, 0<=i<=n+1 */
 
+static int *inf, INFW, cB, cL, cG, hl_done = 1, MM;
+static int **retdiag;
+static int order[512], norder;
+#define INF(t, i) inf[(t) * INFW + (i)]
+
+static void extend_halfline(int mto) {
+  if (mto > MM) mto = MM;
+  for (int m = hl_done + 1; m <= mto; m++) {
+    for (int t = 1; t <= MM; t++) {
+      int i = m - t;
+      if (i < 1) break;
+      if (i > t + 1) continue;
+      int x = newcell(-1);
+      INF(t, i) = x;
+      emit(x, INF(t - 1, i - 1), INF(t - 1, i), INF(t - 1, i + 1), (i == t + 1 && t <= N - 2) ? FRONT : NONF);
+      if (i == 1 && GSTATIC >= 0 && t >= GSTATIC) emit(-1, x, -1, -1, ISG);
+      if (PERIOD && t - PERIOD >= 2 * (t + 1 - i) + CTHETA && t - PERIOD >= 1) emit(-1, x, INF(t - PERIOD, i - PERIOD), -1, EQ);
+    }
+    if ((m + 1) % 2 == 0) {            /* anti-diagonal 2n-1: the return chain of the line n differs from the half-line */
+      int n = (m + 1) / 2;
+      if (n >= NMIN && n <= N && retdiag[n])
+        for (int i = n; i >= 2; i--) emit(-1, retdiag[n][i], INF(m - i, i), -1, DIFF);
+    }
+  }
+  if (mto > hl_done) hl_done = mto;
+}
+
+static void emit_line(int n) {
+  extend_halfline(2 * n - 2);
+  int T = 2 * n - 3;
+  int RW = n + 2;
+  int *R = malloc((2 * n) * RW * sizeof(int));
+  idx[n] = R;
+  for (int t = 0; t <= T; t++)
+    for (int i = 0; i <= n + 1; i++)
+      R[t * RW + i] = (i == 0 || i == n + 1) ? cB : ((t + i <= 2 * n - 2) ? INF(t, i) : -1);
+  for (int t = n - 1; t <= T; t++)
+    for (int i = 1; i <= n; i++)
+      if (t + i >= 2 * n - 1) {
+        int x = newcell(-1);
+        R[t * RW + i] = x;
+        emit(x, R[(t - 1) * RW + i - 1], R[(t - 1) * RW + i], R[(t - 1) * RW + i + 1], NONF);
+        for (int j = 0; j < ncut[n]; j++) {
+          cut_t *c = &cuts[n][j];
+          if (i < c->p || i > c->p + c->m - 1) continue;
+          if (t >= c->T + S0) {
+            if (!idx[c->m]) { fprintf(stderr, "order: the line %d needs the line %d first\n", n, c->m); exit(1); }
+            int y = idx[c->m][(t - c->T) * (c->m + 2) + (i - c->p + 1)];
+            emit(-1, x, y, -1, EQ);
+          } else if (WAKE && t + i >= 2 * n - 1 + WAKE && i > c->p + S0 + MARGIN) {
+            emit(-1, x, -1, -1, ISL);
+          }
+        }
+      }
+  for (int i = 1; i <= n; i++) emit(-1, R[T * RW + i - 1], R[T * RW + i], R[T * RW + i + 1], FIRE);
+  emit(-1, n, -1, -1, MARK);
+  retdiag[n] = malloc((n + 1) * sizeof(int));
+  for (int i = 2; i <= n; i++) retdiag[n][i] = R[(2 * n - 1 - i) * RW + i];
+  /* if the half-line already covers the anti-diagonal 2n-1, compare the return chain now */
+  if (hl_done >= 2 * n - 1)
+    for (int i = n; i >= 2; i--) emit(-1, retdiag[n][i], INF(2 * n - 1 - i, i), -1, DIFF);
+}
+
 static void build(void) {
-  int M = 2 * N - 1;
-  int W = M + 3;
-  int *inf = malloc((M + 1) * W * sizeof(int));
-  int cB = newcell(BND), cL = newcell(0), cG = newcell(1);
-#define INF(t, i) inf[(t) * W + (i)]
-  for (int t = 0; t <= M; t++)
-    for (int i = 0; i < W; i++) {
+  MM = 2 * N - 1;
+  INFW = MM + 3;
+  inf = malloc((MM + 1) * INFW * sizeof(int));
+  cB = newcell(BND); cL = newcell(0); cG = newcell(1);
+  for (int t = 0; t <= MM; t++)
+    for (int i = 0; i < INFW; i++) {
       if (i == 0) INF(t, i) = cB;
       else if (t == 0) INF(t, i) = (i == 1) ? cG : cL;
       else if (i > t + 1) INF(t, i) = cL;
@@ -91,58 +152,10 @@ static void build(void) {
       r -= m;
     }
   }
-  int nextn = NMIN;
-  int **retdiag = calloc(N + 2, sizeof(int *));
-  for (int m = 2; m <= M; m++) {
-    for (int t = 1; t <= M; t++) {
-      int i = m - t;
-      if (i < 1) break;
-      if (i > t + 1) continue;
-      int x = newcell(-1);
-      INF(t, i) = x;
-      emit(x, INF(t - 1, i - 1), INF(t - 1, i), INF(t - 1, i + 1), (i == t + 1 && t <= N - 2) ? FRONT : NONF);
-      if (i == 1 && GSTATIC >= 0 && t >= GSTATIC) emit(-1, x, -1, -1, ISG);
-      if (PERIOD && t - PERIOD >= 2 * (t + 1 - i) + CTHETA && t - PERIOD >= 1) emit(-1, x, INF(t - PERIOD, i - PERIOD), -1, EQ);
-    }
-    if ((m + 1) % 2 == 0) {
-      int n = (m + 1) / 2;
-      if (n >= NMIN && n <= N && retdiag[n])
-        for (int i = n; i >= 2; i--) emit(-1, retdiag[n][i], INF(m - i, i), -1, DIFF);
-    }
-    while (nextn <= N && 2 * nextn - 2 <= m) {
-      int n = nextn++;
-      int T = 2 * n - 3;
-      int RW = n + 2;
-      int *R = malloc((2 * n) * RW * sizeof(int));
-      idx[n] = R;
-      for (int t = 0; t <= T; t++)
-        for (int i = 0; i <= n + 1; i++)
-          R[t * RW + i] = (i == 0 || i == n + 1) ? cB : ((t + i <= 2 * n - 2) ? INF(t, i) : -1);
-      for (int t = n - 1; t <= T; t++)
-        for (int i = 1; i <= n; i++)
-          if (t + i >= 2 * n - 1) {
-            int x = newcell(-1);
-            R[t * RW + i] = x;
-            emit(x, R[(t - 1) * RW + i - 1], R[(t - 1) * RW + i], R[(t - 1) * RW + i + 1], NONF);
-            for (int j = 0; j < ncut[n]; j++) {
-              cut_t *c = &cuts[n][j];
-              if (i < c->p || i > c->p + c->m - 1) continue;
-              if (t >= c->T + S0) {
-                int y = idx[c->m][(t - c->T) * (c->m + 2) + (i - c->p + 1)];
-                emit(-1, x, y, -1, EQ);
-              } else if (WAKE && t + i >= 2 * n - 1 + WAKE && i > c->p + S0 + MARGIN) {
-                emit(-1, x, -1, -1, ISL);
-              }
-            }
-          }
-      for (int i = 1; i <= n; i++) emit(-1, R[T * RW + i - 1], R[T * RW + i], R[T * RW + i + 1], FIRE);
-      emit(-1, n, -1, -1, MARK);
-      retdiag[n] = malloc((n + 1) * sizeof(int));
-      for (int i = 2; i <= n; i++) retdiag[n][i] = R[(2 * n - 1 - i) * RW + i];
-    }
-  }
-#undef INF
-  free(inf);
+  retdiag = calloc(N + 2, sizeof(int *));
+  if (!norder) for (int n = NMIN; n <= N; n++) order[norder++] = n;
+  for (int q = 0; q < norder; q++) emit_line(order[q]);
+  extend_halfline(MM);
 }
 
 static int usedmark[8][8][8];
@@ -171,7 +184,7 @@ static void dfs(int p) {
     case EQ: if (cell[o->a] != cell[o->b]) return; continue;
     case ISL: if (cell[o->a] != 0) return; continue;
     case ISG: if (cell[o->a] != 1) return; continue;
-    case MARK: pass[o->a]++; if (o->a > deepest) { deepest = o->a; fprintf(stderr, "reached n=%d after %lld nodes\n", deepest, nodes); } continue;
+    case MARK: if (!pass[o->a]++) fprintf(stderr, "passed the line %d after %lld nodes\n", o->a, nodes); continue;
     default: break;
     }
     int a = cell[o->a], b = cell[o->b], c = cell[o->c];
@@ -220,6 +233,7 @@ int main(int argc, char **argv) {
     else if (!strcmp(argv[i], "-n")) maxnodes = atoll(argv[++i]);
     else if (!strcmp(argv[i], "-g")) GSTATIC = atoi(argv[++i]);
     else if (!strcmp(argv[i], "-f")) fixfile = argv[++i];
+    else if (!strcmp(argv[i], "-o")) { char *q = strtok(argv[++i], ","); while (q) { order[norder++] = atoi(q); q = strtok(NULL, ","); } }
     else if (!strcmp(argv[i], "-P")) { PERIOD = atoi(argv[++i]); CTHETA = atoi(argv[++i]); }
   }
   if (fixfile) {
