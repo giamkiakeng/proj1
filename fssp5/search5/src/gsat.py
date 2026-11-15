@@ -40,12 +40,36 @@ ap.add_argument('--maxdepth', type=int, default=0, help='do not branch below thi
 ap.add_argument('--emit', help='file for the open nodes at --maxdepth, as --prefix strings')
 ap.add_argument('--front1', action='store_true')
 ap.add_argument('--gstatic', type=int, default=None, help='the first cell is G at every time >= GSTATIC')
+ap.add_argument('--copy', type=int, nargs=3, metavar=('A', 'S0', 'MMIN'), help='copy equations of the class M(a, s0, mmin) (README, Section 2)')
+ap.add_argument('--wake', type=int, default=0); ap.add_argument('--period', type=int, default=0); ap.add_argument('--ctheta', type=int, default=2)
+ap.add_argument('--margin', type=int, default=0)
+ap.add_argument('--wwalls', action='store_true', help='redundant clauses for the weak reading of (B1) with GGG, *GG, GG* -> F (weakwalls.py)')
+ap.add_argument('--nointerior', default='', help='class: this state never occurs in an interior cell (cells 2..n-1 of the lines, cells i >= 2 of the half-line)')
+ap.add_argument('--set', default='', help='class condition: transitions xyz=d, comma-separated (unit clauses of F)')
+ap.add_argument('--neq', default='', help='class condition: delta(x,y,z) != d for xyz=d, comma-separated (unit clauses of F)')
 a = ap.parse_args()
 k, N = a.k, a.N
-M = Model(k, N, copy=False, sym=False, b1=a.b1, b1s=a.b1s, b3=a.b3, b3w=a.b3w, b4=a.b4, b2=a.b2, nogh=a.nogh, wimp=a.wimp,
+cp = a.copy or (2, 2, 3)
+M = Model(k, N, a=cp[0], s0=cp[1], mmin=cp[2], copy=bool(a.copy), wake=a.wake, margin=a.margin, period=a.period, ctheta=a.ctheta, sym=False, b1=a.b1, b1s=a.b1s, b3=a.b3, b3w=a.b3w, b4=a.b4, b2=a.b2, nogh=a.nogh, wimp=a.wimp,
           wgap=a.wgap, strict=a.strict, early=tuple(a.early) if a.early else None,
           extra=[int(x) for x in a.extra.split(',') if x], pump=a.pump, front1=a.front1, gstatic=a.gstatic, noghw=a.noghw, b2nb=a.b2nb)
+if a.wwalls:
+    import weakwalls
+    weakwalls.add_weak_walls(M, noghw=a.noghw)
 E = M.E
+_c = {NAMES[x]: x for x in range(k - 1)}; _c['*'] = BND; _c['F'] = k - 1
+XI = _c[a.nointerior] if a.nointerior else None
+if XI is not None:
+    for (_t, _i), _x in sorted(M.Hc.items()):
+        if _i >= 2:
+            E.add([-_x[XI]])
+    for (_n, _t, _i), _x in sorted(M.Rc.items()):
+        if 2 <= _i <= _n - 1:
+            E.add([-_x[XI]])
+for _spec, _sign in ((a.set, 1), (a.neq, -1)):
+    for _tr in [x for x in _spec.split(',') if x]:
+        _l, _d = _tr.split('=')
+        E.add([_sign * E.T[(_c[_l[0]], _c[_l[1]], _c[_l[2]])][_c[_d]]])
 S = Solver(name=a.solver)
 for c in E.cl:
     S.add_clause(c)
@@ -139,6 +163,8 @@ def dfs(pos, assum, names, maxaux):
             continue
         if v == 1 and (a.nogh or (a.noghw and i >= 2)):
             continue
+        if XI is not None and v == XI and i >= 2:
+            continue
         if v >= 2 and v > maxaux + 1:
             continue
         stats['nodes'] += 1
@@ -198,7 +224,7 @@ def knuth_probe(rng):
         e = (cv(t - 1, i - 1), cv(t - 1, i), cv(t - 1, i + 1))
         openc = []
         for v in W:
-            if (v == 0 and i == t + 1 and t <= NFRONT) or (v == 1 and (a.nogh or (a.noghw and i >= 2))) or (v >= 2 and v > maxaux + 1):
+            if (v == 0 and i == t + 1 and t <= NFRONT) or (v == 1 and (a.nogh or (a.noghw and i >= 2))) or (v >= 2 and v > maxaux + 1) or (XI is not None and v == XI and i >= 2):
                 continue
             est += weight
             S.conf_budget(a.budget)

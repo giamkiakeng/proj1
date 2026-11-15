@@ -7,9 +7,9 @@ search restricted classes of five-state rules, and this file records what each s
 Conventions. States `L` (quiescent), `G` (general), auxiliary `A`, `B`, firing `F`; `*` is the border. A
 *line* is the diagram $C_n$ of the line of length $n$; a rule *synchronizes* $n$ if $C_n$ is all `F` at time
 $2n-2$ and has no `F` before. "UNSAT" means that a SAT solver or an exhaustive enumeration proved that the
-class is empty for the stated lengths; "unknown" means that the run was stopped. Proof certificates (LRAT) exist for the results of Section 4 and for Proposition 7.1, where stated there; the
+class is empty for the stated lengths; "unknown" means that the run was stopped. Proof certificates (LRAT) exist for the results of Section 4 and for Propositions 7.1 and 7.2, where stated there; the
 other computer results have the status of solver answers, cross-checked where the tables say so. Lemmas 6.1
-to 6.3 are proved by hand.
+to 6.5 are proved by hand.
 
 ## 1. Programs (`src/`)
 
@@ -30,6 +30,12 @@ to 6.3 are proved by hand.
 | `wenum.c` | second enumerator for the stable-general class, independent of `mdfs.c` |
 | `enumtree.py`, `covercheck.py` | enumeration of every closed node of a tree search; check that the closed nodes cover the tree |
 | `certtree.py`, `germsat_cert.py` | LRAT / DRAT certificates for the closed nodes |
+| `gcert.py` | the tree search of `gsat.py` with a certificate for every closed node: a new CaDiCaL process per node with a time limit and an LRAT proof, checked by `lrat-check` and, if `CAKELPR` names its binary, by the verified checker `cake_lpr`; a node that is not refuted in time is split. Resumable; `--recheck` rebuilds every cube formula, compares the SHA-256 digests and verifies the proofs again |
+| `gcover.py` | checks without a solver that the certified cubes of `gcert.py` are a complete case split; shares no code with `gcert.py` |
+| `weakwalls.py` | redundant clauses of Lemmas 6.4 and 6.5 (weak reading); `gsat.py --wwalls`, `gcert.py --wwalls` |
+| `minit.py` | the lines start from `X L ... L` for another working state `X` (`gcert.py --init X`) |
+| `check_rule_formula.py`, `check_weak_lemmas.py`, `check_wwalls_enc.py` | tests: a rule of a class that synchronizes $2,\dots,N+2$ must satisfy the formula of `gcert.py` at $N$; the statements of Lemmas 6.4, 6.5 and 6.2' on the diagrams of given rules |
+| `ftime.py` | CNF for rules that synchronize the lines $2,\dots,N$ at some time chosen by the solver, not necessarily minimal (exploratory, Section 8) |
 
 **What a refutation at $N$ means.** The formula of `mcopy.py K N` (also in `mcopy_inc.py` and `germscan.py`)
 is $\Phi_N=\mathrm{MT}(2..N)\wedge\mathrm{RC}_N$: "the lines of lengths $2,\dots,N$ are synchronized at time
@@ -44,7 +50,9 @@ the clauses of the class. Below, "refuted at $N$" or "UNSAT for $2..N$" refers t
 stated; with `--nogh` and without `--strict` it means that no rule of the class synchronizes $2,\dots,N+2$.
 Further options: `--set xyz=d` fixes a transition; `--extra n1,n2` adds complete longer lines; `--early N2 T`
 adds the first $T$ rows after the reflection of the lines up to $N_2$ (no `F`); `--wimp`, `--wgap` add the
-clauses of Lemmas 6.1 and 6.3.
+clauses of Lemmas 6.1 and 6.3. With `--front1` the front cell $(N-1,N)$ on the last anti-diagonal of the
+formula is not `L` either (Lemma 2.4 of the paper for the lines $N+1$ and $N+2$); with `--front1`, `--nogh` or
+`--noghw` a refutation at $N$ says that no rule of the class synchronizes all lines $2,\dots,N+2$.
 
 Checks of the programs:
 
@@ -66,6 +74,14 @@ Checks of the programs:
   of Section 7 (strong reading, $I=(G\,B)$, $N=4$) passed `lrat-check`; the table of Proposition 7.1 is from
   runs with the check. All certificates of Section 4 had the answer `UNSATISFIABLE`.
 - The classes of Section 3 that `decdfs.c` exhausts are also unsatisfiable for `msim.py`.
+- `gcert.py 4 9 --front1 --tlim 1` (four states, no class) closes the tree with 38 certified cubes and 20
+  splits (32 to 40 cubes in other runs: the time limit decides which nodes are split), and `gcover.py` reports a
+  complete case split; with one cube removed from the file it reports the hole.
+  `gcert.py 4 8 --strict` stops with a satisfiable node, in accordance with $N_4=8$. `--recheck` reproduces
+  the 38 formulas and proofs digest for digest, and both checkers accept them again.
+- `check_rule_formula.py`: the rule `balzer_noborder12` of the paper (it synchronizes $2,\dots,12$) satisfies the
+  formula of Proposition 7.2 at $N=9$ and $N=10$, as it must (and at $N=11$); the rule for 2..13 of Section 6
+  satisfies the formula of the stable-general search at $N=11$, as it must (and at $N=12$).
 
 ## 2. Rules with the recursive structure of Mazoyer's solution
 
@@ -323,8 +339,8 @@ in $\{L,A,B\}$, and $\delta(G,L,L)=A$ after renaming. So if every node is closed
 unsatisfiable. The tree is cut at depth 7 into 341 subtrees (and 36 nodes closed above them), which run as
 separate jobs.
 
-Checks. The same program for four states and without the class (`gsat.py 4 9`) closes every node in 18 s
-(1730 nodes), and `gsat.py 4 8 --strict` finds rules for $2,\dots,8$, in accordance with $N_4=8$. Rules of the
+Checks. The same program for four states and without the class (`gsat.py 4 9`) closes every node in about 20 s
+(212 nodes with the default budget of 3000 conflicts, 2877 with `--budget 300`), and `gsat.py 4 8 --strict` finds rules for $2,\dots,8$, in accordance with $N_4=8$. Rules of the
 class that were found without the redundant clauses satisfy the formula with them (`mcopy.py ... --fix`):
 the rule for 2..13 at $N=11,12,13$, and four other rules at $N=10$ or 11.
 
@@ -352,6 +368,83 @@ does not depend on the SAT solver or on Lemmas 6.1 (b)-(d) and 6.3. It is afford
 $\delta(A,L,L)=A$ (some $10^6$ to $10^7$ nodes per closed node) but not for those with $\delta(A,L,L)=B$ (about
 $3\cdot10^7$ nodes per closed node and far more closed nodes, some $10^{13}$ nodes in all); it has not been run on
 all nodes yet.
+
+**The weak reading.** In the weak reading of the paper the two end cells are not protected:
+
+- (B1w) $\delta(x,G,y)=G$ for all working states $x,y$ that are not both $G$;
+- (B3w) $\delta(G,G,G)=\delta(\ast,G,G)=\delta(G,G,\ast)=F$ (other neighbourhoods may give $F$ as well).
+
+A rule with (B1w) and (B3w) in which $\delta(\ast,G,y)=\delta(x,G,\ast)=G$ for all $x,y\in W'$ satisfies (B1),
+and by Lemma 6.1 a rule with (B1) that synchronizes 2 and 3 satisfies (B3w). So for five states the weak class
+is the class of this section together with the rules in which one of these six transitions has another
+value. The cells $2,\dots,n-1$ of the line $n$ are its *interior* cells.
+
+**Lemma 6.4 (interior walls).** Let $\delta$ satisfy (B1w) and (B3w) and synchronize the line of length
+$n\ge3$. Then in this line
+(a) at no time $t\le2n-4$ are three adjacent positions in $\{G,\ast\}$ (the positions 0 and $n+1$ are the
+borders);
+(b) an interior cell in state $G$ at a time $t\le2n-4$ is in state $G$ at time $t+1$;
+(c) if some interior cell is in state $G$ at time $2n-3$, then every cell is in state $G$ at time $2n-3$.
+
+*Proof.* (a) The middle position is a cell in state $G$ with neighbourhood $GGG$, $\ast GG$ or $GG\ast$; by
+(B3w) it is in state $F$ at time $t+1$, so $t+1\ge2n-2$. (b) Both neighbours of an interior cell are cells, in
+working states at time $t$ and not both in state $G$ by (a); apply (B1w). (c) Let the interior cell $i$ be in
+state $G$ at time $2n-3$ and let $x,y\in W$ be the states of its neighbours. Then $F=\delta(x,G,y)$, and (B1w)
+gives $x=y=G$. The same holds for the cell $i-1$ if it is interior, and for $i+1$; by induction all cells are
+in state $G$. $\square$
+
+So a line either never has an interior cell in state $G$, or it fires from the row $G^n$.
+
+**Lemma 6.5 (gaps, weak reading).** Let $\delta$ satisfy (B1w) and (B3w) and synchronize the line of length
+$n\ge3$, and let $t\le2n-4$. With $M$ as in Lemma 6.3, put
+$M_b(1)=|W'|$ and $M_b(\ell)=|W|\,|W'|^{\ell-1}+M_b(\ell-1)$.
+
+1. If the interior cells $p<q$ are in state $G$ at time $t$, $q-p=\ell+1\ge2$, and no cell between them is in
+   state $G$ at time $t$, then $2n-3-t\le M(\ell)$.
+2. If the interior cell $q$ is in state $G$ at time $t$ and no interior cell to its left is, then
+   $2n-3-t\le M_b(q-1)$; if the interior cell $p$ is in state $G$ at time $t$ and no interior cell to its
+   right is, then $2n-3-t\le M_b(n-p)$.
+
+For five states $M_b(1),M_b(2),M_b(3)=3,15,51$.
+
+*Proof.* By Lemma 6.4 (b) an interior cell in state $G$ stays in state $G$ up to time $2n-3$, and since there
+is one, every cell is in state $G$ at time $2n-3$ by Lemma 6.4 (c).
+1. During $[t,2n-3]$ the $\ell$ cells between $p$ and $q$ have constant neighbours, so their configuration
+evolves on its own. Let $s\ge t$ be the least time at which one of them is in state $G$; $s\le2n-3$. The
+configurations at the times $t,\dots,s-1$ lie in $W'^{\ell}$ and are pairwise distinct: after a repetition
+they would be periodic, and no cell of the gap would be in state $G$ at time $2n-3$. Hence
+$s-t\le|W'|^{\ell}$. If $s=2n-3$ we are done. Let $s\le2n-4$. For $\ell=1$ the cells $p,p+1,p+2$ would be in
+state $G$ at time $s$, contrary to Lemma 6.4 (a). For $\ell\ge2$, by Lemma 6.4 (a) some cell of the gap is not
+in state $G$ at time $s$; it lies between two cells of $[p,q]$ in state $G$ at distance $\ell'+1$,
+$1\le\ell'<\ell$, with no cell in state $G$ between them, and induction gives
+$2n-3-s\le M(\ell')\le M(\ell-1)$.
+2. By induction on $\ell=q-1$; the second statement is the mirror image. The cells $1,\dots,\ell$ have the
+border on the left and the constant state $G$ on the right during $[t,2n-3]$. For $\ell=1$: the cell 1 is not
+in state $G$ at a time $u\le2n-4$ (Lemma 6.4 (a) for the positions 0, 1, 2), so its states at the times
+$t,\dots,2n-4$ lie in $W'$, and they are pairwise distinct because the cell is in state $G$ at time $2n-3$.
+For $\ell\ge2$: let $s\ge t$ be the least time at which one of the cells $2,\dots,\ell$ is in state $G$. The
+configurations of the cells $1,\dots,\ell$ at the times $t,\dots,s-1$ lie in $W\times W'^{\ell-1}$ and are
+pairwise distinct as before, so $s-t\le|W|\,|W'|^{\ell-1}$. If $s\le2n-4$, the leftmost of the cells
+$2,\dots,\ell$ in state $G$ at time $s$ is an interior cell $q'$ with no interior cell in state $G$ to its
+left, and induction gives $2n-3-s\le M_b(q'-1)\le M_b(\ell-1)$. $\square$
+
+Consequently, at a time $t\le2n-4$ with $\rho=2n-3-t$: no two interior cells at a distance $d\ge2$ with
+$M(d-1)<\rho$ are both in state $G$ (between them lies a gap of length at most $d-1$, by Lemma 6.4 (a)), and no
+interior cell $y$ with $M_b(y-1)<\rho$ or $M_b(n-y)<\rho$ is in state $G$. `weakwalls.py` adds these clauses
+and those of Lemma 6.4 (`--wwalls`). `check_weak_lemmas.py` finds no violation of Lemmas 6.4, 6.5 and 6.2' on
+the diagrams of the 31 stored rules that satisfy (B1w) and (B3w) on the transitions they use, nor on 41 rules
+for $2,\dots,10$ generated for this test with seven different beginnings of the first cell (in some of them the
+lines 3 and 4 have no interior cell in state $G$); these 41 rules and five of the stored ones, all of which
+synchronize $2,\dots,10$, satisfy the formula with the clauses at $N=8$ (`check_wwalls_enc.py`).
+
+Sizes (estimates by random descents in the tree of `gsat.py`, 30 descents each, budget 3000; standard errors
+30 to 50 per cent, and such estimates tend to be too low): the weak class with (B3) in the strong reading,
+lines $2,\dots,14$: $3.5\cdot10^6$ nodes; with (B3w): $1.3\cdot10^7$; the strong class of this section:
+$1.1\cdot10^6$. The parts of the weak class outside the strong class are defined by $\delta(\ast,G,y)\ne G$ or
+$\delta(x,G,\ast)\ne G$ for one $x$ or $y$. With (B3) in the strong reading $\delta(\ast,G,L)=G$ is forced by
+the line 2; the four other parts estimated so far have $1.6\cdot10^6$ to $7\cdot10^6$ nodes each, so
+they cannot be treated as small corrections to the strong class. The weak class without (B2) and (B4) has
+not been searched. With (B4) and (B2) without borders it is small: Proposition 7.2.
 
 ## 7. Balzer's conditions, taken apart
 
@@ -402,6 +495,77 @@ means that a rule for $2,\dots,N$ was found and the next length was not decided 
 Without (B2): (B1) alone is Section 6 (rule for 2..13); (B1) and (B4): rule for 2..12, 13 not decided in 16
 minutes; (B3) and (B4): rule for 2..12; (B3): rule for 2..11.
 
+**Proposition 7.2 (Balzer's conditions as Yunès states them; computer-assisted, certified; $I$ the identity so far).**
+No five-state rule that satisfies (B1) and (B3) in the weak reading, (B4), and (B2) with $I$ the identity for
+the neighbourhoods without a border synchronizes all lines of lengths $2,\dots,15$ in minimal time.
+
+This is the case left open at the end of Section 6.5 of the paper, where the rule `balzer_noborder12` shows
+that the lines up to 12 do not suffice.
+
+*Proof.* Let $F$ be the formula of `gcert.py 5 13 --b1 --b3w --b4 --b2 id --b2nb --noghw --front1` (2608
+variables, 259,770 clauses; SHA-256 of its clause lines `e827af0b...3a0ce0`, printed by the program): the lines
+$2,\dots,13$ are synchronized, with the clauses of (B1w), (B3w), (B4) and (B2) for the 64 neighbourhoods
+without a border, and with clauses that follow if the lines up to 15 are synchronized as well: the return chain
+of the line 13 and the half-line in working states up to the anti-diagonal 25 (line 14), the front cell
+$(12,13)\ne L$ (Lemma 2.4 of the paper for the lines 14 and 15), and no cell $i\ge2$ of the half-line in state
+$G$ up to the anti-diagonal 25 (Lemma 6.2' with $N=15$). The class is invariant under exchanging the names $A$
+and $B$, so the auxiliary state that the half-line uses first may be called $A$. A rule of the class that
+synchronizes $2,\dots,15$ therefore gives a model of $F$ in the tree that `gcert.py` searches: the transitions
+of the half-line are fixed one at a time in the order of the anti-diagonals; the values excluded at a node are
+`L` for a front cell and `G` for a cell $i\ge2$ (unit clauses of $F$) and `B` before `A` (naming). The search
+ended with 3726 nodes: 1176 were split, and each of the other 2550 is closed by CaDiCaL 3.0.1 (at most 4 s)
+with an LRAT proof that `lrat-check` verified (answer `UNSATISFIABLE` and empty last lemma required). The
+proofs, 34.5 GB in all, were deleted after the check; `runs/yunes/yun_id_13.txt` lists for every closed node
+its cube and the SHA-256 digests of the cube formula ($F$ plus the units of the cube) and of the proof.
+`gcover.py 5 13 runs/yunes/yun_id_13.txt --noghw --front1`, which replays the branching rules without a
+solver, reports that the 2550 cubes are a complete case split. So $F$ is unsatisfiable. $\square$
+
+The largest $N$ such that a rule of this class synchronizes $2,\dots,N$ is therefore 12, 13 or 14.
+A second verification of all 2550 proofs with `cake_lpr` (`gcert.py ... --recheck`) and the searches for the
+involutions $(A\,B)$, $(L\,A)$, $(L\,B)$ and for a stable state other than the initial state of the general
+are running; see Section 8.
+
 ## 8. Log of long runs
 
-(appended as runs finish)
+**Tree sizes (15 November).** Estimates of the number of nodes of the tree of `gsat.py` (budget 3000 conflicts
+per node) by random descents (Knuth's estimator, `gsat.py ... --knuth 30` or `40`); the standard error of the
+mean is given, but the distribution is heavy-tailed and the estimates are to be read as orders of magnitude.
+No descent ended in a model unless stated.
+
+| class (five states) | lines | estimated nodes | standard error |
+|---|---|---|---|
+| no class (the open problem) | 2..15 | $3\cdot10^{18}$ | same order |
+| stable general, Section 6 (`--b1s --b3 --nogh --wimp --wgap`) | 2..14 | $1.07\cdot10^6$ | $0.41\cdot10^6$ |
+| (B1) weak, (B3) strong (`--b1 --b3 --noghw`) | 2..14 | $3.6\cdot10^6$ | $1.0\cdot10^6$ |
+| (B1) weak, (B3) weak (`--b1 --b3w --noghw`) | 2..14 | $1.3\cdot10^7$ | $0.4\cdot10^7$ |
+| (B1) weak, (B3) weak, (B4) | 2..14 | $9\cdot10^7$ | $5\cdot10^7$ |
+| Yunès's form, $I$ identity (Proposition 7.2) | 2..13; 2..14 | $2.4\cdot10^4$; $2.2\cdot10^4$ | $0.5\cdot10^4$ |
+| Yunès's form, $I=(A\,B)$ | 2..11 | $1.9\cdot10^3$ | $0.3\cdot10^3$ |
+| (B1) weak alone (`--b1`) | 2..13 | $8\cdot10^7$, some descents end in a rule | $4\cdot10^7$ |
+| (B2) alone, $I$ identity | 2..12; 2..13 | $5\cdot10^8$; $9\cdot10^8$ | $3\cdot10^8$ |
+| (B2) alone, $I=(A\,B)$ | 2..12 | $2.7\cdot10^6$ | $1.2\cdot10^6$ |
+| (B2) alone, $I=(L\,A)$ | 2..12 | $7.9\cdot10^5$ | $3.0\cdot10^5$ |
+| (B3) strong alone (`--b3`) | 2..13 | $1.6\cdot10^{15}$ | $0.8\cdot10^{15}$ |
+| (B3) strong, first cell `G` from time 2 on (as in Mazoyer's solution) | 2..13 | $8\cdot10^{13}$ | $3\cdot10^{13}$ |
+| first cell `G` from time 1 on | 2..13 | $9\cdot10^{12}$ | $5\cdot10^{12}$ |
+| (B3) strong, no `G` on the half-line beyond the first cell | 2..13 | $1.6\cdot10^{10}$, many descents end in a rule | $0.8\cdot10^{10}$ |
+| (B4) alone | 2..13 | $2\cdot10^{18}$ | same order |
+| the class of Section 2 with all conditions (copies, wake 4, static general 2, periodic (3, 2)) | 2..11 | $3\cdot10^{10}$ | $2\cdot10^{10}$ |
+
+The tree of Proposition 7.2 had 3726 nodes in `gcert.py` (4 s per node instead of 3000 conflicts), and it
+took 93 minutes with two processes on a machine that was running six processes on four cores. On this
+machine a class is within reach of the tree search up to some $10^6$ to $10^7$ estimated nodes; this includes
+the classes with a stable general and the image condition for $(A\,B)$ or $(L\,A)$, but neither the image
+condition for the identity, nor a firing condition alone, nor the open problem.
+
+**Yunès's form, identity (15 November).** `gcert.py 5 13 --b1 --b3w --b4 --b2 id --b2nb --noghw --front1 --tlim 4
+--workers 2`: 5552 s, 2550 certified leaves, 1176 splits, no node left open, no model; 5219 s of CaDiCaL
+time on the leaves; cubes of 4 to 12 transitions (most have 8 or 9).
+
+**Other probes (15 November), not pursued.** Rules in which one working state never occurs in an interior cell
+(`gsat.py 5 N --nointerior X --front1`): for each of $X=G,A,B$ a rule for $2,\dots,8$ is found in seconds;
+$2,\dots,9$ was not decided in 250 s. Rules that synchronize at a time chosen by the solver (`ftime.py`):
+with the time fixed to $2n-2$ the encoder reproduces $N_4=8$ (four states: $2,\dots,8$ satisfiable in 0.7 s,
+$2,\dots,9$ unsatisfiable in 37 s); four states with any firing time in $[2n-2,3n+2]$: a rule for $2,\dots,6$
+(firing times 3, 5, 11, 14, 10, so nothing regular), and $2,\dots,8$ not decided in 120 s. The free firing
+time makes the formulas much harder, and no five-state run was made.
