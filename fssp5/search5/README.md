@@ -182,11 +182,22 @@ is whether (B1) and (B3) alone suffice.
 
 | class (five states) | result |
 |---|---|
-| (B1) strong, (B3) weak, with the conclusions of the lemma added as clauses | satisfiable for 2..11 (incremental, 4 s); $N=12$ unknown (95 s) |
+| (B1) strong, (B3) weak, with the conclusions of the lemma added as clauses | satisfiable for 2..12 (incremental, 8 s in one run; another run was stopped at $N=12$ after 95 s); $N=13$ running |
+| (B1) strong, (B3) strong (exactly `GGG`, `*GG`, `GG*` fire) | satisfiable for 2..12 (incremental, 75 s); the rule synchronizes exactly 2..12 (`rules/stable_generals_2-12.txt`); $N=13$ running |
 | the same, with the necessary conditions of the paper for the lines up to 40 (no `F` in the first 10 rows after the reflection, return chain different from the half-line, half-line without `F` to the anti-diagonal 79) and PUMP$(n,n')$ for $4\le n<n'\le40$ | satisfiable for 2..8 (incremental, 142 s); running |
 | static general from time 1 and (B3) strong, same necessary conditions | satisfiable for 2..10 (incremental, 19 min); running |
 | (B1) weak, (B3) strong, (B4), same necessary conditions | satisfiable for 2..9 (incremental, 4 min); running |
 | image solutions with $I$ the identity, necessary conditions with 8 rows and without PUMP | satisfiable for 2..10; running |
+
+Stronger necessary conditions were added after looking at the rules found: `--chains N3 C` (for every line up
+to $N_3$: no `F` on the first $C$ anti-diagonals of the reflected triangle, and the cells $1,\dots,C$ fire at
+$2n-2$), `--early N2 T` with $T\ge N_2$ (no `F` before $2n-2$ anywhere in the lines up to $N_2$) and
+`--rfire C` (the last $C$ cells of these lines fire at $2n-2$). Mazoyer's table satisfies all of them, and the
+rules found before violate them. They still do not decide the class: with the lengths up to 18 (no early
+`F`, three cells at each end fire at $2n-2$; chains up to 24) the formula is satisfiable already for
+$\delta(A,L,L)=A$, $\delta(A,L,\ast)=B$ (Kissat, 83 s), by a rule whose two ends fire at time $2n-2$ on
+every line tested ($n\le 30$) while the cells between them never fire. As in Section 7 of the paper, the
+conditions that are cheap to state do not constrain the middle of the firing row.
 
 Mazoyer's table (six states, lengths from 3) satisfies the necessary conditions as encoded (`mcopy.py 6 12
 --nmin 3 --nocopy --nosym --early 40 12 --pump 40 --fix mazoyer6.txt`: satisfiable).

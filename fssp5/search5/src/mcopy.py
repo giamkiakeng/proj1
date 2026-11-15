@@ -139,19 +139,20 @@ def chain(n, a, mmin, mfun=None):
 
 class Model:
     def __init__(self, k, N, a=2, s0=2, mmin=3, nmin=2, copy=True, half=None, rev=True, sym=True, levels=99,
-                 mfun=None, wake=0, margin=0, gstatic=None, period=0, ctheta=2, b3=False, b1=False, b4=False, b2=None, early=None, pump=0, b1s=False, b3w=False, nogh=False):
+                 mfun=None, wake=0, margin=0, gstatic=None, period=0, ctheta=2, b3=False, b1=False, b4=False, b2=None, early=None, pump=0, b1s=False, b3w=False, nogh=False, chains=None, rfire=0):
         self.wake, self.margin = wake, margin
         self.period, self.ctheta = period, ctheta
         self.E = E = Enc(k, rev)
         self.k, self.N, self.a, self.s0, self.mmin, self.nmin = k, N, a, s0, mmin, nmin
         self.early = early                            # (N2, T): the first T rows after the reflection of the lines up to N2
-        NH = max(N, early[0]) if early else N
+        NH = max(N, early[0] if early else 0, chains[0] if chains else 0)
+        self.chains = chains                          # (N3, C): the first C chains of the lines up to N3; their cells 1..C fire at 2n-2
         self.M = half if half else 2 * NH - 1         # the half-line carries variables for t + i <= M
         self.Hc, self.Rc = {}, {}
         self.cuts = {n: (chain(n, a, mmin, mfun)[:levels] if copy else []) for n in range(nmin, N + 1)}
-        if early:
-            assert not copy, 'early rows are implemented without copies only'
-            for n in range(N + 1, early[0] + 1):
+        if early or chains:
+            assert not copy, 'early rows and chains are implemented without copies only'
+            for n in range(N + 1, NH + 1):
                 self.cuts[n] = []
         for n, cs in self.cuts.items():
             for p, m, T in cs:
@@ -161,12 +162,28 @@ class Model:
         # half-line transitions
         for t in range(0, self.M):
             for i in range(1, min(t + 2, self.M - t - 1) + 1):          # cell (t+1, i), t+1+i <= M
-                E.level = nmin if early else max(nmin, (t + 1 + i + 2) // 2)   # needed from the line of this length on
+                E.level = nmin if (early or chains) else max(nmin, (t + 1 + i + 2) // 2)   # needed from the line of this length on
                 E.transition(self.H(t, i - 1), self.H(t, i), self.H(t, i + 1), self.H(t + 1, i))
         # the front is never quiescent while some line n <= N still waits for it
         for t in range(1, NH - 1):
-            E.level = nmin if early else max(nmin, t + 2)
+            E.level = nmin if (early or chains) else max(nmin, t + 2)
             E.differ(self.H(t, t + 1), 0)
+        # the first C chains (anti-diagonals t + i = 2n-1, ..., 2n-2+C) of the lines up to N3: no F, except that the
+        # cells 1..C fire at time 2n-2; the return chain differs from the half-line
+        if chains:
+            N3, C = chains
+            E.level = nmin
+            for n in range(nmin, N3 + 1):
+                for t in range(n - 2, 2 * n - 3):
+                    for i in range(max(1, 2 * n - 2 - t), n + 1):
+                        if t + 1 + i <= 2 * n - 2 + C:
+                            E.transition(self.cell(n, t, i - 1), self.cell(n, t, i), self.cell(n, t, i + 1), self.cell(n, t + 1, i))
+                for i in range(1, min(C, n) + 1):
+                    E.transition(self.cell(n, 2 * n - 3, i - 1), self.cell(n, 2 * n - 3, i), self.cell(n, 2 * n - 3, i + 1), 'FIRE')
+                for i in range(2, n + 1):
+                    t = 2 * n - 1 - i
+                    if t + i <= self.M and t <= 2 * n - 3:
+                        E.differ(self.cell(n, t, i), self.H(t, i))
         # early rows of the lines up to N2: no F in the first T rows after the reflection, return chain != half-line
         if early:
             N2, Te = early
@@ -179,6 +196,9 @@ class Model:
                     t = 2 * n - 1 - i
                     if t + i <= self.M and t <= 2 * n - 3:
                         E.differ(self.cell(n, t, i), self.H(t, i))
+                if rfire and n - 1 + Te >= 2 * n - 3:      # the whole triangle is there: the last rfire cells fire at 2n-2
+                    for i in range(max(1, n - rfire + 1), n + 1):
+                        E.transition(self.cell(n, 2 * n - 3, i - 1), self.cell(n, 2 * n - 3, i), self.cell(n, 2 * n - 3, i + 1), 'FIRE')
         # lines
         for n in range(nmin, N + 1):
             E.level = n
@@ -234,7 +254,7 @@ class Model:
                     E.add([vs[1]])
         if gstatic is not None:
             for t in range(gstatic, self.M):
-                E.level = max(nmin, (t + 1 + 2) // 2)
+                E.level = nmin if (early or chains) else max(nmin, (t + 1 + 2) // 2)
                 E.equal(self.H(t, 1), 1)
         E.level = nmin
         if sym and k >= 5:
@@ -368,11 +388,20 @@ def main():
     ap.add_argument('--b1s', action='store_true')
     ap.add_argument('--b3w', action='store_true')
     ap.add_argument('--nogh', action='store_true')
+    ap.add_argument('--chains', type=int, nargs=2, metavar=('N3', 'C'))
+    ap.add_argument('--rfire', type=int, default=0)
+    ap.add_argument('--set', action='append', default=[], metavar='LCR=D', help='fix a transition, e.g. ALL=B or AL*=G')
     ap.add_argument('--ctheta', type=int, default=2)
     a = ap.parse_args()
     t0 = time.time()
     M = Model(a.k, a.N, a.a, a.s0, a.mmin, a.nmin, not a.nocopy, a.half, not a.norev, not a.nosym, a.levels,
-              None, a.wake, a.margin, a.gstatic, a.period, a.ctheta, a.b3, a.b1, a.b4, a.b2, tuple(a.early) if a.early else None, a.pump, a.b1s, a.b3w, a.nogh)
+              None, a.wake, a.margin, a.gstatic, a.period, a.ctheta, a.b3, a.b1, a.b4, a.b2, tuple(a.early) if a.early else None, a.pump, a.b1s, a.b3w, a.nogh, tuple(a.chains) if a.chains else None, a.rfire)
+    for spec in a.set:
+        code = {NAMES[x]: x for x in range(a.k - 1)}
+        code['F'] = a.k - 1
+        code['*'] = BND
+        lcr, d = spec.split('=')
+        M.E.add([M.E.T[(code[lcr[0]], code[lcr[1]], code[lcr[2]])][code[d]]])
     if a.fix:
         sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
         from simlib import load
