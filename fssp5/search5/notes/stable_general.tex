@@ -1,0 +1,201 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=27mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs,enumitem}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}[lemma]{Proposition}
+\newtheorem{theorem}[lemma]{Theorem}
+\newtheorem{corollary}[lemma]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[lemma]{Remark}
+\newcommand{\Lq}{\mathtt{L}}\newcommand{\Gq}{\mathtt{G}}\newcommand{\Aq}{\mathtt{A}}\newcommand{\Bq}{\mathtt{B}}\newcommand{\Fq}{\mathtt{F}}
+\newcommand{\MT}{\mathrm{MT}}
+\title{Five-state firing squads with a stable general\\[2pt]\large Working note for Section~6 of the manuscript}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\noindent\textbf{Status of the statements.}
+Lemmas~\ref{lem:fire}--\ref{lem:gap} and Corollary~\ref{cor:front} are proved here.
+Proposition~\ref{prop:b1b2} is computer-assisted; every formula in its proof has a proof certificate that an
+independent checker verified. Section~\ref{sec:search} describes a computation that is not finished; nothing is
+claimed from it yet.
+
+\section{Setting}
+
+We use the notation of the manuscript. A rule is a map $\delta$ on neighbourhoods $(x,y,z)$ with $y\in W$,
+$x,z\in W\cup\{\ast\}$, not both borders, with values in $W\cup\{\Fq\}$; $W$ is the set of working states,
+$\Lq,\Gq\in W$, $\ast$ is the border and $\Fq\notin W$ the firing state, and
+$\delta(\Lq,\Lq,\Lq)=\delta(\Lq,\Lq,\ast)=\Lq$. $C_n(t,i)$ is the state of the cell $i\in\{1,\dots,n\}$ of the
+line of length $n$ at time $t$, with $C_n(0,\cdot)=\Gq\Lq^{n-1}$, and $C_\infty$ is the diagram of the
+half-line. The rule \emph{synchronizes} $n$ (in minimal time) if $C_n(2n-2,i)=\Fq$ for all $i$ and
+$C_n(t,i)\in W$ for $t<2n-2$. We use the agreement lemma, $C_n(t,i)=C_\infty(t,i)$ for $t+i\le2n-2$, and the
+return-chain lemma: if $\delta$ synchronizes $n$ and $n+1$, then $C_n(2n-1-i,i)\ne C_\infty(2n-1-i,i)$ for
+$1\le i\le n$, and the front cell $f_{n-1}:=C_\infty(n-2,n-1)$ is not $\Lq$.
+
+Throughout, (B1) is Balzer's first condition in the strong reading,
+\begin{equation}\label{eq:B1}
+\delta(x,\Gq,y)=\Gq\qquad\text{unless }x,y\in\{\Gq,\ast\}. \tag{B1}
+\end{equation}
+The positions $0$ and $n+1$ of the line of length $n$ are its borders; a \emph{barrier} of the line at time $t$
+is a border or a cell in state $\Gq$ at time $t$. We write $W':=W\setminus\{\Gq\}$.
+
+\section{Stable generals}
+
+\begin{lemma}[a stable general fires from three generals only]\label{lem:fire}
+Let $\delta$ satisfy \eqref{eq:B1}.
+\begin{enumerate}[label=\textup{(\arabic*)}]
+\item If $\delta$ synchronizes the lengths $2$ and $3$, then $\delta(\Gq,\Lq,\ast)=\Gq$ and
+$\delta(\ast,\Gq,\Gq)=\delta(\Gq,\Gq,\ast)=\delta(\Gq,\Gq,\Gq)=\Fq$.
+\item If moreover $\delta$ synchronizes $n\ge2$, then in the line of length $n$:
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item $C_n(t,1)=\Gq$ for all $t\le 2n-3$;
+\item $C_n(2n-3,i)=\Gq$ for all $i$;
+\item at no time $t\le 2n-4$ are three adjacent positions barriers;
+\item if $C_n(t,i)=\Gq$ and $t\le 2n-4$, then $C_n(t+1,i)=\Gq$.
+\end{enumerate}
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(1) In the line of length $2$ we have $C_2(1,1)=\delta(\ast,\Gq,\Lq)=\Gq$ by \eqref{eq:B1}, and
+$\Fq=C_2(2,1)=\delta(\ast,\Gq,x)$ with $x:=C_2(1,2)=\delta(\Gq,\Lq,\ast)\in W$. By \eqref{eq:B1} this value is
+$\Gq$ unless $x=\Gq$. Hence $x=\Gq$ and $\delta(\ast,\Gq,\Gq)=\Fq$, and then
+$\Fq=C_2(2,2)=\delta(\Gq,\Gq,\ast)$. In the line of length $3$ let $s$ be the first time at which the cell $2$ is
+in state $\Gq$; it exists, since otherwise the cell $1$ would be in state $\Gq$ for ever by \eqref{eq:B1}. The
+cell $1$ is in state $\Gq$ up to time $s$ and in state $\delta(\ast,\Gq,\Gq)=\Fq$ at time $s+1$, so $s+1=4$.
+Then $\Fq=C_3(4,2)=\delta(\Gq,\Gq,z)$ with $z:=C_3(3,3)\in W$, and \eqref{eq:B1} gives $z=\Gq$ and
+$\delta(\Gq,\Gq,\Gq)=\Fq$.
+
+(2c) If three adjacent positions are barriers at time $t$, the middle one is a cell in state $\Gq$ (as $n\ge2$,
+the two borders are not adjacent to a common cell), and by~(1) it is in state $\Fq$ at time $t+1$; hence
+$t+1\ge 2n-2$.
+(2d) By (2c) the two neighbours of the cell are not both barriers, and \eqref{eq:B1} applies.
+(2a) By (2d) and induction on $t$, starting from $C_n(0,1)=\Gq$.
+(2b) By (2a), $\Fq=C_n(2n-2,1)=\delta(\ast,\Gq,y)$ with $y:=C_n(2n-3,2)\in W$, so $y=\Gq$ by \eqref{eq:B1}.
+If $C_n(2n-3,i)=\Gq$ and $i<n$, then $\Fq=C_n(2n-2,i)=\delta(x,\Gq,z)$ with $z:=C_n(2n-3,i+1)\in W$, and
+\eqref{eq:B1} gives $z=\Gq$.
+\end{proof}
+
+So on every line that it synchronizes, a rule with \eqref{eq:B1} produces $\Fq$ only at time $2n-2$, from the row
+$\Gq^n$ and the neighbourhoods $(\Gq,\Gq,\Gq)$, $(\ast,\Gq,\Gq)$, $(\Gq,\Gq,\ast)$. Balzer's condition (B3)
+therefore need not be assumed with (B1): its weak reading is part~(1), and its strong reading can be enforced
+without changing any diagram $C_n$ of a synchronized length, by redefining the transitions with value $\Fq$
+that are not used (for instance $\delta(x,y,z):=y$).
+
+\begin{lemma}[walls]\label{lem:wall}
+Let $N\ge3$, and let $\delta$ satisfy \eqref{eq:B1} and synchronize the lengths $2,\dots,N$. Then
+$C_\infty(t,1)=\Gq$ for $t\le 2N-3$, and $C_\infty(t,i)\ne\Gq$ whenever $i\ge2$ and $t+i\le 2N-4$. In
+particular, on the half-line of a minimal-time solution with \eqref{eq:B1} the first cell is always in state
+$\Gq$ and no other cell ever is.
+\end{lemma}
+
+\begin{proof}
+The first claim is Lemma~\ref{lem:fire}\,(2a) for $n=N$ and the agreement lemma. Let $p\ge2$ and
+$t_0+p\le 2N-4$, and suppose that $C_\infty(t_0,p)=\Gq$. Put $n:=N-1$, so that $t_0+p\le 2n-2$ and
+$t_0\le 2n-4$. By the agreement lemma, $C_n(t_0,i)=C_{n+1}(t_0,i)=C_\infty(t_0,i)$ for $i\le p$. By
+Lemma~\ref{lem:fire}\,(2d), applied to both lengths, the cell $p$ is in state $\Gq$ at the times
+$t_0,\dots,2n-3$ in both lines. The states of the cells $1,\dots,p-1$ at time $t+1$ are determined by the
+states of the cells $1,\dots,p$ at time $t$; by induction on $t$, the cells $1,\dots,p-1$ have the same states
+in both lines at all times $t_0\le t\le 2n-2$. Hence $C_{n+1}(2n-2,1)=C_n(2n-2,1)=\Fq$, although
+$2n-2<2(n+1)-2$, a contradiction.
+\end{proof}
+
+\begin{lemma}[gaps]\label{lem:gap}
+Let $\delta$ satisfy \eqref{eq:B1} and synchronize the lengths $2$, $3$ and $n$. Suppose that at a time
+$t\le 2n-4$ two barriers of the line of length $n$ are at distance $\ell+1\ge2$ and no position between them
+is a barrier. Then
+\[
+2n-3-t\ \le\ M(\ell),\qquad M(1):=|W'|,\quad M(\ell):=|W'|^{\ell}+M(\ell-1)\ \ (\ell\ge2).
+\]
+\end{lemma}
+
+\begin{proof}
+By Lemma~\ref{lem:fire}\,(2d) the two barriers stay barriers up to time $2n-3$, so at the times $t,\dots,2n-3$
+the $\ell$ cells between them are driven by themselves and two constant neighbours. As long as none of these
+cells is in state $\Gq$, their configuration lies in $W'^{\ell}$ and does not repeat: after a repetition it
+would be periodic up to time $2n-3$, contradicting Lemma~\ref{lem:fire}\,(2b). Hence there is
+$1\le m\le|W'|^{\ell}$ such that some of the $\ell$ cells is in state $\Gq$ at time $t+m\le 2n-3$. If
+$t+m=2n-3$, then $2n-3-t\le|W'|^{\ell}\le M(\ell)$. Otherwise $t+m\le 2n-4$; by
+Lemma~\ref{lem:fire}\,(2c) not all of the $\ell$ cells are in state $\Gq$ at time $t+m$, which is impossible
+for $\ell=1$, and for $\ell\ge2$ one of them lies between two barriers at distance $\ell'+1$ with
+$1\le\ell'\le\ell-1$ and no barrier between them. By induction, $2n-3-(t+m)\le M(\ell')\le M(\ell-1)$.
+\end{proof}
+
+Equivalently: if $2n-3-t>M(\ell)$, no two barriers of the line are at a distance $d$ with $2\le d\le\ell+1$ at
+time $t$; indeed, between two such barriers either all positions are barriers, which
+Lemma~\ref{lem:fire}\,(2c) excludes, or some gap of length at most $\ell$ occurs. For five states, $|W'|=3$ and
+$M(1),M(2),M(3)=3,12,39$. Applied to the right border, Lemma~\ref{lem:gap} sharpens the right-band lemma of the
+manuscript in this class: a general at distance $d\ge1$ from the right border exists only during the last
+$M(d)$ steps before time $2n-3$.
+
+\begin{corollary}[front types for five states]\label{cor:front}
+Let $W=\{\Lq,\Gq,\Aq,\Bq\}$ and let $\delta$ be a minimal-time solution with \eqref{eq:B1}. After exchanging
+$\Aq$ and $\Bq$ if necessary, the sequence of front cells $f_t=C_\infty(t-1,t)$, $t\ge2$, is
+$\Aq\Aq\Aq\cdots$, $\Aq\Bq\Bq\Bq\cdots$ or $\Aq\Bq\Aq\Bq\cdots$, and the half-line is a diagram over
+$\{\Lq,\Aq,\Bq\}$ next to a constant first cell $\Gq$.
+\end{corollary}
+
+\begin{proof}
+By the return-chain lemma $f_t\ne\Lq$, by Lemma~\ref{lem:wall} $f_t\ne\Gq$, and
+$f_{t+1}=\delta(f_t,\Lq,\Lq)$.
+\end{proof}
+
+\section{The image condition}
+
+Balzer's second condition for an involution $I$ of $W$, extended by $I(\ast)=\ast$ and $I(\Fq)=\Fq$, is
+\begin{equation}\label{eq:B2}
+\delta(I(z),I(y),I(x))=I(\delta(x,y,z))\quad\text{for every neighbourhood }(x,y,z).\tag{B2}
+\end{equation}
+The weak reading of (B1) requires $\delta(x,\Gq,y)=\Gq$ only for $x,y\in W$ that are not both $\Gq$.
+
+\begin{proposition}[computer-assisted, certified]\label{prop:b1b2}
+No five-state rule that satisfies \eqref{eq:B2} for some involution $I$ of $\{\Lq,\Gq,\Aq,\Bq\}$ and (B1), in
+the weak or in the strong reading, synchronizes all lengths $2,\dots,12$. For $I$ the identity, some rule with
+\eqref{eq:B1} and \eqref{eq:B2} synchronizes all lengths $2,\dots,11$.
+\end{proposition}
+
+\begin{proof}
+Let $\MT_5(2..N)$ be the propositional formula ``$\delta$ synchronizes the lengths $2,\dots,N$'' (one-hot
+variables for the transitions and for the cells; the cells with $t+i\le2n-2$ of all lines are shared, by the
+agreement lemma), with the clause that $\Aq$ occurs before $\Bq$ on the half-line. Because of this clause all
+ten involutions have to be treated. For each $I$ and each reading, the clauses of (B1) and \eqref{eq:B2} are
+added; the resulting formula is unsatisfiable for the value of $N$ in Table~\ref{tab:b1b2} and satisfiable for
+$N-1$ if $N>2$. For the strong reading CaDiCaL refutes each of the ten formulas with an LRAT proof that
+\texttt{lrat-check} verifies. For the weak reading the same holds for nine involutions, and for the identity
+Kissat refutes the formula with a DRAT proof that \texttt{drat-trim} verifies. A certificate is accepted only
+if the solver answers \textsc{unsatisfiable} and the proof ends with the empty clause. The rule for
+$2,\dots,11$ was found by the solver; its table satisfies \eqref{eq:B1} and \eqref{eq:B2} with $I$ the identity,
+and direct simulation shows that it synchronizes exactly the lengths $2,\dots,11$, $18$ and $34$ among
+$2,\dots,39$.
+\end{proof}
+
+\begin{table}[ht]
+\centering\small
+\caption{The least $N$ such that $\MT_5(2..N)$ with (B1) and \eqref{eq:B2} is unsatisfiable.}\label{tab:b1b2}
+\begin{tabular}{lcccccccccc}
+\toprule
+$I$ & $(\Lq\,\Gq)$ & $(\Lq\,\Gq)(\Aq\,\Bq)$ & $(\Gq\,\Aq)$ & $(\Lq\,\Bq)(\Gq\,\Aq)$ & $(\Gq\,\Bq)$ & $(\Lq\,\Aq)(\Gq\,\Bq)$ & $(\Lq\,\Aq)$ & $(\Lq\,\Bq)$ & $(\Aq\,\Bq)$ & id\\
+\midrule
+(B1) strong & 2 & 2 & 3 & 3 & 5 & 5 & 9 & 9 & 10 & 12\\
+(B1) weak & 3 & 3 & 6 & 6 & 7 & 6 & 10 & 10 & 10 & 12\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+By Lemma~\ref{lem:fire}, Proposition~\ref{prop:b1b2} shows that two of Balzer's four conditions already exclude
+five states: the stable general and the image condition. The conditions (B3) and (B4) of Proposition~6.6 of the
+manuscript are not needed.
+
+\section{The stable general alone}\label{sec:search}
+
+Without \eqref{eq:B2} the class is larger: a rule with \eqref{eq:B1} synchronizes all lengths $2,\dots,13$
+(found by a solver, checked by simulation; it synchronizes no other length up to $80$). Whether some rule with
+\eqref{eq:B1} is a minimal-time solution is open at the time of writing. The computation in progress is
+described in \texttt{README.md}, Section~6: a depth-first search over the transitions of the half-line, which
+by Corollary~\ref{cor:front} is a diagram over three states, with an incremental SAT solver at every node, for
+the lengths $2,\dots,14$ and the conclusions of Lemmas~\ref{lem:fire}--\ref{lem:gap} as redundant clauses. If
+every node of this search closes, no five-state rule with \eqref{eq:B1} synchronizes all lengths $2,\dots,16$.
+
+\end{document}
