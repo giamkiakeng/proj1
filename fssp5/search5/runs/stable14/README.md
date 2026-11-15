@@ -8,3 +8,13 @@
 
 Job `j`: `germsat.py 14 --budget 3000 --prefix <line j of g14_d7_prefixes.txt> --cubes c<j>.txt`.
 See `../../README.md`, Section 6.
+
+Certification (in progress).
+
+- `g14_parts_top.txt`: the 36 nodes of `g14_top.txt`, each with a checked LRAT proof
+  (`certtree.py 14 g14_top.txt ... --pump 14`).
+- `g14_parts_168-341.partial.txt.gz`: output of `certtree.py 14 g14_d7_prefixes.txt ... --first 168 --last 341
+  --pump 14 --tlim 4` so far (snapshot; the run is not finished). One line per certified cube:
+  cube | CaDiCaL seconds | proof bytes | SHA-256 of the cube formula | SHA-256 of the proof | VERIFIED.
+  The formula $F$ has 3465 variables and 324,753 clauses; SHA-256 of its clause lines
+  `67957a4ce7230559cf9fc2b463d66096be3056b00b8a01001465fd2ef260f057`.
