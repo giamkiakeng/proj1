@@ -313,10 +313,16 @@ Checks. The same program for four states and without the class (`gsat.py 4 9`) c
 class that were found without the redundant clauses satisfy the formula with them (`mcopy.py ... --fix`):
 the rule for 2..13 at $N=11,12,13$, and four other rules at $N=10$ or 11.
 
-Status of the search for the lines $2,\dots,14$ (`runs/stable14/`): in progress. 81 of the 341 subtrees are
-closed (72,872 nodes, 4 hours of solver time), no rule has been found. If all subtrees close, no five-state rule
-with a stable general synchronizes all lines $2,\dots,16$ (the formula uses Lemma 6.2 up to the anti-diagonal
-27 and the front cell $(13,14)$, which need the lines up to 16).
+Status of the search for the lines $2,\dots,14$ (`runs/stable14/`): in progress, no rule found so far.
+The first 167 of the 341 subtrees are closed by `germsat.py` (169,041 nodes, 13.2 hours of solver time; from
+subtree 100 on with the clauses PUMP$(n,n')$, $4\le n<n'\le14$, which follow from the lines and make the
+subtrees with $\delta(A,L,L)=B$ about 1.5 times cheaper). The other 174 subtrees are being searched by
+`certtree.py`, which does the same search with a new CaDiCaL process at every node (4 s; on a time-out the
+node is split) and has `lrat-check` verify the LRAT proof of every node that it closes; on one subtree that
+`germsat.py` closed in 16 minutes it needed 20 minutes and closed it with 275 checked proofs. When this is
+done, the first 167 subtrees will be certified in the same way. If all subtrees close, no five-state rule with
+a stable general synchronizes all lines $2,\dots,16$ (the formula uses Lemma 6.2 up to the anti-diagonal 27 and
+the front cell $(13,14)$, which need the lines up to 16).
 
 Second method, without a solver. A closed node is a small problem for plain enumeration: with the transitions
 of the node fixed, `mdfs` (depth-first enumeration of all partial rules of the class, transitions fixed lazily)
@@ -327,7 +333,10 @@ number of partial rules of the class for the lines $2,\dots,N$ with nothing fixe
 12, 13, 14, 16 transitions: 171,797, 983, 40, 4). `enumtree.py` runs an enumerator on every closed node (and
 splits a node further if a node limit is reached), and `covercheck.py` checks, without solver or enumeration,
 that the closed nodes are a complete case split. Together they give a proof by exhaustive enumeration that
-does not depend on the SAT solver or on Lemmas 6.1 (b)-(d) and 6.3; this pass has not been run on all nodes yet.
+does not depend on the SAT solver or on Lemmas 6.1 (b)-(d) and 6.3. It is affordable for the subtrees with
+$\delta(A,L,L)=A$ (some $10^6$ to $10^7$ nodes per closed node) but not for those with $\delta(A,L,L)=B$ (about
+$3\cdot10^7$ nodes per closed node and far more closed nodes, some $10^{13}$ nodes in all); it has not been run on
+all nodes yet.
 
 ## 7. Balzer's conditions, taken apart
 
