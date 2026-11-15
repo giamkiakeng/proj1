@@ -495,35 +495,54 @@ means that a rule for $2,\dots,N$ was found and the next length was not decided 
 Without (B2): (B1) alone is Section 6 (rule for 2..13); (B1) and (B4): rule for 2..12, 13 not decided in 16
 minutes; (B3) and (B4): rule for 2..12; (B3): rule for 2..11.
 
-**Proposition 7.2 (Balzer's conditions as Yunès states them; computer-assisted, certified; $I$ the identity so far).**
-No five-state rule that satisfies (B1) and (B3) in the weak reading, (B4), and (B2) with $I$ the identity for
-the neighbourhoods without a border synchronizes all lines of lengths $2,\dots,15$ in minimal time.
+**Proposition 7.2 (Balzer's conditions as Yunès states them; computer-assisted, certified).**
+No five-state rule that satisfies (B1) and (B3) in the weak reading, (B4), and (B2) for the neighbourhoods
+without a border, for some involution $I$ of the working states, synchronizes all lines of lengths
+$2,\dots,15$ in minimal time. For $I\ne\mathrm{id}$ the lengths $2,\dots,12$ suffice.
 
 This is the case left open at the end of Section 6.5 of the paper, where the rule `balzer_noborder12` shows
-that the lines up to 12 do not suffice.
+that the lines up to 12 do not suffice for $I$ the identity.
 
-*Proof.* Let $F$ be the formula of `gcert.py 5 13 --b1 --b3w --b4 --b2 id --b2nb --noghw --front1` (2608
-variables, 259,770 clauses; SHA-256 of its clause lines `e827af0b...3a0ce0`, printed by the program): the lines
-$2,\dots,13$ are synchronized, with the clauses of (B1w), (B3w), (B4) and (B2) for the 64 neighbourhoods
-without a border, and with clauses that follow if the lines up to 15 are synchronized as well: the return chain
-of the line 13 and the half-line in working states up to the anti-diagonal 25 (line 14), the front cell
-$(12,13)\ne L$ (Lemma 2.4 of the paper for the lines 14 and 15), and no cell $i\ge2$ of the half-line in state
-$G$ up to the anti-diagonal 25 (Lemma 6.2' with $N=15$). The class is invariant under exchanging the names $A$
-and $B$, so the auxiliary state that the half-line uses first may be called $A$. A rule of the class that
-synchronizes $2,\dots,15$ therefore gives a model of $F$ in the tree that `gcert.py` searches: the transitions
-of the half-line are fixed one at a time in the order of the anti-diagonals; the values excluded at a node are
-`L` for a front cell and `G` for a cell $i\ge2$ (unit clauses of $F$) and `B` before `A` (naming). The search
-ended with 3726 nodes: 1176 were split, and each of the other 2550 is closed by CaDiCaL 3.0.1 (at most 4 s)
-with an LRAT proof that `lrat-check` verified (answer `UNSATISFIABLE` and empty last lemma required). The
-proofs, 34.5 GB in all, were deleted after the check; `runs/yunes/yun_id_13.txt` lists for every closed node
-its cube and the SHA-256 digests of the cube formula ($F$ plus the units of the cube) and of the proof.
-`gcover.py 5 13 runs/yunes/yun_id_13.txt --noghw --front1`, which replays the branching rules without a
-solver, reports that the 2550 cubes are a complete case split. So $F$ is unsatisfiable. $\square$
+*Proof.* As in the paper, $I(G)=G$: otherwise $g=I(G)\ne G$, and (B2) for the neighbourhood $(G,g,G)$ with
+(B4) gives $\delta(g,G,g)=I(\delta(G,g,G))=I(G)=g$, against (B1w). So $I$ is the identity, $(A\,B)$, $(L\,A)$ or
+$(L\,B)$. For each of them let $F_I$ be the formula of
+`gcert.py 5 N --b1 --b3w --b4 --b2 I --b2nb --noghw --front1`, with $N=13$ for the identity and $N=10$
+otherwise: the lines $2,\dots,N$ are synchronized, with the clauses of (B1w), (B3w), (B4) and of (B2) for the
+64 neighbourhoods without a border, and with clauses that follow if the lines up to $N+2$ are synchronized as
+well: the return chain of the line $N$ and the half-line in working states up to the anti-diagonal $2N-1$
+(line $N+1$), the front cell $(N-1,N)\ne L$ (Lemma 2.4 of the paper for the lines $N+1$ and $N+2$), and no
+cell $i\ge2$ of the half-line in state $G$ up to the anti-diagonal $2N-1$ (Lemma 6.2' for the lines up to
+$N+2$). `gcert.py` searches the tree of half-lines: the transitions of the half-line are fixed one at a
+time in the order of the anti-diagonals; the values excluded at a node are `L` for a front cell and `G` for a
+cell $i\ge2$ (unit clauses of $F_I$) and `B` before `A` has been used (naming). The classes for the identity
+and for $(A\,B)$ are invariant under exchanging the names $A$ and $B$, and this exchange maps the class for
+$(L\,A)$ onto the class for $(L\,B)$; so a rule of one of the four classes that synchronizes $2,\dots,N+2$
+gives, after renaming, a model of one of the four formulas in the tree that is searched. Every node is
+either split or closed by CaDiCaL 3.0.1 (at most 4 s) with an LRAT proof that `lrat-check` verified (answer
+`UNSATISFIABLE` and empty last lemma required):
 
-The largest $N$ such that a rule of this class synchronizes $2,\dots,N$ is therefore 12, 13 or 14.
-A second verification of all 2550 proofs with `cake_lpr` (`gcert.py ... --recheck`) and the searches for the
-involutions $(A\,B)$, $(L\,A)$, $(L\,B)$ and for a stable state other than the initial state of the general
-are running; see Section 8.
+| $I$ | $N$ | variables, clauses of $F_I$ | SHA-256 of the clause lines | nodes split | nodes closed | CaDiCaL time on closed nodes | proofs |
+|---|---|---|---|---|---|---|---|
+| identity | 13 | 2608, 259,770 | `e827af0b...3a0ce0` | 1176 | 2550 | 5219 s | 34.5 GB |
+| $(A\,B)$ | 10 | 1536, 121,456 | `edeb38b1...2a70317` | 137 | 265 | 556 s | 2.7 GB |
+| $(L\,A)$ | 10 | 1536, 121,456 | `f3e68742...334f7f5` | 62 | 131 | 243 s | 1.1 GB |
+| $(L\,B)$ | 10 | 1536, 121,456 | `346a6003...4004d26` | 40 | 89 | 169 s | 0.9 GB |
+
+The proofs were deleted after the check; `runs/yunes/yun_I_N.txt` lists for every closed node its cube and
+the SHA-256 digests of the cube formula ($F_I$ plus the units of the cube) and of the proof.
+`gcover.py 5 N runs/yunes/yun_I_N.txt --noghw --front1`, which replays the branching rules without a solver,
+reports for each of the four files that the cubes are a complete case split. So the four formulas are
+unsatisfiable. $\square$
+
+For $I$ the identity the largest $N$ such that a rule of the class synchronizes $2,\dots,N$ is therefore 12, 13
+or 14. A second verification of the proofs with `cake_lpr` (`gcert.py ... --recheck`, which also compares
+the digests) is recorded in Section 8.
+
+Yunès admits a state other than $G$ in (B1), (B3) and (B4). A state $g$ that is stable, fires in threes and
+is not the initial state of the general is the same class with the roles of two names exchanged: the lines
+start from `A L ... L` and the conditions speak about $G$ (`gcert.py --init A`). Lemma 6.2' does not use the
+initial configuration, so the half-line has no cell $i\ge2$ in state $G$ in this class either. This class has
+rules for $2,\dots,9$ with $I$ the identity; the search for longer lines is running (Section 8).
 
 ## 8. Log of long runs
 
