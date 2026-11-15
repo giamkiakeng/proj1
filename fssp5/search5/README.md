@@ -153,6 +153,47 @@ The strict class of Section 2 has a rule for 2..11 (`rules/strict_2-11.txt`, inc
 early on the line 16, and so do all rules found so far in these classes on some line shortly after $N$: with
 $N\le 12$ the structure does not yet force a rule that generalizes.
 
-## 6. Log of long runs
+## 6. Stable generals
+
+**Lemma (walls).** Let $\delta$ be a minimal-time solution, with any number of states, such that
+
+- (B1), strong reading: $\delta(x,G,y)=G$ unless $x$ and $y$ are both in $\{G,\ast\}$, and
+- (B3), weak reading: $\delta(G,G,G)=\delta(\ast,G,G)=\delta(G,G,\ast)=F$.
+
+Then the first cell is in state $G$ at every time before the firing time, and on the half-line no cell
+$i\ge2$ is ever in state $G$.
+
+*Proof.* A cell of the half-line in state $G$ keeps this state: by (B1) it could only change if both its
+neighbours were in $\{G,\ast\}$, and then it would fire by (B3), which never happens on the half-line. For
+the first cell this gives the first claim. Suppose that the cell $p\ge2$ of the half-line is in state $G$ at
+some time $t_w$, hence at all later times. Let $n$ be so large that $t_w+p\le 2n-2$. By the agreement lemma
+(Lemma 2.2 of the paper) the cell $p$ of the line of length $n$ is in state $G$ at time $t_w$, and by (B1)
+and (B3) it stays in this state until the firing time. So from time $t_w$ on, the cells $1,\dots,p-1$ of the
+line have the constant right neighbour $G$: their states at the times $t\ge t_w$ are determined by their
+states at time $t_w$, which are those of the half-line and do not depend on $n$. Then the first cell would
+be in state $F$ for the first time at the same time in the lines of lengths $n$ and $n+1$, a contradiction.
+$\square$
+
+So in this class a general is a wall that no information crosses, a wall can only appear after the echo of
+the right end has passed, and the half-line is a diagram over $\{L,A,B\}$ next to a constant $G$. The paper
+(Proposition 6.6) excludes five states under (B1)-(B4), where (B2) is the image condition; the question here
+is whether (B1) and (B3) alone suffice.
+
+| class (five states) | result |
+|---|---|
+| (B1) strong, (B3) weak, with the conclusions of the lemma added as clauses | satisfiable for 2..11 (incremental, 4 s); $N=12$ unknown (95 s) |
+| the same, with the necessary conditions of the paper for the lines up to 40 (no `F` in the first 10 rows after the reflection, return chain different from the half-line, half-line without `F` to the anti-diagonal 79) and PUMP$(n,n')$ for $4\le n<n'\le40$ | satisfiable for 2..8 (incremental, 142 s); running |
+| static general from time 1 and (B3) strong, same necessary conditions | satisfiable for 2..10 (incremental, 19 min); running |
+| (B1) weak, (B3) strong, (B4), same necessary conditions | satisfiable for 2..9 (incremental, 4 min); running |
+| image solutions with $I$ the identity, necessary conditions with 8 rows and without PUMP | satisfiable for 2..10; running |
+
+Mazoyer's table (six states, lengths from 3) satisfies the necessary conditions as encoded (`mcopy.py 6 12
+--nmin 3 --nocopy --nosym --early 40 12 --pump 40 --fix mazoyer6.txt`: satisfiable).
+
+The half-lines of this class cannot be listed exhaustively the way the germs of low complexity are listed in
+the paper: `germw.c` (all half-lines over $\{L,A,B\}$ with the conditions on the front and PUMP) does not
+finish even to the anti-diagonal 20.
+
+## 7. Log of long runs
 
 (appended as runs finish)

@@ -139,7 +139,7 @@ def chain(n, a, mmin, mfun=None):
 
 class Model:
     def __init__(self, k, N, a=2, s0=2, mmin=3, nmin=2, copy=True, half=None, rev=True, sym=True, levels=99,
-                 mfun=None, wake=0, margin=0, gstatic=None, period=0, ctheta=2, b3=False, b1=False, b4=False, b2=None, early=None, pump=0):
+                 mfun=None, wake=0, margin=0, gstatic=None, period=0, ctheta=2, b3=False, b1=False, b4=False, b2=None, early=None, pump=0, b1s=False, b3w=False, nogh=False):
         self.wake, self.margin = wake, margin
         self.period, self.ctheta = period, ctheta
         self.E = E = Enc(k, rev)
@@ -218,6 +218,16 @@ class Model:
                 for d in range(k):
                     if vs[d] != ws[I[d]]:
                         E.add([-vs[d], ws[I[d]]])
+        if b1s:       # (B1), strong reading: delta(x, G, y) = G unless x and y are both G or a border
+            for e, vs in E.T.items():
+                if e[1] == 1 and not (e[0] in (1, BND) and e[2] in (1, BND)):
+                    E.add([vs[1]])
+        if b3w:       # (B3), weak reading: GGG, *GG and GG* give F
+            for e in ((1, 1, 1), (BND, 1, 1), (1, 1, BND)):
+                E.add([E.T[e][E.F]])
+        if nogh:      # consequence of (B1) strong and (B3) weak: the first cell is always G, and no other cell of the half-line is G
+            for (t, i), x in sorted(self.Hc.items()):
+                E.add([x[1]] if i == 1 else [-x[1]])
         if b4:        # (B4): delta(G, v, G) = G for v != G
             for e, vs in E.T.items():
                 if e[0] == 1 and e[2] == 1 and e[1] != 1:
@@ -355,11 +365,14 @@ def main():
     ap.add_argument('--b2')
     ap.add_argument('--early', type=int, nargs=2, metavar=('N2', 'T'))
     ap.add_argument('--pump', type=int, default=0)
+    ap.add_argument('--b1s', action='store_true')
+    ap.add_argument('--b3w', action='store_true')
+    ap.add_argument('--nogh', action='store_true')
     ap.add_argument('--ctheta', type=int, default=2)
     a = ap.parse_args()
     t0 = time.time()
     M = Model(a.k, a.N, a.a, a.s0, a.mmin, a.nmin, not a.nocopy, a.half, not a.norev, not a.nosym, a.levels,
-              None, a.wake, a.margin, a.gstatic, a.period, a.ctheta, a.b3, a.b1, a.b4, a.b2, tuple(a.early) if a.early else None, a.pump)
+              None, a.wake, a.margin, a.gstatic, a.period, a.ctheta, a.b3, a.b1, a.b4, a.b2, tuple(a.early) if a.early else None, a.pump, a.b1s, a.b3w, a.nogh)
     if a.fix:
         sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
         from simlib import load

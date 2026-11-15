@@ -24,7 +24,7 @@
 #define BND 7
 enum { NONF = 0, FIRE = 1, DIFF = 2, FRONT = 3, EQ = 4, ISL = 5, MARK = 6, ISG = 7 };
 
-static int K, N, WS, FST, A_, S0, MMIN, WAKE, MARGIN, NMIN, GSTATIC = -1, NOCOPY = 0, PERIOD = 0, CTHETA = 2;
+static int K, N, WS, FST, A_, S0, MMIN, WAKE, MARGIN, NMIN, GSTATIC = -1, NOCOPY = 0, PERIOD = 0, CTHETA = 2, B3 = 0;
 static int tab[8][8][8];
 static int *cell;
 typedef struct { int x, a, b, c, kind; } op_t;
@@ -188,6 +188,11 @@ static void dfs(int p) {
     default: break;
     }
     int a = cell[o->a], b = cell[o->b], c = cell[o->c];
+    if (B3) {                 /* exactly the neighbourhoods GGG, *GG, GG* give F */
+      int gt = (b == 1) && (a == 1 || a == BND) && (c == 1 || c == BND);
+      if (o->kind == FIRE) { if (!gt) return; continue; }
+      if (gt) return;
+    }
     int v = tab[a][b][c];
     if (v < 0) {
       int lo, hi;
@@ -233,6 +238,7 @@ int main(int argc, char **argv) {
     else if (!strcmp(argv[i], "-n")) maxnodes = atoll(argv[++i]);
     else if (!strcmp(argv[i], "-g")) GSTATIC = atoi(argv[++i]);
     else if (!strcmp(argv[i], "-f")) fixfile = argv[++i];
+    else if (!strcmp(argv[i], "-b3")) B3 = 1;
     else if (!strcmp(argv[i], "-o")) { char *q = strtok(argv[++i], ","); while (q) { order[norder++] = atoi(q); q = strtok(NULL, ","); } }
     else if (!strcmp(argv[i], "-P")) { PERIOD = atoi(argv[++i]); CTHETA = atoi(argv[++i]); }
   }
