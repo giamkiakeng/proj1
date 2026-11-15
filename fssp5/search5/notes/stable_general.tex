@@ -19,6 +19,7 @@
 \noindent\textbf{Status of the statements.}
 Lemmas~\ref{lem:fire}--\ref{lem:gap}, Corollary~\ref{cor:front}, Lemmas~\ref{lem:Fsound} and~\ref{lem:split},
 Lemmas~\ref{lem:iwall} and~\ref{lem:gapweak} and Corollary~\ref{cor:gapclauses} are proved here.
+Proposition~\ref{prop:lbparity} is proved here as well.
 Propositions~\ref{prop:b1b2} and~\ref{prop:yunes} are computer-assisted; every formula in their proofs has a
 proof certificate that an independent checker verified. Section~\ref{sec:search} describes a computation that
 is not finished; nothing is claimed from it yet.
@@ -463,5 +464,75 @@ rule in which another state $g$ is stable in the sense of \eqref{eq:B1w}, fires 
 use the initial configuration. (3) Without \eqref{eq:B4} and \eqref{eq:B2o} the class of \eqref{eq:B1w} and
 \eqref{eq:B3w} has not been decided; random descents in its search tree for the lengths $2,\dots,14$ suggest
 some $10^7$ nodes, against $3.7\cdot10^3$ nodes for the identity above.
+
+\section{A remark on the left-border lemma}\label{sec:leftborder}
+
+Lemma~4.1 of the manuscript: let $\delta$ have $k$ states and synchronize the line of length $n$, let
+$s,\ell\ge1$ and $s\le Y\le n-s$, and let the input anti-diagonals $y\mapsto C_\infty(2n-2-y,y)$
+($s\le y\le Y$) and $y\mapsto C_\infty(2n-3-y,y)$ ($s\le y\le Y-1$) be $\ell$-periodic; then
+$Y-s\le(k-1)^{2s}\ell$. Question~(3) of the manuscript asks whether this bound can be made polynomial in $s$.
+We use the notation of that lemma: $u_c(y)$ is the cell $y+\lfloor c/2\rfloor$ at time
+$2n-2+\lceil c/2\rceil-y$, and
+\begin{equation}\label{eq:slices}
+u_c(y)=\delta\bigl(u_{c-2}(y),\,u_{c-1}(y+\varepsilon_c),\,u_c(y+1)\bigr),\qquad
+\varepsilon_c=1\text{ for even }c,\ \varepsilon_c=0\text{ for odd }c,
+\end{equation}
+with the inputs $u_{-1}$, $u_0$. Put $q:=k-1=|W|$.
+
+\begin{proposition}\label{prop:lbparity}
+Let $k$ be odd, $s\ge2$ and $\ell=1$. Under the hypotheses of Lemma~4.1 of the manuscript,
+$Y-s\le(k-1)^{2s}-1$.
+\end{proposition}
+\begin{proof}
+Put $m:=2s\ge4$ and suppose that $Y-s=q^m$. For $0\le j<q^m$ let $X_j:=(u_1(y),\dots,u_m(y))$ with $y=Y-j$.
+By the proof of Lemma~4.1 these $q^m$ vectors lie in $W^m$ and are pairwise distinct, so every element of
+$W^m$ is exactly one $X_j$. Since the inputs are constant on the stretch, \eqref{eq:slices} gives
+$X_{j+1}=\Gamma_0(X_j)$ for $0\le j\le q^m-2$, where the component $c$ of $\Gamma_0(X)$ depends only on the
+components $1,\dots,c$ of $X$.
+
+(1) Let $1\le c\le m-1$, and let $p_j\in W^c$ consist of the first $c$ components of $X_j$. Then
+$p_{j+1}=\Phi_c(p_j)$ for a map $\Phi_c$, and every element of $W^c$ occurs exactly $q^{m-c}\ge2$ times among
+the $p_j$. In particular $p_0=p_j$ for some $j>0$, so the sequence is periodic; its period is the number of
+its values, $q^c$. Hence $\Phi_c$ is a cyclic permutation of $W^c$.
+
+(2) Call $\varphi(j):=j\bmod q^{m-1}$ the phase of $j$. By (1) with $c=m-1$, the first $m-1$ components of
+$X_j$ depend on $\varphi(j)$ only. By \eqref{eq:slices} for the even index $m$, the component $m$ of $X_{j+1}$
+is $g_{\varphi(j)}$ applied to the component $m$ of $X_j$, where
+\[
+g_\varphi:=\delta(\alpha_\varphi,\beta_\varphi,\,\cdot\,),\qquad
+\alpha_\varphi:=\text{component }m-2\text{ of }X_{j+1},\quad \beta_\varphi:=\text{component }m-1\text{ of }X_j
+\]
+for any $j$ of phase $\varphi$. For a fixed phase $\varphi$, the components $m$ of the $q$ vectors
+$X_{\varphi+rq^{m-1}}$, $0\le r<q$, are pairwise distinct, because these vectors are distinct and agree in
+their first $m-1$ components. If $\varphi\le q^{m-1}-2$, the map $g_\varphi$ sends these $q$ values to the $q$
+distinct values at the phase $\varphi+1$; so $g_\varphi$ is a permutation of $W$.
+
+(3) Every pair $(\alpha,\beta)\in W^2$ equals $(\alpha_\varphi,\beta_\varphi)$ for exactly $q^{m-3}$ phases
+$\varphi$. Indeed, write the first $m-1$ components at the phase $\varphi$ as $(p',z)$ with $p'\in W^{m-2}$,
+$z\in W$; then $\beta_\varphi=z$, and $\alpha_\varphi$ is the last component of $\Phi_{m-2}(p')$. As
+$(p',z)$ runs through $W^{m-2}\times W$ and $\Phi_{m-2}$ is a bijection by (1), each pair occurs $q^{m-3}$
+times. Since $q^{m-3}\ge2$, every map $\delta(\alpha,\beta,\cdot)$ is $g_\varphi$ for some
+$\varphi\le q^{m-1}-2$; so by (2) all $g_\varphi$ are permutations of $W$.
+
+(4) Let $G:=g_{q^{m-1}-1}\circ\dots\circ g_0$. The components $m$ of $X_0,X_{q^{m-1}},\dots,X_{(q-1)q^{m-1}}$
+are $q$ distinct elements of $W$, and $G$ maps each of them to the next. As $G$ is a permutation of the
+$q$-element set $W$, it is a cycle of length $q$, with sign $(-1)^{q-1}=-1$. On the other hand, by (3),
+\[
+\operatorname{sgn}G=\prod_{(\alpha,\beta)\in W^2}\operatorname{sgn}\bigl(\delta(\alpha,\beta,\cdot)\bigr)^{q^{m-3}}=1,
+\]
+because $q^{m-3}$ is even. This is a contradiction.
+\end{proof}
+
+For $s=1$ the bound is attained, at least for four and five states and $\ell=1$: a solver finds a four-state
+rule that synchronizes the line of length $11$ with constant inputs for $1\le y\le10$ ($Y-s=9$), and a
+five-state rule that synchronizes the line of length $18$ with constant inputs for $1\le y\le17$ ($Y-s=16$);
+both are checked by simulation, and in both the pairs $(u_1(y),u_2(y))$, $2\le y\le n-1$, are the $q^2$
+elements of $W^2$. So for five states the bound of Lemma~4.1 is sharp for $s=1$ and not for $s\ge2$.
+Proposition~\ref{prop:lbparity} lowers it only by one. In the other direction, the recursion
+\eqref{eq:slices} by itself allows long runs: with $q=4$ and the states read as pairs (bit, carry), the
+components $c,c-2,c-4,\dots$ form a binary counter with ripple carry, because the component $c$ sees the new
+state of the component $c-2$; this gives $2^s$ vectors without repetition. We do not know whether a rule
+that synchronizes a line realizes this for large $s$. A polynomial bound, if there is one, must therefore
+use more than the recursion \eqref{eq:slices} on the first $2s$ chains.
 
 \end{document}
