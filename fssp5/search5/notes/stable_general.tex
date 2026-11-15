@@ -264,13 +264,13 @@ $\gamma\cup\{e(\gamma)\mapsto v\}$ for all $v\in W$ except
 \item $v=\Gq$ if $c(\gamma)=(t,i)$ with $i\ge2$ and the class has a wall lemma;
 \item for $W=\{\Lq,\Gq,\Aq,\Bq\}$: $v=\Bq$ if $\Aq$ is not a value of $\gamma$.
 \end{enumerate}
-The root is the empty partial rule.
+The root is the empty partial rule. For a node $\gamma$ we write $F\wedge\gamma$ for $F$ together with the
+unit clauses $[\delta(e)=\gamma(e)]$, $e\in\operatorname{dom}\gamma$.
 
 \begin{lemma}[complete case split]\label{lem:split}
 Let the class be invariant under exchanging the names $\Aq$ and $\Bq$. Let $\mathcal U$ be a finite set of
 nodes such that the root is \emph{covered}, where a node is covered if it belongs to $\mathcal U$, or if
-$c(\gamma)$ exists and all its children are covered. If $F\wedge\bigwedge_{e\in\operatorname{dom}\gamma}[\delta(e)=\gamma(e)]$
-is unsatisfiable for every $\gamma\in\mathcal U$, then no rule of the class synchronizes all lengths
+$c(\gamma)$ exists and all its children are covered. If $F\wedge\gamma$ is unsatisfiable for every $\gamma\in\mathcal U$, then no rule of the class synchronizes all lengths
 $2,\dots,N+2$.
 \end{lemma}
 \begin{proof}
