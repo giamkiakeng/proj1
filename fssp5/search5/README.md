@@ -79,6 +79,11 @@ Checks of the programs:
   complete case split; with one cube removed from the file it reports the hole.
   `gcert.py 4 8 --strict` stops with a satisfiable node, in accordance with $N_4=8$. `--recheck` reproduces
   the 38 formulas and proofs digest for digest, and both checkers accept them again.
+- `test_branching.py`, `test_branching_ct.py`: for 300 random rules per setting, the neighbourhood that the
+  branching of `gcert.py` (five settings: no class, `--noghw`, `--nogh`, `--strict`, `--init A`) and of
+  `certtree.py` asks for at every node is the neighbourhood above the first half-line cell, in the order of the
+  search, that the transitions fixed so far do not determine, where the half-line is computed by a direct
+  simulation of the rule; some 4000 to 7000 branching steps per setting, no disagreement.
 - `check_rule_formula.py`: the rule `balzer_noborder12` of the paper (it synchronizes $2,\dots,12$) satisfies the
   formula of Proposition 7.2 at $N=9$ and $N=10$, as it must (and at $N=11$); the rule for 2..13 of Section 6
   satisfies the formula of the stable-general search at $N=11$, as it must (and at $N=12$).
