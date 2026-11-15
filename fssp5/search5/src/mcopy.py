@@ -139,14 +139,20 @@ def chain(n, a, mmin, mfun=None):
 
 class Model:
     def __init__(self, k, N, a=2, s0=2, mmin=3, nmin=2, copy=True, half=None, rev=True, sym=True, levels=99,
-                 mfun=None, wake=0, margin=0, gstatic=None, period=0, ctheta=2, b3=False, b1=False, b4=False):
+                 mfun=None, wake=0, margin=0, gstatic=None, period=0, ctheta=2, b3=False, b1=False, b4=False, b2=None, early=None, pump=0):
         self.wake, self.margin = wake, margin
         self.period, self.ctheta = period, ctheta
         self.E = E = Enc(k, rev)
         self.k, self.N, self.a, self.s0, self.mmin, self.nmin = k, N, a, s0, mmin, nmin
-        self.M = half if half else 2 * N - 1          # the half-line carries variables for t + i <= M
+        self.early = early                            # (N2, T): the first T rows after the reflection of the lines up to N2
+        NH = max(N, early[0]) if early else N
+        self.M = half if half else 2 * NH - 1         # the half-line carries variables for t + i <= M
         self.Hc, self.Rc = {}, {}
         self.cuts = {n: (chain(n, a, mmin, mfun)[:levels] if copy else []) for n in range(nmin, N + 1)}
+        if early:
+            assert not copy, 'early rows are implemented without copies only'
+            for n in range(N + 1, early[0] + 1):
+                self.cuts[n] = []
         for n, cs in self.cuts.items():
             for p, m, T in cs:
                 assert m >= nmin, (n, p, m)
@@ -155,12 +161,24 @@ class Model:
         # half-line transitions
         for t in range(0, self.M):
             for i in range(1, min(t + 2, self.M - t - 1) + 1):          # cell (t+1, i), t+1+i <= M
-                E.level = max(nmin, (t + 1 + i + 2) // 2)                 # needed from the line of this length on
+                E.level = nmin if early else max(nmin, (t + 1 + i + 2) // 2)   # needed from the line of this length on
                 E.transition(self.H(t, i - 1), self.H(t, i), self.H(t, i + 1), self.H(t + 1, i))
         # the front is never quiescent while some line n <= N still waits for it
-        for t in range(1, N - 1):
-            E.level = max(nmin, t + 2)
+        for t in range(1, NH - 1):
+            E.level = nmin if early else max(nmin, t + 2)
             E.differ(self.H(t, t + 1), 0)
+        # early rows of the lines up to N2: no F in the first T rows after the reflection, return chain != half-line
+        if early:
+            N2, Te = early
+            E.level = nmin
+            for n in range(nmin, N2 + 1):
+                for t in range(n - 2, min(n - 1 + Te, 2 * n - 3)):
+                    for i in range(max(1, 2 * n - 2 - t), n + 1):
+                        E.transition(self.cell(n, t, i - 1), self.cell(n, t, i), self.cell(n, t, i + 1), self.cell(n, t + 1, i))
+                for i in range(max(2, n - Te), n + 1):
+                    t = 2 * n - 1 - i
+                    if t + i <= self.M and t <= 2 * n - 3:
+                        E.differ(self.cell(n, t, i), self.H(t, i))
         # lines
         for n in range(nmin, N + 1):
             E.level = n
@@ -173,6 +191,15 @@ class Model:
                 t = 2 * n - 1 - i
                 if t + i <= self.M and t <= 2 * n - 3:
                     E.differ(self.cell(n, t, i), self.H(t, i))
+        if pump:      # PUMP(n, n') for 4 <= n < n' <= pump (Lemma 3.3 of the paper), on the half-line
+            assert 2 * pump - 2 <= self.M, 'the half-line must reach the anti-diagonal 2*pump-2'
+            E.level = nmin
+            for q in (os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'paper', 'supplementary', 'src'),
+                      ):
+                if os.path.isdir(q) and q not in sys.path:
+                    sys.path.insert(0, q)
+            import gencnf
+            self.npump = gencnf.add_pumping(E, self.H, pump)
         E.level = 0
         if b3:        # (B3), strong reading: exactly the neighbourhoods GGG, *GG and GG* give F
             for e, vs in E.T.items():
@@ -181,6 +208,16 @@ class Model:
             for e, vs in E.T.items():
                 if e[1] == 1 and e[0] != BND and e[2] != BND and (e[0], e[2]) != (1, 1):
                     E.add([vs[1]])
+        if b2:        # (B2): delta(I(z), I(y), I(x)) = I(delta(x, y, z)) for an involution I of the states
+            I = {x: x for x in list(range(k)) + [BND]}
+            if b2 != 'id':
+                u, v = NAMES.index(b2[0]), NAMES.index(b2[1])
+                I[u], I[v] = v, u
+            for (x, y, z), vs in E.T.items():
+                ws = E.T[(I[z], I[y], I[x])]
+                for d in range(k):
+                    if vs[d] != ws[I[d]]:
+                        E.add([-vs[d], ws[I[d]]])
         if b4:        # (B4): delta(G, v, G) = G for v != G
             for e, vs in E.T.items():
                 if e[0] == 1 and e[2] == 1 and e[1] != 1:
@@ -315,11 +352,14 @@ def main():
     ap.add_argument('--b3', action='store_true')
     ap.add_argument('--b1', action='store_true')
     ap.add_argument('--b4', action='store_true')
+    ap.add_argument('--b2')
+    ap.add_argument('--early', type=int, nargs=2, metavar=('N2', 'T'))
+    ap.add_argument('--pump', type=int, default=0)
     ap.add_argument('--ctheta', type=int, default=2)
     a = ap.parse_args()
     t0 = time.time()
     M = Model(a.k, a.N, a.a, a.s0, a.mmin, a.nmin, not a.nocopy, a.half, not a.norev, not a.nosym, a.levels,
-              None, a.wake, a.margin, a.gstatic, a.period, a.ctheta, a.b3, a.b1, a.b4)
+              None, a.wake, a.margin, a.gstatic, a.period, a.ctheta, a.b3, a.b1, a.b4, a.b2, tuple(a.early) if a.early else None, a.pump)
     if a.fix:
         sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
         from simlib import load

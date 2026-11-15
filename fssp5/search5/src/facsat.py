@@ -22,6 +22,7 @@ ap.add_argument('k', type=int); ap.add_argument('N', type=int); ap.add_argument(
 ap.add_argument('--past', type=int, default=-1); ap.add_argument('--target', default='mazoyer6.txt')
 ap.add_argument('--n0', type=int, default=3); ap.add_argument('--time', type=int, default=3000)
 ap.add_argument('--solver', default='kissat'); ap.add_argument('--out'); ap.add_argument('--cnf')
+ap.add_argument('--maxc', type=int, default=-1, help='at most MAXC windows are mapped to the last working state')
 ap.add_argument('--tmod', type=int, default=1, help='pi may depend on t mod TMOD')
 ap.add_argument('--imod', type=int, default=1, help='pi may depend on i mod IMOD')
 ap.add_argument('--dmod', type=int, default=1, help='pi may depend on (t + i) mod DMOD')
@@ -103,6 +104,11 @@ for s in range(2, k - 2):
         cur = new()
         cl.append([-cur, P[w][s]] + ([prev] if prev is not None else []))
         prev = cur
+if a.maxc >= 0:
+    from pysat.card import CardEnc, EncType
+    enc = CardEnc.atmost(lits=[P[w][k - 2] for w in sorted(P)], bound=a.maxc, top_id=nv, encoding=EncType.seqcounter)
+    cl.extend(enc.clauses)
+    nv = max(nv, enc.nv)
 print('k=%d radius %d%s, mod (t %d, i %d, t+i %d): %d variables, %d clauses' % (k, r, '' if q < 0 else ' + past radius %d' % q, a.tmod, a.imod, a.dmod, nv, len(cl)), flush=True)
 import tempfile
 cnf = a.cnf or os.path.join(tempfile.gettempdir(), 'fac_%d_%d_%d_%d_%d.cnf' % (k, a.N, r, q, os.getpid()))
@@ -123,6 +129,7 @@ if status == 'SATISFIABLE':
             f.write('%s %s %s %s\n' % (l, c, rr, d))
     good = [n for n in range(2, 3 * a.N) if ok(tab, n)]
     print('rule written to', out)
+    print('windows mapped to the last working state:', ' '.join(''.join(w) for w, i in sorted(wid.items(), key=lambda x: x[1]) if P[i][k - 2] in pos))
     print('pi:', ' '.join('%s>%s' % (''.join(w), NAMES[next(s for s in W if P[i][s] in pos)]) for w, i in sorted(wid.items(), key=lambda x: x[1])))
     print('synchronized lengths up to %d: %s' % (3 * a.N - 1, good))
 if not a.cnf:

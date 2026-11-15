@@ -88,6 +88,7 @@ static op_t *prog;
 static int nprog, pcap, ncell;
 static int *cell;
 static signed char *pi;         /* per window id */
+static signed char *pifix;
 static int tab[8][8][8];
 static int trail[4096][3], ntrail;
 static int maxaux;

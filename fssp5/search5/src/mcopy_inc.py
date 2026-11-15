@@ -20,12 +20,15 @@ ap.add_argument('--ctheta', type=int, default=2); ap.add_argument('--nocopy', ac
 ap.add_argument('--start', type=int, default=0); ap.add_argument('--time', type=int, default=0)
 ap.add_argument('--solver', default='cadical153'); ap.add_argument('--out')
 ap.add_argument('--b3', action='store_true'); ap.add_argument('--b1', action='store_true'); ap.add_argument('--b4', action='store_true')
+ap.add_argument('--b2', help='image solutions: id, AB, LA or LB')
+ap.add_argument('--early', type=int, nargs=2, metavar=('N2', 'T'))
+ap.add_argument('--pump', type=int, default=0)
 ap.add_argument('--walls', help='target rule: its static G cells (G at t and t+1) must be G')
 ap.add_argument('--blanks', help='target rule: its quiescent cells must be quiescent')
 ap.add_argument('--skel0', type=int, default=3, help='first line with skeleton constraints')
 a = ap.parse_args()
 M = Model(a.k, a.N, a.a, a.s0, a.mmin, a.nmin, not a.nocopy, None, True, True, 99, None, a.wake, a.margin,
-          a.gstatic, a.period, a.ctheta, a.b3, a.b1, a.b4)
+          a.gstatic, a.period, a.ctheta, a.b3, a.b1, a.b4, a.b2, tuple(a.early) if a.early else None, a.pump)
 E = M.E
 by = {}
 for c, l in zip(E.cl, E.lev):

@@ -117,6 +117,11 @@ configurations of Mazoyer's diagrams. They were collected from the lines 3..80.
 
 Controls: with six states and the single-cell window the formula is satisfiable and returns Mazoyer's rule.
 
+Variants. Restricted to the lines 10..90, 20..90 or 40..90 the radius-1 formula is still unsatisfiable (7 s
+each), so the short lines are not the obstruction. With six states, a radius-1 image that maps at most
+$B$ of the 117 windows to the fifth working state does not exist for $B\le 12$ (UNSAT, at most 17 s each;
+$B=16$ unknown after 100 s): the extra state of Mazoyer's solution is not confined to a few local situations.
+
 ## 5. Other classes
 
 All without copies; "incremental" is `mcopy_inc.py`, which reports the largest $N$ reached, not an upper limit.
@@ -130,6 +135,15 @@ All without copies; "incremental" is `mcopy_inc.py`, which reports the largest $
 | walls of Mazoyer's solution: a cell is `G` wherever Mazoyer's diagram has `G` at $t$ and $t+1$ (`msim.py --keepW --nodec`, lines 3..N) | satisfiable for 3..11 (17 s; incremental 10 s) |
 | walls of Mazoyer's solution, and quiescent wherever Mazoyer's diagram is quiescent | 3..9 satisfiable; 3..10 and 3..11 UNSAT (< 1 s) |
 | quiescent wherever Mazoyer's diagram is quiescent | 3..10 satisfiable (29 s); 3..11 unknown |
+
+Image solutions, that is (B2) of the paper alone, $\delta(I(z),I(y),I(x))=I(\delta(x,y,z))$ for an involution
+$I$ of the states: satisfiable for 2..11 with $I$ the identity (Kissat, 345 s), and for 2..9 with $I=(A\,B)$
+(61 s) and $I=(L\,B)$ (37 s); longer lengths unknown. (Proposition 6.6 of the paper excludes them only together
+with (B1), (B3) and (B4).)
+
+Neighbourhoods of the five rules of Proposition 6.3 (`near.py`, plain formula, half-line to the anti-diagonal
+28): no rule within Hamming distance 8 of $\delta_{14}$, $\delta_{14}^b$, ..., $\delta_{14}^e$ synchronizes
+2..15 (UNSAT, at most 263 s each).
 
 The strict class of Section 2 has a rule for 2..11 (`rules/strict_2-11.txt`, incremental, 15 min); it fires
 early on the line 16, and so do all rules found so far in these classes on some line shortly after $N$: with
