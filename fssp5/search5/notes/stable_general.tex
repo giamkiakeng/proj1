@@ -211,13 +211,24 @@ manuscript are not needed.
 
 \section{The stable general alone}\label{sec:search}
 
-Without \eqref{eq:B2} the class is larger: a rule with \eqref{eq:B1} synchronizes all lengths $2,\dots,13$
-(found by a solver, checked by simulation; it synchronizes no other length up to $80$). Whether some rule with
-\eqref{eq:B1} is a minimal-time solution is open at the time of writing. The computation in progress is
-described in \texttt{README.md}, Section~6: a depth-first search over the transitions of the half-line, which
-by Corollary~\ref{cor:front} is a diagram over three states, with an incremental SAT solver at every node, for
-the lengths $2,\dots,14$ and the conclusions of Lemmas~\ref{lem:fire}--\ref{lem:gap} as redundant clauses. If
-every node of this search closes, no five-state rule with \eqref{eq:B1} synchronizes all lengths $2,\dots,16$.
+Without \eqref{eq:B2} the class is larger. A rule with \eqref{eq:B1} synchronizes all lengths $2,\dots,14$: it
+was found by the search described below, its table satisfies \eqref{eq:B1} and has exactly the neighbourhoods
+$\Gq\Gq\Gq$, $\ast\Gq\Gq$, $\Gq\Gq\ast$ with image $\Fq$, and direct simulation shows that it synchronizes
+the lengths $2,\dots,14$ and no other length up to $120$. So the class reaches the length $14$ of the
+unrestricted five-state rules of the manuscript. On the half-line of this rule the cells $2,\dots,6$ have
+period $2$ in time from time $6$ on, and every cell $i\ge7$ is constant from time $i-1$ on; by the
+left-border barrier of the manuscript such a rule is not a solution, and indeed on every line of length
+$15\le n\le120$ the last cell is in state $\Fq$ before time $2n-2$.
+
+Whether some rule with \eqref{eq:B1} is a minimal-time solution is being decided by the case split of
+Section~\ref{sec:method}, applied to the lengths $2,\dots,14$ with the conclusions of
+Lemmas~\ref{lem:fire}--\ref{lem:gap} as redundant clauses (formula $F_{14}$), and to the lengths
+$2,\dots,15$ (formula $F_{15}$) for the one node at which $F_{14}$ is satisfiable. At the time of writing every
+node of the subtrees finished so far is refuted with a checked proof, for $F_{14}$ or, in the case of that
+one node, for $F_{15}$; about half of the tree remains to be certified, after a first search without
+certificates closed it. Every model of $F_{15}$ is a model of $F_{14}$. If the remaining subtrees are certified
+without another satisfiable node, no five-state rule with \eqref{eq:B1} synchronizes all lengths
+$2,\dots,17$. Nothing is claimed from this computation yet.
 
 \section{The search over half-lines}\label{sec:method}
 

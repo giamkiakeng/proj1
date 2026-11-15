@@ -309,7 +309,7 @@ refutation at $N$ says that no rule of the class synchronizes all lines $2,\dots
 
 | formula | result |
 |---|---|
-| the class, lines $2,\dots,N$ | rule for 2..13 (`rules/stable_generals_2-13.txt`, Kissat, 428 s); $N=14$: Kissat stopped after 58 min without an answer |
+| the class, lines $2,\dots,N$ | rule for 2..13 (`rules/stable_generals_2-13.txt`, Kissat, 428 s); $N=14$: Kissat stopped after 58 min without an answer; the tree search below found a rule for 2..14 (`rules/stable_generals_2-14.txt`) |
 | the 21 cases, `mcopy_inc.py`, 900 s each (stopped after five cases) | case a with $\delta(A,L,\ast)=L$: refuted at 12 (236 s); case a with $G$ and case a with $B$: rules for 2..12 (the rule for 2..13 is in case a with $B$); case b with $\delta(A,L,\ast)=L$ and $\delta(B,L,\ast)\in\{L,A\}$: refuted at 3; case b with $L$, $G$: rule for 2..12 |
 | the 126 half-lines up to the anti-diagonal 6 as cases (`germw 6 40`, `germscan.py`, 20,000 conflicts per call) | 5 refuted at $N\le11$; in the other 121 a rule for 2..9 (10 cases), 2..10 (73), 2..11 (35) or 2..12 (3) is found before the budget ends |
 | with the conditions of Lemmas 6.1 and 6.3 on the first 10 rows after the reflection of the lines up to 40 (`--early 40 10 --wgap`) | rule for 2..11 (incremental, 300 s; it has three adjacent generals on the lines $12,\dots,50$ between 10 and 18 steps after the reflection, just after the rows constrained); $N=12$ running |
@@ -351,16 +351,35 @@ Checks. The same program for four states and without the class (`gsat.py 4 9`) c
 class that were found without the redundant clauses satisfy the formula with them (`mcopy.py ... --fix`):
 the rule for 2..13 at $N=11,12,13$, and four other rules at $N=10$ or 11.
 
-Status of the search for the lines $2,\dots,14$ (`runs/stable14/`): in progress, no rule found so far.
-The first 167 of the 341 subtrees are closed by `germsat.py` (169,041 nodes, 13.2 hours of solver time; from
-subtree 100 on with the clauses PUMP$(n,n')$, $4\le n<n'\le14$, which follow from the lines and make the
-subtrees with $\delta(A,L,L)=B$ about 1.5 times cheaper). The other 174 subtrees are being searched by
-`certtree.py`, which does the same search with a new CaDiCaL process at every node (4 s; on a time-out the
-node is split) and has `lrat-check` verify the LRAT proof of every node that it closes; on one subtree that
-`germsat.py` closed in 16 minutes it needed 20 minutes and closed it with 275 checked proofs. When this is
-done, the first 167 subtrees will be certified in the same way. If all subtrees close, no five-state rule with
-a stable general synchronizes all lines $2,\dots,16$ (the formula uses Lemma 6.2 up to the anti-diagonal 27 and
-the front cell $(13,14)$, which need the lines up to 16).
+**A rule with a stable general for 2..14.** The search for the lines $2,\dots,14$ found one satisfiable node,
+in the subtree 309 (11 transitions of the half-line fixed):
+`GLL=A,GAL=B,ALL=B,GBB=A,BBL=L,BLL=A,ALA=B,LAL=L,BLB=L,LBL=B,LLB=L`. The rule extracted from it,
+`rules/stable_generals_2-14.txt` (SHA-256 `dec76662...0a359415`), satisfies (B1) on its whole table, has
+exactly the neighbourhoods $GGG$, $\ast GG$, $GG\ast$ with image $F$, and synchronizes the lines
+$2,\dots,14$ and no other length up to 120 (direct simulation). So the stable-general class reaches the same
+length 14 as the unrestricted rules $\delta_{14},\dots$ of the paper. Its front is of type c ($A\,B\,A\,B\cdots$),
+and its half-line is eventually periodic: the cells 2 to 6 have period 2 in time from time 6 on, and every cell
+$i\ge7$ is constant from time $i-1$ on ($B$ for odd $i$, $A$ for even $i$; checked for $t<150$). The half-line
+uses 26 neighbourhoods, the lines $2,\dots,14$ use 78. On every line $15\le n\le120$ the last cell is
+in state $F$ too early (2 steps for $n=15,16$, 26 steps for $n=40$, 106 steps for $n=120$). A half-line of this kind cannot
+belong to a solution (Theorem 4.2 of the paper); the rule shows that the lines up to 14 do not exclude it.
+
+**Status of the certified search (`runs/stable14/`).** The formula $F_{14}$ of `certtree.py 14 ... --pump 14` is
+the formula above with the front cell $(13,14)\ne L$ and the clauses PUMP$(n,n')$, $4\le n<n'\le14$ (3465
+variables, 324,753 clauses). Done: the 36 nodes closed above depth 7, and the subtrees 168 to 341:
+27,280 nodes closed with LRAT proofs that `lrat-check` verified (57,808 s of CaDiCaL time on them, 260.5 GB
+of proofs, deleted after the check), three nodes with a complete half-line closed with a longer time limit,
+and the one satisfiable node. The subtrees 1 to 167, which `germsat.py` had closed without a model
+(169,041 nodes, 13.2 hours of solver time), are being certified in the same way.
+
+With the line 15 the satisfiable node closes: `certtree.py 15 ... --pump 15` (formula $F_{15}$: 4100 variables,
+396,586 clauses) refutes it with three certified parts in 10 s (`runs/stable14/g15_parts_sat.txt`). Every model
+of $F_{15}$ is a model of $F_{14}$, because $F_{15}$ contains the clauses of $F_{14}$ for the same lines and
+cells. So if the certification of the subtrees 1 to 167 ends without another satisfiable node, every node of a
+complete case split is refuted for $F_{15}$, and no five-state rule with a stable general synchronizes all
+lines $2,\dots,17$ ($F_{15}$ uses Lemma 6.2 up to the anti-diagonal 29 and the front cell $(14,15)$, which need
+the lines up to 17). `covercheck.py 15` on the files so far reports only nodes in the subtrees 1 to 167 as
+uncovered.
 
 Second method, without a solver. A closed node is a small problem for plain enumeration: with the transitions
 of the node fixed, `mdfs` (depth-first enumeration of all partial rules of the class, transitions fixed lazily)
