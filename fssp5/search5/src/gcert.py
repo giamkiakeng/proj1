@@ -6,7 +6,9 @@ t + i = 2, 3, ..., within an anti-diagonal by increasing time).  A node is a cub
 far).  For a node, CaDiCaL is run on F plus the units of the cube with a time limit and an LRAT proof:
     UNSATISFIABLE and lrat-check accepts the proof (answer and empty last lemma are required)  -> leaf 'U';
     no answer in the time limit -> the node is split on the next transition that the half-line needs  'S';
-    SATISFIABLE -> the class has a rule for the lines of the formula: reported, the search stops.
+    SATISFIABLE -> the class has a rule for the lines of the formula; the node is recorded ('# SAT cube') and
+                   not split.  Such nodes are searched again with the lines 2..N+1 (gchain.py): every model of
+                   the formula for N+1 is a model of the formula for N.
 Children of a node: every working state except
     (a) L for a front cell (t, t+1) with t <= NFRONT          (unit clause of F),
     (b) G for a cell i >= 2 with --nogh / --noghw, anything but G for the first cell with --nogh, and for the
@@ -38,6 +40,7 @@ ap.add_argument('--first', type=int, default=1); ap.add_argument('--last', type=
 ap.add_argument('--maxtlim', type=int, default=4000, help='time limit for a node that cannot be split (complete half-line)')
 ap.add_argument('--wwalls', action='store_true', help='redundant clauses for the weak reading of (B1) with GGG, *GG, GG* -> F (weakwalls.py)')
 ap.add_argument('--nocake', action='store_true', help='do not run the second checker cake_lpr')
+ap.add_argument('--stopsat', action='store_true', help='stop at the first satisfiable node (default: record it as # SAT and go on; such nodes are treated with N+1, see gchain.py)')
 ap.add_argument('--recheck', action='store_true', help='re-verify the certified cubes of OUTFILE: rebuild each formula, compare its SHA-256, rerun CaDiCaL and both checkers')
 ap.add_argument('--sample', type=int, default=0, help='with --recheck: only this many cubes, chosen at random (seed 1)')
 ap.add_argument('--init', default='G', help='initial state of the first cell (default G); the class conditions speak about G')
@@ -212,13 +215,15 @@ if __name__ == '__main__':
         for b_ in bad[:50]:
             print('RECHECK FAILED', b_)
         sys.exit(1 if bad else 0)
-    doneU, doneS = set(), set()
+    doneU, doneS, doneSAT = set(), set(), set()
     if os.path.exists(a.outfile):
         for l in open(a.outfile):
             if l.startswith('U '):
                 doneU.add(l[2:].split(' | ')[0].strip())
             elif l.startswith('S '):
                 doneS.add(l[2:].strip())
+            elif l.startswith('# SAT '):
+                doneSAT.add(l[6:].strip())
     if a.prefixfile:
         cubes = [l.strip().replace(' ', ',').replace('>', '=') for l in open(a.prefixfile) if l.strip() and not l.startswith('#')]
         stack = [c for i, c in enumerate(cubes, 1) if a.first <= i <= a.last][::-1]
@@ -241,10 +246,10 @@ if __name__ == '__main__':
             nsplit += 1
             stack.extend(ch[::-1])
             return None
-        while (stack or inflight) and not sat:
+        while (stack or inflight) and not (sat and a.stopsat):
             while stack and len(inflight) < a.workers:
                 c = stack.pop()
-                if c in doneU:
+                if c in doneU or c in doneSAT:
                     continue
                 if c in doneS:
                     split(c, False); continue
@@ -275,8 +280,8 @@ if __name__ == '__main__':
             out.write('# NOT CERTIFIED %s\n' % b)
         pool.terminate()
     print('# done in %.0f s: %d certified leaves in this run (%d on file before), %d splits, %d not certified, %d satisfiable' % (
-        time.time() - t0, ncert, len(doneU), nsplit, len(bad), len(sat)), flush=True)
+        time.time() - t0, ncert, len(doneU), nsplit, len(bad), len(sat) + len(doneSAT)), flush=True)
     for b in bad[:50]:
         print('NOT CERTIFIED', b)
-    for c in sat:
+    for c in sorted(doneSAT) + sat:
         print('SATISFIABLE', c)
