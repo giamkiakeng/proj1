@@ -28,7 +28,7 @@ ap = argparse.ArgumentParser()
 ap.add_argument('k', type=int); ap.add_argument('N', type=int)
 ap.add_argument('--budget', type=int, default=3000); ap.add_argument('--leaf', type=int, default=2000000)
 ap.add_argument('--all', action='store_true'); ap.add_argument('--out'); ap.add_argument('--cubes')
-for f in ('b1', 'b1s', 'b3', 'b3w', 'b4', 'nogh', 'noghw', 'wimp', 'wgap', 'strict'):
+for f in ('b1', 'b1s', 'b3', 'b3w', 'b4', 'nogh', 'noghw', 'wimp', 'wgap', 'strict', 'b2nb'):
     ap.add_argument('--' + f, action='store_true')
 ap.add_argument('--b2'); ap.add_argument('--extra', default=''); ap.add_argument('--early', type=int, nargs=2)
 ap.add_argument('--pump', type=int, default=0); ap.add_argument('--solver', default='cadical153')
@@ -44,7 +44,7 @@ a = ap.parse_args()
 k, N = a.k, a.N
 M = Model(k, N, copy=False, sym=False, b1=a.b1, b1s=a.b1s, b3=a.b3, b3w=a.b3w, b4=a.b4, b2=a.b2, nogh=a.nogh, wimp=a.wimp,
           wgap=a.wgap, strict=a.strict, early=tuple(a.early) if a.early else None,
-          extra=[int(x) for x in a.extra.split(',') if x], pump=a.pump, front1=a.front1, gstatic=a.gstatic, noghw=a.noghw)
+          extra=[int(x) for x in a.extra.split(',') if x], pump=a.pump, front1=a.front1, gstatic=a.gstatic, noghw=a.noghw, b2nb=a.b2nb)
 E = M.E
 S = Solver(name=a.solver)
 for c in E.cl:

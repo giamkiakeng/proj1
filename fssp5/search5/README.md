@@ -235,6 +235,21 @@ $C_{n+1}(2n-2,1)=C_n(2n-2,1)=F$, although $2n-2<2(n+1)-2$. $\square$
 So a general is a wall that no information crosses, a wall other than the first cell can only appear after
 the echo of the right end has passed, and the half-line is a diagram over $W'$ next to a constant $G$.
 
+**Lemma 6.2' (walls, weak reading).** Let $\delta$ synchronize the lines of lengths $2,\dots,N$, $N\ge3$, and
+suppose that $\delta(x,G,y)=G$ for all working states $x,y$ that are not both $G$ (the weak reading of (B1))
+and that $\delta(G,G,G)=F$. Then $C_\infty(t,i)\ne G$ for all $i\ge2$ and $t$ with $t+i\le2N-4$.
+
+*Proof.* As for Lemma 6.2, with $n=N-1$. A cell $p\ge2$ of the half-line in state $G$ at a time $t_w$ with
+$t_w+p\le2n-2$ satisfies $t_w\ge p-1$, hence $p\le n-1$: in the lines of lengths $n$ and $n+1$ both its
+neighbours are cells. In either line it keeps the state $G$ up to time $2n-3$: by the hypothesis unless both
+neighbours are in state $G$, and then it would fire before the firing time. So the cells $1,\dots,p-1$ evolve
+in the same way in both lines up to time $2n-2$, and the first cell would fire at the same time in both.
+$\square$
+
+In the weak reading the first and the last cell are not protected, so Lemma 6.1 (2) does not hold as stated;
+but the half-line is again a diagram over $W'$ beyond its first cell (`--noghw`). This covers the weak reading
+of the paper and the conditions as Yunès states them (Section 7).
+
 **Lemma 6.3 (gaps).** Let $\delta$ satisfy (B1) and synchronize the lines of lengths 2, 3 and $n$ in minimal
 time. Call the cells of the line $n$ in state $G$ and the two borders its *barriers*. If at a time $t\le2n-4$
 two barriers at distance $\ell+1\ge2$ have no barrier between them, then

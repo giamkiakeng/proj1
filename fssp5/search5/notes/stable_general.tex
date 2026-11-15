@@ -102,6 +102,25 @@ in both lines at all times $t_0\le t\le 2n-2$. Hence $C_{n+1}(2n-2,1)=C_n(2n-2,1
 $2n-2<2(n+1)-2$, a contradiction.
 \end{proof}
 
+\begin{lemma}[walls, weak reading]\label{lem:wallweak}
+Let $N\ge3$, and let $\delta$ synchronize the lengths $2,\dots,N$. Suppose that $\delta(x,\Gq,y)=\Gq$ for all
+$x,y\in W$ that are not both $\Gq$ (the weak reading of \eqref{eq:B1}) and that
+$\delta(\Gq,\Gq,\Gq)=\Fq$. Then $C_\infty(t,i)\ne\Gq$ whenever $i\ge2$ and $t+i\le 2N-4$.
+\end{lemma}
+
+\begin{proof}
+Let $p\ge2$ and $t_0+p\le 2N-4$, suppose that $C_\infty(t_0,p)=\Gq$, and put $n:=N-1$. The cells beyond the
+front are quiescent, so $t_0\ge p-1$; hence $2p-1\le t_0+p\le 2n-2$ and $p\le n-1$, so that in the lines of
+lengths $n$ and $n+1$ both neighbours of the cell $p$ are cells. Let $m\in\{n,n+1\}$. If the cell $p$ of the
+line of length $m$ is in state $\Gq$ at a time $t\le 2m-4$, it is in state $\Gq$ at time $t+1$: by the first
+hypothesis unless both neighbours are in state $\Gq$, and in that case it would be in state $\Fq$ at time
+$t+1\le 2m-3$. As both lines agree with the half-line at $(t_0,p)$, the cell $p$ is in state $\Gq$ at the times
+$t_0,\dots,2n-3$ in both lines, and the proof ends as that of Lemma~\ref{lem:wall}.
+\end{proof}
+
+In the weak reading the first cell is not protected, and Lemma~\ref{lem:fire}\,(2) does not hold as stated:
+the first and the last cell may leave the state $\Gq$.
+
 \begin{lemma}[gaps]\label{lem:gap}
 Let $\delta$ satisfy \eqref{eq:B1} and synchronize the lengths $2$, $3$ and $n$. Suppose that at a time
 $t\le 2n-4$ two barriers of the line of length $n$ are at distance $\ell+1\ge2$ and no position between them
