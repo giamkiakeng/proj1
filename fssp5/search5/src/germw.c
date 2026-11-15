@@ -5,14 +5,15 @@
  * (no bound on the number of transitions) that satisfy the necessary conditions on the half-line:
  *   - the front is never L;
  *   - PUMP(n, n') for 4 <= n < n' <= NP, checked as soon as the anti-diagonal 2n'-2 is complete.
- * A before B (symmetry).  usage: germw M NP [-q] [-c]     (-c: count only)
+ * A before B (symmetry).  usage: germw M NP [-q] [-k KMAX]     (-q: count only; -k: at most KMAX transitions)
  */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #define BND 7
-static int M_, NP, quiet;
+static int M_, NP, quiet, KMAX = 999;
+static long long budgetcuts;
 static int tab[8][8][8];
 static int nused;
 static int usedl[256][3];
@@ -69,6 +70,7 @@ static void dfs(int m, int t) {
     int a = cellv(t - 1, i - 1), b = cellv(t - 1, i), c = cellv(t - 1, i + 1);
     int d = tab[a][b][c];
     if (d < 0) {
+      if (nused >= KMAX) { budgetcuts++; return; }       /* at most KMAX distinct transitions */
       int savemax = maxaux;
       usedl[nused][0] = a; usedl[nused][1] = b; usedl[nused][2] = c;
       nused++;
@@ -94,14 +96,17 @@ static void dfs(int m, int t) {
 int main(int argc, char **argv) {
   if (argc < 3) { fprintf(stderr, "usage: %s M NP [-q]\n", argv[0]); return 2; }
   M_ = atoi(argv[1]); NP = atoi(argv[2]);
-  quiet = argc > 3 && !strcmp(argv[3], "-q");
+  for (int q = 3; q < argc; q++) {
+    if (!strcmp(argv[q], "-q")) quiet = 1;
+    else if (!strcmp(argv[q], "-k")) KMAX = atoi(argv[++q]);
+  }
   W_ = M_ + 3;
   val = calloc((size_t)(M_ + 2) * W_, sizeof(int));
   memset(tab, -1, sizeof tab);
   tab[0][0][0] = 0;
   maxaux = 1;
   dfs(2, 1);
-  fprintf(stderr, "M=%d NP=%d: nodes=%lld germs=%lld pumpcuts=%lld; germs by number of transitions:", M_, NP, nodes, leaves, pumpcuts);
+  fprintf(stderr, "M=%d NP=%d K=%d: nodes=%lld germs=%lld pumpcuts=%lld budgetcuts=%lld; germs by number of transitions:", M_, NP, KMAX, nodes, leaves, pumpcuts, budgetcuts);
   for (int q = 0; q < 64; q++) if (hist[q]) fprintf(stderr, " %d:%lld", q, hist[q]);
   fprintf(stderr, "\n");
   return 0;

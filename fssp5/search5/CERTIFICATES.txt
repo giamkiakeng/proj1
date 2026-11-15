@@ -18,3 +18,27 @@ facsat.py 5 60 1 --imod 2 | 225 windows, 1127 constraints | 1605, 277825 | 82167
 facsat.py 5 80 1 --past 1 | 254 windows, 1102 constraints | 1750, 273412 | 32ac704a20cf6eeb43fa755d9e34b508575aad39434e84033703ab1c7a936c99 | 283163934 | 9d1164345a594dc2683c67886eca274e926a711703fda7d41c24d70c6951ee8b | VERIFIED
 # radius 2: Kissat 4.0.4 with a binary DRAT proof, checked by drat-trim (commit 2e3b2dc): "s VERIFIED" (869 s)
 facsat.py 5 80 2 | 649 windows, 2185 constraints | 3725, 551100 | 13bd2876e52d5523869797865d908c7f3f43c480499a5a4f898c04d29f7acdbb | 554067405 (DRAT) | 6f4b16ee0f29ec61ce2b49a0273c8bf919c40592a14243128886703d55cfd9f5 | VERIFIED (drat-trim)
+# LRAT certificates of Proposition 7.1 (README.md, Section 7): (B1) and (B2) with the involution I; strict formulas (lines 2..N only)
+# formula: `mcopy.py ARGS --cnf FILE` (deterministic); proof: cadical --lrat --no-binary (CaDiCaL 3.0.1); checker: lrat-check (drat-trim, commit 2e3b2dc);
+# each line is listed only if CaDiCaL answered UNSATISFIABLE and the proof ends with the empty clause (certify.sh)
+# columns: command | variables, clauses | formula SHA-256 | proof bytes | proof SHA-256 | lrat-check
+mcopy.py 5 2 --nocopy --strict --b1s --b2 LG | 489, 1601 | 2c672e76c85be6cb2facf9abe7d4fe37e167eb350c218d765f47b4a07a8a9033 | 1050 | dbfdf6fb9c52b8087d87147726150cbbc59ca34ea7bb2da72b3b3da6dd05ff4a | VERIFIED
+mcopy.py 5 2 --nocopy --strict --b1s --b2 LG+AB | 489, 1625 | 979d25ef2fad2f65b69270993a07f4c2ec229a5b5d7ad39c2f1df8c0ecab4e23 | 1050 | f1d4174625d60bdc2225872ef919f5b96573011acb9904cfef99264858b98636 | VERIFIED
+mcopy.py 5 3 --nocopy --strict --b1s --b2 GA | 521, 2955 | 1edcef3f90b3035bdfc5c6bc870b7a950fa0ccfce5a99abce84719e7a1a990e1 | 8462 | 3d1d4e5cb2d8080b0935c8952f35f151a315e43232a34d49b0c286b7be0b901b | VERIFIED
+mcopy.py 5 3 --nocopy --strict --b1s --b2 LB+GA | 521, 2979 | 5dabae2db4e40edbb80ae8c466326bebbf878dbf9f1f716760a5a8e3dab07854 | 8661 | e845bd4eed54c9602e2d6180576bdb824277d27c50fe7f7d4ba3905c987131b4 | VERIFIED
+mcopy.py 5 5 --nocopy --strict --b1s --b2 GB | 655, 13967 | 04e0d9443a10269f292ab074ff9e9c141cd56b633ff7ab8fd2f5009e332e48ae | 24656 | a5e90121cfac90ddbf5d66cbef3d82d2bd87c58a5e3d82b50dade760f1153999 | VERIFIED
+mcopy.py 5 5 --nocopy --strict --b1s --b2 LA+GB | 655, 13991 | b7865cc401b54b02669bd2d56ae4592d0fd202bef5fcd6bd4a7dc5b1677c5bc8 | 33823 | 7a27c32ec3484ce764c7b715e13ea79cbea1a4f0b05178490ad5d5f9ba82bb59 | VERIFIED
+mcopy.py 5 9 --nocopy --strict --b1s --b2 LA | 1315, 85307 | c5a6e007c3fc8afccbbbf075e5d8d051eb4baca22e29a2da3ed7d8787b2d829e | 13798166 | b54a901b9c444e1d253e3703bd6293f9ece9d829bfa23bbfa79955dd3f860e1b | VERIFIED
+mcopy.py 5 9 --nocopy --strict --b1s --b2 LB | 1315, 85307 | 816d8f062c4cab5be6eb7d30eb7df5266ffbf34b5d8dc64d8998b1c5a230ad4d | 17874379 | 89e5e2c2a51a2e60f7c71819d24cc1b77f1a7d8c6d66c729851b1ca4ea4282cb | VERIFIED
+mcopy.py 5 10 --nocopy --strict --b1s --b2 AB | 1585, 116817 | 62b059882615bf80b21454abbe8064067025beaff032b147058481cab001b177 | 30201343 | 35b500aa487057dd86cda127ae1ccf6a1c9fff2ede114bfbbaed04e99265b8f2 | VERIFIED
+mcopy.py 5 12 --nocopy --strict --b1s --b2 id | 2279, 200272 | 9fec9941a7d4da6e76819038203a26d8fc0ec8fa15252b2708d551c8b1f9746a | 197246625 | df203c8b7dff66fe234d49a46d26d2488f32aa50aa936edb30c73f853b633121 | VERIFIED
+mcopy.py 5 3 --nocopy --strict --b1 --b2 LG | 521, 2949 | 0bf3507e29d196fd6ca8d80ee44683ab00a37e4efc34c593829ed2c0f1b6a675 | 6975 | 36b330d24fdd0b0a1d798763c30f61b47585107912392e8c1c8b54faa5028772 | VERIFIED
+mcopy.py 5 3 --nocopy --strict --b1 --b2 LG+AB | 521, 2973 | 426a9b9d885e5dbae9030ebaff22bde779a6d49a349b72ca631dae19d0e2ec55 | 6975 | 412fc144e66e298f033264d854e5ed3915c57e51f9d9dc6725730269e459fc01 | VERIFIED
+mcopy.py 5 6 --nocopy --strict --b1 --b2 GA | 765, 24757 | cfe2c7c92af432c0ecf6fd1c69960d6ebe614c9ae9b1a03ba7127a037b333305 | 561951 | 2a6cb1e48142429cdf6c2f21710c0e708b0357652ae94de5a5f784fb554cbf9b | VERIFIED
+mcopy.py 5 6 --nocopy --strict --b1 --b2 LB+GA | 765, 24781 | 338c86a941737b36bbb506647d97d7e010515cb81480a65a20910bdd7c8ad226 | 481776 | aad41130a3b3cdfcb587934fd731f789d182c33b3acf71505d8eea5463234753 | VERIFIED
+mcopy.py 5 7 --nocopy --strict --b1 --b2 GB | 909, 39857 | 64bad885d945d88236d9c7b2222ff9dad7753628037fbd75315a0bf032f5f8a1 | 862763 | 8c16d9745e5aead355ecf4ccdd33ec50b625a559bcb0432dd4bd3d7ac9e09ac4 | VERIFIED
+mcopy.py 5 6 --nocopy --strict --b1 --b2 LA+GB | 765, 24781 | bfaa84770f7f610a94352eb36f350a872e4b76c829849ac8467b5aee3fc70302 | 713392 | f3c451e6a81b0d77083a8ff648773564d1ac023f4a9ddf35fdd77f2a0794a330 | VERIFIED
+mcopy.py 5 10 --nocopy --strict --b1 --b2 LA | 1585, 116811 | b267efe937fde4f0840bbcb6f37873d7fea76272a0e8b641d4a98d7aba512fc6 | 99376586 | 44662f5b665e048bdc6b8b806a646d2bbd154c9c3156368352b00a53f9ea1f07 | VERIFIED
+mcopy.py 5 10 --nocopy --strict --b1 --b2 LB | 1585, 116811 | 2e12a035c0dfd56d308e61fe1a1fb5340dc766c62a63732d63ffb9acc42806b2 | 132871145 | 45fe195d8838837d840f566a3cda43901cfc23fd3e9596f7f30904e374c863e4 | VERIFIED
+mcopy.py 5 10 --nocopy --strict --b1 --b2 AB | 1585, 116811 | cd47631b10b458c1eac81c95f006fd766cb75a7d4733c6981f6d0839aec9e429 | 218692657 | 5fafe94a7aecdf2751ab30a4252c5af184606a4a5c22338c9f526b2d1285e39e | VERIFIED
+# (B1) weak with I the identity, lines 2..12 (mcopy.py 5 12 --nocopy --strict --b1 --b2 id): Kissat answers UNSATISFIABLE (529 s); certificate not yet produced

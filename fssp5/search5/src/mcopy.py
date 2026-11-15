@@ -139,19 +139,21 @@ def chain(n, a, mmin, mfun=None):
 
 class Model:
     def __init__(self, k, N, a=2, s0=2, mmin=3, nmin=2, copy=True, half=None, rev=True, sym=True, levels=99,
-                 mfun=None, wake=0, margin=0, gstatic=None, period=0, ctheta=2, b3=False, b1=False, b4=False, b2=None, early=None, pump=0, b1s=False, b3w=False, nogh=False, chains=None, rfire=0):
+                 mfun=None, wake=0, margin=0, gstatic=None, period=0, ctheta=2, b3=False, b1=False, b4=False, b2=None, early=None, pump=0, b1s=False, b3w=False, nogh=False, chains=None, rfire=0, rbg=False, wimp=False, wgap=False, strict=False, extra=()):
         self.wake, self.margin = wake, margin
         self.period, self.ctheta = period, ctheta
         self.E = E = Enc(k, rev)
         self.k, self.N, self.a, self.s0, self.mmin, self.nmin = k, N, a, s0, mmin, nmin
         self.early = early                            # (N2, T): the first T rows after the reflection of the lines up to N2
-        NH = max(N, early[0] if early else 0, chains[0] if chains else 0)
+        extra = sorted(set(x for x in extra if x > N))    # further lines, encoded completely, present from the start
+        self.extra = extra
+        NH = max([N, early[0] if early else 0, chains[0] if chains else 0] + extra)
         self.chains = chains                          # (N3, C): the first C chains of the lines up to N3; their cells 1..C fire at 2n-2
-        self.M = half if half else 2 * NH - 1         # the half-line carries variables for t + i <= M
+        self.M = half if half else (2 * NH - 2 if strict else 2 * NH - 1)   # the half-line carries variables for t + i <= M
         self.Hc, self.Rc = {}, {}
         self.cuts = {n: (chain(n, a, mmin, mfun)[:levels] if copy else []) for n in range(nmin, N + 1)}
-        if early or chains:
-            assert not copy, 'early rows and chains are implemented without copies only'
+        if early or chains or extra:
+            assert not copy, 'early rows, chains and extra lines are implemented without copies only'
             for n in range(N + 1, NH + 1):
                 self.cuts[n] = []
         for n, cs in self.cuts.items():
@@ -162,11 +164,16 @@ class Model:
         # half-line transitions
         for t in range(0, self.M):
             for i in range(1, min(t + 2, self.M - t - 1) + 1):          # cell (t+1, i), t+1+i <= M
-                E.level = nmin if (early or chains) else max(nmin, (t + 1 + i + 2) // 2)   # needed from the line of this length on
+                E.level = nmin if (early or chains or extra) else max(nmin, (t + 1 + i + 2) // 2)   # needed from the line of this length on
                 E.transition(self.H(t, i - 1), self.H(t, i), self.H(t, i + 1), self.H(t + 1, i))
         # the front is never quiescent while some line n <= N still waits for it
+        # (Lemma 2.4 of the paper: the front cell (n-2, n-1) is not L if the lines n and n+1 are synchronized.  For
+        # n = N this uses the line N+1; with strict=True the clause of the line N is left out, and so is the
+        # return chain of the line N below, so that the formula says exactly: the lines nmin..N are synchronized.)
         for t in range(1, NH - 1):
-            E.level = nmin if (early or chains) else max(nmin, t + 2)
+            if strict and t == NH - 2:
+                continue
+            E.level = nmin if (early or chains or extra) else max(nmin, t + 2)
             E.differ(self.H(t, t + 1), 0)
         # the first C chains (anti-diagonals t + i = 2n-1, ..., 2n-2+C) of the lines up to N3: no F, except that the
         # cells 1..C fire at time 2n-2; the return chain differs from the half-line
@@ -200,17 +207,70 @@ class Model:
                     for i in range(max(1, n - rfire + 1), n + 1):
                         E.transition(self.cell(n, 2 * n - 3, i - 1), self.cell(n, 2 * n - 3, i), self.cell(n, 2 * n - 3, i + 1), 'FIRE')
         # lines
-        for n in range(nmin, N + 1):
-            E.level = n
+        for n in list(range(nmin, N + 1)) + extra:
+            E.level = n if n <= N else nmin
             for t in range(n - 2, 2 * n - 2):
                 for i in range(max(1, 2 * n - 2 - t), n + 1):           # cell (t+1, i) with t+1+i >= 2n-1
                     y = 'FIRE' if t + 1 == 2 * n - 2 else self.cell(n, t + 1, i)
                     E.transition(self.cell(n, t, i - 1), self.cell(n, t, i), self.cell(n, t, i + 1), y)
-            # return chain differs from the half-line (Lemma 2.4 of the paper; redundant)
+            # return chain differs from the half-line (Lemma 2.4 of the paper; it follows from the lines n and n+1)
             for i in range(2, n + 1):
                 t = 2 * n - 1 - i
-                if t + i <= self.M and t <= 2 * n - 3:
+                if t + i <= self.M and t <= 2 * n - 3 and not (strict and n == N):
                     E.differ(self.cell(n, t, i), self.H(t, i))
+            if wimp:
+                # consequences of (B1) strong and (B3) for the line n (redundant clauses):
+                # no three adjacent generals (borders count) before time 2n-3, hence a general stays a general;
+                # with (B3) strong, every cell is a general at time 2n-3
+                def g(t, i):
+                    x = self.cell(n, t, i)
+                    return x[1]
+                if b3:
+                    for i in range(1, n + 1):
+                        E.add([g(2 * n - 3, i)])
+                for t in range(max(1, n - 1), 2 * n - 3):                   # n-1 <= t <= 2n-4
+                    for i in range(max(2, 2 * n - 1 - t), n + 1):
+                        E.add([-g(t, i), g(t + 1, i)])
+                    for i in range(1, n + 1):
+                        E.add([-g(t, j) for j in (i - 1, i, i + 1) if 1 <= j <= n])
+        if wgap:
+            # stable generals (B1): two barriers (cells in state G, or borders) at a distance d >= 2 enclose a gap that
+            # evolves on its own, so at time t they need 2n-3-t <= M(d-1), M(1) = 3, M(l) = 3^l + M(l-1).
+            # Added for every row of the lines up to N and for the early rows of the lines up to N2 (necessary
+            # conditions); with the same rows: no three adjacent barriers before 2n-3, and G persists.
+            MG = [0, 3, 12, 39, 120, 363]
+            self.ngap = 0
+            for n in range(nmin, NH + 1):
+                full = n <= N or n in extra
+                if not full and not (early and n <= early[0]):
+                    continue
+                E.level = n if n <= N else nmin
+                tlast = 2 * n - 4 if full else min(n - 1 + early[1], 2 * n - 4)
+                def g(t, i):
+                    if i == 0 or i == n + 1:
+                        return True
+                    if t + i <= 2 * n - 2:
+                        return i == 1
+                    return self.cell(n, t, i)[1]
+                for t in range(max(1, n - 1), tlast + 1):
+                    rho = 2 * n - 3 - t
+                    dmax = 1 + max([l for l in range(len(MG)) if MG[l] < rho])
+                    pos = [i for i in range(0, n + 2) if g(t, i) is not False]
+                    for x in pos:
+                        for d in range(2, dmax + 1):
+                            y = x + d
+                            if y > n + 1 or g(t, y) is False:
+                                continue
+                            c = [-v for v in (g(t, x), g(t, y)) if v is not True]
+                            E.add(c); self.ngap += 1
+                    if not full:
+                        for i in range(1, n + 1):
+                            tri = [g(t, j) for j in (i - 1, i, i + 1)]
+                            if all(v is not False for v in tri):
+                                E.add([-v for v in tri if v is not True])
+                        if t + 1 <= tlast + 1 and t + 1 <= n - 1 + early[1]:
+                            for i in range(max(2, 2 * n - 1 - t), n + 1):
+                                E.add([-g(t, i), g(t + 1, i)])
         if pump:      # PUMP(n, n') for 4 <= n < n' <= pump (Lemma 3.3 of the paper), on the half-line
             assert 2 * pump - 2 <= self.M, 'the half-line must reach the anti-diagonal 2*pump-2'
             E.level = nmin
@@ -231,8 +291,10 @@ class Model:
         if b2:        # (B2): delta(I(z), I(y), I(x)) = I(delta(x, y, z)) for an involution I of the states
             I = {x: x for x in list(range(k)) + [BND]}
             if b2 != 'id':
-                u, v = NAMES.index(b2[0]), NAMES.index(b2[1])
-                I[u], I[v] = v, u
+                for tr in b2.split('+'):          # a product of disjoint transpositions, e.g. AB or LG+AB
+                    u, v = NAMES.index(tr[0]), NAMES.index(tr[1])
+                    assert I[u] == u and I[v] == v and u != v
+                    I[u], I[v] = v, u
             for (x, y, z), vs in E.T.items():
                 ws = E.T[(I[z], I[y], I[x])]
                 for d in range(k):
@@ -247,14 +309,23 @@ class Model:
                 E.add([E.T[e][E.F]])
         if nogh:      # consequence of (B1) strong and (B3) weak: the first cell is always G, and no other cell of the half-line is G
             for (t, i), x in sorted(self.Hc.items()):
+                if strict and i >= 2 and t + i > 2 * N - 4:
+                    continue          # the wall lemma for this cell would use a line longer than N
                 E.add([x[1]] if i == 1 else [-x[1]])
+        if rbg:       # the right border behaves like a general: delta(x, y, *) = delta(x, y, G)
+            for (x, y, z), vs in E.T.items():
+                if z == BND:
+                    ws = E.T[(x, y, 1)]
+                    for d in range(k):
+                        E.add([-vs[d], ws[d]])
+                        E.add([vs[d], -ws[d]])
         if b4:        # (B4): delta(G, v, G) = G for v != G
             for e, vs in E.T.items():
                 if e[0] == 1 and e[2] == 1 and e[1] != 1:
                     E.add([vs[1]])
         if gstatic is not None:
             for t in range(gstatic, self.M):
-                E.level = nmin if (early or chains) else max(nmin, (t + 1 + 2) // 2)
+                E.level = nmin if (early or chains or extra) else max(nmin, (t + 1 + 2) // 2)
                 E.equal(self.H(t, 1), 1)
         E.level = nmin
         if sym and k >= 5:
@@ -390,12 +461,17 @@ def main():
     ap.add_argument('--nogh', action='store_true')
     ap.add_argument('--chains', type=int, nargs=2, metavar=('N3', 'C'))
     ap.add_argument('--rfire', type=int, default=0)
+    ap.add_argument('--rbg', action='store_true')
+    ap.add_argument('--wimp', action='store_true', help='redundant clauses for stable generals (needs --b1s and --b3 or --b3w)')
+    ap.add_argument('--wgap', action='store_true', help='gap bounds for stable generals, also on the early rows of --early')
+    ap.add_argument('--strict', action='store_true', help='no clause that uses the line N+1 (front and return chain of the line N)')
+    ap.add_argument('--extra', default='', help='further complete lines, e.g. 16,20,24')
     ap.add_argument('--set', action='append', default=[], metavar='LCR=D', help='fix a transition, e.g. ALL=B or AL*=G')
     ap.add_argument('--ctheta', type=int, default=2)
     a = ap.parse_args()
     t0 = time.time()
     M = Model(a.k, a.N, a.a, a.s0, a.mmin, a.nmin, not a.nocopy, a.half, not a.norev, not a.nosym, a.levels,
-              None, a.wake, a.margin, a.gstatic, a.period, a.ctheta, a.b3, a.b1, a.b4, a.b2, tuple(a.early) if a.early else None, a.pump, a.b1s, a.b3w, a.nogh, tuple(a.chains) if a.chains else None, a.rfire)
+              None, a.wake, a.margin, a.gstatic, a.period, a.ctheta, a.b3, a.b1, a.b4, a.b2, tuple(a.early) if a.early else None, a.pump, a.b1s, a.b3w, a.nogh, tuple(a.chains) if a.chains else None, a.rfire, a.rbg, a.wimp, a.wgap, a.strict, [int(x) for x in a.extra.split(',') if x])
     for spec in a.set:
         code = {NAMES[x]: x for x in range(a.k - 1)}
         code['F'] = a.k - 1

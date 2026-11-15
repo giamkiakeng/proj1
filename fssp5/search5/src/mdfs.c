@@ -22,9 +22,9 @@
 #include <string.h>
 
 #define BND 7
-enum { NONF = 0, FIRE = 1, DIFF = 2, FRONT = 3, EQ = 4, ISL = 5, MARK = 6, ISG = 7 };
+enum { NONF = 0, FIRE = 1, DIFF = 2, FRONT = 3, EQ = 4, ISL = 5, MARK = 6, ISG = 7, HNONF = 8 };
 
-static int K, N, WS, FST, A_, S0, MMIN, WAKE, MARGIN, NMIN, GSTATIC = -1, NOCOPY = 0, PERIOD = 0, CTHETA = 2, B3 = 0;
+static int K, N, WS, FST, A_, S0, MMIN, WAKE, MARGIN, NMIN, GSTATIC = -1, NOCOPY = 0, PERIOD = 0, CTHETA = 2, B3 = 0, B1S = 0, NOGH = 0, RBG = 0;
 static int tab[8][8][8];
 static int *cell;
 typedef struct { int x, a, b, c, kind; } op_t;
@@ -79,7 +79,7 @@ static void extend_halfline(int mto) {
       if (i > t + 1) continue;
       int x = newcell(-1);
       INF(t, i) = x;
-      emit(x, INF(t - 1, i - 1), INF(t - 1, i), INF(t - 1, i + 1), (i == t + 1 && t <= N - 2) ? FRONT : NONF);
+      emit(x, INF(t - 1, i - 1), INF(t - 1, i), INF(t - 1, i + 1), (i == t + 1 && t <= N - 2) ? FRONT : HNONF);
       if (i == 1 && GSTATIC >= 0 && t >= GSTATIC) emit(-1, x, -1, -1, ISG);
       if (PERIOD && t - PERIOD >= 2 * (t + 1 - i) + CTHETA && t - PERIOD >= 1) emit(-1, x, INF(t - PERIOD, i - PERIOD), -1, EQ);
     }
@@ -163,7 +163,7 @@ static void print_solution(void) {
   memset(usedmark, 0, sizeof usedmark);
   for (int p = 0; p < nprog; p++) {
     op_t *o = &prog[p];
-    if (o->kind == NONF || o->kind == FIRE || o->kind == FRONT) usedmark[cell[o->a]][cell[o->b]][cell[o->c]] = 1;
+    if (o->kind == NONF || o->kind == FIRE || o->kind == FRONT || o->kind == HNONF) usedmark[cell[o->a]][cell[o->b]][cell[o->c]] = 1;
   }
   printf("SOL %lld:", sols);
   for (int l = 0; l < 8; l++)
@@ -188,10 +188,17 @@ static void dfs(int p) {
     default: break;
     }
     int a = cell[o->a], b = cell[o->b], c = cell[o->c];
+    int half = (o->kind == HNONF || o->kind == FRONT);
+    if (RBG && c == BND) c = 1;          /* the right border behaves like a general */
     if (B3) {                 /* exactly the neighbourhoods GGG, *GG, GG* give F */
       int gt = (b == 1) && (a == 1 || a == BND) && (c == 1 || c == BND);
       if (o->kind == FIRE) { if (!gt) return; continue; }
       if (gt) return;
+    }
+    if (B1S && b == 1) {      /* a general that is not between two generals/borders stays a general */
+      if (o->kind == FIRE) return;
+      cell[o->x] = 1;
+      continue;
     }
     int v = tab[a][b][c];
     if (v < 0) {
@@ -202,6 +209,7 @@ static void dfs(int p) {
       int savemax = maxaux;
       for (int d = lo; d <= hi; d++) {
         if (d >= 2 && d < FST && d > maxaux + 1) continue;
+        if (NOGH && half && d == 1) continue;    /* no general on the half-line beyond the first cell */
         tab[a][b][c] = d;
         if (d >= 2 && d < FST && d > maxaux) maxaux = d;
         if (o->x >= 0) cell[o->x] = d;
@@ -215,7 +223,7 @@ static void dfs(int p) {
     if (o->kind == FIRE) {
       if (v != FST) return;
     } else {
-      if (v == FST || (o->kind == FRONT && v == 0)) return;
+      if (v == FST || (o->kind == FRONT && v == 0) || (NOGH && half && v == 1)) return;
       cell[o->x] = v;
     }
   }
@@ -229,7 +237,7 @@ int main(int argc, char **argv) {
   WAKE = atoi(argv[6]); MARGIN = atoi(argv[7]); NMIN = atoi(argv[8]);
   WS = K - 1; FST = K - 1;
   memset(tab, -1, sizeof tab);
-  tab[0][0][0] = 0; tab[0][0][BND] = 0;
+  tab[0][0][0] = 0; tab[0][0][BND] = 0; tab[0][0][1] = -1;
   maxaux = 1;
   const char *fixfile = NULL;
   for (int i = 9; i < argc; i++) {
@@ -239,6 +247,9 @@ int main(int argc, char **argv) {
     else if (!strcmp(argv[i], "-g")) GSTATIC = atoi(argv[++i]);
     else if (!strcmp(argv[i], "-f")) fixfile = argv[++i];
     else if (!strcmp(argv[i], "-b3")) B3 = 1;
+    else if (!strcmp(argv[i], "-b1s")) B1S = 1;
+    else if (!strcmp(argv[i], "-nogh")) NOGH = 1;
+    else if (!strcmp(argv[i], "-rbg")) RBG = 1;
     else if (!strcmp(argv[i], "-o")) { char *q = strtok(argv[++i], ","); while (q) { order[norder++] = atoi(q); q = strtok(NULL, ","); } }
     else if (!strcmp(argv[i], "-P")) { PERIOD = atoi(argv[++i]); CTHETA = atoi(argv[++i]); }
   }

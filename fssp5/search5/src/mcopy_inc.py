@@ -26,13 +26,27 @@ ap.add_argument('--pump', type=int, default=0)
 ap.add_argument('--b1s', action='store_true'); ap.add_argument('--b3w', action='store_true'); ap.add_argument('--nogh', action='store_true')
 ap.add_argument('--chains', type=int, nargs=2, metavar=('N3', 'C'))
 ap.add_argument('--rfire', type=int, default=0)
+ap.add_argument('--rbg', action='store_true')
+ap.add_argument('--wimp', action='store_true')
+ap.add_argument('--wgap', action='store_true')
+ap.add_argument('--strict', action='store_true')
+ap.add_argument('--extra', default='')
+ap.add_argument('--set', action='append', default=[], metavar='LCR=D', help='fix a transition, e.g. ALL=B or AL*=G')
 ap.add_argument('--walls', help='target rule: its static G cells (G at t and t+1) must be G')
 ap.add_argument('--blanks', help='target rule: its quiescent cells must be quiescent')
 ap.add_argument('--skel0', type=int, default=3, help='first line with skeleton constraints')
 a = ap.parse_args()
 M = Model(a.k, a.N, a.a, a.s0, a.mmin, a.nmin, not a.nocopy, None, True, True, 99, None, a.wake, a.margin,
-          a.gstatic, a.period, a.ctheta, a.b3, a.b1, a.b4, a.b2, tuple(a.early) if a.early else None, a.pump, a.b1s, a.b3w, a.nogh, tuple(a.chains) if a.chains else None, a.rfire)
+          a.gstatic, a.period, a.ctheta, a.b3, a.b1, a.b4, a.b2, tuple(a.early) if a.early else None, a.pump, a.b1s, a.b3w, a.nogh, tuple(a.chains) if a.chains else None, a.rfire, a.rbg, a.wimp, a.wgap, a.strict, [int(x) for x in a.extra.split(',') if x])
 E = M.E
+from mcopy import NAMES, BND
+for spec in a.set:
+    code = {NAMES[x]: x for x in range(a.k - 1)}
+    code['F'] = a.k - 1
+    code['*'] = BND
+    lcr, d = spec.split('=')
+    E.level = 0
+    E.add([E.T[(code[lcr[0]], code[lcr[1]], code[lcr[2]])][code[d]]])
 by = {}
 for c, l in zip(E.cl, E.lev):
     by.setdefault(l, []).append(c)
