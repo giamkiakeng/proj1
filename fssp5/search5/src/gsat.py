@@ -28,12 +28,14 @@ ap = argparse.ArgumentParser()
 ap.add_argument('k', type=int); ap.add_argument('N', type=int)
 ap.add_argument('--budget', type=int, default=3000); ap.add_argument('--leaf', type=int, default=2000000)
 ap.add_argument('--all', action='store_true'); ap.add_argument('--out'); ap.add_argument('--cubes')
-for f in ('b1', 'b1s', 'b3', 'b3w', 'b4', 'nogh', 'wimp', 'wgap', 'strict'):
+for f in ('b1', 'b1s', 'b3', 'b3w', 'b4', 'nogh', 'noghw', 'wimp', 'wgap', 'strict'):
     ap.add_argument('--' + f, action='store_true')
 ap.add_argument('--b2'); ap.add_argument('--extra', default=''); ap.add_argument('--early', type=int, nargs=2)
 ap.add_argument('--pump', type=int, default=0); ap.add_argument('--solver', default='cadical153')
 ap.add_argument('--prefix', default='', help='half-line transitions fixed at the root, in the order of the search, e.g. *GL=G,GLL=A')
 ap.add_argument('--maxnodes', type=int, default=0)
+ap.add_argument('--knuth', type=int, default=0, help='do not search: estimate the size of the tree by this many random descents (Knuth)')
+ap.add_argument('--seed', type=int, default=1)
 ap.add_argument('--maxdepth', type=int, default=0, help='do not branch below this depth: the open nodes of this depth are written to --emit')
 ap.add_argument('--emit', help='file for the open nodes at --maxdepth, as --prefix strings')
 ap.add_argument('--front1', action='store_true')
@@ -42,7 +44,7 @@ a = ap.parse_args()
 k, N = a.k, a.N
 M = Model(k, N, copy=False, sym=False, b1=a.b1, b1s=a.b1s, b3=a.b3, b3w=a.b3w, b4=a.b4, b2=a.b2, nogh=a.nogh, wimp=a.wimp,
           wgap=a.wgap, strict=a.strict, early=tuple(a.early) if a.early else None,
-          extra=[int(x) for x in a.extra.split(',') if x], pump=a.pump, front1=a.front1, gstatic=a.gstatic)
+          extra=[int(x) for x in a.extra.split(',') if x], pump=a.pump, front1=a.front1, gstatic=a.gstatic, noghw=a.noghw)
 E = M.E
 S = Solver(name=a.solver)
 for c in E.cl:
@@ -135,7 +137,7 @@ def dfs(pos, assum, names, maxaux):
     for v in W:
         if v == 0 and i == t + 1 and t <= NFRONT:
             continue
-        if v == 1 and a.nogh:
+        if v == 1 and (a.nogh or (a.noghw and i >= 2)):
             continue
         if v >= 2 and v > maxaux + 1:
             continue
@@ -164,6 +166,53 @@ def dfs(pos, assum, names, maxaux):
         dfs(pos, as2, nm2, max(maxaux, v))
         del tab[e]
     undo()
+def knuth_probe(rng):
+    """one random descent: returns the estimate of the number of nodes, of solver calls with a model, and the depth"""
+    tabk, valk = dict(tab), {}
+    def cv(t, i):
+        if i < 1:
+            return BND
+        if i > t + 1:
+            return 0
+        if t == 0:
+            return 1
+        if i == 1 and a.nogh:
+            return 1
+        return valk[(t, i)]
+    assum, weight, est, sat, pos, maxaux, depth = list(root_assum), 1.0, 0.0, 0.0, 0, mx, 0
+    while True:
+        dead = False
+        while pos < len(order):
+            t, i = order[pos]
+            e = (cv(t - 1, i - 1), cv(t - 1, i), cv(t - 1, i + 1))
+            if e not in tabk:
+                break
+            valk[(t, i)] = tabk[e]
+            pos += 1
+            if i == t + 1 and tabk[e] == 0 and t <= NFRONT:
+                dead = True
+                break
+        if dead or pos == len(order):
+            return est, sat, depth, 'leaf' if not dead else 'dead'
+        t, i = order[pos]
+        e = (cv(t - 1, i - 1), cv(t - 1, i), cv(t - 1, i + 1))
+        openc = []
+        for v in W:
+            if (v == 0 and i == t + 1 and t <= NFRONT) or (v == 1 and (a.nogh or (a.noghw and i >= 2))) or (v >= 2 and v > maxaux + 1):
+                continue
+            est += weight
+            S.conf_budget(a.budget)
+            r = S.solve_limited(assumptions=assum + [E.T[e][v]])
+            if r is True:
+                sat += weight
+            elif r is None:
+                openc.append(v)
+        if not openc:
+            return est, sat, depth, 'closed'
+        v = rng.choice(openc)
+        weight *= len(openc)
+        tabk[e] = v; assum.append(E.T[e][v]); maxaux = max(maxaux, v); depth += 1
+
 root_assum, root_names, mx = [], [], 1
 for spec in [x for x in a.prefix.split(',') if x]:
     lcr, d = spec.split('=')
@@ -172,6 +221,18 @@ for spec in [x for x in a.prefix.split(',') if x]:
     tab[e] = code[d]; mx = max(mx, code[d])
 print('# k=%d N=%d, %d variables, %d clauses, budget %d, leaf budget %d, %d half-line cells up to the anti-diagonal %d' % (
     k, N, E.nv, len(E.cl), a.budget, a.leaf, len(order), MM), flush=True)
+if a.knuth:
+    import random, statistics
+    rng = random.Random(a.seed)
+    ests, sats, depths = [], [], []
+    for q in range(a.knuth):
+        est, sat, depth, how = knuth_probe(rng)
+        ests.append(est); sats.append(sat); depths.append(depth)
+        if (q + 1) % 10 == 0 or q + 1 == a.knuth:
+            se = statistics.stdev(ests) / len(ests) ** 0.5 if len(ests) > 1 else 0
+            print('.. %d descents, %.0f s: estimated nodes %.3g (standard error %.2g), estimated nodes with a model %.3g, mean depth %.1f, max depth %d' % (
+                q + 1, time.time() - t0, statistics.mean(ests), se, statistics.mean(sats), statistics.mean(depths), max(depths)), flush=True)
+    sys.exit(0)
 try:
     dfs(0, root_assum, root_names, mx)
     done = True

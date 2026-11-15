@@ -7,7 +7,7 @@ finish within the time limit, the cube is split on the next transition that the 
 branching as germsat.py) and the parts are certified instead.  One line per certified cube is appended to
 OUTFILE: cube | CaDiCaL seconds | proof bytes | formula SHA-256 | proof SHA-256 | VERIFIED.  Proofs are deleted
 after the check.  F is the formula of mcopy.py without its symmetry clauses:
-    Model(5, N, copy=False, sym=False, b1s, b3, nogh, wimp, wgap, front1)
+    Model(5, N, copy=False, sym=False, b1s, b3, nogh, wimp, wgap, front1[, pump])
 and its SHA-256 (without units) is printed, so that a cube formula can be rebuilt as F plus units.
 
 usage: certtree.py N PREFIXFILE OUTFILE [--tlim SEC] [--workers W] [--first I] [--last J]
@@ -21,11 +21,12 @@ ap = argparse.ArgumentParser()
 ap.add_argument('N', type=int); ap.add_argument('prefixfile'); ap.add_argument('outfile')
 ap.add_argument('--tlim', type=int, default=100); ap.add_argument('--workers', type=int, default=2)
 ap.add_argument('--first', type=int, default=1); ap.add_argument('--last', type=int, default=10 ** 9)
+ap.add_argument('--pump', type=int, default=0, help='add the pumping clauses PUMP(n, n\') for n < n\' <= PUMP (redundant for PUMP <= N)')
 a = ap.parse_args()
 CAD = os.environ.get('CADICAL', 'cadical'); LC = os.environ.get('LRATCHECK', 'lrat-check')
 TMP = os.environ.get('CERTTMP', os.path.join(os.path.dirname(os.path.abspath(__file__)), 'cert'))
 N = a.N
-M = Model(5, N, copy=False, sym=False, b1s=True, b3=True, nogh=True, wimp=True, wgap=True, front1=True)
+M = Model(5, N, copy=False, sym=False, b1s=True, b3=True, nogh=True, wimp=True, wgap=True, front1=True, pump=a.pump)
 E = M.E
 BASE = ''.join(' '.join(map(str, c)) + ' 0\n' for c in E.cl)
 NCL = len(E.cl)
