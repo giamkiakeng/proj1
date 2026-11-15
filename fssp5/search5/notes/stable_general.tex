@@ -528,11 +528,13 @@ set $W$, it is a cycle of length $q$, with sign $(-1)^{q-1}=-1$. On the other ha
 because $q^{m-3}$ is even. This is a contradiction.
 \end{proof}
 
-For $s=1$ the bound is attained, at least for four and five states and $\ell=1$: a solver finds a four-state
-rule that synchronizes the line of length $11$ with constant inputs for $1\le y\le10$ ($Y-s=9$), and a
-five-state rule that synchronizes the line of length $18$ with constant inputs for $1\le y\le17$ ($Y-s=16$);
-both are checked by simulation, and in both the pairs $(u_1(y),u_2(y))$, $2\le y\le n-1$, are the $q^2$
-elements of $W^2$. So for five states the bound of Lemma~4.1 is sharp for $s=1$, $\ell=1$, and it is not attained for $s\ge2$.
+For $s=1$ the bound is attained, at least for four, five and six states and $\ell=1$: a solver finds a
+four-state rule that synchronizes the line of length $11$ with constant inputs for $1\le y\le10$ ($Y-s=9$), a
+five-state rule that synchronizes the line of length $18$ with constant inputs for $1\le y\le17$ ($Y-s=16$),
+and a six-state rule that synchronizes the line of length $27$ with constant inputs for $1\le y\le26$
+($Y-s=25$); all three are checked by simulation. In each case the line has the length $q^2+2$, the least for
+which $Y=n-s$ is possible, and the pairs $(u_1(y),u_2(y))$, $2\le y\le n-1$, are then the $q^2$ elements of
+$W^2$. So for five states the bound of Lemma~4.1 is sharp for $s=1$, $\ell=1$, and it is not attained for $s\ge2$.
 Proposition~\ref{prop:lbparity} lowers it only by one. In the other direction, the recursion
 \eqref{eq:slices} by itself allows long runs: with $q=4$ and the states read as pairs (bit, carry), the
 components $c,c-2,c-4,\dots$ form a binary counter with ripple carry, because the component $c$ sees the new

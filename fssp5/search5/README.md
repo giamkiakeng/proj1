@@ -561,11 +561,13 @@ $\ell$-periodic, $Y\le n-s$, then $Y-s\le(k-1)^{2s}\ell$. Its proof only uses th
 chains, read from right to left, cannot repeat a state. `leftb.py K n s l Y` asks a solver for a rule that
 synchronizes the line $n$ (only this line, as in the lemma) with periodic inputs on the stretch.
 
-**Observation 8.1 (solver; the rules are re-simulated).** For $s=1$, $\ell=1$ the bound is attained for four
-and for five states: `rules/leftborder_k4_s1_n11.txt` synchronizes the line 11 and has constant inputs for
+**Observation 8.1 (solver; the rules are re-simulated).** For $s=1$, $\ell=1$ the bound is attained for four,
+five and six states: `rules/leftborder_k4_s1_n11.txt` synchronizes the line 11 and has constant inputs for
 $1\le y\le10$ ($Y-s=9=3^2$), and `rules/leftborder_k5_s1_n18.txt` synchronizes the line 18 with constant
-inputs for $1\le y\le17$ ($Y-s=16=4^2$). In both, the pairs $(u_1(y),u_2(y))$ of the two chains take every
-value of $W^2$ exactly once along the stretch. With the same $Y$ and a longer line ($n=12$; $n=19,20$) the
+inputs for $1\le y\le17$ ($Y-s=16=4^2$), and `rules/leftborder_k6_s1_n27.txt` (six states) synchronizes the
+line 27 with constant inputs for $1\le y\le26$ ($Y-s=25=5^2$; found in 107 s). In the first two, the pairs
+$(u_1(y),u_2(y))$ of the two chains were listed and take every value of $W^2$ exactly once along the stretch,
+as they must. With the same $Y$ and a longer line ($n=12$; $n=19,20$) the
 formulas are unsatisfiable. For five states and $s=2$ a stretch with $Y-s=20$ exists (lines 24 and 25,
 `rules/leftborder_k5_s2_n24.txt`), so the maximum for $s=2$ exceeds the bound for $s=1$; $Y-s=32$ was not
 decided in 240 s. Three states say nothing: no three-state rule synchronizes a single line of length 4, 5
