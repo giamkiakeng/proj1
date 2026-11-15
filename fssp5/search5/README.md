@@ -25,6 +25,7 @@ to 6.3 are proved by hand.
 | `facdfs.c` | exhaustive enumeration of local images |
 | `germw.c` | lists the half-lines of the stable-general class (Section 6) below an anti-diagonal, optionally with at most $K$ transitions |
 | `germscan.py` | one incremental solver for a list of half-line germs or cases: each is passed as assumptions, the clauses of the longer lines are guarded by activation literals |
+| `germsat.py` | stable generals: depth-first search over the half-line with the incremental solver at every node (Section 6) |
 
 **What a refutation at $N$ means.** The formula of `mcopy.py K N` (also in `mcopy_inc.py` and `germscan.py`)
 is $\Phi_N=\mathrm{MT}(2..N)\wedge\mathrm{RC}_N$: "the lines of lengths $2,\dots,N$ are synchronized at time
@@ -297,7 +298,7 @@ them are needed? (B1): stable general. (B2): image condition $\delta(I(z),I(y),I
 involution $I$ of the working states, also at the borders. (B3): exactly `GGG`, `*GG`, `GG*` give `F`.
 (B4): $\delta(G,v,G)=G$ for $v\ne G$. Strong reading unless stated.
 
-**Proposition 7.1 (computer-assisted).** No five-state rule that satisfies (B2), for some involution $I$ of
+**Proposition 7.1 (computer-assisted, certified).** No five-state rule that satisfies (B2), for some involution $I$ of
 $\{L,G,A,B\}$, and (B1) synchronizes all lines of lengths $2,\dots,12$ in minimal time; this holds for the
 strong and for the weak reading of (B1). For $I$ the identity the lengths up to 11 do not suffice.
 
@@ -315,7 +316,8 @@ and, where $N>2$, satisfiable for $N-1$ (CaDiCaL):
 
 Certificates (`CERTIFICATES.txt`): for the strong reading, CaDiCaL refutes each of the ten formulas with an
 LRAT proof that `lrat-check` verifies; for the weak reading the same holds for the nine involutions other than
-the identity, and for the identity Kissat refutes the formula (529 s) and the certificate is being produced.
+the identity, and for the identity Kissat refutes the formula with a DRAT proof (713 MB) that `drat-trim`
+verifies.
 The rule `rules/b1_b2_id_2-11.txt`, found by the solver, satisfies (B1) in the strong reading and (B2) with
 $I$ the identity (both checked on the table) and synchronizes the lines $2,\dots,11$ (and 18 and 34, and no
 other length below 40; direct simulation). $\square$

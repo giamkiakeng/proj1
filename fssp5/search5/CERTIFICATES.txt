@@ -41,4 +41,5 @@ mcopy.py 5 6 --nocopy --strict --b1 --b2 LA+GB | 765, 24781 | bfaa84770f7f610a94
 mcopy.py 5 10 --nocopy --strict --b1 --b2 LA | 1585, 116811 | b267efe937fde4f0840bbcb6f37873d7fea76272a0e8b641d4a98d7aba512fc6 | 99376586 | 44662f5b665e048bdc6b8b806a646d2bbd154c9c3156368352b00a53f9ea1f07 | VERIFIED
 mcopy.py 5 10 --nocopy --strict --b1 --b2 LB | 1585, 116811 | 2e12a035c0dfd56d308e61fe1a1fb5340dc766c62a63732d63ffb9acc42806b2 | 132871145 | 45fe195d8838837d840f566a3cda43901cfc23fd3e9596f7f30904e374c863e4 | VERIFIED
 mcopy.py 5 10 --nocopy --strict --b1 --b2 AB | 1585, 116811 | cd47631b10b458c1eac81c95f006fd766cb75a7d4733c6981f6d0839aec9e429 | 218692657 | 5fafe94a7aecdf2751ab30a4252c5af184606a4a5c22338c9f526b2d1285e39e | VERIFIED
-# (B1) weak with I the identity, lines 2..12 (mcopy.py 5 12 --nocopy --strict --b1 --b2 id): Kissat answers UNSATISFIABLE (529 s); certificate not yet produced
+# (B1) weak with I the identity: Kissat 4.0.4 with a binary DRAT proof, checked by drat-trim (commit 2e3b2dc): "s VERIFIED" (Kissat 499 s, drat-trim 807 s)
+mcopy.py 5 12 --nocopy --strict --b1 --b2 id | 2279, 200266 | 66ae2f07688dd282b5627636ccbdfdf6de08f5af6c9ca0048b4fe56acc9a2861 | 712721597 (DRAT) | 5130801cb492df42bb14ca96e929e70b4af4adbccb63d3a6b0a4584fc772248e | VERIFIED (drat-trim)
