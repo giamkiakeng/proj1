@@ -139,7 +139,7 @@ def chain(n, a, mmin, mfun=None):
 
 class Model:
     def __init__(self, k, N, a=2, s0=2, mmin=3, nmin=2, copy=True, half=None, rev=True, sym=True, levels=99,
-                 mfun=None, wake=0, margin=0, gstatic=None, period=0, ctheta=2, b3=False, b1=False, b4=False, b2=None, early=None, pump=0, b1s=False, b3w=False, nogh=False, chains=None, rfire=0, rbg=False, wimp=False, wgap=False, strict=False, extra=()):
+                 mfun=None, wake=0, margin=0, gstatic=None, period=0, ctheta=2, b3=False, b1=False, b4=False, b2=None, early=None, pump=0, b1s=False, b3w=False, nogh=False, chains=None, rfire=0, rbg=False, wimp=False, wgap=False, strict=False, extra=(), front1=False):
         self.wake, self.margin = wake, margin
         self.period, self.ctheta = period, ctheta
         self.E = E = Enc(k, rev)
@@ -175,6 +175,10 @@ class Model:
                 continue
             E.level = nmin if (early or chains or extra) else max(nmin, t + 2)
             E.differ(self.H(t, t + 1), 0)
+        if front1 and not strict:
+            # the front cell on the last anti-diagonal 2NH-1 is not L either (Lemma 2.4 for the lines NH+1 and NH+2)
+            E.level = nmin if (early or chains or extra) else N
+            E.differ(self.H(NH - 1, NH), 0)
         # the first C chains (anti-diagonals t + i = 2n-1, ..., 2n-2+C) of the lines up to N3: no F, except that the
         # cells 1..C fire at time 2n-2; the return chain differs from the half-line
         if chains:
@@ -466,12 +470,13 @@ def main():
     ap.add_argument('--wgap', action='store_true', help='gap bounds for stable generals, also on the early rows of --early')
     ap.add_argument('--strict', action='store_true', help='no clause that uses the line N+1 (front and return chain of the line N)')
     ap.add_argument('--extra', default='', help='further complete lines, e.g. 16,20,24')
+    ap.add_argument('--front1', action='store_true', help='the front cell (N-1, N) is not L (uses the lines N+1, N+2)')
     ap.add_argument('--set', action='append', default=[], metavar='LCR=D', help='fix a transition, e.g. ALL=B or AL*=G')
     ap.add_argument('--ctheta', type=int, default=2)
     a = ap.parse_args()
     t0 = time.time()
     M = Model(a.k, a.N, a.a, a.s0, a.mmin, a.nmin, not a.nocopy, a.half, not a.norev, not a.nosym, a.levels,
-              None, a.wake, a.margin, a.gstatic, a.period, a.ctheta, a.b3, a.b1, a.b4, a.b2, tuple(a.early) if a.early else None, a.pump, a.b1s, a.b3w, a.nogh, tuple(a.chains) if a.chains else None, a.rfire, a.rbg, a.wimp, a.wgap, a.strict, [int(x) for x in a.extra.split(',') if x])
+              None, a.wake, a.margin, a.gstatic, a.period, a.ctheta, a.b3, a.b1, a.b4, a.b2, tuple(a.early) if a.early else None, a.pump, a.b1s, a.b3w, a.nogh, tuple(a.chains) if a.chains else None, a.rfire, a.rbg, a.wimp, a.wgap, a.strict, [int(x) for x in a.extra.split(',') if x], a.front1)
     for spec in a.set:
         code = {NAMES[x]: x for x in range(a.k - 1)}
         code['F'] = a.k - 1

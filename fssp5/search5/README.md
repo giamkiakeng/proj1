@@ -26,6 +26,10 @@ to 6.3 are proved by hand.
 | `germw.c` | lists the half-lines of the stable-general class (Section 6) below an anti-diagonal, optionally with at most $K$ transitions |
 | `germscan.py` | one incremental solver for a list of half-line germs or cases: each is passed as assumptions, the clauses of the longer lines are guarded by activation literals |
 | `germsat.py` | stable generals: depth-first search over the half-line with the incremental solver at every node (Section 6) |
+| `gsat.py` | the same search for any class of `mcopy.py` and any number of states |
+| `wenum.c` | second enumerator for the stable-general class, independent of `mdfs.c` |
+| `enumtree.py`, `covercheck.py` | enumeration of every closed node of a tree search; check that the closed nodes cover the tree |
+| `certtree.py`, `germsat_cert.py` | LRAT / DRAT certificates for the closed nodes |
 
 **What a refutation at $N$ means.** The formula of `mcopy.py K N` (also in `mcopy_inc.py` and `germscan.py`)
 is $\Phi_N=\mathrm{MT}(2..N)\wedge\mathrm{RC}_N$: "the lines of lengths $2,\dots,N$ are synchronized at time
@@ -290,6 +294,40 @@ that is not next to a barrier is created from a neighbourhood in $\{L,A,B\}^3$, 
 occurs on the half-line, and every line of length $n\ge5$ has such a wall among its cells 3, 4, 5 (otherwise
 the cells 4, 5 and the cell 6 or the right border would be three adjacent barriers before time $2n-3$). So
 listing the half-lines by complexity cannot settle the class with these programs: it would have to reach 34.
+
+**The search over the half-line.** As one formula the class is hard for the solvers (lines $2,\dots,14$: no
+answer from Kissat in 58 minutes), but it is easy once the half-line is fixed: `germscan.py` refutes each of the
+1203 half-lines of the class with at most 16 transitions (`germw 78 40 -k 16`) at some $N\le13$, in 9 seconds
+for all of them. `germsat.py` uses this. It walks the tree of half-lines: the transitions of the half-line are
+fixed one at a time, in the order in which the anti-diagonals need them, with the values $L,A,B$ (the front
+never $L$); at every node the formula for the lines $2,\dots,N$ is solved incrementally under the assumption
+of the transitions fixed so far, with a budget of 3000 conflicts. A node that the solver refutes is closed, a
+node with a model ends the search with a rule, and a node where the budget runs out is branched on the next
+transition. The branching is complete: by Lemma 6.2 and the clauses of the formula a half-line cell $i\ge2$ is
+in $\{L,A,B\}$, and $\delta(G,L,L)=A$ after renaming. So if every node is closed, the formula is
+unsatisfiable. The tree is cut at depth 7 into 341 subtrees (and 36 nodes closed above them), which run as
+separate jobs.
+
+Checks. The same program for four states and without the class (`gsat.py 4 9`) closes every node in 18 s
+(1730 nodes), and `gsat.py 4 8 --strict` finds rules for $2,\dots,8$, in accordance with $N_4=8$. Rules of the
+class that were found without the redundant clauses satisfy the formula with them (`mcopy.py ... --fix`):
+the rule for 2..13 at $N=11,12,13$, and four other rules at $N=10$ or 11.
+
+Status of the search for the lines $2,\dots,14$ (`runs/stable14/`): in progress. 81 of the 341 subtrees are
+closed (72,872 nodes, 4 hours of solver time), no rule has been found. If all subtrees close, no five-state rule
+with a stable general synchronizes all lines $2,\dots,16$ (the formula uses Lemma 6.2 up to the anti-diagonal
+27 and the front cell $(13,14)$, which need the lines up to 16).
+
+Second method, without a solver. A closed node is a small problem for plain enumeration: with the transitions
+of the node fixed, `mdfs` (depth-first enumeration of all partial rules of the class, transitions fixed lazily)
+finds no rule after $10^4$ to $4\cdot10^7$ nodes for each of the first 60 closed nodes of one subtree. `wenum.c`
+is a second enumerator, written separately and with a different order of enumeration; the two agree on the
+number of partial rules of the class for the lines $2,\dots,N$ with nothing fixed ($N=3,4,5$: 57, 19,407,
+16,197,888) and with the first transitions of the half-line of the rule for 2..13 fixed ($N=10,11,12,13$ with
+12, 13, 14, 16 transitions: 171,797, 983, 40, 4). `enumtree.py` runs an enumerator on every closed node (and
+splits a node further if a node limit is reached), and `covercheck.py` checks, without solver or enumeration,
+that the closed nodes are a complete case split. Together they give a proof by exhaustive enumeration that
+does not depend on the SAT solver or on Lemmas 6.1 (b)-(d) and 6.3; this pass has not been run on all nodes yet.
 
 ## 7. Balzer's conditions, taken apart
 

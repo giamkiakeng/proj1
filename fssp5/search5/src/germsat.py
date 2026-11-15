@@ -29,6 +29,9 @@ ap.add_argument('--extra', default=''); ap.add_argument('--early', type=int, nar
 ap.add_argument('--solver', default='cadical153'); ap.add_argument('--nowgap', action='store_true')
 ap.add_argument('--prefix', default='', help='transitions fixed at the root, e.g. ALL=A,GAL=B')
 ap.add_argument('--grow', type=float, default=1.0, help='the budget is multiplied by GROW per level')
+ap.add_argument('--cubes', help='write the closed nodes (one cube per line) to this file')
+ap.add_argument('--maxdepth', type=int, default=0, help='do not branch below this depth: the open nodes of this depth are written to --emit')
+ap.add_argument('--emit', help='file for the open nodes at --maxdepth, as --prefix strings')
 a = ap.parse_args()
 k, N = 5, a.N
 M = Model(k, N, copy=False, sym=False, b1s=True, b3=True, nogh=True, wimp=True, wgap=not a.nowgap,
@@ -49,6 +52,8 @@ def cellv(t, i):
     return val[(t, i)]
 order = [(m - t, t) for m in range(3, MM + 1) for t in range(1, m) if 2 <= m - t <= t + 1]
 order = [(t, i) for (i, t) in order]          # cells in the order of germw.c: anti-diagonal, then time
+cubef = None
+emitted = []
 stats = {'nodes': 0, 'unsat': 0, 'sat': 0, 'budget': 0, 'leaf_unknown': 0, 'calls': 0}
 by_depth = {}
 models = []
@@ -98,6 +103,8 @@ def dfs(pos, assum, names, maxaux):
             found(assum, names)
         elif r is False:
             stats['unsat'] += 1
+            if cubef:
+                cubef.write('LEAF ' + ' '.join(names) + '\n')
         else:
             stats['leaf_unknown'] += 1
             report('OPEN-LEAF', names)
@@ -118,6 +125,8 @@ def dfs(pos, assum, names, maxaux):
         r = solve(as2, int(a.budget * a.grow ** d))
         if r is False:
             stats['unsat'] += 1; by_depth[d][0] += 1
+            if cubef:
+                cubef.write(' '.join(nm2) + '\n')
             continue
         if r is True:
             by_depth[d][1] += 1
@@ -126,6 +135,9 @@ def dfs(pos, assum, names, maxaux):
                 continue
         else:
             stats['budget'] += 1; by_depth[d][2] += 1
+            if a.maxdepth and d >= a.maxdepth:
+                emitted.append(','.join(x.replace('>', '=') for x in nm2))
+                continue
         tab[e] = v
         dfs(pos, as2, nm2, max(maxaux, v))
         del tab[e]
@@ -153,7 +165,15 @@ for spec in [x for x in a.prefix.split(',') if x]:
         tab[e] = code[d]; mx = max(mx, code[d])
 print('# N=%d, %d variables, %d clauses, budget %d (x%.2f per level), leaf budget %d, half-line cells %d' % (
     N, E.nv, len(E.cl), a.budget, a.grow, a.leaf, len(order)), flush=True)
+if a.cubes:
+    cubef = open(a.cubes, 'w')
 dfs(0, root_assum, root_names, mx)
+if cubef:
+    cubef.close()
+if a.emit:
+    with open(a.emit, 'w') as f:
+        f.write(''.join(x + '\n' for x in emitted))
+    print('# %d open nodes at depth %d written to %s' % (len(emitted), a.maxdepth, a.emit), flush=True)
 print('# done in %.0f s: %s' % (time.time() - t0, stats), flush=True)
 print('# by depth (unsat, sat, budget): ' + ' '.join('%d:%s' % (d, tuple(v)) for d, v in sorted(by_depth.items())), flush=True)
-print('# RESULT: %s' % ('models found: %d' % len(models) if models else ('UNSAT (every node closed)' if stats['leaf_unknown'] == 0 else 'open leaves: %d' % stats['leaf_unknown'])), flush=True)
+print('# RESULT: %s' % ('models found: %d' % len(models) if models else ('%d nodes deferred' % len(emitted) if emitted else ('UNSAT (every node closed)' if stats['leaf_unknown'] == 0 else 'open leaves: %d' % stats['leaf_unknown']))), flush=True)
