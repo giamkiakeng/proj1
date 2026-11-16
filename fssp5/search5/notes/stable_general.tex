@@ -328,8 +328,16 @@ $\MT_4(2..N)$ give when their models are enumerated with a solver. With the unit
 exactly one four-state rule for $2,\dots,4$ and none for $2,\dots,5$, and with the weak reading \eqref{eq:B1w}
 below $19$ rules for $2,\dots,6$ and none for $2,\dots,7$; the formulas give the same numbers. For five states
 with \eqref{eq:B1} and \eqref{eq:B3s}, and without the exclusion~(c), both methods count $20$ rules for the lengths $2,3$ and $6062$
-for $2,3,4$. Beyond these lengths the enumeration is not feasible for five states: with (c) the class has
-$10$, $3031$ and $4\,094\,650$ rules for $2,\dots,3$, $2,\dots,4$ and $2,\dots,5$.
+for $2,3,4$. Beyond these lengths the enumeration of the whole class is not feasible for five states: with
+(c) the class has $10$, $3031$ and $4\,094\,650$ rules for $2,\dots,3$, $2,\dots,4$ and $2,\dots,5$. One part
+of the class was enumerated completely, the rules with $\delta(\Gq,\Lq,\Lq)=\Aq$,
+$\delta(\Aq,\Lq,\ast)=\Lq$ and $\delta(\Bq,\Lq,\ast)=\Gq$: the program visits $7.26\cdot10^{10}$ nodes and
+finds $896$ rules for the lengths $2,\dots,11$, exactly four for $2,\dots,12$ and none for $2,\dots,13$. The
+tree search of this section, with the incremental solver and the formulas $\MT_5(2..12)$ and $\MT_5(2..13)$
+with \eqref{eq:B1}, \eqref{eq:B3s}, the three unit clauses of the part and the unit clauses of
+Lemma~\ref{lem:wall}, closes every node for $2,\dots,13$ and, continued below the satisfiable nodes down to
+complete half-lines, finds for $2,\dots,12$ seven models, which on the transitions used by the lines are
+exactly the four rules of the enumeration.
 
 \section{The stable general alone}\label{sec:search}
 
