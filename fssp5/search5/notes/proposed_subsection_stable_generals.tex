@@ -1,0 +1,385 @@
+%% Proposed addition to Section 6 of the manuscript, to follow Section 6.5 (Balzer's Conditions).
+%% It uses the macros and theorem environments of paper.tex and refers to these labels of the
+%% manuscript: sec:balzer, prop:balzer, lem:agree, lem:return, lem:pumping, thm:left.
+%% The manuscript itself is not changed by this file.
+
+\subsection{Stable Generals}\label{sec:stable}
+
+\Cref{prop:balzer} uses Balzer's four conditions together. Far less is needed. The
+first condition alone excludes five states, and so does its weak reading
+together with the image condition for the neighbourhoods without a border. The
+second statement contains the form in which Yun\`es states the conditions, which
+\cref{sec:balzer} left open.
+
+\begin{theorem}[computer-assisted]\label{thm:stable}
+No five-state rule that satisfies \textup{(B1)} synchronizes all lines of
+lengths $2,\dots,16$ in minimal time. The lengths up to $14$ do not suffice to
+prove this.
+\end{theorem}
+
+\begin{proposition}[computer-assisted]\label{prop:weakimage}
+Let $I$ be an involution of $W=\{\Lq,\Gq,\Aq,\Bq\}$, extended by $I(\Fq)=\Fq$.
+No five-state rule that satisfies \textup{(B1)} in the weak reading and
+\begin{equation}\label{eq:B2o}
+\delta(I(z),I(y),I(x))=I(\delta(x,y,z))\qquad\text{for all }x,y,z\in W
+\end{equation}
+synchronizes all lines of lengths $2,\dots,N_I+2$ in minimal time, where
+$N_I=13$ for the identity, $N_I=11$ for $(\Aq\,\Bq)$, $(\Lq\,\Aq)$ and
+$(\Lq\,\Bq)$, $N_I=7$ for $(\Gq\,\Aq)$ and $(\Gq\,\Bq)$, $N_I=6$ for
+$(\Lq\,\Aq)(\Gq\,\Bq)$ and $(\Lq\,\Bq)(\Gq\,\Aq)$, and $N_I=3$ for $(\Lq\,\Gq)$ and
+$(\Lq\,\Gq)(\Aq\,\Bq)$. In particular, no five-state rule that satisfies these
+two conditions for some involution synchronizes all lines of lengths
+$2,\dots,15$ in minimal time.
+\end{proposition}
+
+\Cref{prop:weakimage} assumes nothing about the neighbourhoods with image
+$\Fq$, about the values $\delta(\Gq,v,\Gq)$, or about the neighbourhoods with a
+border, and $I$ may move $\Gq$. With $I$ the identity, its hypotheses hold for the rule
+\texttt{balzer\_noborder12} of \cref{sec:balzer}; so for the identity the
+largest $N$ such that a rule of the class synchronizes the lines of lengths
+$2,\dots,N$ is $12$, $13$ or $14$. In \cref{thm:stable} the largest such $N$ is
+$14$ or $15$. The search below found a rule, \texttt{stable\_generals\_2-14},
+that satisfies (B1), gives $\Fq$ exactly on $(\Gq,\Gq,\Gq)$, $(\ast,\Gq,\Gq)$
+and $(\Gq,\Gq,\ast)$, and synchronizes the lines of lengths $2,\dots,14$ and no
+other line of length at most $120$ (direct simulation). On its half-line the
+cells $2,\dots,6$ have period $2$ in time from time $6$ on and every cell $i\ge7$
+is constant from time $i-1$ on (simulation for $t<150$), which is the kind of
+half-line that \cref{thm:left} excludes for a solution.
+
+\paragraph{Consequences of a stable general}
+A \emph{barrier} of the line of length $n$ at time $t$ is a border (position
+$0$ or $n+1$) or a cell in state $\Gq$ at time $t$.
+
+\begin{lemma}\label{lem:fire}
+Let $\delta$ satisfy \textup{(B1)}.
+\begin{enumerate}[(1)]
+\item If $\delta$ synchronizes the lines of lengths $2$ and $3$ at times $2$ and
+$4$, then $\delta(\Gq,\Lq,\ast)=\Gq$ and
+$\delta(\ast,\Gq,\Gq)=\delta(\Gq,\Gq,\ast)=\delta(\Gq,\Gq,\Gq)=\Fq$.
+\item If moreover $\delta$ synchronizes the line of length $n\ge2$ at time
+$2n-2$, then
+\begin{enumerate}[(a)]
+\item $C_n(t,1)=\Gq$ for all $t\le2n-3$;
+\item $C_n(2n-3,i)=\Gq$ for $1\le i\le n$;
+\item at no time $t\le2n-4$ are three adjacent positions barriers;
+\item if $C_n(t,i)=\Gq$ and $t\le2n-4$, then $C_n(t+1,i)=\Gq$.
+\end{enumerate}
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(1) In the line of length $2$, $C_2(1,1)=\delta(\ast,\Gq,\Lq)=\Gq$ by (B1), and
+$\Fq=C_2(2,1)=\delta(\ast,\Gq,x)$ with $x:=C_2(1,2)=\delta(\Gq,\Lq,\ast)\in W$. By
+(B1) this value is $\Gq$ unless $x=\Gq$. Hence $x=\Gq$ and
+$\delta(\ast,\Gq,\Gq)=\Fq$, and then $\Fq=C_2(2,2)=\delta(\Gq,\Gq,\ast)$. In the
+line of length $3$ let $s$ be the first time at which the cell $2$ is in state
+$\Gq$; it exists, because otherwise the cell $1$ would be in state $\Gq$ for
+ever, by (B1). The cell $1$ is in state $\Gq$ up to time $s$ and in state
+$\delta(\ast,\Gq,\Gq)=\Fq$ at time $s+1$, so $s+1=4$. Then
+$\Fq=C_3(4,2)=\delta(\Gq,\Gq,z)$ with $z:=C_3(3,3)\in W$, and (B1) gives $z=\Gq$
+and $\delta(\Gq,\Gq,\Gq)=\Fq$.
+
+(2c) If three adjacent positions are barriers at time $t$, the middle one is a
+cell in state $\Gq$, because for $n\ge2$ the two borders are not adjacent to a
+common cell; by (1) this cell is in state $\Fq$ at time $t+1$, so
+$t+1\ge2n-2$. (2d) By (2c) the two neighbours of the cell are not both
+barriers, and (B1) applies. (2a) By (2d) and induction on $t$, starting from
+$C_n(0,1)=\Gq$. (2b) By (2a), $\Fq=C_n(2n-2,1)=\delta(\ast,\Gq,y)$ with
+$y:=C_n(2n-3,2)\in W$, so $y=\Gq$ by (B1). If $C_n(2n-3,i)=\Gq$ and $i<n$, then
+$\Fq=C_n(2n-2,i)=\delta(x,\Gq,z)$ with $z:=C_n(2n-3,i+1)\in W$, and (B1) gives
+$z=\Gq$.
+\end{proof}
+
+So a rule with (B1) produces $\Fq$, on every line that it synchronizes, only at
+time $2n-2$, from the row $\Gq^n$ and the three neighbourhoods of (B3). The
+strong reading of (B3) can therefore be enforced without changing the line of
+any synchronized length, by redefining $\delta(x,y,z):=y$ for the other
+neighbourhoods with image $\Fq$; these have $y\ne\Gq$ by (B1), so (B1) is
+preserved.
+
+\begin{lemma}[walls]\label{lem:wall}
+Let $N\ge3$, and let $\delta$ satisfy \textup{(B1)} and synchronize the lines of
+lengths $2,\dots,N$ in minimal time. Then $C_\infty(t,1)=\Gq$ for $t\le2N-3$, and
+$C_\infty(t,i)\ne\Gq$ whenever $i\ge2$ and $t+i\le2N-4$.
+\end{lemma}
+
+\begin{proof}
+The first claim is \cref{lem:fire}\,(2a) for $n=N$ and \cref{lem:agree}. Let
+$p\ge2$ and $t_0+p\le2N-4$, and suppose that $C_\infty(t_0,p)=\Gq$. Put
+$n:=N-1$, so that $t_0+p\le2n-2$ and $t_0\le2n-4$. By \cref{lem:agree},
+$C_n(t_0,i)=C_{n+1}(t_0,i)=C_\infty(t_0,i)$ for $i\le p$. By
+\cref{lem:fire}\,(2d), applied to both lengths, the cell $p$ is in state $\Gq$ at
+the times $t_0,\dots,2n-3$ in both lines. The states of the cells
+$1,\dots,p-1$ at time $t+1$ are determined by the states of the cells
+$1,\dots,p$ at time $t$; by induction on $t$, the cells $1,\dots,p-1$ have the
+same states in both lines at all times $t_0\le t\le2n-2$. Hence
+$C_{n+1}(2n-2,1)=C_n(2n-2,1)=\Fq$, although $2n-2<2(n+1)-2$.
+\end{proof}
+
+Thus a cell in state $\Gq$ is a wall that no information crosses, a wall other
+than the first cell can appear only after the echo of the right end has passed,
+and the half-line of a solution with (B1) would be a diagram over
+$W':=W\setminus\{\Gq\}$ next to a constant first cell. The cells between two
+walls evolve on their own, and they cannot do so for long.
+
+\begin{lemma}[gaps]\label{lem:gap}
+Let $\delta$ satisfy \textup{(B1)} and synchronize the lines of lengths $2$, $3$
+and $n$ in minimal time. Suppose that at a time $t\le2n-4$ two barriers of the
+line of length $n$ are at distance $\ell+1\ge2$ and no position between them is
+a barrier. Then
+\[
+2n-3-t\le M(\ell),\qquad M(1):=|W'|,\quad M(\ell):=|W'|^{\ell}+M(\ell-1)\ \
+(\ell\ge2).
+\]
+Consequently, if $2n-3-t>M(\ell)$, no two barriers of the line are at a
+distance $d$ with $2\le d\le\ell+1$ at time $t$.
+\end{lemma}
+
+\begin{proof}
+By \cref{lem:fire}\,(2d) the two barriers stay barriers up to time $2n-3$, so at
+the times $t,\dots,2n-3$ the $\ell$ cells between them are driven by themselves
+and two constant neighbours. As long as none of these cells is in state $\Gq$,
+their configuration lies in $W'^{\ell}$ and does not repeat: after a repetition
+it would be periodic up to time $2n-3$, against \cref{lem:fire}\,(2b). Hence
+there is $1\le m\le|W'|^{\ell}$ such that one of the $\ell$ cells is in state
+$\Gq$ at time $t+m\le2n-3$. If $t+m=2n-3$, then
+$2n-3-t\le|W'|^{\ell}\le M(\ell)$. Otherwise $t+m\le2n-4$; by
+\cref{lem:fire}\,(2c) not all of the $\ell$ cells are in state $\Gq$ at time
+$t+m$, which is impossible for $\ell=1$, and for $\ell\ge2$ some two barriers at
+time $t+m$ are at a distance $\ell'+1$ with $1\le\ell'\le\ell-1$ and have no
+barrier between them. By induction, $2n-3-(t+m)\le M(\ell')\le M(\ell-1)$. For
+the last statement, let two barriers be at a distance $d$ with
+$2\le d\le\ell+1$ at time $t$. Not all positions between them are barriers, by
+\cref{lem:fire}\,(2c); so two barriers at a distance $\ell'+1\le d$ have no
+barrier between them, and $2n-3-t\le M(\ell')\le M(\ell)$.
+\end{proof}
+
+For five states, $M(1),M(2),M(3)=3,12,39$.
+
+\paragraph{A case split over the half-line}
+As single formulas, the classes of \cref{thm:stable,prop:weakimage} are hard
+for the solvers that we used; they become easy once a beginning of the
+half-line is fixed. Fix $N\ge3$ and put $M:=2N-1$. The formula $F^{(N)}$ of a
+class of five-state rules has one-hot variables $[\delta(e)=d]$ for every
+neighbourhood $e$ and state $d$, a one-hot vector of variables over $W$ for
+every cell $(t,i)$ of the half-line with $t\ge1$, $1\le i\le t+1$ and
+$t+i\le M$, and one for every cell $(t,i)\in R_n$ with $t\le2n-3$, for
+$2\le n\le N$; the other cells of the lines are identified with cells of the
+half-line (\cref{lem:agree}) or are constants. Its clauses say that
+\begin{enumerate}[(F1)]
+\item every cell with variables is the image under $\delta$ of the three cells
+above it;
+\item for $2\le n\le N$, every cell of the line of length $n$ at time $2n-3$ has
+a neighbourhood with image $\Fq$;
+\item $C_n(2n-1-i,i)\ne C_\infty(2n-1-i,i)$ for $2\le n\le N$ and $2\le i\le n$;
+\item the front cells $(t,t+1)$, $1\le t\le N-1$, are not $\Lq$;
+\item the conditions of the class hold.
+\end{enumerate}
+
+\begin{lemma}\label{lem:Fsound}
+If a rule of the class synchronizes all lines of lengths $2,\dots,N+2$ in minimal
+time, then its transitions and the cells of its lines and half-line satisfy
+$F^{(N')}$ for every $3\le N'\le N$.
+\end{lemma}
+
+\begin{proof}
+It suffices to treat $N'=N$. The half-line cells with $t+i\le2N-1$ agree with
+the line of length $N+1$, at times $t\le2N-2<2(N+1)-2$; so they are working
+states, and (F1) holds for them and for the cells of the lines $n\le N$ before
+time $2n-2$. (F2) is the synchronization of the lines $n\le N$. (F3) is
+\cref{lem:return} for $n\le N$, which uses the line of length $n+1\le N+1$. (F4):
+by \cref{lem:return} the front cell $(n-2,n-1)$ is not $\Lq$ if the lines of
+lengths $n$ and $n+1$ are synchronized; with $n\le N+1$ this gives the cells
+$(t,t+1)$ for $t\le N-1$.
+\end{proof}
+
+Order the half-line cells with variables by $(t,i)\prec(t',i')$ if $t+i<t'+i'$,
+or $t+i=t'+i'$ and $t<t'$. The three cells above a cell precede it in this
+order or are constants. A \emph{node} is a map $\gamma$ from a finite set of
+neighbourhoods to $W$. It determines the states of an initial segment of the
+cells; let $c(\gamma)$ be the first cell that it does not determine and
+$e(\gamma)$ the neighbourhood above it. The \emph{children} of $\gamma$ are the
+nodes $\gamma\cup\{e(\gamma)\mapsto v\}$ for $v\in W$, except
+\begin{enumerate}[(a)]
+\item $v=\Lq$ if $c(\gamma)$ is a front cell $(t,t+1)$ with $t\le N-1$;
+\item $v=\Gq$, in a class in which \cref{lem:wall} holds; in such a class the
+cells $(t,1)$ are the constant $\Gq$, carry no variables and are left out of the
+order $\prec$;
+\item $v=\Bq$ if $\Aq$ is not a value of $\gamma$.
+\end{enumerate}
+The root is the empty map. A set $\mathcal U$ of nodes \emph{covers} a node
+$\gamma$ if $\gamma\in\mathcal U$, or if $c(\gamma)$ exists and $\mathcal U$
+covers all children of $\gamma$. We write $F\wedge\gamma$ for a formula $F$
+with the unit clauses $[\delta(e)=\gamma(e)]$, $e\in\operatorname{dom}\gamma$.
+
+\begin{lemma}[complete case split]\label{lem:split}
+Let the class be invariant under exchanging the names $\Aq$ and $\Bq$, and let
+$\mathcal U$ be a finite set of pairs $(\gamma,N_\gamma)$ with $3\le N_\gamma\le N$
+such that the nodes $\gamma$ cover the root of the tree for $N$. If
+$F^{(N_\gamma)}\wedge\gamma$ is unsatisfiable for every pair, then no rule of the
+class synchronizes all lines of lengths $2,\dots,N+2$ in minimal time.
+\end{lemma}
+
+\begin{proof}
+Let $\delta$ be such a rule. Consider the neighbourhoods above the cells of
+its half-line in the order $\prec$; if the first of them whose image is an
+auxiliary state has the image $\Bq$, exchange the names $\Aq$ and $\Bq$. The new
+rule is in the class and synchronizes the same lines. We show by induction that
+every covered node $\gamma\subseteq\delta$ has a descendant
+$\gamma'\subseteq\delta$ that occurs in $\mathcal U$. If $\gamma$ occurs in
+$\mathcal U$, there is nothing to show. Otherwise $c(\gamma)$ exists; let
+$v:=\delta(e(\gamma))$, which is the state of the cell $c(\gamma)$ in the
+half-line of $\delta$. By (F4), $v\ne\Lq$ in case (a); by \cref{lem:wall} with
+$N+2$ in place of $N$, which reaches the anti-diagonal $2N$, the cells $(t,1)$
+are in state $\Gq$ and $v\ne\Gq$ in case (b); and $v\ne\Bq$ in case (c), because $e(\gamma)$ is then the
+first neighbourhood of the half-line with an auxiliary image. So
+$\gamma\cup\{e(\gamma)\mapsto v\}\subseteq\delta$ is a child of $\gamma$, hence
+covered, and the induction applies to it; the tree is finite. For the root we
+obtain a pair $(\gamma,N_\gamma)$ with $\gamma\subseteq\delta$. By
+\cref{lem:Fsound}, $\delta$ satisfies $F^{(N_\gamma)}$, and it satisfies the
+unit clauses of $\gamma$; this contradicts the hypothesis.
+\end{proof}
+
+The children of a node in the tree for $N$ are among its children in the tree
+for $N'\le N$, and $c(\gamma)$, $e(\gamma)$ do not depend on $N$ as long as
+$c(\gamma)$ exists for the smaller value. The search program therefore works
+level by level. At the level $N$ it walks the tree below its start nodes; for
+a node $\gamma$ it runs CaDiCaL~3.0.1 on $F^{(N)}\wedge\gamma$ with a time limit
+of $4$~s and an LRAT proof. If the answer is \textsc{unsatisfiable}, the proof
+ends with the empty clause and \texttt{lrat-check} accepts it, the pair
+$(\gamma,N)$ is recorded with the SHA-256 digests of the formula and of the
+proof; if the solver finds a model, $\gamma$ becomes a start node of the level
+$N+1$; otherwise the children of $\gamma$ are treated. A second program, which
+shares no code with the first, reads the recorded pairs and checks that they
+cover the root.
+
+\begin{proof}[Proof of \cref{thm:stable}]
+The second statement is the rule \texttt{stable\_generals\_2-14}. For the first,
+let $\delta$ be a five-state rule with (B1) that synchronizes the lines of
+lengths $2,\dots,16$. By the remark after \cref{lem:fire} we may assume that
+exactly the three neighbourhoods of (B3) have the image $\Fq$. The class of the
+rules with (B1) and this property is invariant under exchanging $\Aq$ and
+$\Bq$, and \cref{lem:wall} holds in it.
+
+Let $F_{14}$ be $F^{(14)}$ for this class, where (F5) consists of the unit
+clauses of (B1) and of (B3) in the strong reading, of the unit clauses
+$C_\infty(t,1)=\Gq$ and $C_\infty(t,i)\ne\Gq$ ($i\ge2$) for the half-line cells
+with $t+i\le27$, and of three groups of redundant clauses: the statements (2b),
+(2c) and (2d) of \cref{lem:fire} for the lines of lengths $n\le14$; for
+$n\le14$ and $n-1\le t\le2n-4$, no two positions of the line of length $n$ at a
+distance $d$ with $2\le d\le\ell+1$ are both barriers at time $t$, where $\ell$
+is the largest integer with $M(\ell)<2n-3-t$; and $\PUMP(n,n')$ for
+$4\le n<n'\le14$. $F_{14}$ has
+$3465$ variables and $324\,753$ clauses. The rule $\delta$ satisfies it: for
+(F1)--(F4) this is \cref{lem:Fsound}; \cref{lem:wall} with $N=16$ gives the unit
+clauses on the half-line; the first two groups of redundant clauses are \cref{lem:fire} and the last
+statement of \cref{lem:gap} for the lengths $n\le14$; and $\PUMP(n,n')$ is
+\cref{lem:pumping}.
+
+The search produced $44\,516$ nodes $\gamma$ for which $F_{14}\wedge\gamma$ is
+refuted with a verified proof (\cref{tab:stable}), and one node $\gamma^\ast$,
+with $11$ transitions, for which $F_{14}\wedge\gamma^\ast$ is satisfiable; its
+model is the rule for $2,\dots,14$. For $\gamma^\ast$ we use the formula
+$S_{15}$ with the clauses (F1) and (F2) for the lines of lengths
+$2,\dots,15$, (F3) for $n\le14$, (F4) for $t\le12$, and (B1): every rule with
+(B1) that synchronizes the lines of lengths $2,\dots,15$ satisfies it, by
+\cref{lem:return}. CaDiCaL refutes $S_{15}\wedge\gamma^\ast$ ($3556$ variables,
+$384\,704$ clauses), and \texttt{lrat-check} and \texttt{cake\_lpr} verify the
+proof. The $44\,517$ nodes cover the root of the tree for $N=14$ (the checking
+program walks $66\,808$ nodes). As in the proof of \cref{lem:split}, the rule
+$\delta$ contains one of them. It satisfies $F_{14}$ and $S_{15}$ with the unit
+clauses of that node, which contradicts the refutations.
+\end{proof}
+
+\begin{table}[t]
+\centering\small
+\caption{The certificates of \cref{thm:stable}. The tree was cut at depth $7$
+into $341$ subtrees. ``Time'' is the CaDiCaL time on the closed nodes, and the
+last column is the total size of their LRAT proofs. A node whose transitions
+determine the whole half-line up to the anti-diagonal $27$ cannot be split;
+four such nodes needed more than $4$~s.}
+\label{tab:stable}
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+Nodes & Formula & Closed & Time & Proofs\\
+\midrule
+above depth $7$ & $F_{14}$ & $36$ & $<1$ s & $0.02$ GB\\
+subtrees $1$ to $167$ & $F_{14}$ & $17\,196$ & $35\,384$ s & $178.1$ GB\\
+subtrees $168$ to $341$ & $F_{14}$ & $27\,280$ & $57\,808$ s & $260.5$ GB\\
+complete half-line, longer limit & $F_{14}$ & $4$ & $15$ s & $0.07$ GB\\
+the node $\gamma^\ast$ & $S_{15}$ & $1$ & $12$ s & $0.08$ GB\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{proof}[Proof of \cref{prop:weakimage}]
+Exchanging the names $\Aq$ and $\Bq$ maps the class for $I$ onto the class for
+$(\Aq\,\Bq)\,I\,(\Aq\,\Bq)$. The classes for the identity, $(\Aq\,\Bq)$,
+$(\Lq\,\Gq)$ and $(\Lq\,\Gq)(\Aq\,\Bq)$ are invariant, and the exchange maps the
+classes for $(\Lq\,\Aq)$, $(\Gq\,\Aq)$ and $(\Lq\,\Aq)(\Gq\,\Bq)$ onto those for
+$(\Lq\,\Bq)$, $(\Gq\,\Bq)$ and $(\Lq\,\Bq)(\Gq\,\Aq)$. For each involution, (F5)
+consists of the clauses of the weak reading of (B1) and of \eqref{eq:B2o}, and
+case (b) of the tree does not occur. The search was run for each of the ten
+involutions, from the level $3$ on (for the identity at the level $13$ only);
+\cref{tab:weakimage} lists the levels at which a node was closed. Every proof
+was verified by \texttt{lrat-check} and by \texttt{cake\_lpr}, and for every $I$
+the nodes closed at the levels up to the last level $N'_I$ cover the root of
+the tree for $N'_I$. For an invariant class, \cref{lem:split} applies with
+$N=N'_I$. For two classes that the exchange maps onto each other, the choice of
+names in the proof of \cref{lem:split} turns a rule of one of them into a rule
+of one of the two classes whose half-line is a path of the tree of that class,
+and the proof of \cref{lem:split} applies in that tree; this gives the larger
+of the two last levels for both.
+\end{proof}
+
+\begin{table}[t]
+\centering\small
+\caption{The search of \cref{prop:weakimage}: one row for every level at which
+a node was closed; at the lower levels the root is satisfiable. ``Sat.''
+counts the nodes with a model, which are searched again at the next level.}
+\label{tab:weakimage}
+\begin{tabular}{@{}lrrrrrrrr@{}}
+\toprule
+$I$ & Level & Variables & Clauses & Closed & Split & Sat. & Time & Proofs\\
+\midrule
+identity & $13$ & $2608$ & $259\,620$ & $12\,296$ & $4213$ & $0$ & $20\,727$ s & $102.3$ GB\\
+$(\Aq\,\Bq)$ & $10$ & $1536$ & $121\,369$ & $677$ & $258$ & $1$ & $1090$ s & $4.62$ GB\\
+$(\Aq\,\Bq)$ & $11$ & $1840$ & $160\,062$ & $4$ & $1$ & $0$ & $8$ s & $0.03$ GB\\
+$(\Lq\,\Aq)$ & $9$ & $1280$ & $89\,308$ & $115$ & $50$ & $12$ & $193$ s & $0.79$ GB\\
+$(\Lq\,\Aq)$ & $10$ & $1536$ & $121\,369$ & $190$ & $67$ & $0$ & $290$ s & $1.25$ GB\\
+$(\Lq\,\Bq)$ & $9$ & $1280$ & $89\,308$ & $32$ & $15$ & $7$ & $58$ s & $0.25$ GB\\
+$(\Lq\,\Bq)$ & $10$ & $1536$ & $121\,369$ & $218$ & $81$ & $2$ & $382$ s & $1.66$ GB\\
+$(\Lq\,\Bq)$ & $11$ & $1840$ & $160\,062$ & $26$ & $10$ & $0$ & $39$ s & $0.18$ GB\\
+$(\Gq\,\Aq)$ & $7$ & $896$ & $42\,750$ & $1$ & $0$ & $0$ & $0.2$ s & $2.1$ MB\\
+$(\Gq\,\Bq)$ & $7$ & $896$ & $42\,750$ & $1$ & $0$ & $0$ & $0.3$ s & $2.0$ MB\\
+$(\Lq\,\Aq)(\Gq\,\Bq)$ & $6$ & $760$ & $27\,111$ & $1$ & $0$ & $0$ & $0.2$ s & $1.5$ MB\\
+$(\Lq\,\Bq)(\Gq\,\Aq)$ & $6$ & $760$ & $27\,111$ & $1$ & $0$ & $0$ & $0.1$ s & $1.4$ MB\\
+$(\Lq\,\Gq)$ & $3$ & $528$ & $3566$ & $1$ & $0$ & $0$ & $<0.1$ s & $4.8$ kB\\
+$(\Lq\,\Gq)(\Aq\,\Bq)$ & $3$ & $528$ & $3590$ & $1$ & $0$ & $0$ & $<0.1$ s & $4.8$ kB\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Three remarks on the scope of these statements. First, Mazoyer's six-state
+solution has no stable general (\cref{sec:balzer}), so \cref{thm:stable} does
+not concern rules of its kind. It satisfies (B3), but with (B3) alone the same
+case split is far out of reach: random descents in the tree for the lines of
+lengths $2,\dots,13$ suggest some $10^{15}$ nodes, where the same estimate for
+the class of \cref{thm:stable} gives $10^{6}$. Second, the proofs of
+\cref{tab:stable} were checked by \texttt{lrat-check}; those of the first row
+and of the last two rows, and those of a random sample of $600$ nodes of the
+subtrees, were verified by \texttt{cake\_lpr} as well. Third, the proof of
+\cref{thm:stable} says where a five-state rule with (B1) for the lines of
+lengths $2,\dots,15$ would have to be looked for: such a rule has a wall on the
+anti-diagonal $27$ of its half-line, $C_\infty(27-i,i)=\Gq$ for some
+$3\le i\le13$. Indeed, it satisfies $S_{15}$ and every clause of $F_{14}$ except
+possibly the unit clauses that use the line of length $16$, which are (F4) for
+the front cell $(13,14)$ and the unit clauses $C_\infty(27-i,i)\ne\Gq$ for
+$2\le i\le14$. The front states $f_t=C_\infty(t-1,t)$, $2\le t\le13$, lie in
+$\{\Aq,\Bq\}$ by \cref{lem:return,lem:wall} for the lengths up to $15$, and
+$f_{t+1}=\delta(f_t,\Lq,\Lq)$; so $f_{14}\in\{f_3,f_4\}$ is $\Aq$ or $\Bq$,
+which settles the cell $(13,14)$. Moreover $C_\infty(25,2)\ne\Gq$, because
+otherwise the line of length $15$ would have a cell in state $\Fq$ at time
+$26$. If none of the cells $(27-i,i)$, $3\le i\le13$, were in state $\Gq$,
+the rule would satisfy $F_{14}$, its half-line would be a path of the tree, and
+the last step of the proof of \cref{thm:stable} would apply to it.

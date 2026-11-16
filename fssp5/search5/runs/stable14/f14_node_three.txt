@@ -1,0 +1,8 @@
+# The satisfiable node of the search for the lines 2..14 holds exactly three rules (README.md, Section 6).
+# enum_satnode.py OUTDIR: enumerates the models of F_14 with the 11 transitions of the node, up to the transitions that a
+# model uses in the lines 2..14 and in the half-line up to the anti-diagonal 27; it finds three models
+# (rules/stable_generals_2-14.txt, ..._b.txt, ..._c.txt) and writes OUTDIR/f14_node_blocked.cnf:
+# F_14 (324753 clauses), the 11 unit clauses of the node and the 3 blocking clauses; 3465 variables, 324767 clauses.
+# cadical 3.0.1 --lrat --no-binary: s UNSATISFIABLE (4 s); lrat-check: c VERIFIED; cake_lpr: s VERIFIED UNSAT.
+# SHA-256 of f14_node_blocked.cnf: 0e4f7032e5a7ec2a93c407425b4216e3d8e6526ffe525b3ec46ecb8398d5b9d3
+# SHA-256 of the LRAT proof (16770382 bytes): a77db8bc8970ed8466d5a7fc3d751da729d7479af67c1b6d24cb23122622eec0

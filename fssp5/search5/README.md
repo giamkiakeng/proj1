@@ -38,6 +38,7 @@ to 6.3, 6.5 and 6.6 and Proposition 8.2 are proved by hand.
 | `mstrict.py` | gap clauses of Lemma 6.3 that are sound for the strict formula of the lines $2,\dots,N$ (`gsat.py --sgap`, `gcert.py --sgap`); `--cellunit` and `--cellclause` of the two programs add a unit clause or one clause on cells of the half-line |
 | `minit.py` | the lines start from `X L ... L` for another working state `X` (`gcert.py --init X`) |
 | `check_balzer.py` | which of (B1) to (B4), in their weak and strong readings and for a given involution, hold on the table of a rule; then simulation |
+| `enum_satnode.py` | enumerates the models of $F_{14}$ at the satisfiable node of the stable-general tree, up to unused table entries, and writes the formula whose refutation certifies that there are no others |
 | `check_rule_formula.py`, `check_weak_lemmas.py`, `check_wwalls_enc.py` | tests: a rule of a class that synchronizes $2,\dots,N+2$ must satisfy the formula of `gcert.py` at $N$; the statements of Lemmas 6.5, 6.6 and 6.2' on the diagrams of given rules |
 | `leftb.py` | CNF: a rule that synchronizes one line with periodic input anti-diagonals at the left border (Section 8) |
 | `ftime.py` | CNF for rules that synchronize the lines $2,\dots,N$ at some time chosen by the solver, not necessarily minimal (exploratory, Section 9) |
@@ -432,6 +433,23 @@ and had found the same single satisfiable node in the subtree 309. (3) With the 
 is closed by three certified parts in 10 s (`g15_parts_sat.txt`), and `covercheck.py 15` with this file in place
 of `g15s_sat_strict.txt` also reports a complete case split; this alone gives the weaker statement for the
 lines $2,\dots,17$.
+
+**The three rules of the node $\gamma^\ast$ (certified).** Up to the table entries that are used neither in the
+lines $2,\dots,14$ nor in the half-line up to the anti-diagonal 27, the formula $F_{14}$ has exactly three
+models: `rules/stable_generals_2-14.txt`, `rules/stable_generals_2-14_b.txt` and
+`rules/stable_generals_2-14_c.txt`. `enum_satnode.py` enumerates the models of $F_{14}$ with the units of
+$\gamma^\ast$: after each model the conjunction of the transitions that it uses is excluded by a clause; after
+three models the formula is unsatisfiable, and for $F_{14}$ with the 11 units and the three clauses (3465
+variables, 324,767 clauses, SHA-256 of the file `0e4f7032...98d5b9d3`) CaDiCaL gives an LRAT proof (16.8 MB,
+SHA-256 `a77db8bc...2622eec0`) that `lrat-check` and `cake_lpr` verify (`runs/stable14/f14_node_three.txt`). All
+other nodes of the tree are closed for $F_{14}$ (Theorem 6.4). The three rules have 75 used transitions in
+common and differ in $\delta(A,A,A)=L,A,A$ and $\delta(G,A,A)=B,A,L$; they use 78, 81 and 80 transitions in the
+lines $2,\dots,14$. Each satisfies (B1) on its table and synchronizes exactly the lines $2,\dots,14$ among
+$2,\dots,120$ (with the unused entries as in the files); on the line 15 each of them has a cell in state $F$ at
+time 26. So, after the normalization and the choice of names in the proof of Theorem 6.4, a five-state rule
+with a stable general that synchronizes $2,\dots,14$ either agrees with one of these three rules on all
+transitions that it uses in these lines and in the half-line up to the anti-diagonal 27, or it violates a
+condition that the lines 15 and 16 would impose (items 3 to 5 of the proof).
 
 **The length 15.** Is there a five-state rule with a stable general for $2,\dots,15$? Such a rule satisfies
 every clause of $F_{14}$ except possibly those that use the line 16: the unit clause of item 4 for the front

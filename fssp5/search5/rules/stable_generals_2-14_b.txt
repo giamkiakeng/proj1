@@ -1,0 +1,101 @@
+# five-state rule with a stable general (B1): model 2 of 3 of the formula F_14 of README.md, Section 6 (the stored rule
+# stable_generals_2-14.txt is model 1); it synchronizes exactly the lines 2..14 among 2..120 (direct simulation with the
+# entries as written here); entries marked 'not used' are used neither in the lines 2..14 nor in the half-line up to
+# the anti-diagonal 27 and were set by the solver. Written by src/enum_satnode.py.
+k 5
+* A A L   # not used
+* A B L   # not used
+* A G L   # not used
+* A L L   # not used
+* B A L   # not used
+* B B L   # not used
+* B G L   # not used
+* B L L   # not used
+* G A G
+* G B G
+* G G F
+* G L G
+* L A L   # not used
+* L B L   # not used
+* L G L   # not used
+* L L L   # not used
+A A * B
+A A A A
+A A B L
+A A G B
+A A L A
+A B * A
+A B A B
+A B B A
+A B G A
+A B L B
+A G * G
+A G A G
+A G B G
+A G G G
+A G L G
+A L * A
+A L A B
+A L B G
+A L G A
+A L L B
+B A * G
+B A A B
+B A B A
+B A G G
+B A L A
+B B * A
+B B A B
+B B B L
+B B G A
+B B L L
+B G * G
+B G A G   # not used
+B G B G
+B G G G
+B G L G
+B L * G
+B L A G
+B L B L
+B L G G   # not used
+B L L A
+G A * B
+G A A A
+G A B B
+G A G B
+G A L B
+G B * L
+G B A G
+G B B A
+G B G L
+G B L B
+G G * F
+G G A G
+G G B G
+G G G F
+G G L G
+G L * G
+G L A G
+G L B B
+G L G G
+G L L A
+L A * B
+L A A L
+L A B B
+L A G B
+L A L L
+L B * A
+L B A L
+L B B G
+L B G A
+L B L B
+L G * G
+L G A G   # not used
+L G B G
+L G G G
+L G L G
+L L * L
+L L A A
+L L B L
+L L G B
+L L L L
