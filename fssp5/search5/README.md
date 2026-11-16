@@ -50,6 +50,7 @@ with a stable state other than the initial state (running), (B2) alone, (B3) alo
 | `fix_open.py`, `recheck_ct.py` | for `certtree.py`: collect the nodes with a complete half-line that were not refuted within the time limit (they are then certified with a long limit); second check of the certified cubes, all or a random sample, with `lrat-check` and `cake_lpr` |
 | `gcert.py` | the tree search of `gsat.py` with a certificate for every closed node: a new CaDiCaL process per node with a time limit and an LRAT proof, checked by `lrat-check` and, if `CAKELPR` names its binary, by the verified checker `cake_lpr`; a node that is not refuted in time is split. Resumable; `--recheck` rebuilds every cube formula, compares the SHA-256 digests and verifies the proofs again |
 | `gcover.py` | checks without a solver that the certified cubes of `gcert.py` are a complete case split; shares no code with `gcert.py` |
+| `nodecert.py` | certified refutation of single nodes under another formula of `gcert.py`, for example the strict formula of the lines $2,\dots,N$ at the nodes that are satisfiable at the level $N-1$ (this decides the exact maximum of a class, Proposition 7.3) |
 | `gchain.py` | raises $N$ until the tree of `gcert.py` closes: a node at which the formula for $N$ is satisfiable is recorded, not split, and searched again with the formula for $N+1$ (every model of $F_{N+1}$ is a model of $F_N$, so the closed nodes of all levels together are a case split for the last level) |
 | `weakwalls.py` | redundant clauses of Lemmas 6.5 and 6.6 (weak reading); `gsat.py --wwalls`, `gcert.py --wwalls` |
 | `mstrict.py` | gap clauses of Lemma 6.3 that are sound for the strict formula of the lines $2,\dots,N$ (`gsat.py --sgap`, `gcert.py --sgap`); `--cellunit` and `--cellclause` of the two programs add a unit clause or one clause on cells of the half-line |
@@ -749,7 +750,9 @@ formula of the lines $2,\dots,11$ with the units of the node
 that `lrat-check` and `cake_lpr` verified (`runs/b1b2/ws_AB_11_nodes.txt`, `ws_LB_11_nodes.txt`), and
 `gcover.py 5 10 --front1` on the lists of the levels up to 10 together with these nodes reports a complete case
 split for $(A\,B)$ (678 cubes) and for $(L\,B)$ (252 cubes), as it does for $(L\,A)$ without them (305 cubes).
-So no rule of these classes synchronizes $2,\dots,11$, and $N^\ast_I\le10$. As a cross-check, Kissat refutes the
+So no rule of these classes synchronizes $2,\dots,11$, and $N^\ast_I\le10$. `nodecert.py 5 11 ... --b1 --b2 LB --b2nb --strict`, which builds the
+strict formula with the encoder of `gcert.py` instead of `mcopy.py`, refutes the two nodes of $(L\,B)$ as well
+(both checkers). As a further cross-check, Kissat refutes the
 strict formulas of the lines $2,\dots,11$ for $(L\,A)$ and for $(L\,B)$ as whole formulas (400 s and 376 s, no
 proof kept); for $(A\,B)$ it gave no answer in 800 s. The trees and their certificates (every proof was verified by
 `lrat-check` and by `cake_lpr`; at the levels that are not listed the root is satisfiable):
