@@ -674,6 +674,16 @@ of them (299 s, 244 s, 795 s). The recheck of the 2550 cubes for the identity is
 tree, Kissat refutes each of the three formulas $F_I$, written by `writef.py`, as a whole (no proof kept):
 $(L\,B)$ 216 s, $(L\,A)$ 220 s, $(A\,B)$ 664 s; for the identity ($N=13$) Kissat is running.
 
+**Weak (B1) with (B2) without borders, identity (15 to 16 November).** `gcert.py 5 13 --b1 --b2 id --b2nb --front1`
+(no (B3), no (B4), no wall lemma): the tree closes with 12,296 nodes closed and 4213 split, no node open and
+none satisfiable; 28,685 s with three processes, 20,727 s of CaDiCaL time on the closed nodes, 102.3 GB of
+LRAT proofs, each verified by `lrat-check` and by `cake_lpr`. $F$: 2608 variables, 259,620 clauses, SHA-256 of
+the clause lines `4c411838...cbfefe4`. `gcover.py 5 13 runs/b1b2/w_id_13.txt.gz` (unpacked) `--front1`: complete
+case split. So no five-state rule with (B1) in the weak reading and the image condition for the identity on
+the neighbourhoods without a border synchronizes all lines $2,\dots,15$; this contains Proposition 7.2 for the
+identity and Proposition 7.1 for the identity (with 15 in place of 12). The other nine involutions are
+running (`gchain.py`); the result will be stated as Proposition 7.3 when they are done.
+
 **No return to the quiescent state (15 November).** The class $\delta(x,y,z)\ne L$ for $y\ne L$ (a cell that has
 left the quiescent state never returns to it; `gsat.py 5 N --neq ... --front1`): rules for $2,\dots,8$ and for
 $2,\dots,9$ are found (2 s, 538 s); for $2,\dots,10$ no rule in the first 30,000 nodes, and the tree is
