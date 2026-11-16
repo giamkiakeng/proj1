@@ -20,9 +20,10 @@
 Lemmas~\ref{lem:fire}--\ref{lem:gap}, Corollary~\ref{cor:front}, Lemmas~\ref{lem:Fsound} and~\ref{lem:split},
 Lemmas~\ref{lem:iwall} and~\ref{lem:gapweak}, Corollary~\ref{cor:gapclauses} and Lemma~\ref{lem:levels} are
 proved here. Proposition~\ref{prop:lbparity} is proved here as well.
-Propositions~\ref{prop:b1b2}, \ref{prop:yunes} and~\ref{prop:b1b2nb} are computer-assisted; every formula in
-their proofs has a proof certificate that an independent checker verified. Section~\ref{sec:search} describes a computation that
-is not finished; nothing is claimed from it yet.
+Theorem~\ref{thm:b1} and Propositions~\ref{prop:b1b2}, \ref{prop:yunes} and~\ref{prop:b1b2nb} are
+computer-assisted; every formula in their proofs has a proof certificate that an independent checker verified.
+Corollary~\ref{cor:fifteen} follows from the proof of Theorem~\ref{thm:b1}. The end of
+Section~\ref{sec:search} describes a computation that is not finished; nothing is claimed from it yet.
 
 \section{Setting}
 
@@ -209,27 +210,6 @@ By Lemma~\ref{lem:fire}, Proposition~\ref{prop:b1b2} shows that two of Balzer's 
 five states: the stable general and the image condition. The conditions (B3) and (B4) of Proposition~6.6 of the
 manuscript are not needed.
 
-\section{The stable general alone}\label{sec:search}
-
-Without \eqref{eq:B2} the class is larger. A rule with \eqref{eq:B1} synchronizes all lengths $2,\dots,14$: it
-was found by the search described below, its table satisfies \eqref{eq:B1} and has exactly the neighbourhoods
-$\Gq\Gq\Gq$, $\ast\Gq\Gq$, $\Gq\Gq\ast$ with image $\Fq$, and direct simulation shows that it synchronizes
-the lengths $2,\dots,14$ and no other length up to $120$. So the class reaches the length $14$ of the
-unrestricted five-state rules of the manuscript. On the half-line of this rule the cells $2,\dots,6$ have
-period $2$ in time from time $6$ on, and every cell $i\ge7$ is constant from time $i-1$ on; by the
-left-border barrier of the manuscript such a rule is not a solution, and indeed on every line of length
-$15\le n\le120$ the last cell is in state $\Fq$ before time $2n-2$.
-
-Whether some rule with \eqref{eq:B1} is a minimal-time solution is being decided by the case split of
-Section~\ref{sec:method}, applied to the lengths $2,\dots,14$ with the conclusions of
-Lemmas~\ref{lem:fire}--\ref{lem:gap} as redundant clauses (formula $F_{14}$), and to the lengths
-$2,\dots,15$ (formula $F_{15}$) for the one node at which $F_{14}$ is satisfiable. At the time of writing every
-node of the subtrees finished so far is refuted with a checked proof, for $F_{14}$ or, in the case of that
-one node, for $F_{15}$; about half of the tree remains to be certified, after a first search without
-certificates closed it. Every model of $F_{15}$ is a model of $F_{14}$. If the remaining subtrees are certified
-without another satisfiable node, no five-state rule with \eqref{eq:B1} synchronizes all lengths
-$2,\dots,17$. Nothing is claimed from this computation yet.
-
 \section{The search over half-lines}\label{sec:method}
 
 The formulas of the next sections are refuted by a case split over the half-line. We describe the split and
@@ -311,6 +291,144 @@ shares no code with \texttt{gcert.py}, reads $\mathcal U$ and checks that the ro
 and has \texttt{lrat-check} and the formally verified checker \texttt{cake\_lpr} verify a fresh proof.
 For a class that is not invariant under the exchange of $\Aq$ and $\Bq$, such as (B2) with $I=(\Lq\,\Aq)$,
 the exchange maps it onto another class of the same kind, and both are searched.
+
+\section{The stable general alone}\label{sec:search}
+
+Without \eqref{eq:B2} the class is larger; it is decided by the lines up to $16$.
+
+\begin{theorem}[computer-assisted, certified]\label{thm:b1}
+No five-state rule that satisfies \eqref{eq:B1} synchronizes all lengths $2,\dots,16$. Some five-state rule
+that satisfies \eqref{eq:B1} synchronizes all lengths $2,\dots,14$.
+\end{theorem}
+
+Hence the largest $N$ such that some five-state rule with a stable general synchronizes all lengths
+$2,\dots,N$ is $14$ or $15$, and no five-state minimal-time solution has a stable general. The rule for
+$2,\dots,14$ was found by the search described in the proof. Its table satisfies \eqref{eq:B1} and has exactly
+the neighbourhoods $\Gq\Gq\Gq$, $\ast\Gq\Gq$, $\Gq\Gq\ast$ with image $\Fq$, and direct simulation shows that
+it synchronizes the lengths $2,\dots,14$ and no other length up to $120$. So the class reaches the length $14$
+of the unrestricted five-state rules of the manuscript. On the half-line of this rule the cells $2,\dots,6$
+have period $2$ in time from time $6$ on, and every cell $i\ge7$ is constant from time $i-1$ on (checked for
+$t<150$); by the left-border barrier of the manuscript such a rule is not a solution, and indeed on every line
+of length $15\le n\le120$ the last cell is in state $\Fq$ before time $2n-2$.
+
+\begin{proof}[Proof of Theorem~\ref{thm:b1}]
+The second statement is the rule just described. For the first, let $\delta$ be a five-state rule with
+\eqref{eq:B1} that synchronizes all lengths $2,\dots,16$.
+
+\emph{Step 1: normal form.} By Lemma~\ref{lem:fire}, in the lines of lengths $2,\dots,16$ the state $\Fq$ is
+produced only from the neighbourhoods $(\Gq,\Gq,\Gq)$, $(\ast,\Gq,\Gq)$, $(\Gq,\Gq,\ast)$. Replace
+$\delta(x,y,z)$ by $y$ for every other neighbourhood with $\delta(x,y,z)=\Fq$. Such a neighbourhood has
+$y\ne\Gq$ by \eqref{eq:B1}, so \eqref{eq:B1} still holds, and the diagrams $C_n$, $n\le16$, do not change. We
+may therefore assume
+\begin{equation}\label{eq:B3s}
+\delta(x,y,z)=\Fq\iff(x,y,z)\in\{(\Gq,\Gq,\Gq),(\ast,\Gq,\Gq),(\Gq,\Gq,\ast)\}. \tag{B3s}
+\end{equation}
+The front cell $\delta(\Gq,\Lq,\Lq)=C_\infty(1,2)$ is not $\Lq$ by the return-chain lemma and not $\Gq$ by
+Lemma~\ref{lem:wall}; after exchanging the names $\Aq$ and $\Bq$ if necessary, which preserves \eqref{eq:B1}
+and \eqref{eq:B3s}, we have $\delta(\Gq,\Lq,\Lq)=\Aq$.
+
+\emph{Step 2: the formula.} Let $F_{14}$ be the formula of Section~\ref{sec:method} with $N=14$ and $M=27$ for
+this class, in the following form. The half-line cells $(t,1)$ are the constant $\Gq$ and carry no variables.
+The clauses are (F1)--(F4); the unit clauses of \eqref{eq:B1} and \eqref{eq:B3s} on the transition variables;
+the unit clauses $C_\infty(t,i)\ne\Gq$ for all half-line cells with $i\ge2$ and $t+i\le27$; and three groups
+of redundant clauses:
+\begin{enumerate}[label=\textup{(R\arabic*)},nosep]
+\item for the lines $n\le14$, the statements (2b), (2c) and (2d) of Lemma~\ref{lem:fire};
+\item for $n\le14$ and $n-1\le t\le2n-4$: no two positions of the line of length $n$ at a distance $d$ with
+$2\le d\le\ell+1$ are both barriers at time $t$, where $\ell$ is the largest integer with
+$M(\ell)<2n-3-t$ (the remark after Lemma~\ref{lem:gap});
+\item the conclusion $\mathrm{PUMP}(n,n')$ of the pumping lemma of the manuscript for $4\le n<n'\le14$.
+\end{enumerate}
+$F_{14}$ has $3465$ variables and $324\,753$ clauses. The rule $\delta$ with its diagrams satisfies it:
+(F1)--(F4) hold by Lemma~\ref{lem:Fsound} with $N=14$; Lemma~\ref{lem:wall} with $N=16$ gives
+$C_\infty(t,1)=\Gq$ for $t\le29$ and $C_\infty(t,i)\ne\Gq$ for $i\ge2$, $t+i\le28$; (R1) and (R2) are
+Lemmas~\ref{lem:fire} and~\ref{lem:gap} for the lengths $n\le14$; and the pumping lemma holds for any two
+lengths that the rule synchronizes.
+
+\emph{Step 3: the tree.} We use the tree of Section~\ref{sec:method} without the cells $(t,1)$: the order
+$\prec$ is restricted to the half-line cells $(t,i)$ with $i\ge2$ and $t+i\le27$, the root is the node
+$\{(\Gq,\Lq,\Lq)\mapsto\Aq\}$, and the children of a node $\gamma$ are $\gamma\cup\{e(\gamma)\mapsto v\}$ for
+$v\in\{\Lq,\Aq,\Bq\}$, except $v=\Lq$ if $c(\gamma)$ is a front cell. By Step~1, by (F4) and by the unit
+clauses on the half-line, the rule $\delta$ contains the root, and whenever it contains a node $\gamma$ for
+which $c(\gamma)$ exists it contains a child of $\gamma$. Hence, as in the proof of
+Lemma~\ref{lem:split}: if a finite set $\mathcal U$ of nodes covers the root, then $\gamma\subseteq\delta$ for
+some $\gamma\in\mathcal U$.
+
+\emph{Step 4: the certificates.} Let $S_{15}$ be the formula with the clauses (F1) and (F2) for $N=15$ and
+$M=28$, (F3) for the lines $n\le14$, (F4) for $t\le12$, and the unit clauses of \eqref{eq:B1}; every rule with
+\eqref{eq:B1} that synchronizes all lengths $2,\dots,15$ satisfies it, since (F3) and (F4) then follow from
+the return-chain lemma for the lengths up to $15$. The search (programs \texttt{germsat.py} and
+\texttt{certtree.py}) produced a set $\mathcal U_{14}$ of $44\,516$ nodes and one further node $\gamma^\ast$,
+with $11$ transitions, such that
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item for every $\gamma\in\mathcal U_{14}$, CaDiCaL~3.0.1 refutes $F_{14}\wedge\gamma$ with an LRAT proof that
+\texttt{lrat-check} verified;
+\item $F_{14}\wedge\gamma^\ast$ is satisfiable (its model is the rule for $2,\dots,14$), and CaDiCaL refutes
+$S_{15}\wedge\gamma^\ast$ ($3556$ variables, $384\,704$ clauses) with an LRAT proof that \texttt{lrat-check}
+and \texttt{cake\_lpr} verified;
+\item the program \texttt{covercheck.py}, which replays the branching without a solver, reports that
+$\mathcal U_{14}\cup\{\gamma^\ast\}$ covers the root ($44\,517$ nodes read and used, $66\,808$ nodes walked).
+\end{enumerate}
+By Step~3, $\gamma\subseteq\delta$ for some $\gamma\in\mathcal U_{14}\cup\{\gamma^\ast\}$. If
+$\gamma\in\mathcal U_{14}$, then $\delta$ satisfies $F_{14}\wedge\gamma$ by Step~2, against (i). If
+$\gamma=\gamma^\ast$, then $\delta$ satisfies $S_{15}\wedge\gamma^\ast$, against (ii).
+\end{proof}
+
+\begin{table}[ht]
+\centering\small
+\caption{The certificates of Theorem~\ref{thm:b1}. The tree was cut at depth $7$ into $341$ subtrees; the time
+is the CaDiCaL time on the closed nodes, and the last column is the total size of their LRAT proofs. A node
+with a complete half-line cannot be split; four such nodes needed more than the limit of $4$~s.}\label{tab:b1}
+\begin{tabular}{llrrr}
+\toprule
+nodes & formula & closed & time & proofs\\
+\midrule
+above depth $7$ & $F_{14}$ & 36 & $<1$ s & 0.02 GB\\
+subtrees $1$ to $167$ & $F_{14}$ & 17\,196 & 35\,384 s & 178.1 GB\\
+subtrees $168$ to $341$ & $F_{14}$ & 27\,280 & 57\,808 s & 260.5 GB\\
+complete half-line, longer limit & $F_{14}$ & 4 & 15 s & 0.07 GB\\
+the node $\gamma^\ast$ & $S_{15}$ & 1 & 12 s & 0.08 GB\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent\textbf{Remarks.} (1) A certificate is accepted only if the solver answers \textsc{unsatisfiable}
+and the proof ends with the empty clause. The proofs were deleted after the check; the lists of the closed
+nodes record the SHA-256 digests of every cube formula and of every proof. The program
+\texttt{recheck\_ct.py} rebuilds a cube formula, compares the digest, runs the solver again and has
+\texttt{lrat-check} and \texttt{cake\_lpr} check the new proof; this was done for the $36$ nodes above depth
+$7$, for the four nodes with a complete half-line, and for a random sample of the nodes of the subtrees.
+(2) A first pass of the search with an incremental solver and no proofs had closed the same tree and had
+found the same single satisfiable node.
+(3) With the formula $F_{15}$ (the lines up to $15$ and the consequences of the lines $16$ and $17$) the node
+$\gamma^\ast$ is closed by three certified parts; this alone gives the theorem for the lengths $2,\dots,17$.
+
+\begin{corollary}\label{cor:fifteen}
+Every five-state rule with \eqref{eq:B1} that synchronizes all lengths $2,\dots,15$ has a wall on the
+anti-diagonal $27$ of its half-line: $C_\infty(27-i,i)=\Gq$ for some $3\le i\le13$.
+\end{corollary}
+
+\begin{proof}
+Let $\delta$ be such a rule, in the normal form of Step~1 (Lemmas~\ref{lem:fire} and~\ref{lem:wall} apply with
+$16$ replaced by $15$), and suppose that $C_\infty(27-i,i)\ne\Gq$ for $3\le i\le13$. We show that $\delta$
+satisfies $F_{14}$ and contains a child of every node that it contains; then Steps~3 and~4 give a
+contradiction, because $\delta$ satisfies $S_{15}$. The clauses of $F_{14}$ whose justification in Step~2 used
+the length $16$ are the unit clause (F4) for the front cell $(13,14)$ and the unit clauses
+$C_\infty(27-i,i)\ne\Gq$, $2\le i\le14$: Lemma~\ref{lem:Fsound} with $N=13$ gives (F4) for $t\le12$, the
+half-line cells with $t+i\le27$ agree with the line of length $15$ at times before $28$, the return chains of
+the lines $n\le14$ use the lengths up to $15$, and Lemma~\ref{lem:wall} with $N=15$ gives the constants
+$C_\infty(t,1)=\Gq$ for $t\le27$ and the unit clauses for $t+i\le26$; (R1)--(R3) concern the lengths up to
+$14$. Now the front cells $f_t=C_\infty(t-1,t)$, $2\le t\le13$, lie in $\{\Aq,\Bq\}$, and
+$f_{t+1}=\delta(f_t,\Lq,\Lq)$; so the sequence $f_2,f_3,\dots$ is constant from $f_3$ on or alternates, and
+$f_{14}=\delta(f_{13},\Lq,\Lq)\in\{f_3,f_4\}\subseteq\{\Aq,\Bq\}$. This is the cell $(13,14)$: it is neither
+$\Lq$ nor $\Gq$. Finally $C_\infty(25,2)\ne\Gq$: otherwise $C_\infty(26,1)=\delta(\ast,\Gq,\Gq)=\Fq$, and this
+is a cell of the line of length $15$ at time $26<28$.
+\end{proof}
+
+Whether such a rule exists is being decided by the same method, applied to the formula $S_{15}$ with the
+clause $\bigvee_{i=3}^{13}[C_\infty(27-i,i)=\Gq]$, the unit clauses of Lemma~\ref{lem:wall} for $N=15$ and the
+redundant clauses (R1) and (R2) for the lengths up to $15$, where (R2) is written with the variables of the
+cells on the anti-diagonals $27$ and $28$. Nothing is claimed from this computation yet.
 
 \section{The weak reading}\label{sec:weak}
 
