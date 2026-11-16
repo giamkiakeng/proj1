@@ -1,6 +1,6 @@
 %% Proposed addition to Section 6 of the manuscript, to follow Section 6.5 (Balzer's Conditions).
 %% It uses the macros and theorem environments of paper.tex and refers to these labels of the
-%% manuscript: sec:balzer, prop:balzer, lem:agree, lem:return, lem:pumping, thm:left.
+%% manuscript: sec:balzer, prop:balzer, lem:lightcone, lem:agree, lem:return, lem:pumping, thm:left.
 %% The manuscript itself is not changed by this file.
 
 \subsection{Stable Generals}\label{sec:stable}
@@ -18,27 +18,28 @@ prove this.
 \end{theorem}
 
 \begin{proposition}[computer-assisted]\label{prop:weakimage}
-Let $I$ be an involution of $W=\{\Lq,\Gq,\Aq,\Bq\}$, extended by $I(\Fq)=\Fq$.
-No five-state rule that satisfies \textup{(B1)} in the weak reading and
+For an involution $I$ of $W=\{\Lq,\Gq,\Aq,\Bq\}$, extended by $I(\Fq)=\Fq$, let
+$N^\ast_I$ be the largest $N$ such that some five-state rule that satisfies
+\textup{(B1)} in the weak reading and
 \begin{equation}\label{eq:B2o}
 \delta(I(z),I(y),I(x))=I(\delta(x,y,z))\qquad\text{for all }x,y,z\in W
 \end{equation}
-synchronizes all lines of lengths $2,\dots,N_I+2$ in minimal time, where
-$N_I=13$ for the identity, $N_I=11$ for $(\Aq\,\Bq)$, $(\Lq\,\Aq)$ and
-$(\Lq\,\Bq)$, $N_I=7$ for $(\Gq\,\Aq)$ and $(\Gq\,\Bq)$, $N_I=6$ for
-$(\Lq\,\Aq)(\Gq\,\Bq)$ and $(\Lq\,\Bq)(\Gq\,\Aq)$, and $N_I=3$ for $(\Lq\,\Gq)$ and
-$(\Lq\,\Gq)(\Aq\,\Bq)$. In particular, no five-state rule that satisfies these
-two conditions for some involution synchronizes all lines of lengths
-$2,\dots,15$ in minimal time.
+synchronizes all lines of lengths $2,\dots,N$ in minimal time. Then
+$N^\ast_I\in\{12,13\}$ for the identity, $N^\ast_I\in\{10,11\}$ for
+$(\Aq\,\Bq)$, $(\Lq\,\Aq)$ and $(\Lq\,\Bq)$, $N^\ast_I=6$ for $(\Gq\,\Aq)$,
+$(\Gq\,\Bq)$, $(\Lq\,\Aq)(\Gq\,\Bq)$ and $(\Lq\,\Bq)(\Gq\,\Aq)$, and $N^\ast_I=2$
+for $(\Lq\,\Gq)$ and $(\Lq\,\Gq)(\Aq\,\Bq)$. In particular, no five-state rule that
+satisfies these two conditions for some involution synchronizes all lines of
+lengths $2,\dots,14$ in minimal time.
 \end{proposition}
 
 \Cref{prop:weakimage} assumes nothing about the neighbourhoods with image
 $\Fq$, about the values $\delta(\Gq,v,\Gq)$, or about the neighbourhoods with a
 border, and $I$ may move $\Gq$. With $I$ the identity, its hypotheses hold for the rule
-\texttt{balzer\_noborder12} of \cref{sec:balzer}; so for the identity the
-largest $N$ such that a rule of the class synchronizes the lines of lengths
-$2,\dots,N$ is $12$, $13$ or $14$. In \cref{thm:stable} the largest such $N$ is
-$14$ or $15$. The search below found a rule, \texttt{stable\_generals\_2-14},
+\texttt{balzer\_noborder12} of \cref{sec:balzer}, which gives the lower bound
+$12$. For the class of \cref{thm:stable}, the largest $N$ such that some rule
+synchronizes the lines of lengths $2,\dots,N$ is $14$ or $15$. The search below
+found a rule, \texttt{stable\_generals\_2-14},
 that satisfies (B1), gives $\Fq$ exactly on $(\Gq,\Gq,\Gq)$, $(\ast,\Gq,\Gq)$
 and $(\Gq,\Gq,\ast)$, and synchronizes the lines of lengths $2,\dots,14$ and no
 other line of length at most $120$ (direct simulation). On its half-line the
@@ -186,7 +187,8 @@ a neighbourhood with image $\Fq$;
 \begin{lemma}\label{lem:Fsound}
 If a rule of the class synchronizes all lines of lengths $2,\dots,N+2$ in minimal
 time, then its transitions and the cells of its lines and half-line satisfy
-$F^{(N')}$ for every $3\le N'\le N$.
+$F^{(N')}$ for every $3\le N'\le N$. If $N\ge5$, the same holds for a five-state
+rule of the class that synchronizes all lines of lengths $2,\dots,N+1$.
 \end{lemma}
 
 \begin{proof}
@@ -197,7 +199,13 @@ time $2n-2$. (F2) is the synchronization of the lines $n\le N$. (F3) is
 \cref{lem:return} for $n\le N$, which uses the line of length $n+1\le N+1$. (F4):
 by \cref{lem:return} the front cell $(n-2,n-1)$ is not $\Lq$ if the lines of
 lengths $n$ and $n+1$ are synchronized; with $n\le N+1$ this gives the cells
-$(t,t+1)$ for $t\le N-1$.
+$(t,t+1)$ for $t\le N-1$. For the second statement only (F4) for $t=N-1$ has to
+be shown again. The front cells $g_t:=C_\infty(t,t+1)$ satisfy $g_0=\Gq$ and
+$g_{t+1}=\delta(g_t,\Lq,\Lq)$, by \cref{lem:lightcone}. The lines of lengths up to
+$N+1$ give $g_t\ne\Lq$ for $t\le N-2$, in particular for $t\le3$. So
+$g_0,\dots,g_3$ lie in the three-element set $W\setminus\{\Lq\}$, two of them are
+equal, and the sequence is periodic from there on with values in
+$W\setminus\{\Lq\}$.
 \end{proof}
 
 Order the half-line cells with variables by $(t,i)\prec(t',i')$ if $t+i<t'+i'$,
@@ -224,7 +232,9 @@ Let the class be invariant under exchanging the names $\Aq$ and $\Bq$, and let
 $\mathcal U$ be a finite set of pairs $(\gamma,N_\gamma)$ with $3\le N_\gamma\le N$
 such that the nodes $\gamma$ cover the root of the tree for $N$. If
 $F^{(N_\gamma)}\wedge\gamma$ is unsatisfiable for every pair, then no rule of the
-class synchronizes all lines of lengths $2,\dots,N+2$ in minimal time.
+class synchronizes all lines of lengths $2,\dots,N+2$ in minimal time. If
+$N\ge5$ and case \textup{(b)} does not occur in the class, then no five-state
+rule of the class synchronizes all lines of lengths $2,\dots,N+1$.
 \end{lemma}
 
 \begin{proof}
@@ -244,7 +254,10 @@ $\gamma\cup\{e(\gamma)\mapsto v\}\subseteq\delta$ is a child of $\gamma$, hence
 covered, and the induction applies to it; the tree is finite. For the root we
 obtain a pair $(\gamma,N_\gamma)$ with $\gamma\subseteq\delta$. By
 \cref{lem:Fsound}, $\delta$ satisfies $F^{(N_\gamma)}$, and it satisfies the
-unit clauses of $\gamma$; this contradicts the hypothesis.
+unit clauses of $\gamma$; this contradicts the hypothesis. For the second
+statement, let $\delta$ synchronize the lines of lengths $2,\dots,N+1$; the
+argument is the same with the second statement of \cref{lem:Fsound}, which
+gives (F4) and $F^{(N_\gamma)}$, and without case (b).
 \end{proof}
 
 The children of a node in the tree for $N$ are among its children in the tree
@@ -331,12 +344,28 @@ involutions, from the level $3$ on (for the identity at the level $13$ only);
 \cref{tab:weakimage} lists the levels at which a node was closed. Every proof
 was verified by \texttt{lrat-check} and by \texttt{cake\_lpr}, and for every $I$
 the nodes closed at the levels up to the last level $N'_I$ cover the root of
-the tree for $N'_I$. For an invariant class, \cref{lem:split} applies with
+the tree for $N'_I$. The last levels are $13$ for the identity, $11$ for
+$(\Aq\,\Bq)$, and $10$ and $11$ for $(\Lq\,\Aq)$ and $(\Lq\,\Bq)$. For an
+invariant class, the second statement of \cref{lem:split} applies with
 $N=N'_I$. For two classes that the exchange maps onto each other, the choice of
 names in the proof of \cref{lem:split} turns a rule of one of them into a rule
 of one of the two classes whose half-line is a path of the tree of that class,
 and the proof of \cref{lem:split} applies in that tree; this gives the larger
-of the two last levels for both.
+of the two last levels for both. Hence $N^\ast_I\le13$ for the identity and
+$N^\ast_I\le11$ for the other three. The lower bounds are
+\texttt{balzer\_noborder12} and two rules found by the solver, for
+$(\Aq\,\Bq)$ and for $(\Lq\,\Bq)$, which satisfy the conditions on their tables
+and synchronize the lines of lengths $2,\dots,10$ (direct simulation).
+
+For the six involutions that move $\Gq$, the formula
+$\MT_5(\{2,\dots,N\};2N-2)$ with the clauses of the two conditions decides
+$N^\ast_I$: it is unsatisfiable for $N=3$ if $I$ is $(\Lq\,\Gq)$ or
+$(\Lq\,\Gq)(\Aq\,\Bq)$ and for $N=7$ if $I$ is one of the other four, in each
+case with an LRAT proof that \texttt{lrat-check} and \texttt{cake\_lpr} verified,
+and it is satisfiable for $N=2$ and for $N=6$, respectively; the rules that the
+solver returns synchronize the lines of these lengths (direct simulation). The
+tree search also closes these six classes, at the levels of
+\cref{tab:weakimage}.
 \end{proof}
 
 \begin{table}[t]

@@ -23,7 +23,7 @@ proved here. Proposition~\ref{prop:lbparity} is proved here as well.
 Theorem~\ref{thm:b1} and Propositions~\ref{prop:b1b2}, \ref{prop:yunes} and~\ref{prop:b1b2nb} are
 computer-assisted; every formula in their proofs has a proof certificate that an independent checker verified.
 Corollary~\ref{cor:fifteen} follows from the proof of Theorem~\ref{thm:b1}, and Proposition~\ref{prop:three}
-is computer-assisted with a verified certificate. The end of
+is computer-assisted with a verified certificate. Lemma~\ref{lem:front} is proved here. The end of
 Section~\ref{sec:search} describes a computation that is not finished; nothing is claimed from it yet.
 
 \section{Setting}
@@ -242,6 +242,29 @@ the synchronization of the lines $n\le N$. (F3) is the return-chain lemma for $n
 $n+1\le N+1$. (F4): by the return-chain lemma the front cell $(n-2,n-1)$ is not $\Lq$ if $n$ and $n+1$ are
 synchronized; with $n\le N+1$ this gives the cells $(t,t+1)$ for $t\le N-1$. (F5): the wall lemmas give
 $C_\infty(t,i)\ne\Gq$ for $i\ge2$ and $t+i\le 2(N+2)-4=2N$.
+\end{proof}
+
+The length $N+2$ enters this proof twice: in (F4) for the last front cell, and in the wall lemma. The first
+use can be avoided.
+
+\begin{lemma}[the front]\label{lem:front}
+For every rule, the front cells $g_t:=C_\infty(t,t+1)$ satisfy $g_0=\Gq$ and
+$g_{t+1}=\delta(g_t,\Lq,\Lq)$ as long as $g_t\in W$. If $|W|=4$ and $g_1,g_2,g_3\in W\setminus\{\Lq\}$, then
+$g_t\in W\setminus\{\Lq\}$ for all $t$. Consequently, if $N\ge5$ and a rule of a class without a wall lemma
+synchronizes all lengths $2,\dots,N+1$, then it satisfies the formula $F$ with the parameter $N'$ for every
+$3\le N'\le N$.
+\end{lemma}
+
+\begin{proof}
+The cells $(t,t+2)$ and $(t,t+3)$ lie beyond the front and are quiescent, so
+$g_{t+1}=C_\infty(t+1,t+2)=\delta(g_t,\Lq,\Lq)$. If $g_1,g_2,g_3\ne\Lq$, the four states $g_0,\dots,g_3$ lie
+in the three-element set $W\setminus\{\Lq\}$, so $g_i=g_j$ for some $0\le i<j\le3$; the sequence is then
+periodic from $i$ on, and all its values occur among $g_i,\dots,g_{j-1}$. For the consequence, let the rule
+synchronize all lengths $2,\dots,N+1$. By the return-chain lemma for $n\le N$, which uses the length
+$n+1\le N+1$, the front cell $(n-2,n-1)$ is not $\Lq$; so $g_t\ne\Lq$ for $t\le N-2$, in particular for
+$t\le3$, and hence for all $t$. This is (F4) for every parameter. The proof of Lemma~\ref{lem:Fsound} for
+(F1)--(F3) with the parameter $N'\le N$ uses the lengths up to $N'+1$ only, and (F5) holds by the definition
+of the class.
 \end{proof}
 
 \paragraph{The tree.} Order the half-line cells with variables by
@@ -615,7 +638,7 @@ $(\Lq\,\Bq)$ & 10 & 1536 & 121\,456 & 40 & 89 & 169 s & 0.9 GB\\
 \end{table}
 
 \noindent\textbf{Remarks.} (1) For the identity, the largest $N$ such that a rule of the class synchronizes
-all lengths $2,\dots,N$ is $12$, $13$ or $14$. (2) The statement refers to the state $\Gq$ of the general. A
+all lengths $2,\dots,N$ is $12$, $13$ or $14$; by Proposition~\ref{prop:b1b2nb} below it is $12$ or $13$. (2) The statement refers to the state $\Gq$ of the general. A
 rule in which another state $g$ is stable in the sense of \eqref{eq:B1w}, fires in threes and satisfies
 \eqref{eq:B4} is not covered; Lemma~\ref{lem:wallweak} holds for such a state as well, since its proof does not
 use the initial configuration. (3) Without \eqref{eq:B4} and \eqref{eq:B2o} the class of \eqref{eq:B1w} and
@@ -639,18 +662,17 @@ children at the level $N'$, because (a) excludes $\Lq$ for more front cells at t
 
 \begin{lemma}[case split over several levels]\label{lem:levels}
 Let the class be invariant under exchanging the names $\Aq$ and $\Bq$ and have no wall lemma, and let
-$N\ge3$. Let $\mathcal U$ be a finite set of pairs $(\gamma,N_\gamma)$ of a partial rule $\gamma$ and an integer
+$N\ge5$. Let $\mathcal U$ be a finite set of pairs $(\gamma,N_\gamma)$ of a partial rule $\gamma$ and an integer
 $3\le N_\gamma\le N$ such that, in the tree of level $N$, the root is covered by the set of all $\gamma$. If
 $F^{(N_\gamma)}\wedge\gamma$ is unsatisfiable for every pair $(\gamma,N_\gamma)\in\mathcal U$, then no rule of the
-class synchronizes all lengths $2,\dots,N+2$.
+class synchronizes all lengths $2,\dots,N+1$.
 \end{lemma}
 \begin{proof}
 Let $\delta$ be such a rule, with the names $\Aq$ and $\Bq$ chosen as in the proof of Lemma~\ref{lem:split}.
-By Lemma~\ref{lem:Fsound}, $\delta$ with its diagrams satisfies $F^{(N)}$, and the induction in the proof of
-Lemma~\ref{lem:split}, carried out in the tree of level $N$, yields a pair $(\gamma,N_\gamma)\in\mathcal U$ with
-$\gamma\subseteq\delta$. The rule $\delta$ synchronizes all lengths $2,\dots,N_\gamma+2$, so by
-Lemma~\ref{lem:Fsound} with $N_\gamma$ in place of $N$ it satisfies $F^{(N_\gamma)}$; it also satisfies the unit
-clauses of $\gamma$. This contradicts the unsatisfiability of $F^{(N_\gamma)}\wedge\gamma$.
+By Lemma~\ref{lem:front}, $\delta$ with its diagrams satisfies $F^{(N')}$ for every $3\le N'\le N$. The
+induction in the proof of Lemma~\ref{lem:split}, carried out in the tree of level $N$, uses of $\delta$ only
+that it satisfies $F^{(N)}$; it yields a pair $(\gamma,N_\gamma)\in\mathcal U$ with $\gamma\subseteq\delta$.
+The rule satisfies $F^{(N_\gamma)}$ and the unit clauses of $\gamma$. This contradicts the unsatisfiability of $F^{(N_\gamma)}\wedge\gamma$.
 \end{proof}
 
 The program \texttt{gchain.py} produces such a set. It starts with the root at a low level. At the level $N$
@@ -663,19 +685,18 @@ model of $F^{(N)}\wedge\gamma$ contains the table of a rule of the class that sy
 $2,\dots,N$.
 
 \begin{proposition}[computer-assisted, certified]\label{prop:b1b2nb}
-Let $I$ be an involution of $\{\Lq,\Gq,\Aq,\Bq\}$. No five-state rule that satisfies \eqref{eq:B1w} and
-\eqref{eq:B2o} for $I$ synchronizes all lengths $2,\dots,N_I+2$, where
+For an involution $I$ of $\{\Lq,\Gq,\Aq,\Bq\}$ let $N^\ast_I$ be the largest $N$ such that some five-state rule
+with \eqref{eq:B1w} and \eqref{eq:B2o} for $I$ synchronizes all lengths $2,\dots,N$. Then
 \[
-N_I=\begin{cases}
-13&\text{for the identity},\\
-11&\text{for }(\Aq\,\Bq),\ (\Lq\,\Aq),\ (\Lq\,\Bq),\\
-7&\text{for }(\Gq\,\Aq),\ (\Gq\,\Bq),\\
-6&\text{for }(\Lq\,\Aq)(\Gq\,\Bq),\ (\Lq\,\Bq)(\Gq\,\Aq),\\
-3&\text{for }(\Lq\,\Gq),\ (\Lq\,\Gq)(\Aq\,\Bq).
+N^\ast_I\ \begin{cases}
+\in\{12,13\}&\text{for the identity},\\
+\in\{10,11\}&\text{for }(\Aq\,\Bq),\ (\Lq\,\Aq),\ (\Lq\,\Bq),\\
+=6&\text{for }(\Gq\,\Aq),\ (\Gq\,\Bq),\ (\Lq\,\Aq)(\Gq\,\Bq),\ (\Lq\,\Bq)(\Gq\,\Aq),\\
+=2&\text{for }(\Lq\,\Gq),\ (\Lq\,\Gq)(\Aq\,\Bq).
 \end{cases}
 \]
 In particular, no five-state rule that satisfies \eqref{eq:B1w} and \eqref{eq:B2o} for some involution
-synchronizes all lengths $2,\dots,15$.
+synchronizes all lengths $2,\dots,14$.
 \end{proposition}
 
 \begin{proof}
@@ -688,12 +709,23 @@ a time limit of $4$~s per node. Table~\ref{tab:b1b2nb} lists, for every level at
 formula and the numbers of nodes; $N'_I$ is the last level of the search for $I$. Every closed node has an
 LRAT refutation that \texttt{lrat-check} and \texttt{cake\_lpr} verified, and for every $I$
 \texttt{gcover.py} reports that the root is covered in the tree of level $N'_I$ by the nodes closed at the
-levels up to $N'_I$. Lemma~\ref{lem:levels} applies to each invariant class with $N=N'_I$. For a pair of
-classes that the exchange maps onto each other, a rule of one of them is, after the choice of names in the
-proof of Lemma~\ref{lem:split}, a rule of one of the two classes whose half-line is a path of the
+levels up to $N'_I$. The last levels are $13$ for the identity, $11$ for $(\Aq\,\Bq)$, and $10$ and $11$ for
+$(\Lq\,\Aq)$ and $(\Lq\,\Bq)$. Lemma~\ref{lem:levels} applies to each invariant class with $N=N'_I$. For a
+pair of classes that the exchange maps onto each other, a rule of one of them is, after the choice of names in
+the proof of Lemma~\ref{lem:split}, a rule of one of the two classes whose half-line is a path of the
 corresponding tree; so the argument of Lemma~\ref{lem:levels} applies with $N$ the larger of the two last
 levels, in the tree of that class at its own last level $N'\le N$, because the rule synchronizes all lengths
-$2,\dots,N'+2$. This gives $N_I=\max(N'_I,N'_{I'})$ for the pair $I$, $I'$.
+$2,\dots,N'+1$. This gives $N^\ast_I\le13$ for the identity and $N^\ast_I\le11$ for $(\Aq\,\Bq)$,
+$(\Lq\,\Aq)$ and $(\Lq\,\Bq)$. The lower bounds are the rule \texttt{balzer\_noborder12} for the identity and
+two rules found by the solver, for $(\Aq\,\Bq)$ and for $(\Lq\,\Bq)$, which synchronize exactly the lengths
+$2,\dots,10$ among $2,\dots,60$ (conditions checked on the tables, lengths by direct simulation).
+
+For the six involutions that move $\Gq$ the formula $\MT_5(2..N)$ with the clauses of \eqref{eq:B1w} and
+\eqref{eq:B2o} and nothing else decides $N^\ast_I$: it is unsatisfiable for $N=3$ if $I$ is $(\Lq\,\Gq)$ or
+$(\Lq\,\Gq)(\Aq\,\Bq)$, and for $N=7$ if $I$ is one of the other four; each of these six formulas has an LRAT
+refutation that \texttt{lrat-check} and \texttt{cake\_lpr} verified. For $N=2$ and $N=6$ the formulas are
+satisfiable, and the rules that the solver returns synchronize the lengths $2$ and $2,\dots,6$ (direct
+simulation).
 \end{proof}
 
 \begin{table}[ht]
@@ -724,15 +756,14 @@ $(\Lq\,\Gq)(\Aq\,\Bq)$ & 3 & 528 & 3590 & 1 & 0 & 0 & $<0.1$ s & 4.8 kB\\
 \end{tabular}
 \end{table}
 
-\noindent\textbf{Remarks.} (1) Proposition~\ref{prop:b1b2nb} contains Proposition~\ref{prop:yunes} and, with
-the lengths up to $15$ in place of $12$, the weak case of Proposition~\ref{prop:b1b2}. In Proposition~6.6 of
+\noindent\textbf{Remarks.} (1) Proposition~\ref{prop:b1b2nb} contains Proposition~\ref{prop:yunes}, with the
+lengths up to $14$ in place of $15$ for the identity, and, with the lengths up to $14$ in place of $12$, the
+weak case of Proposition~\ref{prop:b1b2}. In Proposition~6.6 of
 the manuscript the conditions (B3) and (B4) and the border part of the image condition can therefore be
-dropped, and (B1) can be read weakly. (2) The satisfiable nodes give lower bounds. Two rules found by the
-solver, one with \eqref{eq:B1w} and \eqref{eq:B2o} for $(\Aq\,\Bq)$ and one for $(\Lq\,\Bq)$, synchronize
-exactly the lengths $2,\dots,10$ among $2,\dots,60$ (conditions checked on the tables, lengths by direct
-simulation). The second one has $\delta(\Gq,\Gq,\Gq)\ne\Fq$, so \eqref{eq:B3w} does not follow from
-\eqref{eq:B1w} and \eqref{eq:B2o}. For the identity the rule \texttt{balzer\_noborder12} gives the lengths
-$2,\dots,12$, so the largest $N$ with a rule of the class for $2,\dots,N$ is $12$, $13$ or $14$. (3) Without
+dropped, and (B1) can be read weakly. (2) The rule for $(\Lq\,\Bq)$ that synchronizes $2,\dots,10$ has $\delta(\Gq,\Gq,\Gq)\ne\Fq$, so
+\eqref{eq:B3w} does not follow from \eqref{eq:B1w} and \eqref{eq:B2o}. The tree search also closes the six
+classes of the involutions that move $\Gq$, at the levels $3$, $7$ and $6$ of Table~\ref{tab:b1b2nb}; the
+strict formulas give the exact values. (3) Without
 \eqref{eq:B1w} the image condition without borders does not make the tree small: for the identity with
 \eqref{eq:B3w} and \eqref{eq:B4} random descents suggest some $10^9$ nodes at the level $13$.
 
