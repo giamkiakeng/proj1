@@ -316,6 +316,20 @@ and has \texttt{lrat-check} and the formally verified checker \texttt{cake\_lpr}
 For a class that is not invariant under the exchange of $\Aq$ and $\Bq$, such as (B2) with $I=(\Lq\,\Aq)$,
 the exchange maps it onto another class of the same kind, and both are searched.
 
+\paragraph{A check of the encoder by enumeration.} The program \texttt{fsdfs.c} shares no code with the
+encoders and uses no solver. It simulates the lines of lengths $2,3,\dots$ in this order, cell by cell, and
+branches over the admissible values of a transition when a line first needs it; a branch ends when a cell is in
+state $\Fq$ before the time $2n-2$ or is not in state $\Fq$ at that time. Every partial rule (the transitions
+used by the lines $2,\dots,n$) is reached exactly once, so the program counts the rules that synchronize all
+lengths $2,\dots,n$ up to unused transitions. For four states it visits $1.17\cdot10^8$ nodes and finds
+$536$ rules for $2,\dots,7$, $27$ for $2,\dots,8$ and none for $2,\dots,9$, the numbers that the formulas
+$\MT_4(2..N)$ give when their models are enumerated with a solver. With the unit clauses of \eqref{eq:B1} it finds
+exactly one four-state rule for $2,\dots,4$ and none for $2,\dots,5$, and with the weak reading \eqref{eq:B1w}
+below $19$ rules for $2,\dots,6$ and none for $2,\dots,7$; the formulas give the same numbers. For five states
+with \eqref{eq:B1} and \eqref{eq:B3s}, and without the exclusion~(c), both methods count $20$ rules for the lengths $2,3$ and $6062$
+for $2,3,4$. Beyond these lengths the enumeration is not feasible for five states: with (c) the class has
+$10$, $3031$ and $4\,094\,650$ rules for $2,\dots,3$, $2,\dots,4$ and $2,\dots,5$.
+
 \section{The stable general alone}\label{sec:search}
 
 Without \eqref{eq:B2} the class is larger; it is decided by the lines up to $16$.
@@ -449,6 +463,13 @@ $f_{14}=\delta(f_{13},\Lq,\Lq)\in\{f_3,f_4\}\subseteq\{\Aq,\Bq\}$. This is the c
 $\Lq$ nor $\Gq$. Finally $C_\infty(25,2)\ne\Gq$: otherwise $C_\infty(26,1)=\delta(\ast,\Gq,\Gq)=\Fq$, and this
 is a cell of the line of length $15$ at time $26<28$.
 \end{proof}
+
+The value $i=13$ does not occur either. In the line of length $15$ the cell $13$ would be a barrier at time
+$14$, at distance $3$ from the right border, and $2\cdot15-3-14=13>M(2)=12$; this contradicts the remark after
+Lemma~\ref{lem:gap}, which needs the lengths $2$, $3$ and $15$ only. So the wall of
+Corollary~\ref{cor:fifteen} is at a cell $3\le i\le12$. For $i=3$ the same remark holds with equality on the
+left: the cell $2$ lies between the barriers $1$ and $3$ from time $24$ on and has $27-24=3=M(1)$ steps left,
+so it passes through the three states $\Lq$, $\Aq$, $\Bq$ at the times $24$, $25$, $26$.
 
 \begin{proposition}[computer-assisted, certified]\label{prop:three}
 Up to the transitions that are used neither in the lines of lengths $2,\dots,14$ nor in the half-line up to
