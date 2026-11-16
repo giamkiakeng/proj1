@@ -1,0 +1,3 @@
+# nodes of the tree for I = AB that are satisfiable at the level 10, refuted for the strict formula of the lines 2..11
+# columns: U cube | formula | variables, clauses | SHA-256 of the formula file | proof bytes | SHA-256 of the proof | lrat-check | cake_lpr
+U *GL=G,GLL=A,*GA=G,GAL=B,*GB=G,ALL=B | strict formula of the lines 2..11 with the units of the node: mcopy.py 5 11 --nocopy --nosym --strict --b1 --b2 AB --b2nb --set <the transitions of the node>; 1796, 154585 variables, clauses | ef471c91795807d61eb2297a5fc01dd579686978f1a5f31e7643ab8f502c6127 | 18643868 | fd18b29a334064debbc064a9aeb34af5eac966ad507a67575395795093e2513c | VERIFIED | cake_lpr s VERIFIED UNSAT

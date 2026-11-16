@@ -701,7 +701,7 @@ Then
 
 | $I$ | identity | $(A\,B)$ | $(L\,A)$, $(L\,B)$ | $(G\,A)$, $(G\,B)$, $(L\,A)(G\,B)$, $(L\,B)(G\,A)$ | $(L\,G)$, $(L\,G)(A\,B)$ |
 |---|---|---|---|---|---|
-| $N^\ast_I$ | 12 or 13 | 10 or 11 | 10 or 11 | 6 | 2 |
+| $N^\ast_I$ | 12 or 13 | 10 | 10 | 6 | 2 |
 
 *Proof.* The front. For any rule, the front cells $g_t:=C_\infty(t,t+1)$ satisfy $g_0=G$ and
 $g_{t+1}=\delta(g_t,L,L)$, because the two cells to the right of the front are quiescent. If $g_1,g_2,g_3$ are
@@ -737,7 +737,19 @@ $(A\,B)$, $(L\,G)$ and $(L\,G)(A\,B)$ are fixed, and $(L\,A)\leftrightarrow(L\,B
 $(G\,A)\leftrightarrow(G\,B)$, $(L\,A)(G\,B)\leftrightarrow(L\,B)(G\,A)$. So a rule of the class for $I$ is, after
 renaming if `B` occurs first, covered by the tree for $I$ or by the tree for its mirror, and the larger of the
 two last levels counts for both. The last levels are 13 for the identity, 11 for $(A\,B)$, and 10 and 11 for
-$(L\,A)$ and $(L\,B)$; this gives $N^\ast_I\le13$ for the identity and $N^\ast_I\le11$ for the other three. The trees and their certificates (every proof was verified by
+$(L\,A)$ and $(L\,B)$; this gives $N^\ast_I\le13$ for the identity and $N^\ast_I\le11$ for the other three.
+
+The length 11. A rule of the class for $(A\,B)$ or $(L\,B)$ that synchronizes $2,\dots,11$ satisfies the
+formulas of the levels up to 10, so its half-line passes through a node that is closed at a level up to 10 or
+through one of the nodes that are satisfiable at the level 10: one node for $(A\,B)$
+(`*GL=G,GLL=A,*GA=G,GAL=B,*GB=G,ALL=B`) and two for $(L\,B)$ (`*GL=G,GLL=A,*GA=B` and
+`*GL=G,GLL=A,*GA=A,GAL=L,*AL=G`); the tree for $(L\,A)$ has none. For each of these three nodes the strict
+formula of the lines $2,\dots,11$ with the units of the node
+(`mcopy.py 5 11 --nocopy --nosym --strict --b1 --b2 I --b2nb --set ...`) is unsatisfiable, with an LRAT proof
+that `lrat-check` and `cake_lpr` verified (`runs/b1b2/ws_AB_11_nodes.txt`, `ws_LB_11_nodes.txt`), and
+`gcover.py 5 10 --front1` on the lists of the levels up to 10 together with these nodes reports a complete case
+split for $(A\,B)$ (678 cubes) and for $(L\,B)$ (252 cubes), as it does for $(L\,A)$ without them (305 cubes).
+So no rule of these classes synchronizes $2,\dots,11$, and $N^\ast_I\le10$. The trees and their certificates (every proof was verified by
 `lrat-check` and by `cake_lpr`; at the levels that are not listed the root is satisfiable):
 
 | $I$ | level | variables, clauses of $F^I_N$ | SHA-256 of the clause lines | nodes closed | split | satisfiable | CaDiCaL time on closed nodes | proofs |
@@ -771,8 +783,8 @@ the other four involutions are the rules named below. $\square$
 Proposition 7.3 contains Proposition 7.2, with the lengths up to 14 in place of 15 for the identity, and,
 with the lengths up to 14 in place of 12, the weak case of Proposition 7.1: in Proposition 6.6 of the paper the conditions (B3) and (B4) and the border part of (B2) can
 be dropped and (B1) can be read weakly. A satisfiable node carries a model of $F^I_N$, which is a rule of the
-class that synchronizes $2,\dots,N$. So the class for $(A\,B)$ has a rule for $2,\dots,10$ and none for
-$2,\dots,12$, and the same holds for the class for $(L\,B)$, which is the class for $(L\,A)$ with the names
+class that synchronizes $2,\dots,N$. So the class for $(A\,B)$ has a rule for $2,\dots,10$ (and none for
+$2,\dots,11$), and the same holds for the class for $(L\,B)$, which is the class for $(L\,A)$ with the names
 exchanged: `rules/b1w_b2nb_AB_2-10.txt` and `rules/b1w_b2nb_LB_2-10.txt` (found by `mcopy.py`; conditions
 checked on the tables by `check_balzer.py`; each synchronizes exactly the lines $2,\dots,10$ among
 $2,\dots,60$). The second of them does not fire from `GGG`, so (B3) does not follow from these conditions.

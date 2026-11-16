@@ -690,7 +690,7 @@ with \eqref{eq:B1w} and \eqref{eq:B2o} for $I$ synchronizes all lengths $2,\dots
 \[
 N^\ast_I\ \begin{cases}
 \in\{12,13\}&\text{for the identity},\\
-\in\{10,11\}&\text{for }(\Aq\,\Bq),\ (\Lq\,\Aq),\ (\Lq\,\Bq),\\
+=10&\text{for }(\Aq\,\Bq),\ (\Lq\,\Aq),\ (\Lq\,\Bq),\\
 =6&\text{for }(\Gq\,\Aq),\ (\Gq\,\Bq),\ (\Lq\,\Aq)(\Gq\,\Bq),\ (\Lq\,\Bq)(\Gq\,\Aq),\\
 =2&\text{for }(\Lq\,\Gq),\ (\Lq\,\Gq)(\Aq\,\Bq).
 \end{cases}
@@ -716,7 +716,16 @@ the proof of Lemma~\ref{lem:split}, a rule of one of the two classes whose half-
 corresponding tree; so the argument of Lemma~\ref{lem:levels} applies with $N$ the larger of the two last
 levels, in the tree of that class at its own last level $N'\le N$, because the rule synchronizes all lengths
 $2,\dots,N'+1$. This gives $N^\ast_I\le13$ for the identity and $N^\ast_I\le11$ for $(\Aq\,\Bq)$,
-$(\Lq\,\Aq)$ and $(\Lq\,\Bq)$. The lower bounds are the rule \texttt{balzer\_noborder12} for the identity and
+$(\Lq\,\Aq)$ and $(\Lq\,\Bq)$.
+
+For these three involutions the length $11$ is excluded as follows. By Lemma~\ref{lem:front}, a rule of the
+class that synchronizes all lengths $2,\dots,11$ satisfies $F^{(N')}$ for $N'\le10$, so in the tree of level
+$10$ its half-line passes through a node closed at a level up to $10$, which is impossible, or through a node
+at which $F^{(10)}$ is satisfiable. There is one such node for $(\Aq\,\Bq)$, there are two for $(\Lq\,\Bq)$ and
+none for $(\Lq\,\Aq)$. For each of the three nodes $\gamma$, the formula $\MT_5(2..11)$ with the clauses of the
+class and the unit clauses of $\gamma$ has an LRAT refutation that \texttt{lrat-check} and \texttt{cake\_lpr}
+verified, and \texttt{gcover.py} reports that the nodes closed at the levels up to $10$, together with these
+nodes, cover the root of the tree of level $10$. Hence $N^\ast_I\le10$. The lower bounds are the rule \texttt{balzer\_noborder12} for the identity and
 two rules found by the solver, for $(\Aq\,\Bq)$ and for $(\Lq\,\Bq)$, which synchronize exactly the lengths
 $2,\dots,10$ among $2,\dots,60$ (conditions checked on the tables, lengths by direct simulation).
 

@@ -25,7 +25,7 @@ $N^\ast_I$ be the largest $N$ such that some five-state rule that satisfies
 \delta(I(z),I(y),I(x))=I(\delta(x,y,z))\qquad\text{for all }x,y,z\in W
 \end{equation}
 synchronizes all lines of lengths $2,\dots,N$ in minimal time. Then
-$N^\ast_I\in\{12,13\}$ for the identity, $N^\ast_I\in\{10,11\}$ for
+$N^\ast_I\in\{12,13\}$ for the identity, $N^\ast_I=10$ for
 $(\Aq\,\Bq)$, $(\Lq\,\Aq)$ and $(\Lq\,\Bq)$, $N^\ast_I=6$ for $(\Gq\,\Aq)$,
 $(\Gq\,\Bq)$, $(\Lq\,\Aq)(\Gq\,\Bq)$ and $(\Lq\,\Bq)(\Gq\,\Aq)$, and $N^\ast_I=2$
 for $(\Lq\,\Gq)$ and $(\Lq\,\Gq)(\Aq\,\Bq)$. In particular, no five-state rule that
@@ -352,7 +352,15 @@ names in the proof of \cref{lem:split} turns a rule of one of them into a rule
 of one of the two classes whose half-line is a path of the tree of that class,
 and the proof of \cref{lem:split} applies in that tree; this gives the larger
 of the two last levels for both. Hence $N^\ast_I\le13$ for the identity and
-$N^\ast_I\le11$ for the other three. The lower bounds are
+$N^\ast_I\le11$ for the other three. For these three the length $11$ is
+excluded separately: by \cref{lem:Fsound}, a rule of the class that synchronizes
+the lines of lengths $2,\dots,11$ satisfies $F^{(N')}$ for $N'\le10$, so its
+half-line passes through one of the nodes at which $F^{(10)}$ is satisfiable
+(one for $(\Aq\,\Bq)$, two for $(\Lq\,\Bq)$, none for $(\Lq\,\Aq)$); for each of
+these three nodes, $\MT_5(\{2,\dots,11\};20)$ with the clauses of the class and
+the unit clauses of the node has a refutation verified by both checkers, and
+with these nodes the closed nodes of the levels up to $10$ cover the root of
+the tree for $10$. The lower bounds are
 \texttt{balzer\_noborder12} and two rules found by the solver, for
 $(\Aq\,\Bq)$ and for $(\Lq\,\Bq)$, which satisfy the conditions on their tables
 and synchronize the lines of lengths $2,\dots,10$ (direct simulation).
