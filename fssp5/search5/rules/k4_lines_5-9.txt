@@ -1,0 +1,44 @@
+# four-state rule that synchronizes exactly the lines 5..9 (README, Section 5, enumeration without a solver);
+# one of the 36 rules for 5..9 found by fsdfs2 4 9 -nmin 5; only the 40 transitions that these lines use are listed.
+# No four-state rule synchronizes the lines 5..10, and none synchronizes 2..9, 3..9 or 4..9.
+k 4
+L L L L
+L L G L
+L L * L
+L G L G
+L G G G
+L G A A
+L A L G
+L A A G
+L A * G
+G L L G
+G L G L
+G L A A
+G L * A
+G G L L
+G G G A
+G G A G
+G G * A
+G A L G
+G A G A
+G A A F
+G A * L
+A L L A
+A L G A
+A L A G
+A L * G
+A G L G
+A G G L
+A G A L
+A G * L
+A A L A
+A A A F
+A A * F
+* L L A
+* L G A
+* L A G
+* G L L
+* G G G
+* G A F
+* A L L
+* A G L

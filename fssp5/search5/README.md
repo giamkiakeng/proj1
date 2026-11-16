@@ -24,7 +24,7 @@ checker verified, and the completeness of every case split was checked by a prog
 | No five-state rule is a local image of Mazoyer's six-state solution for windows up to radius 2, or radius 1 with one step of memory | certified | Section 4 |
 | Consequences of a stable general: firing from three generals only, walls, gap bounds; the same in the weak reading | proved by hand | Lemmas 6.1 to 6.3, 6.5, 6.6 |
 | The bound $(k-1)^{2s}\ell$ of the left-border lemma is attained for $s=1$ and is not attained for odd $k$ and $s\ge2$ | solver answer with simulated rules; proved by hand | Observation 8.1, Proposition 8.2 |
-| Four states: no rule synchronizes all lines $3,\dots,9$ or all lines $4,\dots,9$ (42 and 399 rules reach the length 8); the numbers of four-state rules of every length range and class | exhaustive enumeration without a solver | Section 5 |
+| Four states: no rule synchronizes all lines $3,\dots,9$ or all lines $4,\dots,9$ (42 and 399 rules reach the length 8), but 36 rules synchronize $5,\dots,9$ and none $5,\dots,10$; the numbers of four-state rules of every length range and class; no four-state rule with a stable general synchronizes both 6 and 7 | exhaustive enumeration without a solver | Section 5 |
 | Sizes of the search trees of other classes, among them the open problem itself ($3\cdot10^{18}$ nodes for the lines up to 15) | estimates by random descents | Section 9 |
 
 Open here: whether a five-state rule with a stable general synchronizes $2,\dots,15$ (running), the identity
@@ -289,12 +289,26 @@ seconds ($3\cdot10^7$ nodes per second):
 | $n_0=2$ | 7 | 664 | 96,169 | 828,670 | 64,299 | 536 | 27 | 0 | $1.17\cdot10^8$ |
 | $n_0=3$ | 1566 | | 480,682 | 4,382,062 | 396,718 | 2671 | 42 | 0 | $6.98\cdot10^8$ |
 | $n_0=4$ | 1,108,449 | | | 49,676,762 | 4,316,958 | 51,872 | 399 | 0 | $9.44\cdot10^9$ |
+| $n_0=5$ | | | | | | | | 36 | $4.31\cdot10^{10}$ (with backjumping, `fsdfs2.c`); none for $5,\dots,10$ |
 
-The row $n_0=2$ repeats $N_4=8$ and the numbers 536 and 27 of `enum_rules.py`. The other two rows are new
-here: **no four-state rule synchronizes all lines of lengths $3,\dots,9$, and none synchronizes all lines of
-lengths $4,\dots,9$** (exhaustive enumeration; not certified by a proof checker). So the four-state result does
-not depend on the shortest lines. Kissat refutes the strict formula of the lines $3,\dots,9$ as well (127 s)
-and gives no answer for $4,\dots,9$ in 150 s. With the class options the enumeration also repeats the
+The row $n_0=2$ repeats $N_4=8$ and the numbers 536 and 27 of `enum_rules.py`. The other rows are new here
+(exhaustive enumeration; not certified by a proof checker): **no four-state rule synchronizes all lines of
+lengths $3,\dots,9$, and none synchronizes all lines $4,\dots,9$; but 36 four-state rules synchronize the
+lines $5,\dots,9$, and none synchronizes $5,\dots,10$.** So if $N_4(n_0)$ denotes the largest $N$ with a
+four-state rule for $n_0,\dots,N$, then $N_4(2)=N_4(3)=N_4(4)=8$ and $N_4(5)=9$: the bound 8 depends on the
+lines 2, 3 and 4, and the number of consecutive lengths that one rule can serve falls from 7 to 6, 5 and 5. One
+of the 36 rules is `rules/k4_lines_5-9.txt` (40 transitions; by simulation it synchronizes the lengths 5 to 9
+and none of the lengths 2, 3 and $10,\dots,40$, and the line of length 4 needs a transition that is not among
+the 40); the general walks to the right as a single `G`, and the line fires from
+the row `G A ... A` one step after the row of generals. Kissat refutes the strict formula of the lines
+$3,\dots,9$ as well (127 s) and gives no answer for $4,\dots,9$, $5,\dots,9$ or $5,\dots,10$ in 150 s each.
+With a class the same question has smaller answers (`fsdfs2 4 16 CLASS -nmin n0`, all trees complete): for
+$n_0=2,3,4,5,6$ the largest $N$ is $4,4,5,6,6$ with (B1) strong (with or without (B3) strong) and $6,6,7,7,7$
+with (B1) weak; for $n_0=2,3,4$ it is $8,8,8$ with (B3) strong and $7,8,8$ with (B4). In particular **no
+four-state rule with a stable general synchronizes both lines 6 and 7.** For five states the corresponding
+statement fails for pairs: Kissat finds rules with a stable general for the two lines $7,8$, for $11,12$ and for
+$15,16$ (0.2 s, 2 s, 36 s), and gives no answer in 400 s for the three lines $14,15,16$, for $13,\dots,16$ and
+for $12,\dots,16$. With the class options the enumeration also repeats the
 four-state column of the table above, with the numbers of rules: (B1) strong 1 rule for $2,\dots,4$ and none
 for $2,\dots,5$; (B1) weak 19 rules for $2,\dots,6$, none for $2,\dots,7$ (the same with (B3) weak in addition);
 (B3) strong and (B3) weak 26 rules each for $2,\dots,8$, none for $2,\dots,9$; (B4) 86 rules for $2,\dots,7$, none for
