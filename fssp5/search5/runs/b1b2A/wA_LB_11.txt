@@ -1,0 +1,3 @@
+# gcert.py 5 11 cert/b1b2A/wA_LB_11.txt --b1 --b2 LB --b2nb --front1 --init A --tlim 4 --workers 3 --prefixfile cert/b1b2A/wA_LB_11.prefix.txt
+# F: 1840 variables, 160062 clauses, sha256 2d2aefe23154ac197a00383ea9af783aa21e9faeab72d8008ae883fb39323792
+U *AL=B,ALL=A,*BA=G,BAL=G | 1.0 s | 6536962 | 5416df4bc0d0d04beba51cd4c6cc432232ae4ffba1b580be4cfbde792cd07619 | 546745a796abeaaa8a5254b8b2c7c6baaf6c199d6b7862b8e140126c26897549 | VERIFIED | cake_lpr VERIFIED UNSAT

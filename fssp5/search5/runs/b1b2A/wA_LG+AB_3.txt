@@ -1,0 +1,3 @@
+# gcert.py 5 3 cert/b1b2A/wA_LG+AB_3.txt --b1 --b2 LG+AB --b2nb --front1 --init A --tlim 4 --workers 3
+# F: 528 variables, 3590 clauses, sha256 aeb494a4fbed0cdeeb84eafa579572378f7ac9d28796c1cf6505ddca1754ef97
+U - | 0.0 s | 5663 | d7fe2c2ed4a6921a5a15d42d677a3257abda11329bbecf08048847129290e7c6 | 7418b4986bd28cc113044e437a40774cde23931db387ea4c22f3c4f2bff19063 | VERIFIED | cake_lpr VERIFIED UNSAT

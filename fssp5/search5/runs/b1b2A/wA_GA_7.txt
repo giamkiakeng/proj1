@@ -1,0 +1,3 @@
+# gcert.py 5 7 cert/b1b2A/wA_GA_7.txt --b1 --b2 GA --b2nb --front1 --init A --tlim 4 --workers 3 --prefixfile cert/b1b2A/wA_GA_7.prefix.txt
+# F: 896 variables, 42750 clauses, sha256 4722d498ebc49ca1a748fea745c254b5fd5a5bae17a23faf5509dfc07fabfd16
+U - | 0.3 s | 2094817 | 5081882fee161c1dc34f2b848674313226b6228f9d7543825f4408acda760735 | b80fe07753aa2f9ac4c0c02ffe6f403bad91fdcfe715fbde71202ea3a42b543a | VERIFIED | cake_lpr VERIFIED UNSAT

@@ -7,7 +7,7 @@ search restricted classes of five-state rules, and this file records what each s
 Conventions. States `L` (quiescent), `G` (general), auxiliary `A`, `B`, firing `F`; `*` is the border. A
 *line* is the diagram $C_n$ of the line of length $n$; a rule *synchronizes* $n$ if $C_n$ is all `F` at time
 $2n-2$ and has no `F` before. "UNSAT" means that a SAT solver or an exhaustive enumeration proved that the
-class is empty for the stated lengths; "unknown" means that the run was stopped. Proof certificates (LRAT) exist for the results of Section 4, for Theorem 6.4 and for Propositions 7.1 to 7.3, where stated there; the
+class is empty for the stated lengths; "unknown" means that the run was stopped. Proof certificates (LRAT) exist for the results of Section 4, for Theorem 6.4 and for Propositions 7.1 to 7.4, where stated there; the
 other computer results have the status of solver answers, cross-checked where the tables say so. Lemmas 6.1
 to 6.3, 6.5 and 6.6 and Proposition 8.2 are proved by hand.
 
@@ -19,14 +19,15 @@ checker verified, and the completeness of every case split was checked by a prog
 | No five-state rule with a stable general, (B1), synchronizes all lines $2,\dots,16$; three such rules, and up to unused entries only these, synchronize $2,\dots,14$ under the conditions that the lines 15 and 16 impose | certified | Theorem 6.4 and the paragraph after it |
 | No five-state rule with (B1) in the weak reading and the image condition (B2) for the neighbourhoods without a border, for any of the ten involutions, synchronizes all lines $2,\dots,14$ | certified | Proposition 7.3 |
 | The same for Balzer's four conditions as Yunès states them (open at the end of Section 6.5 of the paper) | certified | Proposition 7.2 |
+| The same class with a stable state that is not the initial state of the general: exact maxima 10, 6 and 2 for the nine involutions other than the identity | certified | Proposition 7.4 |
 | (B1) and (B2) with borders: no rule for $2,\dots,12$, in both readings of (B1) | certified | Proposition 7.1 |
 | No five-state rule is a local image of Mazoyer's six-state solution for windows up to radius 2, or radius 1 with one step of memory | certified | Section 4 |
 | Consequences of a stable general: firing from three generals only, walls, gap bounds; the same in the weak reading | proved by hand | Lemmas 6.1 to 6.3, 6.5, 6.6 |
 | The bound $(k-1)^{2s}\ell$ of the left-border lemma is attained for $s=1$ and is not attained for odd $k$ and $s\ge2$ | solver answer with simulated rules; proved by hand | Observation 8.1, Proposition 8.2 |
 | Sizes of the search trees of other classes, among them the open problem itself ($3\cdot10^{18}$ nodes for the lines up to 15) | estimates by random descents | Section 9 |
 
-Open here: whether a five-state rule with a stable general synchronizes $2,\dots,15$ (running), the classes
-with a stable state other than the initial state (running), (B2) alone, (B3) alone, and the problem itself.
+Open here: whether a five-state rule with a stable general synchronizes $2,\dots,15$ (running), the identity
+in Propositions 7.3 (12 or 13) and 7.4, (B2) alone, (B3) alone, and the problem itself.
 
 ## 1. Programs (`src/`)
 
@@ -725,9 +726,8 @@ is not the initial state of the general is the same class with the roles of two 
 start from `A L ... L` and the conditions speak about $G$ (`gcert.py --init A`). Lemma 6.2' does not use the
 initial configuration, so the half-line has no cell $i\ge2$ in state $G$ in this class either. This class has
 rules for $2,\dots,11$ with $I$ the identity (the tree search at $N=11$ ends at a satisfiable node; $N=12$ was
-not finished). It is being searched without (B3) and (B4), as in
-Proposition 7.3 below (`gchain.py ... --init A`); in that class no renaming is left, because all four working
-states are distinguished (quiescent, initial, stable, the fourth), so the ten involutions are ten classes.
+not finished). Without (B3) and (B4) this class is
+Proposition 7.4 below.
 
 **Proposition 7.3 (weak stable general and image condition without borders; computer-assisted, certified).**
 No five-state rule that satisfies (B1) in the weak reading and (B2) for the neighbourhoods without a border,
@@ -831,6 +831,44 @@ checked on the tables by `check_balzer.py`; each synchronizes exactly the lines 
 $2,\dots,60$). The second of them does not fire from `GGG`, so (B3) does not follow from these conditions.
 For the identity the rule `balzer_noborder12` of the paper shows that the largest $N$ with a rule for
 $2,\dots,N$ is 12 or 13.
+
+**Proposition 7.4 (a stable state that is not the initial state; computer-assisted, certified).** Let the
+first cell start in the state $A$ and let $G$ be another working state, which need not occur in the initial
+configuration: the lines are $A\,L\cdots L$, and the conditions are (B1) in the weak reading for $G$ and (B2)
+for the neighbourhoods without a border, for an involution $I$ of $\{L,G,A,B\}$. Let $N^\ast_I$ be the largest
+$N$ such that some five-state rule of this class synchronizes all lines $2,\dots,N$. Then
+
+| $I$ | $(A\,B)$, $(L\,A)$, $(L\,B)$ | $(G\,A)$, $(G\,B)$, $(L\,A)(G\,B)$, $(L\,B)(G\,A)$ | $(L\,G)$, $(L\,G)(A\,B)$ | identity |
+|---|---|---|---|---|
+| $N^\ast_I$ | 10 | 6 | 2 | at least 10; not decided |
+
+*Proof.* As for Proposition 7.3, with `gchain.py ... --init A`. In this class the four working states are
+distinguished (quiescent, initial, stable, the fourth), so no names are exchanged and the ten involutions are
+ten classes; the remark on the front holds with $g_0=A$. For $(A\,B)$, $(L\,A)$ and $(L\,B)$ the trees close at
+the level 11 (`gcover.py 5 11 ... --front1 --init A`: complete case splits with 821, 443 and 431 cubes), so
+$N^\ast_I\le11$; the nodes that are satisfiable at the level 10 (one, two and one) are refuted for the strict
+formula of the lines $2,\dots,11$ (`nodecert.py 5 11 ... --strict --init A`), and with them the case splits of
+the level 10 are complete (815, 441 and 431 cubes), so $N^\ast_I\le10$; a satisfiable node of the level 10
+carries a rule for $2,\dots,10$. For the six involutions that move $G$ the strict formulas of the root decide:
+unsatisfiable for $N=3$ and satisfiable for $N=2$ for $(L\,G)$ and $(L\,G)(A\,B)$, unsatisfiable for $N=7$ and
+satisfiable for $N=6$ for the other four (`runs/b1b2A/strict_roots.txt`). Every refutation has an LRAT proof
+verified by `lrat-check` and `cake_lpr`. For the identity the level 10 has 4597 closed and 111 satisfiable
+nodes; the level 11 is not finished. $\square$
+
+| $I$ | level | variables, clauses | SHA-256 of the clause lines | nodes closed | split | satisfiable | CaDiCaL time on closed nodes | proofs |
+|---|---|---|---|---|---|---|---|---|
+| $(A\,B)$ | 9 | 1280, 89,308 | `1c280f94...76fd4e9` | 414 | 160 | 23 | 625 s | 2.53 GB |
+| $(A\,B)$ | 10 | 1536, 121,369 | `d49c0009...0a2e94c` | 400 | 134 | 1 | 669 s | 2.78 GB |
+| $(A\,B)$ | 11 | 1840, 160,062 | `24f3fe8e...6b7e0d6` | 7 | 2 | 0 | 14 s | 0.06 GB |
+| $(L\,A)$ | 9 | 1280, 89,308 | `d1fdd049...9363982` | 121 | 45 | 10 | 201 s | 0.86 GB |
+| $(L\,A)$ | 10 | 1536, 121,369 | `406fac32...083fac9` | 318 | 114 | 2 | 465 s | 2.11 GB |
+| $(L\,A)$ | 11 | 1840, 160,062 | `80b98d5f...3ab5fdf` | 4 | 1 | 0 | 9 s | 0.04 GB |
+| $(L\,B)$ | 10 | 1536, 121,369 | `893e40e2...c62dc46` | 430 | 156 | 1 | 688 s | 2.96 GB |
+| $(L\,B)$ | 11 | 1840, 160,062 | `2d2aefe2...9323792` | 1 | 0 | 0 | 1 s | 0.01 GB |
+
+So for the nine involutions other than the identity it makes no difference for the maximum whether the stable
+state is the initial state of the general or another state: the values 10, 6 and 2 are those of
+Proposition 7.3.
 
 ## 8. The left-border lemma: is its bound attained?
 

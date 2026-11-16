@@ -1,0 +1,3 @@
+# nodecert.py 5 11 --b1 --b2 AB --b2nb --strict --init A
+# F: k=5 N=11, 1796 variables, 154579 clauses, sha256 of the clause lines 94cff2a9d6be18787b9000923e9605bbfd6321756fb0b06f3e09f7084baf151a
+U *AL=G,ALL=B,*GB=G,GBL=A,*GA=G,BLL=A | 11.0 s | 30603670 | 703553fde2350fce017c08bb2a69df3d0529f260eaed383725e853aa36358a85 | f6da5fe92bffaafa7ca2a04bc482ec62f21e58fe3429414260537a42dd9b25f8 | VERIFIED | cake_lpr VERIFIED UNSAT

@@ -1,0 +1,2 @@
+N=3: 1 nodes closed, 0 split, 0 satisfiable, 0 not certified, 0 s
+CLOSED at N=3: no rule of the class synchronizes all lines 2..5
