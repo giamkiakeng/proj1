@@ -1077,6 +1077,20 @@ the identity, (B3), (B4)) the incremental solver `mcopy_inc.py` finds rules up t
 alone it reaches $2,\dots,12$ after 72 s for the identity and 200 s for $(A\,B)$. The runs were stopped there;
 none of these rules synchronizes a longer line, and nothing is claimed about six states.
 
+**Conditions that do not prune (16 November, solver answers).** A minimal-time solution satisfies more than
+the synchronization of the lines $2,\dots,N$, and three such conditions were tried as cheap substitutes for long
+lines; each of them is satisfiable within seconds and so excludes nothing. (1) Single long lines: with four
+states there are rules that synchronize the lines 2, 3 and $e$ for each $e\in\{9,10,11,12\}$ (`mcopy.py 4 3
+--nocopy --extra e`, 0.2 s to 65 s), although no four-state rule synchronizes $2,\dots,9$; a rule can be tuned to
+one long line. (2) Chains (`--chains N3 C`: for every $n\le N_3$ the first $C$ anti-diagonals after the
+reflection contain no `F` except that the cells $1,\dots,C$ fire at the time $2n-2$, and the return chain
+differs from the half-line): in the class of Theorem 6.4, with the lines $2,\dots,8$ complete and the chains for
+all $n\le24$, $C=1,2$, or the lines $2,\dots,10$ and $n\le30$, $C=2$, a rule is found in 2 s to 16 s. Firing the
+first cells in time is easy; the difficulty is to fire all cells. (3) The pumping lemma on a long half-line
+(`--half 58 --pump 30`: the half-line in working states up to the anti-diagonal 58 and $\mathrm{PUMP}(n,n')$ for
+all $4\le n<n'\le30$): with the lines $2,\dots,12$ of the class of Theorem 6.4 a rule is found in 21 s, and with
+`--half 78 --pump 40` in 535 s. So the lines themselves, all of them up to $N$, are what excludes rules.
+
 **Second checker on a sample (16 November).** `recheck_ct.py 14 g14_parts_1-167.txt g14_parts_168-341.txt --sample 600
 --seed 20261116 --pump 14 --workers 2`: 600 of the 44,476 certified cubes, 1582 s; 600 verified again by `lrat-check`
 and `cake_lpr` with the recorded formula digest, proof digest equal for 600, no failure.
