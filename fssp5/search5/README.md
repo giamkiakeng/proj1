@@ -1078,6 +1078,30 @@ the identity, (B3), (B4)) the incremental solver `mcopy_inc.py` finds rules up t
 alone it reaches $2,\dots,12$ after 72 s for the identity and 200 s for $(A\,B)$. The runs were stopped there;
 none of these rules synchronizes a longer line, and nothing is claimed about six states.
 
+**A stable firing state that is not the initial state (16 November, in progress; solver answers).** Theorem 6.4
+is about the state `G` in which the first cell starts. A rule can also have a stable state from which it fires
+that is not the initial state: the lines are $A\,L\cdots L$, and $G$ is another working state with (B1) in the
+strong reading such that exactly `GGG`, `*GG` and `GG*` give `F`. (For the initial state the second condition
+follows from the first, Lemma 6.1; here it is an assumption, because a line need not contain `G` at all.) Call
+this class $\mathcal A$. The line of length 2 forces $\delta(\ast,A,L)=\delta(A,L,\ast)=G$, so the first cell is
+`G` from time 1 on; the wall lemma holds for the cells $i\ge2$ with the same proof, which does not use the first
+cell, and so do the gap bounds. The formula and the tree are those of Theorem 6.4 with the initial row
+$A\,L\cdots$ (`gsat.py 5 N --b1s --b3 --nogh --wimp --wgap --front1 --init A`); the four working states have
+four different roles, so there is no naming rule. Together with Theorem 6.4 a bound for $\mathcal A$ gives the
+statement without reference to the initial state: no five-state solution has a stable state from which alone
+it fires.
+
+What is known so far: $\mathcal A$ has a rule for the lines $2,\dots,13$
+(`rules/stable_firing_initA_2-13.txt`; it synchronizes exactly these lengths among $2,\dots,120$, and its table
+satisfies the two conditions; found by `node_model.py` at a node that the first pass reported as satisfiable for
+the level 12, where the strict formula of $2,\dots,14$ is unsatisfiable). So this class reaches 13, one less than
+the class of Theorem 6.4 so far. Random descents estimate the tree at $4\cdot10^5$ to $5\cdot10^5$ nodes for
+each of the levels 12, 13 and 14, six times the tree of Theorem 6.4; a first pass at the level 12 with the
+incremental solver is running (338 subtrees), and every node that it finds satisfiable is tested with the strict
+formulas of $2,\dots,13$, $2,\dots,14$, ... (`logs` of the session; not certified). A larger class that contains
+both, five states and a separate start state that is never entered again (six states, `--init A`, and
+$\delta(e)\ne A$ for all $e$), is estimated at $2.7\cdot10^6$ nodes at the level 12 and was not started.
+
 **Conditions that do not prune (16 November, solver answers).** A minimal-time solution satisfies more than
 the synchronization of the lines $2,\dots,N$, and three such conditions were tried as cheap substitutes for long
 lines; each of them is satisfiable within seconds and so excludes nothing. (1) Single long lines: with four
