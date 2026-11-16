@@ -24,6 +24,7 @@ checker verified, and the completeness of every case split was checked by a prog
 | No five-state rule is a local image of Mazoyer's six-state solution for windows up to radius 2, or radius 1 with one step of memory | certified | Section 4 |
 | Consequences of a stable general: firing from three generals only, walls, gap bounds; the same in the weak reading | proved by hand | Lemmas 6.1 to 6.3, 6.5, 6.6 |
 | The bound $(k-1)^{2s}\ell$ of the left-border lemma is attained for $s=1$ and is not attained for odd $k$ and $s\ge2$ | solver answer with simulated rules; proved by hand | Observation 8.1, Proposition 8.2 |
+| Four states: no rule synchronizes all lines $3,\dots,9$ or all lines $4,\dots,9$ (42 and 399 rules reach the length 8); the numbers of four-state rules of every length range and class | exhaustive enumeration without a solver | Section 5 |
 | Sizes of the search trees of other classes, among them the open problem itself ($3\cdot10^{18}$ nodes for the lines up to 15) | estimates by random descents | Section 9 |
 
 Open here: whether a five-state rule with a stable general synchronizes $2,\dots,15$ (running), the identity
@@ -60,6 +61,7 @@ in Propositions 7.3 (12 or 13) and 7.4, (B2) alone, (B3) alone, and the problem 
 | `check_balzer.py` | which of (B1) to (B4), in their weak and strong readings and for a given involution, hold on the table of a rule; then simulation |
 | `ladder.py`, `freeset.py` | rules with (B3) in which at most $R$ of the entries that (B1) fixes are not `G`, or in which chosen entries are free (strict formula); the corresponding `--set` list for `gsat.py` and `gcert.py` |
 | `enum_rules.py` | all rules of a class for the lines $2,\dots,N$ up to unused transitions (strict formula; feasible for four states) |
+| `fsdfs.c` | exhaustive backtracking search without a SAT solver (`gcc -O2 -o fsdfs fsdfs.c -lm`): simulates the lines $n_0,\dots,N$ in this order and branches on every transition when it is first needed; counts the rules for $n_0,\dots,n$ up to unused transitions for every $n\le N$; class options `-b1s -b1w -b3s -b3w -b4 -set -neq`, lemma-based pruning for a fixed $N$ (`-front -chain -prefire -wall -gap`), `-knuth R SEED` for a size estimate by random descents. Complete for four states in seconds; an independent check of the encoders (Section 5) |
 | `near2.py` | is there a rule for $2,\dots,N$ that differs from a given rule in at most $D$ of the transitions that it uses (strict formula, no class; the unused entries are free)? |
 | `enum_satnode.py` | enumerates the models of $F_{14}$ at the satisfiable node of the stable-general tree, up to unused table entries, and writes the formula whose refutation certifies that there are no others |
 | `check_rule_formula.py`, `check_weak_lemmas.py`, `check_wwalls_enc.py` | tests: a rule of a class that synchronizes $2,\dots,N+2$ must satisfy the formula of `gcert.py` at $N$; the statements of Lemmas 6.5, 6.6 and 6.2' on the diagrams of given rules |
@@ -272,6 +274,42 @@ alternates between `G` and `A` from time 1 on in 21; and 5 to 9 of the entries t
 With (B1) in the strong reading there is exactly one four-state rule for $2,\dots,4$, and with (B1) in the weak
 reading there are 19 for $2,\dots,6$. So the number of rules falls quickly just below the maximum (536, 27, 0
 for $N=7,8,9$), as it does for five states in the class of Theorem 6.4 (three rules at $N=14$).
+
+**Enumeration without a solver (16 November).** `fsdfs.c` is a second, independent way to the same numbers: it
+simulates the lines $n_0,n_0+1,\dots$ in this order, cell by cell, and branches over the admissible values of a
+transition at the moment when a line first needs it; a branch dies when a cell fires before the time $2n-2$ or
+does not fire at that time. Each partial rule (the transitions that the lines $n_0,\dots,n$ use) is reached
+exactly once, so the program counts the rules for $n_0,\dots,n$ up to unused transitions, for every $n$ at
+once. It shares no code with the encoders and uses no solver. For four states the search is complete in
+seconds ($3\cdot10^7$ nodes per second):
+
+| four states, lines $n_0,\dots,n$ | $n=n_0$ | $3$ | $4$ | $5$ | $6$ | $7$ | $8$ | $9$ | nodes |
+|---|---|---|---|---|---|---|---|---|---|
+| $n_0=2$ | 7 | 664 | 96,169 | 828,670 | 64,299 | 536 | 27 | 0 | $1.17\cdot10^8$ |
+| $n_0=3$ | 1566 | | 480,682 | 4,382,062 | 396,718 | 2671 | 42 | 0 | $6.98\cdot10^8$ |
+| $n_0=4$ | 1,108,449 | | | 49,676,762 | 4,316,958 | 51,872 | 399 | 0 | $9.44\cdot10^9$ |
+
+The row $n_0=2$ repeats $N_4=8$ and the numbers 536 and 27 of `enum_rules.py`. The other two rows are new
+here: **no four-state rule synchronizes all lines of lengths $3,\dots,9$, and none synchronizes all lines of
+lengths $4,\dots,9$** (exhaustive enumeration; not certified by a proof checker). So the four-state result does
+not depend on the shortest lines. Kissat refutes the strict formula of the lines $3,\dots,9$ as well (127 s)
+and gives no answer for $4,\dots,9$ in 150 s. With the class options the enumeration also repeats the
+four-state column of the table above, with the numbers of rules: (B1) strong 1 rule for $2,\dots,4$ and none
+for $2,\dots,5$; (B1) weak 19 rules for $2,\dots,6$, none for $2,\dots,7$ (the same with (B3) weak in addition);
+(B3) strong and (B3) weak 26 rules each for $2,\dots,8$, none for $2,\dots,9$; (B4) 86 rules for $2,\dots,7$, none for
+$2,\dots,8$; (B3) strong with (B4) 2 rules for $2,\dots,7$.
+
+For five states the two programs agree where both can count: without the naming rule for $A$ and $B$, (B1)
+strong with (B3) has 20 rules for $2,3$ and 6062 for $2,3,4$, and (B3) alone has 98 rules for $2,3$, by
+`enum_rules.py 5 N --b3 [--b1s]` and by `fsdfs 5 N -b3s [-b1s] -nosym`. Beyond that the enumeration is not
+feasible: with the naming rule the class of Theorem 6.4 has 10, 3031 and 4,094,650 rules for $2,\dots,3$,
+$2,\dots,4$ and $2,\dots,5$. Random descents (`-knuth`, 3 million descents per run) estimate the tree for
+$N=15$ at $6\cdot10^{12}$ and $1.1\cdot10^{13}$ nodes (two runs) for this class with all the pruning of
+Lemmas 6.1 to 6.3, at $3\cdot10^{20}$ for (B3) strong alone and at $3\cdot10^{22}$ for the unrestricted problem
+(both with the front and return-chain pruning). These are estimates: in the four-state case, where the true
+size is $1.17\cdot10^8$, four runs of 2 million descents gave between $4.6\cdot10^7$ and $1.3\cdot10^8$. The tree searches of
+Sections 6 and 7 close the first of these classes with $7\cdot10^4$ solver calls because a solver call excludes
+all completions of a half-line at once; the enumeration visits them one by one.
 
 ## 6. Stable generals
 
