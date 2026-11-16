@@ -326,6 +326,32 @@ size is $1.17\cdot10^8$, four runs of 2 million descents gave between $4.6\cdot1
 Sections 6 and 7 close the first of these classes with $7\cdot10^4$ solver calls because a solver call excludes
 all completions of a half-line at once; the enumeration visits them one by one.
 
+**A sub-class of Theorem 6.4 by both methods (16 November).** A part of the class of Theorem 6.4 is small enough
+for the enumeration and large enough to test the whole tree search. Name the auxiliary states so that
+$\delta(G,L,L)=A$, and split the class by the reaction of the last cell to the front,
+$(\delta(A,L,\ast),\delta(B,L,\ast))$; random descents estimate the 16 parts at $10^{10}$ to $2\cdot10^{13}$
+nodes for $N=15$ (three of them die at once), about $6\cdot10^{13}$ in all. The part
+$\delta(A,L,\ast)=L$, $\delta(B,L,\ast)=G$ was done completely, in three ways:
+
+- `fsdfs 5 16 -b1s -b3s -prefire -gap -set "AL*=L,BL*=G" -max` (no pruning that depends on $N$; $7.26\cdot10^{10}$
+  nodes, 4955 s): the numbers of rules for $2,\dots,n$ are 1, 1, 58, 18,131, 7,896,760, 272,536,715, 167,602,723,
+  7,434,219, 96,868, 896, 4, 0 for $n=2,\dots,13$. So this part has exactly four rules for $2,\dots,12$ and none
+  for $2,\dots,13$.
+- `fsdfs2 5 12 ... -front -chain -wall -keepsym -print 10` (backjumping and the pruning of Lemmas 6.1 to 6.3 for
+  $N=12$; $5.0\cdot10^9$ nodes, 810 s): four rules, with 65, 68, 68 and 68 transitions. Each satisfies (B1) and
+  synchronizes exactly the lengths $2,\dots,12$ (simulation); one is `rules/stable_generals_sub_LG_2-12.txt`.
+- The tree search of Section 6 with the incremental solver, `gsat.py 5 N --b1s --b3 --wimp --strict --noghws
+  --gstatic 1 --set "AL*=L,BL*=G"`: for $N=13$ every node is closed (4838 nodes, 2070 s); for $N=12$ with
+  `--all` (the search continues below satisfiable nodes down to complete half-lines) it finds 7 models (4864
+  nodes, 2039 s), and on the transitions that the lines $2,\dots,12$ use they are exactly the four rules of the
+  enumeration.
+
+So on this part the encoder, the lemma clauses of the strict formula, the branching of the tree and the
+enumeration agree in every number that both produce. Kissat, on the strict formula of this part as a whole,
+finds a rule for $2,\dots,11$ in 23 s and gives no answer for $2,\dots,12$ in 400 s. The part
+$\delta(A,L,\ast)=A$, $\delta(B,L,\ast)=G$, which contains the three rules of Theorem 6.4, is estimated at
+$3\cdot10^{12}$ nodes and is running; the whole class would need about 15 processor-days with backjumping.
+
 ## 6. Stable generals
 
 In this section (B1) is read in the strong reading of the paper,

@@ -16,6 +16,10 @@
  *   -cell T,I=X;...  the half-line cell (T, I) is in the state X (a condition on the rule; needs N with T+I <= 2N-2)
  *   -cellany T,I=X;...  at least one of the listed half-line cells has the listed state (cells on one anti-diagonal
  *            T+I = D <= 2N-2; checked in the line N when its anti-diagonal D is complete)
+ *   -keepsym   keep the naming rule although -set, -neq, -cell or -cellany names an auxiliary state: the conditions then
+ *            speak about the rule in its canonical naming (the first auxiliary state that occurs is called A, ...)
+ *   -split D J M   the part J of M: a branch at depth D (D transitions chosen) belongs to the part given by a hash of
+ *            its transitions; the numbers of solutions of the M parts add up to the number of all solutions
  *   -nmin M, -print M, -report S
  */
 #include <stdio.h>
@@ -29,10 +33,12 @@ static int K, W, N, NMIN = 2;          /* W = K-1 working states; F = W as a val
 static int tab[(MAXK) * (MAXK) * (MAXK)];
 static unsigned mask[(MAXK) * (MAXK) * (MAXK)];
 static signed char cellv[MAXN + 2][2 * MAXN + 2][MAXN + 3];
-static int opt_b1s, opt_b1w, opt_b3s, opt_b3w, opt_b4, opt_front, opt_chain, opt_prefire, opt_wall, opt_gap, opt_nosym;
+static int opt_b1s, opt_b1w, opt_b3s, opt_b3w, opt_b4, opt_front, opt_chain, opt_prefire, opt_wall, opt_gap, opt_nosym, opt_keepsym;
 static long long nodes, sols, jumps, fails_by_line[MAXN + 2], done_by_line[MAXN + 2];
 static int nprint = 0, naux = 0, depth = 0;
 static int maxline = 0;
+static int split_d = 0, split_j = 0, split_m = 1; static unsigned long long hpath = 1469598103934665603ULL;
+static inline unsigned long long hmix(unsigned long long h) { h ^= h >> 31; h *= 0x9E3779B97F4A7C15ULL; return h >> 33; }
 static time_t t_start, t_last; static int report_s = 60;
 static const char *NAMES = "LGABCD";
 static const long MG[] = {0, 3, 12, 39, 120, 363, 1092, 3279};
@@ -92,7 +98,10 @@ static int gap_ok(int n, int tt, bs *why) {
 static bs next_line(int n) {
     done_by_line[n]++;
     if (n > maxline) { maxline = n; fprintf(stderr, "# first rule for the lines %d..%d after %lld nodes, %ld s\n", NMIN, n, nodes, (long)(time(NULL) - t_start)); }
-    if (n == N) { sols++; if (sols <= nprint) print_rule(); return BSALL; }
+    if (n == N) {
+        if (split_m > 1 && depth < split_d && split_j != 0) return BSALL;      /* counted by the part 0 */
+        sols++; if (sols <= nprint) print_rule(); return BSALL;
+    }
     int m = n + 1;
     for (int i = 0; i <= m + 1; i++) { cellv[m][0][i] = (i == 0 || i == m + 1) ? W : (i == 1 ? 1 : 0); dep[m][0][i] = BS0; }
     return run(m, 0, 1);
@@ -179,10 +188,16 @@ static bs run(int n, int t, int i) {
                 if (v - 2 > naux0) continue;                   /* an auxiliary state before its predecessors */
                 naux = (v - 2 == naux0) ? naux0 + 1 : naux0;
             }
+            unsigned long long h0 = hpath;
+            hpath = hpath * 1099511628211ULL + (unsigned)(e * 8 + v + 1);
+            if (split_m > 1 && depth + 1 == split_d && (int)(hmix(hpath) % (unsigned)split_m) != split_j) {
+                hpath = h0; naux = naux0; acc = BSALL;          /* another part searches this branch: nothing is known about it here */
+                continue;
+            }
             tab[e] = v; nodes++; depth++;
             c[t + 1][i] = (signed char)v; d[t + 1][i] = Pe;
             bs r = run(n, t, i + 1);
-            depth--; tab[e] = -1; naux = naux0;
+            depth--; tab[e] = -1; naux = naux0; hpath = h0;
             if (!bhas(r, e)) { jumps++; return r; }             /* the failure does not depend on this choice */
             acc = bor(acc, r);
         }
@@ -227,18 +242,20 @@ int main(int argc, char **argv) {
         else if (!strcmp(argv[a], "-chain")) opt_chain = 1; else if (!strcmp(argv[a], "-prefire")) opt_prefire = 1;
         else if (!strcmp(argv[a], "-wall")) opt_wall = 1; else if (!strcmp(argv[a], "-gap")) opt_gap = 1;
         else if (!strcmp(argv[a], "-nosym")) opt_nosym = 1;
+        else if (!strcmp(argv[a], "-keepsym")) opt_keepsym = 1;
         else if (!strcmp(argv[a], "-print")) nprint = atoi(argv[++a]);
         else if (!strcmp(argv[a], "-nmin")) NMIN = atoi(argv[++a]);
         else if (!strcmp(argv[a], "-report")) report_s = atoi(argv[++a]);
         else if (!strcmp(argv[a], "-set")) setl = argv[++a]; else if (!strcmp(argv[a], "-neq")) neql = argv[++a];
         else if (!strcmp(argv[a], "-cell")) celll = argv[++a]; else if (!strcmp(argv[a], "-cellany")) anyl = argv[++a];
+        else if (!strcmp(argv[a], "-split")) { split_d = atoi(argv[a + 1]); split_j = atoi(argv[a + 2]); split_m = atoi(argv[a + 3]); a += 3; }
         else { fprintf(stderr, "unknown option %s\n", argv[a]); return 2; }
     }
     if ((opt_prefire || opt_wall || opt_gap) && !opt_b3s) { fprintf(stderr, "-prefire, -wall and -gap need -b3s\n"); return 2; }
     if ((opt_wall || opt_gap) && !opt_b1s) { fprintf(stderr, "-wall and -gap need -b1s\n"); return 2; }
     {   /* the naming rule assumes a class that is invariant under renaming the auxiliary states */
         const char *ls[4] = {setl, neql, celll, anyl};
-        for (int j = 0; j < 4; j++) if (ls[j] && strpbrk(ls[j], "ABCD") && !opt_nosym) { opt_nosym = 1; fprintf(stderr, "# an option names an auxiliary state: the naming rule is switched off (-nosym)\n"); }
+        for (int j = 0; j < 4; j++) if (ls[j] && strpbrk(ls[j], "ABCD") && !opt_nosym && !opt_keepsym) { opt_nosym = 1; fprintf(stderr, "# an option names an auxiliary state: the naming rule is switched off (-nosym); -keepsym keeps it\n"); }
     }
     memset(need, -1, sizeof need);
     if (celll) cell_list(celll, 0);
@@ -269,6 +286,7 @@ int main(int argc, char **argv) {
     if (neql) printf(" neq %s", neql);
     if (celll) printf(" cell %s", celll);
     if (anyl) printf(" cellany %s", anyl);
+    if (split_m > 1) printf(" part %d of %d at depth %d", split_j, split_m, split_d);
     printf("\nnodes %lld, backjumps %lld, solutions %lld, deepest line completed %d, %ld s\n", nodes, jumps, sols, maxline, (long)(time(NULL) - t_start));
     printf("branches that completed the line n (not all are visited):");
     for (int n = NMIN; n <= N; n++) printf(" %d:%lld", n, done_by_line[n]);
