@@ -36,6 +36,7 @@ to 6.5 are proved by hand.
 | `gchain.py` | raises $N$ until the tree of `gcert.py` closes: a node at which the formula for $N$ is satisfiable is recorded, not split, and searched again with the formula for $N+1$ (every model of $F_{N+1}$ is a model of $F_N$, so the closed nodes of all levels together are a case split for the last level) |
 | `weakwalls.py` | redundant clauses of Lemmas 6.4 and 6.5 (weak reading); `gsat.py --wwalls`, `gcert.py --wwalls` |
 | `minit.py` | the lines start from `X L ... L` for another working state `X` (`gcert.py --init X`) |
+| `check_balzer.py` | which of (B1) to (B4), in their weak and strong readings and for a given involution, hold on the table of a rule; then simulation |
 | `check_rule_formula.py`, `check_weak_lemmas.py`, `check_wwalls_enc.py` | tests: a rule of a class that synchronizes $2,\dots,N+2$ must satisfy the formula of `gcert.py` at $N$; the statements of Lemmas 6.4, 6.5 and 6.2' on the diagrams of given rules |
 | `leftb.py` | CNF: a rule that synchronizes one line with periodic input anti-diagonals at the left border (Section 8) |
 | `ftime.py` | CNF for rules that synchronize the lines $2,\dots,N$ at some time chosen by the solver, not necessarily minimal (exploratory, Section 9) |
@@ -570,7 +571,78 @@ Yunès admits a state other than $G$ in (B1), (B3) and (B4). A state $g$ that is
 is not the initial state of the general is the same class with the roles of two names exchanged: the lines
 start from `A L ... L` and the conditions speak about $G$ (`gcert.py --init A`). Lemma 6.2' does not use the
 initial configuration, so the half-line has no cell $i\ge2$ in state $G$ in this class either. This class has
-rules for $2,\dots,9$ with $I$ the identity; the search for longer lines is running (Section 9).
+rules for $2,\dots,11$ with $I$ the identity (the tree search at $N=11$ ends at a satisfiable node; $N=12$ was
+not finished). It is being searched without (B3) and (B4), as in
+Proposition 7.3 below (`gchain.py ... --init A`); in that class no renaming is left, because all four working
+states are distinguished (quiescent, initial, stable, the fourth), so the ten involutions are ten classes.
+
+**Proposition 7.3 (weak stable general and image condition without borders; computer-assisted, certified).**
+No five-state rule that satisfies (B1) in the weak reading and (B2) for the neighbourhoods without a border,
+for some involution $I$ of the working states, synchronizes all lines of lengths $2,\dots,15$ in minimal time.
+Nothing is assumed about firing, about $\delta(G,v,G)$ or about the neighbourhoods with a border. More precisely,
+no such rule synchronizes all lines $2,\dots,N_I+2$:
+
+| $I$ | identity | $(A\,B)$ | $(L\,A)$, $(L\,B)$ | $(G\,A)$, $(G\,B)$ | $(L\,A)(G\,B)$, $(L\,B)(G\,A)$ | $(L\,G)$ | $(L\,G)(A\,B)$ |
+|---|---|---|---|---|---|---|---|
+| $N_I$ | 13 | 11 | 11 | 7 | 6 | 3 | 3 |
+
+*Proof.* Let $F^I_N$ be the formula of `gcert.py 5 N --b1 --b2 I --b2nb --front1`: the lines $2,\dots,N$ are
+synchronized, with the clauses of (B1w) and of (B2) for the 64 neighbourhoods without a border, the return
+chain of the line $N$, the half-line in working states up to the anti-diagonal $2N-1$, and the front cell
+$(N-1,N)\ne L$. All cell variables of $F^I_N$ are functions of the transition table. If a rule of the class
+synchronizes the lines $2,\dots,N+2$, its table and diagrams satisfy $F^I_N$ (Lemma 2.4 of the paper for the
+lines $N+1$ and $N+2$), and for the same reason they satisfy $F^I_{N'}$ for every $N'\le N$.
+
+`gchain.py` searches the tree of half-lines of Proposition 7.2 level by level. At the level $N$ the node is
+closed (CaDiCaL refutes $F^I_N$ plus the units of the cube in at most 4 s, with an LRAT proof), split, or
+satisfiable (CaDiCaL finds a model in 4 s); a satisfiable node is recorded and searched again at the level
+$N+1$. The order in which the half-line needs its transitions does not depend on the level, and the values
+excluded at a node of the level $N$ (`L` for a front cell up to $(N-1,N)$, and `B` before `A` has been used) are
+also excluded at every higher level; so a node of a lower level is a node of the tree of every higher level.
+The tree for $I$ is finished at the first level $N_I'$ at which no node is satisfiable. Then
+`gcover.py 5 N runs/b1b2/w_I_*.txt --front1` with $N=N_I'$, which replays the branching of the level $N_I'$
+without a solver, reports that the closed nodes of all levels are a complete case split. Suppose a rule of the
+class for $I$, in whose half-line `B` does not occur before `A`, synchronizes $2,\dots,N_I'+2$. Its half-line is
+a path of the tree of the level $N_I'$ and passes through a node that was closed at some level $N\le N_I'$;
+the rule satisfies $F^I_N$ and the units of that cube, which is a contradiction.
+
+Exchanging the names $A$ and $B$ maps the class for $I$ onto the class for $(A\,B)\,I\,(A\,B)$. The identity,
+$(A\,B)$, $(L\,G)$ and $(L\,G)(A\,B)$ are fixed, and $(L\,A)\leftrightarrow(L\,B)$,
+$(G\,A)\leftrightarrow(G\,B)$, $(L\,A)(G\,B)\leftrightarrow(L\,B)(G\,A)$. So a rule of the class for $I$ is, after
+renaming if `B` occurs first, covered by the tree for $I$ or by the tree for its mirror, and $N_I$ in the
+statement is the larger of the two levels. The trees and their certificates (every proof was verified by
+`lrat-check` and by `cake_lpr`; at the levels that are not listed the root is satisfiable):
+
+| $I$ | level | variables, clauses of $F^I_N$ | SHA-256 of the clause lines | nodes closed | split | satisfiable | CaDiCaL time on closed nodes | proofs |
+|---|---|---|---|---|---|---|---|---|
+| identity | 13 | 2608, 259,620 | `4c411838...cbfefe4` | 12,296 | 4213 | 0 | 20,727 s | 102.3 GB |
+| $(A\,B)$ | 10 | 1536, 121,369 | `dfa6f6a5...9436a59` | 677 | 258 | 1 | 1090 s | 4.62 GB |
+| $(A\,B)$ | 11 | 1840, 160,062 | `84672a30...a43d405` | 4 | 1 | 0 | 8 s | 0.03 GB |
+| $(L\,A)$ | 9 | 1280, 89,308 | `c2c2cb4f...10ce6f4` | 115 | 50 | 12 | 193 s | 0.79 GB |
+| $(L\,A)$ | 10 | 1536, 121,369 | `cd805cb5...e545e09` | 190 | 67 | 0 | 290 s | 1.25 GB |
+| $(L\,B)$ | 9 | 1280, 89,308 | `9bbde38c...373ce45` | 32 | 15 | 7 | 58 s | 0.25 GB |
+| $(L\,B)$ | 10 | 1536, 121,369 | `29797ea4...13a5fe1` | 218 | 81 | 2 | 382 s | 1.66 GB |
+| $(L\,B)$ | 11 | 1840, 160,062 | `e2b20c60...9021e0a` | 26 | 10 | 0 | 39 s | 0.18 GB |
+| $(G\,A)$ | 7 | 896, 42,750 | `814679a7...04ed256` | 1 (the root) | 0 | 0 | 0.2 s | 2 MB |
+| $(G\,B)$ | 7 | 896, 42,750 | `e3ab0f4a...dde197c` | 1 (the root) | 0 | 0 | 0.2 s | 2 MB |
+| $(L\,A)(G\,B)$ | 6 | 760, 27,111 | `afbb033f...b828039` | 1 (the root) | 0 | 0 | < 1 s | < 2 MB |
+| $(L\,B)(G\,A)$ | 6 | 760, 27,111 | `2c6f2cd5...a5eaf69` | 1 (the root) | 0 | 0 | < 1 s | < 2 MB |
+| $(L\,G)$ | 3 | 528, 3,566 | `fdfb6f9f...31c434a` | 1 (the root) | 0 | 0 | < 1 s | < 1 MB |
+| $(L\,G)(A\,B)$ | 3 | 528, 3,590 | `3a9b12ff...0a7a1b1` | 1 (the root) | 0 | 0 | < 1 s | < 1 MB |
+
+The identity was searched at the level 13 only. `runs/b1b2/` holds the lists of the closed nodes with the
+digests of their cube formulas and proofs, and the summaries of all levels. $\square$
+
+Proposition 7.3 contains Proposition 7.2 and, with the lengths up to 15 in place of 12, the weak case of
+Proposition 7.1: in Proposition 6.6 of the paper the conditions (B3) and (B4) and the border part of (B2) can
+be dropped and (B1) can be read weakly. A satisfiable node carries a model of $F^I_N$, which is a rule of the
+class that synchronizes $2,\dots,N$. So the class for $(A\,B)$ has a rule for $2,\dots,10$ and none for
+$2,\dots,13$, and the same holds for the class for $(L\,B)$, which is the class for $(L\,A)$ with the names
+exchanged: `rules/b1w_b2nb_AB_2-10.txt` and `rules/b1w_b2nb_LB_2-10.txt` (found by `mcopy.py`; conditions
+checked on the tables by `check_balzer.py`; each synchronizes exactly the lines $2,\dots,10$ among
+$2,\dots,60$). The second of them does not fire from `GGG`, so (B3) does not follow from these conditions.
+For the identity the rule `balzer_noborder12` of the paper shows that the largest $N$ with a rule for
+$2,\dots,N$ is 12, 13 or 14.
 
 ## 8. The left-border lemma: is its bound attained?
 
@@ -681,8 +753,8 @@ LRAT proofs, each verified by `lrat-check` and by `cake_lpr`. $F$: 2608 variable
 the clause lines `4c411838...cbfefe4`. `gcover.py 5 13 runs/b1b2/w_id_13.txt.gz` (unpacked) `--front1`: complete
 case split. So no five-state rule with (B1) in the weak reading and the image condition for the identity on
 the neighbourhoods without a border synchronizes all lines $2,\dots,15$; this contains Proposition 7.2 for the
-identity and Proposition 7.1 for the identity (with 15 in place of 12). The other nine involutions are
-running (`gchain.py`); the result will be stated as Proposition 7.3 when they are done.
+identity and Proposition 7.1 for the identity (with 15 in place of 12). The other nine involutions
+followed on 16 November (`gchain.py`, levels 3 to 11, 25 minutes in all); together they are Proposition 7.3.
 
 **No return to the quiescent state (15 November).** The class $\delta(x,y,z)\ne L$ for $y\ne L$ (a cell that has
 left the quiescent state never returns to it; `gsat.py 5 N --neq ... --front1`): rules for $2,\dots,8$ and for
@@ -704,7 +776,7 @@ $N=13$ and $2.2\cdot10^4$ at $N=14$ for the identity, $2.1\cdot10^3$ at $N=11$ f
 but without (B3): $3.6\cdot10^4$. So the tree is small because of the image condition; (B3) and (B4) hardly
 matter. With (B4) and (B3) strong but without the image condition the weak class is estimated at
 $4.2\cdot10^6$ nodes. The certified search for (B1w) with (B2) without borders, for all ten involutions, is
-running (`chain_b1b2.sh`).
+Proposition 7.3.
 
 **A note on running several searches at once.** The kernel of the machine groups processes by session
 (`sched_autogroup_enabled`), and the nice value of a process only counts within its group. Several searches

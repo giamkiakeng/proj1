@@ -1,0 +1,2 @@
+N=13: 12296 nodes closed, 4213 split, 0 satisfiable, 0 not certified, 1 s
+CLOSED at N=13: no rule of the class synchronizes all lines 2..15

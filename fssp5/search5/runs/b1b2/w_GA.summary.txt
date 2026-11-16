@@ -1,0 +1,6 @@
+N=3: 0 nodes closed, 0 split, 1 satisfiable, 0 not certified, 0 s
+N=4: 0 nodes closed, 0 split, 1 satisfiable, 0 not certified, 0 s (from 1 nodes of level 3)
+N=5: 0 nodes closed, 0 split, 1 satisfiable, 0 not certified, 0 s (from 1 nodes of level 4)
+N=6: 0 nodes closed, 0 split, 1 satisfiable, 0 not certified, 0 s (from 1 nodes of level 5)
+N=7: 1 nodes closed, 0 split, 0 satisfiable, 0 not certified, 1 s (from 1 nodes of level 6)
+CLOSED at N=7: no rule of the class synchronizes all lines 2..9
