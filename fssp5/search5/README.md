@@ -1023,6 +1023,22 @@ descent), and with $\delta(L,G,y)$ free as well $8\cdot10^9$. The neighbourhoods
 Theorem 6.4 in the unrestricted class: no rule for $2,\dots,15$ differs from one of them in at most 6 of the
 transitions that it uses (`near2.py`, Kissat, 28 s to 453 s per formula; distance 8 was not decided in 2300 s).
 
+**Six states with a stable general (16 November, solver answers).** By Theorem 6.4 a minimal-time solution
+with a stable general needs at least six states. Mazoyer's six-state solution does not satisfy (B1): of the 22
+entries $\delta(x,G,y)$, $x,y$ not both in $\{G,\ast\}$, that its lines of lengths $3,\dots,300$ use, seven differ from
+$G$, namely those for $(\ast,G,L)$, $(A,G,L)$, $(B,G,L)$, $(C,G,L)$, $(G,G,L)$, $(C,G,\ast)$ and $(C,G,G)$; it fires
+from `GGG`, `*GG` and `GG*` only. We have not checked (B1) on the
+solutions of Balzer (eight states) and Gerken (seven states), so we do not know the least number of states of
+a solution with a stable general. With six states the formulas behave
+like the five-state ones, a few lengths later: `mcopy.py 6 N --nocopy --strict --b1s --b3` (Kissat) returns
+rules for $2,\dots,8$, $2,\dots,10$, $2,\dots,12$ and $2,\dots,14$ in 3 s, 9 s, 22 s and 83 s, and gives no answer for
+$2,\dots,16$ in 1400 s. The rule for $2,\dots,14$ (`rules/k6_stable_general_2-14.txt`) synchronizes exactly
+these lengths among $2,\dots,80$. With all four of Balzer's conditions ((B1) strong, (B2) with borders for
+the identity, (B3), (B4)) the incremental solver `mcopy_inc.py` finds rules up to $2,\dots,12$ within 48 s
+(`rules/k6_balzer_conditions_2-12.txt`, exactly these lengths among $2,\dots,80$); with (B1) strong and (B2)
+alone it reaches $2,\dots,12$ after 72 s for the identity and 200 s for $(A\,B)$. The runs were stopped there;
+none of these rules synchronizes a longer line, and nothing is claimed about six states.
+
 **Second checker on a sample (16 November).** `recheck_ct.py 14 g14_parts_1-167.txt g14_parts_168-341.txt --sample 600
 --seed 20261116 --pump 14 --workers 2`: 600 of the 44,476 certified cubes, 1582 s; 600 verified again by `lrat-check`
 and `cake_lpr` with the recorded formula digest, proof digest equal for 600, no failure.
