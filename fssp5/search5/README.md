@@ -749,7 +749,9 @@ formula of the lines $2,\dots,11$ with the units of the node
 that `lrat-check` and `cake_lpr` verified (`runs/b1b2/ws_AB_11_nodes.txt`, `ws_LB_11_nodes.txt`), and
 `gcover.py 5 10 --front1` on the lists of the levels up to 10 together with these nodes reports a complete case
 split for $(A\,B)$ (678 cubes) and for $(L\,B)$ (252 cubes), as it does for $(L\,A)$ without them (305 cubes).
-So no rule of these classes synchronizes $2,\dots,11$, and $N^\ast_I\le10$. The trees and their certificates (every proof was verified by
+So no rule of these classes synchronizes $2,\dots,11$, and $N^\ast_I\le10$. As a cross-check, Kissat refutes the
+strict formulas of the lines $2,\dots,11$ for $(L\,A)$ and for $(L\,B)$ as whole formulas (400 s and 376 s, no
+proof kept); for $(A\,B)$ it gave no answer in 800 s. The trees and their certificates (every proof was verified by
 `lrat-check` and by `cake_lpr`; at the levels that are not listed the root is satisfiable):
 
 | $I$ | level | variables, clauses of $F^I_N$ | SHA-256 of the clause lines | nodes closed | split | satisfiable | CaDiCaL time on closed nodes | proofs |
