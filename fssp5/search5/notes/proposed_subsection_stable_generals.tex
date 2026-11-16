@@ -44,7 +44,14 @@ and $(\Gq,\Gq,\ast)$, and synchronizes the lines of lengths $2,\dots,14$ and no
 other line of length at most $120$ (direct simulation). On its half-line the
 cells $2,\dots,6$ have period $2$ in time from time $6$ on and every cell $i\ge7$
 is constant from time $i-1$ on (simulation for $t<150$), which is the kind of
-half-line that \cref{thm:left} excludes for a solution.
+half-line that \cref{thm:left} excludes for a solution. Up to the transitions
+that are used neither in the lines of lengths $2,\dots,14$ nor in the half-line
+up to the anti-diagonal $27$, and up to the exchange of $\Aq$ and $\Bq$, it is one
+of exactly three models of the formula $F_{14}$ of the proof below: the other
+two differ from it in $\delta(\Aq,\Aq,\Aq)$, $\delta(\Gq,\Aq,\Aq)$ and in a few
+transitions that it does not use, and the refutation of $F_{14}$ with the
+node $\gamma^\ast$ and three clauses that exclude these models has a proof
+verified by both checkers.
 
 \paragraph{Consequences of a stable general}
 A \emph{barrier} of the line of length $n$ at time $t$ is a border (position
@@ -367,7 +374,10 @@ case split is far out of reach: random descents in the tree for the lines of
 lengths $2,\dots,13$ suggest some $10^{15}$ nodes, where the same estimate for
 the class of \cref{thm:stable} gives $10^{6}$. Second, the proofs of
 \cref{tab:stable} were checked by \texttt{lrat-check}; those of the first row
-and of the last two rows were verified by \texttt{cake\_lpr} as well. Third, the proof of
+and of the last two rows, and those of a random sample of $600$ of the
+$44\,476$ nodes of the subtrees, were verified by \texttt{cake\_lpr} as well,
+after the formulas and the proofs had been produced again with the recorded
+digests. Third, the proof of
 \cref{thm:stable} says where a five-state rule with (B1) for the lines of
 lengths $2,\dots,15$ would have to be looked for: such a rule has a wall on the
 anti-diagonal $27$ of its half-line, $C_\infty(27-i,i)=\Gq$ for some

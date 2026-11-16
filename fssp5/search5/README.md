@@ -425,8 +425,9 @@ the refutation of that node. $\square$
 
 Second checks. (1) `recheck_ct.py` rebuilds a cube formula, compares its digest with the recorded one, runs
 CaDiCaL again and has `lrat-check` and the verified checker `cake_lpr` check the new proof. This was done for
-the 36 top nodes and the 4 nodes of the fourth row (all accepted, same proof digests); the same check of a
-random sample of 600 of the 44,476 nodes of the subtrees is running (Section 9). (2) The first pass of the search (`germsat.py`, incremental
+the 36 top nodes and the 4 nodes of the fourth row, and for a random sample of 600 of the 44,476 nodes of the
+subtrees (`--sample 600 --seed 20261116`): every formula has the recorded digest, every new proof has the recorded
+digest as well, and both checkers accept all of them (1582 s for the sample). (2) The first pass of the search (`germsat.py`, incremental
 solver, no proofs) had closed the subtrees 1 to 167 without a model (169,041 nodes, 13.2 hours of solver time)
 and had found the same single satisfiable node in the subtree 309. (3) With the formula $F_{15}$ of
 `certtree.py 15 ... --pump 15` (4100 variables, 396,586 clauses), which uses the lines up to 17, $\gamma^\ast$
@@ -855,6 +856,10 @@ satisfiable node. With the subtrees 168 to 341 this is Theorem 6.4: 44,516 nodes
 of CaDiCaL time, 438.7 GB of proofs in all) and the one satisfiable node closed for the lines $2,\dots,15$;
 `covercheck.py 14`: complete case split. The cubes have 5 to 18 transitions (most have 12 to 14). Sizes of the
 two halves: 17,196 and 27,280 closed nodes for 167 and 174 subtrees.
+
+**Second checker on a sample (16 November).** `recheck_ct.py 14 g14_parts_1-167.txt g14_parts_168-341.txt --sample 600
+--seed 20261116 --pump 14 --workers 2`: 600 of the 44,476 certified cubes, 1582 s; 600 verified again by `lrat-check`
+and `cake_lpr` with the recorded formula digest, proof digest equal for 600, no failure.
 
 **The satisfiable node and the length 15 (16 November).** With the 11 transitions of the node fixed,
 `mcopy.py 5 N --nocopy --nosym --strict --b1s`: satisfiable for $N=14$ (14 s), unsatisfiable for $N=15$ (22 s,
