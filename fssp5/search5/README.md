@@ -55,6 +55,7 @@ with a stable state other than the initial state (running), (B2) alone, (B3) alo
 | `mstrict.py` | gap clauses of Lemma 6.3 that are sound for the strict formula of the lines $2,\dots,N$ (`gsat.py --sgap`, `gcert.py --sgap`); `--cellunit` and `--cellclause` of the two programs add a unit clause or one clause on cells of the half-line |
 | `minit.py` | the lines start from `X L ... L` for another working state `X` (`gcert.py --init X`) |
 | `check_balzer.py` | which of (B1) to (B4), in their weak and strong readings and for a given involution, hold on the table of a rule; then simulation |
+| `near2.py` | is there a rule for $2,\dots,N$ that differs from a given rule in at most $D$ of the transitions that it uses (strict formula, no class; the unused entries are free)? |
 | `enum_satnode.py` | enumerates the models of $F_{14}$ at the satisfiable node of the stable-general tree, up to unused table entries, and writes the formula whose refutation certifies that there are no others |
 | `check_rule_formula.py`, `check_weak_lemmas.py`, `check_wwalls_enc.py` | tests: a rule of a class that synchronizes $2,\dots,N+2$ must satisfy the formula of `gcert.py` at $N$; the statements of Lemmas 6.5, 6.6 and 6.2' on the diagrams of given rules |
 | `leftb.py` | CNF: a rule that synchronizes one line with periodic input anti-diagonals at the left border (Section 8) |
@@ -110,6 +111,13 @@ Checks of the programs:
 - `check_rule_formula.py`: the rule `balzer_noborder12` of the paper (it synchronizes $2,\dots,12$) satisfies the
   formula of Proposition 7.2 at $N=9$ and $N=10$, as it must (and at $N=11$); the rule for 2..13 of Section 6
   satisfies the formula of the stable-general search at $N=11$, as it must (and at $N=12$).
+- `test_reduction.py`: the reduction for the length 15 (Section 6: a rule with (B1) for $2,\dots,N_0+1$ satisfies
+  the formula of the level $N_0$ or has a `G` on the anti-diagonal $2N_0-1$ of its half-line, at a cell
+  $3\le i\le N_0-1$) is tested on 60 rules each for $N_0=8,9,10$, enumerated from the strict formula of the
+  lines $2,\dots,N_0+1$: 36, 52 and 60 of them satisfy the formula of the level, the other 24, 8 and 0 have such
+  a wall, and none has neither. This also exercises the strict formula and the gap clauses of `mstrict.py`:
+  with and without the redundant clauses, the strict formula with a unit clause for the front cell or for one
+  cell of the last anti-diagonal has the same answer in all 22 cases tried for $N=6,\dots,9$.
 
 ## 2. Rules with the recursive structure of Mazoyer's solution
 
