@@ -922,7 +922,7 @@ time on the leaves; cubes of 4 to 12 transitions (most have 8 or 9).
 $(L\,B)$, $(A\,B)$: 278 s, 185 s and 616 s; no node left open, no model. `gcert.py ... --recheck` on the three
 files: every cube formula is rebuilt with the same SHA-256 digest, CaDiCaL produces the same proof (same
 digest) for each of the 131, 89 and 265 cubes, and `lrat-check` and the verified checker `cake_lpr` accept all
-of them (299 s, 244 s, 795 s). The recheck of the 2550 cubes for the identity is running. Independently of the
+of them (299 s, 244 s, 795 s). The recheck of the 2550 cubes for the identity ended on 16 November after 44,796 s (one process at low priority): every formula and every proof has the recorded digest, and both checkers accept all 2550. Independently of the
 tree, Kissat refutes each of the three formulas $F_I$, written by `writef.py`, as a whole (no proof kept):
 $(L\,B)$ 216 s, $(L\,A)$ 220 s, $(A\,B)$ 664 s; for the identity ($N=13$) Kissat gave no answer in 20,000 s (below).
 
@@ -944,6 +944,19 @@ satisfiable node. With the subtrees 168 to 341 this is Theorem 6.4: 44,516 nodes
 of CaDiCaL time, 438.7 GB of proofs in all) and the one satisfiable node closed for the lines $2,\dots,15$;
 `covercheck.py 14`: complete case split. The cubes have 5 to 18 transitions (most have 12 to 14). Sizes of the
 two halves: 17,196 and 27,280 closed nodes for 167 and 174 subtrees.
+
+**Stable state other than the initial state, and a fault of `gchain.py` (16 November).** `gchain.py ... --init A`
+closed nine of the ten involutions (levels 3 to 11). For the identity it stopped after the level 10 (4597 nodes
+closed, 1596 split, 111 satisfiable, 7945 s) with the message that the run had not finished. The run had
+finished: `gchain.py` looked for the final line of `gcert.py` among the last 60 lines of the log, and the 111
+satisfiable nodes are listed after it. The test now reads the whole output of the last run. The fault could
+only stop a chain early, not close one wrongly. The chain for the identity was continued at the level 11.
+
+**The node of the three rules with free border entries (16 November, solver answers).** With the 11 transitions
+of $\gamma^\ast$ fixed, (B1) in the weak reading and a stable left end ($\delta(\ast,G,y)=G$), so that only the
+entries $\delta(x,G,\ast)$ are added to the class of Theorem 6.4: the strict formula is satisfiable for the lines
+$2,\dots,14$ and unsatisfiable for $2,\dots,15$ and $2,\dots,16$ (89 s and 93 s). So this half-line does not reach
+the length 15 in that larger class either.
 
 **Second checker on a sample (16 November).** `recheck_ct.py 14 g14_parts_1-167.txt g14_parts_168-341.txt --sample 600
 --seed 20261116 --pump 14 --workers 2`: 600 of the 44,476 certified cubes, 1582 s; 600 verified again by `lrat-check`

@@ -58,7 +58,8 @@ for N in range(N0, NMAX + 1):
         elif l.startswith('# NOT CERTIFIED'):
             bad.append(l.strip())
     tail = open(log).read().strip().split('\n')
-    finished = any(x.startswith('# done') for x in tail[-60:])
+    last_start = max([j for j, x in enumerate(tail) if x.startswith('# F:')] + [0])       # the log is appended to: look at the last run only
+    finished = any(x.startswith('# done') for x in tail[last_start:])
     note('N=%d: %d nodes closed, %d split, %d satisfiable, %d not certified, %.0f s%s%s' % (
         N, U, S, len(sat), len(bad), time.time() - t0, '' if cubes is None else ' (from %d nodes of level %d)' % (len(cubes), N - 1),
         '' if finished else '  [the run did not finish]'))
