@@ -968,6 +968,17 @@ entries $\delta(x,G,\ast)$ are added to the class of Theorem 6.4: the strict for
 $2,\dots,14$ and unsatisfiable for $2,\dots,15$ and $2,\dots,16$ (89 s and 93 s). So this half-line does not reach
 the length 15 in that larger class either.
 
+**Almost stable generals, five states (16 November, in progress).** `ladder.py 5 13 1` (Kissat, 1941 s): a rule
+for $2,\dots,13$ with (B3) in which exactly one of the 21 entries is not `G`, namely $\delta(G,G,L)=B$
+(`rules/almost_stable_GGL_2-13.txt`; it synchronizes exactly $2,\dots,13$ among $2,\dots,60$). This is one of the
+entries in which Mazoyer's solution leaves `G` as well. The class "all entries `G` except $\delta(G,G,L)$" is
+estimated at $3\cdot10^5$ nodes for the lines up to 14 (10 random descents, standard error $0.9\cdot10^5$),
+the size of the class of Theorem 6.4, so it can be searched completely; a first pass is running. The class
+"$\delta(x,G,y)=G$ unless $y=L$" is much larger: $7\cdot10^6$ after 10 descents and $5\cdot10^8$ after 20 (one deep
+descent), and with $\delta(L,G,y)$ free as well $8\cdot10^9$. The neighbourhoods of the three rules of
+Theorem 6.4 in the unrestricted class: no rule for $2,\dots,15$ differs from one of them in at most 6 of the
+transitions that it uses (`near2.py`, Kissat, 28 s to 453 s per formula; distance 8 was not decided in 2300 s).
+
 **Second checker on a sample (16 November).** `recheck_ct.py 14 g14_parts_1-167.txt g14_parts_168-341.txt --sample 600
 --seed 20261116 --pump 14 --workers 2`: 600 of the 44,476 certified cubes, 1582 s; 600 verified again by `lrat-check`
 and `cake_lpr` with the recorded formula digest, proof digest equal for 600, no failure.
