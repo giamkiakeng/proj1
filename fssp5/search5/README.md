@@ -57,6 +57,7 @@ with a stable state other than the initial state (running), (B2) alone, (B3) alo
 | `minit.py` | the lines start from `X L ... L` for another working state `X` (`gcert.py --init X`) |
 | `check_balzer.py` | which of (B1) to (B4), in their weak and strong readings and for a given involution, hold on the table of a rule; then simulation |
 | `ladder.py`, `freeset.py` | rules with (B3) in which at most $R$ of the entries that (B1) fixes are not `G`, or in which chosen entries are free (strict formula); the corresponding `--set` list for `gsat.py` and `gcert.py` |
+| `enum_rules.py` | all rules of a class for the lines $2,\dots,N$ up to unused transitions (strict formula; feasible for four states) |
 | `near2.py` | is there a rule for $2,\dots,N$ that differs from a given rule in at most $D$ of the transitions that it uses (strict formula, no class; the unused entries are free)? |
 | `enum_satnode.py` | enumerates the models of $F_{14}$ at the satisfiable node of the stable-general tree, up to unused table entries, and writes the formula whose refutation certifies that there are no others |
 | `check_rule_formula.py`, `check_weak_lemmas.py`, `check_wwalls_enc.py` | tests: a rule of a class that synchronizes $2,\dots,N+2$ must satisfy the formula of `gcert.py` at $N$; the statements of Lemmas 6.5, 6.6 and 6.2' on the diagrams of given rules |
@@ -260,6 +261,15 @@ $\delta(L,G,y)$ and $\delta(A,G,L)$; the border entries alone (the weak reading)
 solution the general also changes only next to a quiescent cell, apart from two entries: it leaves `G` in the
 neighbourhoods $(x,G,L)$ and in $(C,G,\ast)$, $(C,G,G)$. For five states the class $R=0$ already reaches 14;
 the classes with a few exceptions are being searched for a rule beyond 14 (Section 9).
+
+`enum_rules.py K N` lists all rules for the lines $2,\dots,N$ up to the transitions that are not used in these
+lines (each model of the strict formula is excluded by a clause on its used transitions). For four states
+there are 536 rules for $2,\dots,7$ and exactly 27 for $2,\dots,8$. Of the 27, 26 fire from the row of generals
+with the neighbourhoods $GGG$, $\ast GG$, $GG\ast$ only; the first cell is constantly `G` in 5 of them and
+alternates between `G` and `A` from time 1 on in 21; and 5 to 9 of the entries that (B1) fixes are not `G`.
+With (B1) in the strong reading there is exactly one four-state rule for $2,\dots,4$, and with (B1) in the weak
+reading there are 19 for $2,\dots,6$. So the number of rules falls quickly just below the maximum (536, 27, 0
+for $N=7,8,9$), as it does for five states in the class of Theorem 6.4 (three rules at $N=14$).
 
 ## 6. Stable generals
 
