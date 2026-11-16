@@ -11,6 +11,23 @@ class is empty for the stated lengths; "unknown" means that the run was stopped.
 other computer results have the status of solver answers, cross-checked where the tables say so. Lemmas 6.1
 to 6.3, 6.5 and 6.6 and Proposition 8.2 are proved by hand.
 
+**Main results so far.** "Certified" means: every unsatisfiability claim has a proof that an independent
+checker verified, and the completeness of every case split was checked by a program that uses no solver.
+
+| statement | status | where |
+|---|---|---|
+| No five-state rule with a stable general, (B1), synchronizes all lines $2,\dots,16$; three such rules, and up to unused entries only these, synchronize $2,\dots,14$ under the conditions that the lines 15 and 16 impose | certified | Theorem 6.4 and the paragraph after it |
+| No five-state rule with (B1) in the weak reading and the image condition (B2) for the neighbourhoods without a border, for any of the ten involutions, synchronizes all lines $2,\dots,15$ | certified | Proposition 7.3 |
+| The same for Balzer's four conditions as Yunès states them (open at the end of Section 6.5 of the paper) | certified | Proposition 7.2 |
+| (B1) and (B2) with borders: no rule for $2,\dots,12$, in both readings of (B1) | certified | Proposition 7.1 |
+| No five-state rule is a local image of Mazoyer's six-state solution for windows up to radius 2, or radius 1 with one step of memory | certified | Section 4 |
+| Consequences of a stable general: firing from three generals only, walls, gap bounds; the same in the weak reading | proved by hand | Lemmas 6.1 to 6.3, 6.5, 6.6 |
+| The bound $(k-1)^{2s}\ell$ of the left-border lemma is attained for $s=1$ and is not attained for odd $k$ and $s\ge2$ | solver answer with simulated rules; proved by hand | Observation 8.1, Proposition 8.2 |
+| Sizes of the search trees of other classes, among them the open problem itself ($3\cdot10^{18}$ nodes for the lines up to 15) | estimates by random descents | Section 9 |
+
+Open here: whether a five-state rule with a stable general synchronizes $2,\dots,15$ (running), the classes
+with a stable state other than the initial state (running), (B2) alone, (B3) alone, and the problem itself.
+
 ## 1. Programs (`src/`)
 
 | program | what it does |
