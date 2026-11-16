@@ -7,9 +7,9 @@ search restricted classes of five-state rules, and this file records what each s
 Conventions. States `L` (quiescent), `G` (general), auxiliary `A`, `B`, firing `F`; `*` is the border. A
 *line* is the diagram $C_n$ of the line of length $n$; a rule *synchronizes* $n$ if $C_n$ is all `F` at time
 $2n-2$ and has no `F` before. "UNSAT" means that a SAT solver or an exhaustive enumeration proved that the
-class is empty for the stated lengths; "unknown" means that the run was stopped. Proof certificates (LRAT) exist for the results of Section 4 and for Propositions 7.1 and 7.2, where stated there; the
+class is empty for the stated lengths; "unknown" means that the run was stopped. Proof certificates (LRAT) exist for the results of Section 4, for Theorem 6.4 and for Propositions 7.1 to 7.3, where stated there; the
 other computer results have the status of solver answers, cross-checked where the tables say so. Lemmas 6.1
-to 6.5 are proved by hand.
+to 6.3, 6.5 and 6.6 and Proposition 8.2 are proved by hand.
 
 ## 1. Programs (`src/`)
 
@@ -34,10 +34,11 @@ to 6.5 are proved by hand.
 | `gcert.py` | the tree search of `gsat.py` with a certificate for every closed node: a new CaDiCaL process per node with a time limit and an LRAT proof, checked by `lrat-check` and, if `CAKELPR` names its binary, by the verified checker `cake_lpr`; a node that is not refuted in time is split. Resumable; `--recheck` rebuilds every cube formula, compares the SHA-256 digests and verifies the proofs again |
 | `gcover.py` | checks without a solver that the certified cubes of `gcert.py` are a complete case split; shares no code with `gcert.py` |
 | `gchain.py` | raises $N$ until the tree of `gcert.py` closes: a node at which the formula for $N$ is satisfiable is recorded, not split, and searched again with the formula for $N+1$ (every model of $F_{N+1}$ is a model of $F_N$, so the closed nodes of all levels together are a case split for the last level) |
-| `weakwalls.py` | redundant clauses of Lemmas 6.4 and 6.5 (weak reading); `gsat.py --wwalls`, `gcert.py --wwalls` |
+| `weakwalls.py` | redundant clauses of Lemmas 6.5 and 6.6 (weak reading); `gsat.py --wwalls`, `gcert.py --wwalls` |
+| `mstrict.py` | gap clauses of Lemma 6.3 that are sound for the strict formula of the lines $2,\dots,N$ (`gsat.py --sgap`, `gcert.py --sgap`); `--cellunit` and `--cellclause` of the two programs add a unit clause or one clause on cells of the half-line |
 | `minit.py` | the lines start from `X L ... L` for another working state `X` (`gcert.py --init X`) |
 | `check_balzer.py` | which of (B1) to (B4), in their weak and strong readings and for a given involution, hold on the table of a rule; then simulation |
-| `check_rule_formula.py`, `check_weak_lemmas.py`, `check_wwalls_enc.py` | tests: a rule of a class that synchronizes $2,\dots,N+2$ must satisfy the formula of `gcert.py` at $N$; the statements of Lemmas 6.4, 6.5 and 6.2' on the diagrams of given rules |
+| `check_rule_formula.py`, `check_weak_lemmas.py`, `check_wwalls_enc.py` | tests: a rule of a class that synchronizes $2,\dots,N+2$ must satisfy the formula of `gcert.py` at $N$; the statements of Lemmas 6.5, 6.6 and 6.2' on the diagrams of given rules |
 | `leftb.py` | CNF: a rule that synchronizes one line with periodic input anti-diagonals at the left border (Section 8) |
 | `ftime.py` | CNF for rules that synchronize the lines $2,\dots,N$ at some time chosen by the solver, not necessarily minimal (exploratory, Section 9) |
 
@@ -186,7 +187,7 @@ All without copies; "incremental" is `mcopy_inc.py`, which reports the largest $
 
 | class | result |
 |---|---|
-| static general: the first cell is `G` from time 1 (or 2) on | satisfiable for 2..12 (incremental, 9 min); $N=13$ running |
+| static general: the first cell is `G` from time 1 (or 2) on | satisfiable for 2..12 (incremental, 9 min); $N=13$ not decided (run stopped) |
 | (B3) of the paper in the strong reading: exactly `GGG`, `*GG`, `GG*` give `F` (the line fires from the row `G...G`) | satisfiable for 2..11 (14 s) |
 | (B3) and (B4) ($\delta(G,v,G)=G$) | satisfiable for 2..12 (29 s) |
 | (B3) and (B1) weak ($\delta(x,G,y)=G$ for working $x,y$, not both `G`); (B3), (B1) and (B4) | satisfiable for 2..11 (7 s; 12 s) |
@@ -314,9 +315,9 @@ refutation at $N$ says that no rule of the class synchronizes all lines $2,\dots
 | the class, lines $2,\dots,N$ | rule for 2..13 (`rules/stable_generals_2-13.txt`, Kissat, 428 s); $N=14$: Kissat stopped after 58 min without an answer; the tree search below found a rule for 2..14 (`rules/stable_generals_2-14.txt`) |
 | the 21 cases, `mcopy_inc.py`, 900 s each (stopped after five cases) | case a with $\delta(A,L,\ast)=L$: refuted at 12 (236 s); case a with $G$ and case a with $B$: rules for 2..12 (the rule for 2..13 is in case a with $B$); case b with $\delta(A,L,\ast)=L$ and $\delta(B,L,\ast)\in\{L,A\}$: refuted at 3; case b with $L$, $G$: rule for 2..12 |
 | the 126 half-lines up to the anti-diagonal 6 as cases (`germw 6 40`, `germscan.py`, 20,000 conflicts per call) | 5 refuted at $N\le11$; in the other 121 a rule for 2..9 (10 cases), 2..10 (73), 2..11 (35) or 2..12 (3) is found before the budget ends |
-| with the conditions of Lemmas 6.1 and 6.3 on the first 10 rows after the reflection of the lines up to 40 (`--early 40 10 --wgap`) | rule for 2..11 (incremental, 300 s; it has three adjacent generals on the lines $12,\dots,50$ between 10 and 18 steps after the reflection, just after the rows constrained); $N=12$ running |
+| with the conditions of Lemmas 6.1 and 6.3 on the first 10 rows after the reflection of the lines up to 40 (`--early 40 10 --wgap`) | rule for 2..11 (incremental, 300 s; it has three adjacent generals on the lines $12,\dots,50$ between 10 and 18 steps after the reflection, just after the rows constrained); $N=12$ not decided (run stopped) |
 | lines $2,\dots,N$ and the complete line 20 (`--extra 20`) | rule for 2..9 and 20 (incremental, 451 s); its half-line is periodic with period 4 in time and space, which fits the length 20 |
-| lines 2, 19, 22 complete, and PUMP$(n,n')$ for $n<n'\le22$ (`mcopy.py 5 2 --extra 19,22 --pump 22`) | not decided: no answer from the incremental solver in 8 minutes; Kissat running |
+| lines 2, 19, 22 complete, and PUMP$(n,n')$ for $n<n'\le22$ (`mcopy.py 5 2 --extra 19,22 --pump 22`) | not decided: no answer from the incremental solver in 8 minutes; the Kissat run was stopped without an answer |
 
 The rule for 2..13 synchronizes exactly the lengths 2..13 among 2..80. On its half-line the cells 2, 3, 4 are
 constant ($A$, $B$, $L$) from time 5 on and the cells beyond are in $\{L,A\}$ (checked for $t<380$), where the
@@ -366,22 +367,93 @@ uses 26 neighbourhoods, the lines $2,\dots,14$ use 78. On every line $15\le n\le
 in state $F$ too early (2 steps for $n=15,16$, 26 steps for $n=40$, 106 steps for $n=120$). A half-line of this kind cannot
 belong to a solution (Theorem 4.2 of the paper); the rule shows that the lines up to 14 do not exclude it.
 
-**Status of the certified search (`runs/stable14/`).** The formula $F_{14}$ of `certtree.py 14 ... --pump 14` is
-the formula above with the front cell $(13,14)\ne L$ and the clauses PUMP$(n,n')$, $4\le n<n'\le14$ (3465
-variables, 324,753 clauses). Done: the 36 nodes closed above depth 7, and the subtrees 168 to 341:
-27,280 nodes closed with LRAT proofs that `lrat-check` verified (57,808 s of CaDiCaL time on them, 260.5 GB
-of proofs, deleted after the check), three nodes with a complete half-line closed with a longer time limit,
-and the one satisfiable node. The subtrees 1 to 167, which `germsat.py` had closed without a model
-(169,041 nodes, 13.2 hours of solver time), are being certified in the same way.
+**Theorem 6.4 (computer-assisted, certified).** No five-state rule with a stable general, that is with (B1),
+synchronizes all lines of lengths $2,\dots,16$ in minimal time. The rule `rules/stable_generals_2-14.txt`
+satisfies (B1) and synchronizes all lines of lengths $2,\dots,14$.
 
-With the line 15 the satisfiable node closes: `certtree.py 15 ... --pump 15` (formula $F_{15}$: 4100 variables,
-396,586 clauses) refutes it with three certified parts in 10 s (`runs/stable14/g15_parts_sat.txt`). Every model
-of $F_{15}$ is a model of $F_{14}$, because $F_{15}$ contains the clauses of $F_{14}$ for the same lines and
-cells. So if the certification of the subtrees 1 to 167 ends without another satisfiable node, every node of a
-complete case split is refuted for $F_{15}$, and no five-state rule with a stable general synchronizes all
-lines $2,\dots,17$ ($F_{15}$ uses Lemma 6.2 up to the anti-diagonal 29 and the front cell $(14,15)$, which need
-the lines up to 17). `covercheck.py 15` on the files so far reports only nodes in the subtrees 1 to 167 as
-uncovered.
+So the largest $N$ for which some five-state rule with a stable general synchronizes $2,\dots,N$ is 14 or 15.
+
+*Proof.* Let $\delta$ be a five-state rule with (B1) that synchronizes the lines $2,\dots,16$. By Lemma 6.1 the
+only neighbourhoods with image $F$ that occur in these lines are $GGG$, $\ast GG$ and $GG\ast$; every other
+neighbourhood with image $F$ is given its middle state as image, which changes neither the lines nor (B1). By
+Lemma 2.4 of the paper $\delta(G,L,L)\ne L$, and by Lemma 6.2 it is not $G$; the names are chosen such that
+$\delta(G,L,L)=A$.
+
+The formula $F_{14}$ is the formula of `certtree.py 14 ... --pump 14`, that is `Model(5, 14, b1s, b3, nogh, wimp,
+wgap, front1, pump=14)` of `mcopy.py` without symmetry clauses: 3465 variables, 324,753 clauses, SHA-256 of
+the clause lines `67957a4ce7230559cf9fc2b463d66096be3056b00b8a01001465fd2ef260f057`. Its clauses say:
+
+1. the cells of the half-line up to the anti-diagonal 27 and the cells of the lines $2,\dots,14$ are working
+   states that follow $\delta$, and every cell of the line $n\le14$ has a neighbourhood with image $F$ at time
+   $2n-3$ (the half-line cells agree with the line 15, at times before 28);
+2. (B1), and exactly $GGG$, $\ast GG$, $GG\ast$ have the image $F$;
+3. the return chain of every line $n\le14$ differs from the half-line (Lemma 2.4 of the paper for the lines
+   $n$ and $n+1\le15$);
+4. the front cells $(t,t+1)$, $t\le13$, are not $L$ (Lemma 2.4 for the lines up to 16);
+5. the first cell of the half-line is $G$ and no other cell of the half-line up to the anti-diagonal 27 is
+   (Lemma 6.2 with $N=16$, which reaches the anti-diagonal 28);
+6. the conclusions of Lemma 6.1 and of Lemma 6.3 for the lines $n\le14$;
+7. PUMP$(n,n')$ for $4\le n<n'\le14$ (Lemma 3.3 of the paper for the lines $n$ and $n'$).
+
+So $\delta$ with its diagrams satisfies $F_{14}$. A *node* of the search tree is a set of transitions of the
+half-line, fixed in the order in which the anti-diagonals $3,\dots,27$ need them; the root is
+$\{\delta(G,L,L)=A\}$, and the children of a node give the next transition that the half-line needs the values
+$L$, $A$, $B$, except $L$ if the cell is a front cell. By the items 4 and 5 the half-line of $\delta$ is a path
+from the root through this tree.
+
+| nodes | closed for | number | CaDiCaL time | LRAT proofs |
+|---|---|---|---|---|
+| above depth 7 (`g14_parts_top.txt`) | $F_{14}$ | 36 | < 1 s | 0.02 GB |
+| subtrees 1 to 167 (`g14_parts_1-167.txt.gz`) | $F_{14}$ | 17,196 | 35,384 s | 178.1 GB |
+| subtrees 168 to 341 (`g14_parts_168-341.txt.gz`) | $F_{14}$ | 27,280 | 57,808 s | 260.5 GB |
+| nodes with a complete half-line that need more than 4 s (`g14_parts_open.txt`) | $F_{14}$ | 4 | 15 s | 0.07 GB |
+| the node $\gamma^\ast$ at which $F_{14}$ is satisfiable (`g15s_sat_strict.txt`) | $S_{15}$ | 1 | 12 s | 0.08 GB |
+
+For each of the 44,516 nodes $\gamma$ of the first four rows, CaDiCaL 3.0.1 refutes $F_{14}$ with the units
+of $\gamma$, with an LRAT proof that `lrat-check` verified (answer `UNSATISFIABLE` and empty last lemma
+required; the proofs were deleted after the check, the lists record the SHA-256 digests of every cube formula
+and proof). At the node $\gamma^\ast$ of the preceding paragraph $F_{14}$ is satisfiable. For it the formula
+$S_{15}$ is used: the lines $2,\dots,15$ are synchronized, (B1), and the 11 transitions of $\gamma^\ast$
+(`mcopy.py 5 15 --nocopy --nosym --strict --b1s --set ...`; 3556 variables, 384,704 clauses, SHA-256 of the
+file `32bd639e...ce773c1`). CaDiCaL refutes it in 12 s, and `lrat-check` and `cake_lpr` verify the proof
+(80 MB, SHA-256 `37bdc5d6...8c5a95f6`). `covercheck.py 14` on the five lists reads 44,517 cubes, uses all of them,
+walks 66,808 nodes and finds no uncovered node: the cubes are a complete case split. Hence the path of
+$\delta$ passes through one of the 44,517 nodes. But $\delta$ satisfies $F_{14}$ and, since it synchronizes
+$2,\dots,15$ and has (B1), also $S_{15}$, together with the units of every node on its path. This contradicts
+the refutation of that node. $\square$
+
+Second checks. (1) `recheck_ct.py` rebuilds a cube formula, compares its digest with the recorded one, runs
+CaDiCaL again and has `lrat-check` and the verified checker `cake_lpr` check the new proof. This was done for
+the 36 top nodes and the 4 nodes of the fourth row (all accepted, same proof digests), and for a random sample
+of the 44,476 nodes of the subtrees (Section 9). (2) The first pass of the search (`germsat.py`, incremental
+solver, no proofs) had closed the subtrees 1 to 167 without a model (169,041 nodes, 13.2 hours of solver time)
+and had found the same single satisfiable node in the subtree 309. (3) With the formula $F_{15}$ of
+`certtree.py 15 ... --pump 15` (4100 variables, 396,586 clauses), which uses the lines up to 17, $\gamma^\ast$
+is closed by three certified parts in 10 s (`g15_parts_sat.txt`), and `covercheck.py 15` with this file in place
+of `g15s_sat_strict.txt` also reports a complete case split; this alone gives the weaker statement for the
+lines $2,\dots,17$.
+
+**The length 15.** Is there a five-state rule with a stable general for $2,\dots,15$? Such a rule satisfies
+every clause of $F_{14}$ except possibly those that use the line 16: the unit clause of item 4 for the front
+cell $(13,14)$, and the unit clauses of item 5 for the cells $i\ge2$ of the anti-diagonal 27 (Lemma 6.2 with
+$N=15$ reaches the anti-diagonal 26). If it satisfied these as well, its half-line would be a path of the
+tree above and the proof of Theorem 6.4 would apply to it, because the node $\gamma^\ast$ is closed for the
+lines $2,\dots,15$. The front cell $(13,14)$ is $\delta(f,L,L)$ for the front state $f$ of the cell 13, which is
+$A$ or $B$ and has occurred as a front state before (the front states of the cells $2,\dots,13$ are in
+$\{A,B\}$ and each is the image of its predecessor); so this cell is $A$ or $B$ again. The cell $(25,2)$ is not
+$G$, because the first cell is $G$ and the line 15 would fire at time 26. Hence:
+
+> every five-state rule with (B1) that synchronizes $2,\dots,15$ has a wall on the anti-diagonal 27 of its
+> half-line: $C_\infty(27-i,i)=G$ for some $3\le i\le13$.
+
+The formula $S_{15}\wedge D$, the strict formula of the lines $2,\dots,15$ with (B1) and the clause
+$D=\bigvee_{i=3}^{13}[C_\infty(27-i,i)=G]$, is being searched with certificates (`gcert.py 5 15 --b1s --b3
+--wimp --strict --noghws --gstatic 1 --sgap --cellclause ...`; 3556 variables, 386,734 clauses, SHA-256 of
+the clause lines `5419585e...1acd8edb`; Section 9). The first attempts, one tree for each of the eleven cells,
+were stopped: each of them is almost as large as the tree for the whole clause, which random descents
+estimate at $3\cdot10^5$ nodes with a budget of 3000 conflicts (standard error $1.4\cdot10^5$). If the tree
+closes, the largest $N$ of the class is exactly 14; a satisfiable node would give a five-state rule for
+$2,\dots,15$.
 
 Second method, without a solver. A closed node is a small problem for plain enumeration: with the transitions
 of the node fixed, `mdfs` (depth-first enumeration of all partial rules of the class, transitions fixed lazily)
@@ -407,7 +479,7 @@ and by Lemma 6.1 a rule with (B1) that synchronizes 2 and 3 satisfies (B3w). So 
 is the class of this section together with the rules in which one of these six transitions has another
 value. The cells $2,\dots,n-1$ of the line $n$ are its *interior* cells.
 
-**Lemma 6.4 (interior walls).** Let $\delta$ satisfy (B1w) and (B3w) and synchronize the line of length
+**Lemma 6.5 (interior walls).** Let $\delta$ satisfy (B1w) and (B3w) and synchronize the line of length
 $n\ge3$. Then in this line
 (a) at no time $t\le2n-4$ are three adjacent positions in $\{G,\ast\}$ (the positions 0 and $n+1$ are the
 borders);
@@ -423,7 +495,7 @@ in state $G$. $\square$
 
 So a line either never has an interior cell in state $G$, or it fires from the row $G^n$.
 
-**Lemma 6.5 (gaps, weak reading).** Let $\delta$ satisfy (B1w) and (B3w) and synchronize the line of length
+**Lemma 6.6 (gaps, weak reading).** Let $\delta$ satisfy (B1w) and (B3w) and synchronize the line of length
 $n\ge3$, and let $t\le2n-4$. With $M$ as in Lemma 6.3, put
 $M_b(1)=|W'|$ and $M_b(\ell)=|W|\,|W'|^{\ell-1}+M_b(\ell-1)$.
 
@@ -435,20 +507,20 @@ $M_b(1)=|W'|$ and $M_b(\ell)=|W|\,|W'|^{\ell-1}+M_b(\ell-1)$.
 
 For five states $M_b(1),M_b(2),M_b(3)=3,15,51$.
 
-*Proof.* By Lemma 6.4 (b) an interior cell in state $G$ stays in state $G$ up to time $2n-3$, and since there
-is one, every cell is in state $G$ at time $2n-3$ by Lemma 6.4 (c).
+*Proof.* By Lemma 6.5 (b) an interior cell in state $G$ stays in state $G$ up to time $2n-3$, and since there
+is one, every cell is in state $G$ at time $2n-3$ by Lemma 6.5 (c).
 1. During $[t,2n-3]$ the $\ell$ cells between $p$ and $q$ have constant neighbours, so their configuration
 evolves on its own. Let $s\ge t$ be the least time at which one of them is in state $G$; $s\le2n-3$. The
 configurations at the times $t,\dots,s-1$ lie in $W'^{\ell}$ and are pairwise distinct: after a repetition
 they would be periodic, and no cell of the gap would be in state $G$ at time $2n-3$. Hence
 $s-t\le|W'|^{\ell}$. If $s=2n-3$ we are done. Let $s\le2n-4$. For $\ell=1$ the cells $p,p+1,p+2$ would be in
-state $G$ at time $s$, contrary to Lemma 6.4 (a). For $\ell\ge2$, by Lemma 6.4 (a) some cell of the gap is not
+state $G$ at time $s$, contrary to Lemma 6.5 (a). For $\ell\ge2$, by Lemma 6.5 (a) some cell of the gap is not
 in state $G$ at time $s$; it lies between two cells of $[p,q]$ in state $G$ at distance $\ell'+1$,
 $1\le\ell'<\ell$, with no cell in state $G$ between them, and induction gives
 $2n-3-s\le M(\ell')\le M(\ell-1)$.
 2. By induction on $\ell=q-1$; the second statement is the mirror image. The cells $1,\dots,\ell$ have the
 border on the left and the constant state $G$ on the right during $[t,2n-3]$. For $\ell=1$: the cell 1 is not
-in state $G$ at a time $u\le2n-4$ (Lemma 6.4 (a) for the positions 0, 1, 2), so its states at the times
+in state $G$ at a time $u\le2n-4$ (Lemma 6.5 (a) for the positions 0, 1, 2), so its states at the times
 $t,\dots,2n-4$ lie in $W'$, and they are pairwise distinct because the cell is in state $G$ at time $2n-3$.
 For $\ell\ge2$: let $s\ge t$ be the least time at which one of the cells $2,\dots,\ell$ is in state $G$. The
 configurations of the cells $1,\dots,\ell$ at the times $t,\dots,s-1$ lie in $W\times W'^{\ell-1}$ and are
@@ -457,9 +529,9 @@ $2,\dots,\ell$ in state $G$ at time $s$ is an interior cell $q'$ with no interio
 left, and induction gives $2n-3-s\le M_b(q'-1)\le M_b(\ell-1)$. $\square$
 
 Consequently, at a time $t\le2n-4$ with $\rho=2n-3-t$: no two interior cells at a distance $d\ge2$ with
-$M(d-1)<\rho$ are both in state $G$ (between them lies a gap of length at most $d-1$, by Lemma 6.4 (a)), and no
+$M(d-1)<\rho$ are both in state $G$ (between them lies a gap of length at most $d-1$, by Lemma 6.5 (a)), and no
 interior cell $y$ with $M_b(y-1)<\rho$ or $M_b(n-y)<\rho$ is in state $G$. `weakwalls.py` adds these clauses
-and those of Lemma 6.4 (`--wwalls`). `check_weak_lemmas.py` finds no violation of Lemmas 6.4, 6.5 and 6.2' on
+and those of Lemma 6.5 (`--wwalls`). `check_weak_lemmas.py` finds no violation of Lemmas 6.5, 6.6 and 6.2' on
 the diagrams of the 31 stored rules that satisfy (B1w) and (B3w) on the transitions they use, nor on 41 rules
 for $2,\dots,10$ generated for this test with seven different beginnings of the first cell (in some of them the
 lines 3 and 4 have no interior cell in state $G$); these 41 rules and five of the stored ones, all of which
@@ -468,7 +540,7 @@ synchronize $2,\dots,10$, satisfy the formula with the clauses at $N=8$ (`check_
 Sizes (estimates by random descents in the tree of `gsat.py`, 30 descents each, budget 3000; standard errors
 30 to 50 per cent, and such estimates tend to be too low): the weak class with (B3) in the strong reading,
 lines $2,\dots,14$: $4\cdot10^6$ to $2\cdot10^7$ nodes in four runs, with or without the clauses of Lemmas
-6.4 and 6.5, which do not make the tree smaller; with (B3w): $1.3\cdot10^7$; the strong class of this section:
+6.5 and 6.6, which do not make the tree smaller; with (B3w): $1.3\cdot10^7$; the strong class of this section:
 $1.1\cdot10^6$. The parts of the weak class outside the strong class are defined by $\delta(\ast,G,y)\ne G$ or
 $\delta(x,G,\ast)\ne G$ for one $x$ or $y$. With (B3) in the strong reading $\delta(\ast,G,L)=G$ is forced by
 the line 2; the four other parts estimated so far have $1.6\cdot10^6$ to $7\cdot10^6$ nodes each, so
@@ -711,8 +783,10 @@ No descent ended in a model unless stated.
 |---|---|---|---|
 | no class (the open problem) | 2..15 | $3\cdot10^{18}$ | same order |
 | stable general, Section 6 (`--b1s --b3 --nogh --wimp --wgap`) | 2..14 | $1.07\cdot10^6$ | $0.41\cdot10^6$ |
+| stable general, strict formula $S_{15}$ of Section 6 (`--b1s --b3 --wimp --strict --noghws --gstatic 1`; 16 November) | 2..15, strict | $7.4\cdot10^5$ | $5.5\cdot10^5$ |
+| the same with the wall clause $D$ and `--sgap` (16 November) | 2..15, strict | $3.2\cdot10^5$ | $1.4\cdot10^5$ |
 | (B1) weak, (B3) strong (`--b1 --b3 --noghw`) | 2..14 | $3.6\cdot10^6$; with another seed $1.7\cdot10^7$ | $1.0\cdot10^6$; $0.8\cdot10^7$ |
-| the same with the clauses of Lemmas 6.4, 6.5 (`--wwalls`) and PUMP (`--pump 14`) | 2..14 | $1.2\cdot10^7$; $5.2\cdot10^6$ (two seeds) | $0.7\cdot10^7$; $1.7\cdot10^6$ |
+| the same with the clauses of Lemmas 6.5, 6.6 (`--wwalls`) and PUMP (`--pump 14`) | 2..14 | $1.2\cdot10^7$; $5.2\cdot10^6$ (two seeds) | $0.7\cdot10^7$; $1.7\cdot10^6$ |
 | (B1) weak, (B3) weak (`--b1 --b3w --noghw`) | 2..14 | $1.3\cdot10^7$ | $0.4\cdot10^7$ |
 | (B1) weak, (B3) weak, (B4) | 2..14 | $9\cdot10^7$ | $5\cdot10^7$ |
 | Yunès's form, $I$ identity (Proposition 7.2) | 2..13; 2..14 | $2.4\cdot10^4$; $2.2\cdot10^4$ | $0.5\cdot10^4$ |
@@ -744,7 +818,7 @@ files: every cube formula is rebuilt with the same SHA-256 digest, CaDiCaL produ
 digest) for each of the 131, 89 and 265 cubes, and `lrat-check` and the verified checker `cake_lpr` accept all
 of them (299 s, 244 s, 795 s). The recheck of the 2550 cubes for the identity is running. Independently of the
 tree, Kissat refutes each of the three formulas $F_I$, written by `writef.py`, as a whole (no proof kept):
-$(L\,B)$ 216 s, $(L\,A)$ 220 s, $(A\,B)$ 664 s; for the identity ($N=13$) Kissat is running.
+$(L\,B)$ 216 s, $(L\,A)$ 220 s, $(A\,B)$ 664 s; for the identity ($N=13$) Kissat gave no answer in 20,000 s (below).
 
 **Weak (B1) with (B2) without borders, identity (15 to 16 November).** `gcert.py 5 13 --b1 --b2 id --b2nb --front1`
 (no (B3), no (B4), no wall lemma): the tree closes with 12,296 nodes closed and 4213 split, no node open and
@@ -755,6 +829,24 @@ case split. So no five-state rule with (B1) in the weak reading and the image co
 the neighbourhoods without a border synchronizes all lines $2,\dots,15$; this contains Proposition 7.2 for the
 identity and Proposition 7.1 for the identity (with 15 in place of 12). The other nine involutions
 followed on 16 November (`gchain.py`, levels 3 to 11, 25 minutes in all); together they are Proposition 7.3.
+
+**Stable generals: the certification is complete (16 November).** `certtree.py 14 ... --first 1 --last 167 --pump 14
+--tlim 4 --workers 4` ended after 20,003 s: 17,196 nodes closed with verified LRAT proofs (35,384 s of CaDiCaL
+time, 178.1 GB of proofs), one node with a complete half-line left for a longer limit (closed in 5 s), no
+satisfiable node. With the subtrees 168 to 341 this is Theorem 6.4: 44,516 nodes closed for $F_{14}$ (93,207 s
+of CaDiCaL time, 438.7 GB of proofs in all) and the one satisfiable node closed for the lines $2,\dots,15$;
+`covercheck.py 14`: complete case split. The cubes have 5 to 18 transitions (most have 12 to 14). Sizes of the
+two halves: 17,196 and 27,280 closed nodes for 167 and 174 subtrees.
+
+**The satisfiable node and the length 15 (16 November).** With the 11 transitions of the node fixed,
+`mcopy.py 5 N --nocopy --nosym --strict --b1s`: satisfiable for $N=14$ (14 s), unsatisfiable for $N=15$ (22 s,
+certified, Theorem 6.4) and $N=16$ (22 s, solver answer). The search for a rule for $2,\dots,15$ elsewhere in
+the class (formula $S_{15}\wedge D$ of Section 6) is running: `gcert.py`, three processes; Kissat on the same
+formula as a whole has no answer yet.
+
+**Yunès's form, identity: Kissat on the whole formula (15 to 16 November).** `kissat` on $F_I$ for the
+identity, $N=13$ (2608 variables, 259,770 clauses): no answer in 20,000 s. The tree search closes the same
+formula with 5219 s of CaDiCaL time on 2550 nodes.
 
 **No return to the quiescent state (15 November).** The class $\delta(x,y,z)\ne L$ for $y\ne L$ (a cell that has
 left the quiescent state never returns to it; `gsat.py 5 N --neq ... --front1`): rules for $2,\dots,8$ and for

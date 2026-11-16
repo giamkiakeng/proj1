@@ -48,6 +48,9 @@ ap.add_argument('--nointerior', default='', help='class: this state never occurs
 ap.add_argument('--noghws', action='store_true', help='with --strict: no G in a half-line cell i >= 2 with t + i <= 2N-4 (the wall lemma for the lines 2..N only)')
 ap.add_argument('--set', default='', help='class condition: transitions xyz=d, comma-separated (unit clauses of F)')
 ap.add_argument('--neq', default='', help='class condition: delta(x,y,z) != d for xyz=d, comma-separated (unit clauses of F)')
+ap.add_argument('--cellunit', default='', help='unit clauses on half-line cells: T,I=X;T,I=X (the cell (T, I) is in state X)')
+ap.add_argument('--cellclause', default='', help='one clause on half-line cells: T,I=X;T,I=X (at least one of the cells (T, I) is in state X)')
+ap.add_argument('--sgap', action='store_true', help='with --strict --b1s --noghws --gstatic: gap clauses of Lemma 6.3 that are sound for the lines 2..N alone (mstrict.py)')
 a = ap.parse_args()
 CAD = os.environ.get('CADICAL', 'cadical'); LC = os.environ.get('LRATCHECK', 'lrat-check')
 TMP = os.environ.get('CERTTMP', os.path.join(os.path.dirname(os.path.abspath(__file__)), 'cert'))
@@ -80,6 +83,19 @@ for _spec, _sign in ((a.set, 1), (a.neq, -1)):
     for _tr in [x for x in _spec.split(',') if x]:
         _l, _d = _tr.split('=')
         E.add([_sign * E.T[(_c[_l[0]], _c[_l[1]], _c[_l[2]])][_c[_d]]])
+for _cu in [x for x in a.cellunit.split(';') if x]:
+    _p, _d = _cu.split('='); _t, _i = map(int, _p.split(','))
+    E.add([M.Hc[(_t, _i)][_c[_d]]])
+if a.cellclause:
+    _cl = []
+    for _cu in [x for x in a.cellclause.split(';') if x]:
+        _p, _d = _cu.split('='); _t, _i = map(int, _p.split(','))
+        _cl.append(M.Hc[(_t, _i)][_c[_d]])
+    E.add(_cl)
+if a.sgap:
+    assert a.strict and a.b1s and a.noghws and a.gstatic is not None and a.gstatic <= 1 and not a.wgap
+    import mstrict
+    NSGAP = mstrict.add_strict_gaps(M, N)
 BASE = ''.join(' '.join(map(str, c)) + ' 0\n' for c in E.cl)
 NCL = len(E.cl)
 MM = M.M

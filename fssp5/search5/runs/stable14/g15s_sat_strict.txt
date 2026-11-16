@@ -1,0 +1,6 @@
+# the satisfiable node of the search for the lines 2..14, refuted for the strict formula of the lines 2..15:
+# mcopy.py 5 15 --nocopy --nosym --strict --b1s --set GLL=A --set GAL=B --set ALL=B --set GBB=A --set BBL=L --set BLL=A --set ALA=B --set LAL=L --set BLB=L --set LBL=B --set LLB=L --cnf FILE
+# (the lines 2..15 are synchronized, (B1) in the strong reading, the 11 transitions of the node; nothing that uses a line longer than 15)
+# FILE: 3556 variables, 384704 clauses; CaDiCaL 3.0.1 --lrat --no-binary: s UNSATISFIABLE; lrat-check: c VERIFIED; cake_lpr: s VERIFIED UNSAT
+# columns: cube | CaDiCaL seconds | proof bytes | SHA-256 of FILE | SHA-256 of the proof | checkers
+GLL=A,GAL=B,ALL=B,GBB=A,BBL=L,BLL=A,ALA=B,LAL=L,BLB=L,LBL=B,LLB=L | 12 s | 80468630 | 32bd639e762c9d96925e80e634a9e0245fc18282b992c799cf34b6108ce773c1 | 37bdc5d6bb8a3ae05dfbe2e57d4b5606a4620273a42c8cf46be752108c5a95f6 | VERIFIED | cake_lpr VERIFIED UNSAT

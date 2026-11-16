@@ -1,4 +1,4 @@
-# Stable generals, lines 2..14: tree search over the half-line (in progress)
+# Stable generals, lines 2..14: tree search over the half-line (Theorem 6.4 of ../../README.md)
 
 - `g14_d7_prefixes.txt`: the 341 open nodes at depth 7 (`germsat.py 14 --budget 300 --maxdepth 7`), one job each.
 - `g14_top.txt`: the 36 nodes closed above depth 7.
@@ -20,12 +20,18 @@ Certification.
   `67957a4ce7230559cf9fc2b463d66096be3056b00b8a01001465fd2ef260f057`.
   Four nodes are listed as not certified in the lines `# cube ...`: three with a complete half-line that were not
   refuted in 4 s, and one that is satisfiable (cube 309).
-- `g14_parts_open.txt`: the three nodes with a complete half-line, certified with a longer time limit.
+- `g14_parts_1-167.txt.gz`: the same for `--first 1 --last 167`: 17,196 certified cubes; one node with a
+  complete half-line is listed as not certified (cube 89).
+- `g14_parts_open.txt`: the four nodes with a complete half-line, certified with a longer time limit
+  (`certtree.py 14 <file with these cubes> ... --tlim 6000 --pump 14`).
+- `g15s_sat_strict.txt`: the satisfiable node, refuted for the lines 2..15: strict formula of `mcopy.py` with (B1)
+  and the 11 transitions of the node; LRAT proof verified by `lrat-check` and `cake_lpr`.
 - `g15_sat_cube.txt`, `g15_parts_sat.txt`: the satisfiable node (its model is `../../rules/stable_generals_2-14.txt`)
   and its refutation for the lines 2..15: `certtree.py 15 g15_sat_cube.txt ... --pump 15`, three certified parts;
   $F_{15}$ has 4100 variables and 396,586 clauses, SHA-256 of its clause lines
   `7ec0e26566d2715467eb03728c0bfabec61ddf4a7caf94fee4d3d768f05549b1`.
-- The subtrees 1 to 167 are being certified (`g14_parts_1-167`, to come).
 
-Check of the case split, when all files are there:
-`covercheck.py 15 g14_parts_top.txt g14_parts_1-167.txt g14_parts_168-341.txt g14_parts_open.txt g15_parts_sat.txt`.
+Check of the case split (unpack the two `.gz` files first):
+`covercheck.py 14 g14_parts_top.txt g14_parts_1-167.txt g14_parts_168-341.txt g14_parts_open.txt g15s_sat_strict.txt`
+reports 44,517 cubes, all used, and no uncovered node. With `g15_parts_sat.txt` in place of the last file and
+`covercheck.py 15` the result is the same with 44,519 cubes (the weaker statement for the lines 2..17).
