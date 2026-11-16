@@ -12,6 +12,10 @@
  * R independent runs give a mean and a standard error for every n.  P_{nmin-1} is the empty rule with weight 1.
  *
  * usage: fscount K N M R SEED [-nmin n0] [-b1s] [-b1w] [-b3s] [-b3w] [-b4] [-set xyz=d,...] [-neq xyz=d,...] [-nosym] [-cap C]
+ *   -exh L B P: from the level L on, if the pool has at most P rules, the M random trials are replaced by the complete
+ *   expansion of every rule of the pool (all its extensions through the next line, by backtracking, at most B nodes
+ *   per rule): no family is lost by chance at these levels.
+ *   -ufin: class condition: at the time 2n-4 the cells 2..n-1 of the line n are in one auxiliary state (n >= 5).
  *   -dump FILE L: the rules of the pools of the levels n >= L are written to FILE (at most 200 per pool).
  *   M trials per level, at most C rules kept per pool (default M; a pool larger than C is thinned uniformly and the
  *   weights are multiplied by the inverse of the fraction kept).  States: L G A B C D, F fires, * is the border.
@@ -22,7 +26,9 @@
 #include <math.h>
 
 #define MAXN 40
-#define MAXK 7
+#ifndef MAXK
+#define MAXK 7            /* -DMAXK=5 makes the pools 2.7 times smaller (125 instead of 343 bytes per rule) */
+#endif
 #define NE (MAXK * MAXK * MAXK)
 static int K, W, N, NMIN = 2;
 static unsigned mask[NE];
@@ -30,10 +36,17 @@ static signed char tab[NE];
 static int opt_nosym;
 static unsigned long long rng = 88172645463325252ULL;
 static FILE *dumpf = NULL; static int dump_from = 0;
+static int opt_ufin = 0;
+/* -ufin: at the time 2n-4 the cells 2..n-1 of the line n are in one and the same auxiliary state (n >= 5) */
+static inline int ufin_ok(int n, int tt, int i, int v, const signed char *row) {
+    if (!opt_ufin || n < 5 || tt != 2 * n - 4 || i < 2 || i > n - 1) return 1;
+    if (i == 2) return v >= 2 && v < W;
+    return v == row[2];
+}
 static unsigned long long rnd(void) { rng ^= rng << 13; rng ^= rng >> 7; rng ^= rng << 17; return rng; }
 static const char *NAMES = "LGABCD";
 #define IDX(x, y, z) (((x) * (W + 1) + (y)) * (W + 1) + (z))
-typedef struct { signed char t[NE]; signed char naux; double w; } rule;
+typedef struct { signed char t[NE]; signed char naux; double w; } rule;   /* working copy; the pools store the first ne bytes of t */
 
 static int code(char c) {
     if (c == '*' || c == 'F') return W;
@@ -71,6 +84,7 @@ static double descend(int n, int *naux) {
                     if (!(m >> u & 1)) continue;
                     if (last ? u != W : u == W) continue;
                     if (!opt_nosym && u >= 2 && u < W && u - 2 > *naux) continue;
+                    if (!ufin_ok(n, t + 1, i, u, d)) continue;
                     vals[cnt++] = u;
                 }
                 if (!cnt) return 0;
@@ -79,6 +93,7 @@ static double descend(int n, int *naux) {
                 if (!opt_nosym && v >= 2 && v < W && v - 2 == *naux) (*naux)++;
                 tab[e] = (signed char)v;
             } else if (last ? v != W : v == W) return 0;
+            else if (!ufin_ok(n, t + 1, i, v, d)) return 0;
             d[i] = (signed char)v;
         }
         cur ^= 1;
@@ -86,10 +101,53 @@ static double descend(int n, int *naux) {
     return b;
 }
 
+/* exhaustive expansion: all extensions of the rule in tab[] through the line n; every extension is handed to emit() */
+static signed char xrow[2 * MAXN + 2][MAXN + 3];
+static long xbudget;                                     /* nodes left for the current parent */
+static rule *xnext; static long xnn, xseen, xcap; static double xw, xtot;
+static void emit(int naux) {
+    xtot += xw; xseen++;
+    long slot = -1;
+    if (xnn < xcap) slot = xnn++;
+    else { unsigned long long q = rnd() % (unsigned long long)xseen; if (q < (unsigned long long)xcap) slot = (long)q; }
+    if (slot >= 0) { memcpy(xnext[slot].t, tab, NE); xnext[slot].naux = (signed char)naux; xnext[slot].w = xw; }
+}
+static void expand(int n, int t, int i, int naux) {
+    for (;;) {
+        if (i > n) {
+            if (t + 1 == 2 * n - 2) { emit(naux); return; }
+            xrow[t + 1][0] = (signed char)W; xrow[t + 1][n + 1] = (signed char)W;
+            t++; i = 1; continue;
+        }
+        int e = IDX(xrow[t][i - 1], xrow[t][i], xrow[t][i + 1]);
+        int last = (t + 1 == 2 * n - 2);
+        int v = tab[e];
+        if (v >= 0) {
+            if (last ? v != W : v == W) return;
+            if (!ufin_ok(n, t + 1, i, v, xrow[t + 1])) return;
+            xrow[t + 1][i] = (signed char)v; i++; continue;
+        }
+        unsigned m = mask[e];
+        for (int u = 0; u <= W; u++) {
+            if (!(m >> u & 1)) continue;
+            if (last ? u != W : u == W) continue;
+            int na = naux;
+            if (!opt_nosym && u >= 2 && u < W) { if (u - 2 > naux) continue; if (u - 2 == naux) na = naux + 1; }
+            if (!ufin_ok(n, t + 1, i, u, xrow[t + 1])) continue;
+            if (--xbudget < 0) { tab[e] = -1; return; }
+            tab[e] = (signed char)u; xrow[t + 1][i] = (signed char)u;
+            expand(n, t, i + 1, na);
+            tab[e] = -1;
+        }
+        return;
+    }
+}
+
 int main(int argc, char **argv) {
     if (argc < 6) { fprintf(stderr, "usage: fscount K N M R SEED [options]\n"); return 2; }
     K = atoi(argv[1]); N = atoi(argv[2]); W = K - 1;
     long M = atol(argv[3]); int R = atoi(argv[4]); long cap = M;
+    int exh_from = 1000; long exh_budget = 0, exh_pool = 0, truncated = 0;
     rng ^= (unsigned long long)atoll(argv[5]) * 0x9E3779B97F4A7C15ULL;
     if (K < 3 || K > MAXK || N < 2 || N > MAXN) { fprintf(stderr, "bad K or N\n"); return 2; }
     int b1s = 0, b1w = 0, b3s = 0, b3w = 0, b4 = 0; const char *setl = NULL, *neql = NULL;
@@ -98,7 +156,9 @@ int main(int argc, char **argv) {
         else if (!strcmp(argv[a], "-b3s")) b3s = 1; else if (!strcmp(argv[a], "-b3w")) b3w = 1;
         else if (!strcmp(argv[a], "-b4")) b4 = 1; else if (!strcmp(argv[a], "-nosym")) opt_nosym = 1;
         else if (!strcmp(argv[a], "-nmin")) NMIN = atoi(argv[++a]);
+        else if (!strcmp(argv[a], "-ufin")) opt_ufin = 1;
         else if (!strcmp(argv[a], "-cap")) cap = atol(argv[++a]);
+        else if (!strcmp(argv[a], "-exh")) { exh_from = atoi(argv[a + 1]); exh_budget = atol(argv[a + 2]); exh_pool = atol(argv[a + 3]); a += 3; }
         else if (!strcmp(argv[a], "-dump")) { dumpf = fopen(argv[a + 1], "w"); dump_from = atoi(argv[a + 2]); a += 2; if (!dumpf) { fprintf(stderr, "cannot write the dump file\n"); return 2; } }
         else if (!strcmp(argv[a], "-set")) setl = argv[++a]; else if (!strcmp(argv[a], "-neq")) neql = argv[++a];
         else { fprintf(stderr, "unknown option %s\n", argv[a]); return 2; }
@@ -123,9 +183,19 @@ int main(int argc, char **argv) {
     for (int r = 0; r < R; r++) {
         long np = 1;
         memset(pool[0].t, -1, NE); pool[0].t[IDX(0, 0, 0)] = 0; pool[0].t[IDX(0, 0, W)] = 0; pool[0].naux = 0; pool[0].w = 1;
+        int reached = NMIN - 1;
         for (int n = NMIN; n <= N; n++) {
             long nn = 0, seen = 0; double tot = 0;
-            if (np > 0) for (long j = 0; j < M; j++) {
+            if (np > 0 && n >= exh_from && np <= exh_pool) {   /* every rule of the pool with all its extensions */
+                xnext = next; xnn = 0; xseen = 0; xcap = cap; xtot = 0;
+                for (long j = 0; j < np; j++) {
+                    memcpy(tab, pool[j].t, NE); xw = pool[j].w; xbudget = exh_budget;
+                    for (int i = 0; i <= n + 1; i++) xrow[0][i] = (signed char)((i == 0 || i == n + 1) ? W : (i == 1 ? 1 : 0));
+                    expand(n, 0, 1, pool[j].naux);
+                    if (xbudget < 0) truncated++;
+                }
+                nn = xnn; seen = xseen; tot = xtot;
+            } else if (np > 0) for (long j = 0; j < M; j++) {
                 rule *p = &pool[rnd() % (unsigned long long)np];
                 memcpy(tab, p->t, NE);
                 int naux = p->naux;
@@ -152,13 +222,19 @@ int main(int argc, char **argv) {
                 }
                 fflush(dumpf);
             }
-            s1[n] += tot; s2[n] += tot * tot; if (tot == 0) zero[n]++;
+            s1[n] += tot; s2[n] += tot * tot;
             rule *tmp = pool; pool = next; next = tmp; np = nn;
+            if (nn == 0) { fprintf(stderr, "run %d: the pool is empty at the level %d\n", r, n); break; }
+            reached = n;
         }
+        for (int n = reached + 1; n <= N; n++) zero[n]++;
+        if (reached == N) fprintf(stderr, "run %d: the pool is not empty at the last level %d\n", r, N);
     }
     printf("k=%d lines %d..n, %ld trials per level, %d runs%s%s%s%s%s%s", K, NMIN, M, R, b1s ? " b1s" : "", b1w ? " b1w" : "", b3s ? " b3s" : "", b3w ? " b3w" : "", b4 ? " b4" : "", opt_nosym ? " nosym" : "");
+    if (opt_ufin) printf(" ufin");
     if (setl) printf(" set %s", setl);
     if (neql) printf(" neq %s", neql);
+    if (exh_from < 1000) printf("; from the level %d on a pool of at most %ld rules is expanded completely (at most %ld nodes per rule; %ld expansions were cut off)", exh_from, exh_pool, exh_budget, truncated);
     printf("\n  n   estimate of c_n   standard error   runs with an empty pool\n");
     for (int n = NMIN; n <= N; n++) {
         double m = s1[n] / R, v = R > 1 ? (s2[n] / R - m * m) / (R - 1) : 0;

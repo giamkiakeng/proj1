@@ -1,0 +1,84 @@
+# five-state rule that synchronizes all lines of lengths 2..21 in minimal time; it fires from GGG, *GG, GG* only.
+# Found on 16 November by a neighbourhood search with a SAT solver (lns.py) around five_state_2-19.txt:
+#   python3 lns.py five_state_2-19.txt 20 --b3 --core 9 --dist 0,1,2,3
+# asks for a rule for the lines 2..20 that differs from that rule in at most D of the 50 transitions that it uses
+# on the lines 2..9 (all other transitions are free).  D = 0 and D = 1: unsatisfiable; D = 2: this rule
+# (BG* gives B instead of A, LLG gives G instead of A).  It synchronizes the line 21 as well.
+# Checked by two independent simulators (simlib.py and the simulator of lns.py).  Only the 75 transitions that the
+# lines 2..21 use are listed; with these 75 fixed, no choice of the others synchronizes the line 22 (solver answer).
+k 5
+* G A L
+* G G F
+* G L G
+* L A G
+A A * G
+A A A G
+A A B G
+A A G L
+A A L A
+A B * G
+A B A B
+A B B A
+A B G A
+A B L B
+A G * A
+A G A B
+A G B A
+A G L B
+A L * A
+A L A B
+A L B L
+A L G A
+A L L B
+B A * B
+B A A B
+B A B L
+B A G B
+B A L A
+B B * A
+B B A L
+B B B L
+B B G A
+B B L G
+B G * B
+B G A L
+B G B G
+B G G L
+B G L A
+B L * B
+B L A L
+B L B L
+B L G G
+B L L A
+G A * A
+G A A L
+G A B A
+G A G A
+G A L A
+G B G B
+G B L B
+G G * F
+G G A L
+G G G F
+G G L G
+G L * G
+G L A A
+G L B A
+G L L A
+L A * A
+L A A G
+L A B A
+L A G A
+L A L A
+L B A B
+L B B G
+L B L A
+L G A L
+L G B A
+L G G B
+L G L G
+L L * L
+L L A L
+L L B L
+L L G G
+L L L L
