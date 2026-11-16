@@ -35,3 +35,11 @@ Check of the case split (unpack the two `.gz` files first):
 `covercheck.py 14 g14_parts_top.txt g14_parts_1-167.txt g14_parts_168-341.txt g14_parts_open.txt g15s_sat_strict.txt`
 reports 44,517 cubes, all used, and no uncovered node. With `g15_parts_sat.txt` in place of the last file and
 `covercheck.py 15` the result is the same with 44,519 cubes (the weaker statement for the lines 2..17).
+
+The length 15 (unfinished; nothing is claimed from these files):
+- `s15_D_partial.txt.gz`: the certified search of the formula $S_{15}\wedge D$ of Section 6 of the main README
+  (`gcert.py 5 15 ... --b1s --b3 --wimp --strict --noghws --gstatic 1 --sgap --cellclause "24,3=G;...;14,13=G"
+  --tlim 4 --nocake`), paused on 16 November after 8571 closed and 4475 split nodes, no satisfiable node. The
+  file is the list that `gcert.py` continues from. A first pass of the same tree with the incremental solver
+  (`hunt_run.py`, 193 subtrees) took over; its closed nodes can be certified from this list and from its own
+  lists with `gcert.py --prefixfile`.
