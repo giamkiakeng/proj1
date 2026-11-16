@@ -23,7 +23,8 @@ proved here. Proposition~\ref{prop:lbparity} is proved here as well.
 Theorem~\ref{thm:b1} and Propositions~\ref{prop:b1b2}, \ref{prop:yunes}, \ref{prop:b1b2nb}
 and~\ref{prop:otherstate} are computer-assisted; every formula in their proofs has a proof certificate that an independent checker verified.
 Corollary~\ref{cor:fifteen} follows from the proof of Theorem~\ref{thm:b1}, and Proposition~\ref{prop:three}
-is computer-assisted with a verified certificate. Lemma~\ref{lem:front} is proved here. The end of
+is computer-assisted with a verified certificate. Lemma~\ref{lem:front} is proved here. Lemma~\ref{lem:classA} is proved here, and
+Proposition~\ref{prop:classA13} is a rule that was checked by simulation. The end of
 Section~\ref{sec:search} describes a computation that is not finished; nothing is claimed from it yet.
 
 \section{Setting}
@@ -501,6 +502,94 @@ Whether such a rule exists is being decided by the same method, applied to the f
 clause $\bigvee_{i=3}^{13}[C_\infty(27-i,i)=\Gq]$, the unit clauses of Lemma~\ref{lem:wall} for $N=15$ and the
 redundant clauses (R1) and (R2) for the lengths up to $15$, where (R2) is written with the variables of the
 cells on the anti-diagonals $27$ and $28$. Nothing is claimed from this computation yet.
+
+\section{A stable firing state that is not the initial state}\label{sec:otherfiring}
+
+Theorem~\ref{thm:b1} is about the state $\Gq$ in which the first cell starts. A rule can also have a stable
+state from which it fires that is not the initial state of the first cell. In this section, and only here, the
+lines are $C_n(0,\cdot)=\Aq\Lq^{n-1}$ and the half-line is $C_\infty(0,\cdot)=\Aq\Lq\Lq\cdots$, and $\Gq$ is a
+working state other than $\Lq$ and $\Aq$ for which \eqref{eq:B1} and \eqref{eq:B3s} hold. We call this class of
+rules $\mathcal A$. For the initial state, \eqref{eq:B3s} followed from \eqref{eq:B1} after a normalization
+(Lemma~\ref{lem:fire} and Step~1 of the proof of Theorem~\ref{thm:b1}); here it is an assumption, because a
+line of a rule with \eqref{eq:B1} need not contain the state $\Gq$ at all. The light-cone lemma, the agreement
+lemma and the return-chain lemma use of the initial configuration only that the cells $i\ge2$ are quiescent,
+so they hold for these lines. A barrier is, as before, a border or a cell in state $\Gq$.
+
+Together with Theorem~\ref{thm:b1}, a bound for $\mathcal A$ is a statement without reference to the initial
+state. Let $\delta$ be a five-state rule and $g$ a working state such that \eqref{eq:B1} and \eqref{eq:B3s} hold
+with $g$ in place of $\Gq$. Then $g\ne\Lq$, because $\delta(\Lq,\Lq,\Lq)=\Lq\ne\Fq$. If $g$ is the initial
+state of the first cell, $\delta$ is a rule of Theorem~\ref{thm:b1}; otherwise $\delta$ is, after renaming the
+states, a rule of $\mathcal A$.
+
+\begin{lemma}[the class $\mathcal A$]\label{lem:classA}
+Let $N'\ge3$, and let $\delta\in\mathcal A$ synchronize the lengths $2,\dots,N'$. Then
+\begin{enumerate}[label=\textup{(\alph*)},nosep]
+\item in every line of length $n\le N'$ the statements \textup{(2b)}, \textup{(2c)} and \textup{(2d)} of
+Lemma~\ref{lem:fire} hold;
+\item $\delta(\ast,\Aq,\Lq)=\delta(\Aq,\Lq,\ast)=\Gq$, and $C_n(t,1)=\Gq$ for $n\le N'$ and $1\le t\le 2n-3$;
+\item $C_\infty(t,1)=\Gq$ for $1\le t\le 2N'-3$, and $C_\infty(t,i)\ne\Gq$ whenever $i\ge2$ and $t+i\le 2N'-4$;
+\item the conclusion of Lemma~\ref{lem:gap} holds for every line of length $n\le N'$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(a) Let $n\le N'$. Every cell of the line of length $n$ is in state $\Fq$ at time $2n-2$, so by \eqref{eq:B3s}
+its neighbourhood at time $2n-3$ is one of $(\Gq,\Gq,\Gq)$, $(\ast,\Gq,\Gq)$, $(\Gq,\Gq,\ast)$; in particular
+the cell is in state $\Gq$ at time $2n-3$. This is (2b). If three adjacent positions are barriers at a time
+$t\le 2n-4$, the middle one is a cell in state $\Gq$ whose neighbours are barriers, and by \eqref{eq:B3s} it is
+in state $\Fq$ at time $t+1\le 2n-3$, which is impossible; this is (2c). If $C_n(t,i)=\Gq$ and $t\le 2n-4$, the
+two neighbours of the cell $i$ are not both barriers by (2c), and \eqref{eq:B1} gives $C_n(t+1,i)=\Gq$; this is
+(2d).
+
+(b) By (2b) for $n=2$, both cells of the line of length $2$ are in state $\Gq$ at time $1$:
+$\delta(\ast,\Aq,\Lq)=C_2(1,1)=\Gq$ and $\delta(\Aq,\Lq,\ast)=C_2(1,2)=\Gq$. For every $n\ge2$ the first cell has
+the neighbourhood $(\ast,\Aq,\Lq)$ at time $0$, so $C_n(1,1)=\Gq$, and (2d) gives $C_n(t,1)=\Gq$ for
+$1\le t\le 2n-3$ by induction on $t$.
+
+(c) The first claim is (b) for $n=N'$ and the agreement lemma. For the second, the proof of
+Lemma~\ref{lem:wall} applies without change: it uses (2d) for the lengths $N'-1$ and $N'$, the agreement
+lemma, and the fact that the cells $1,\dots,p-1$ at time $t+1$ are determined by the cells $1,\dots,p$ at time
+$t$; the state of the first cell does not enter.
+
+(d) The proof of Lemma~\ref{lem:gap} uses of the rule only (2b), (2c) and (2d) for the line of length $n$.
+\end{proof}
+
+So in $\mathcal A$ the first cell is in state $\Aq$ at time $0$ and in state $\Gq$ afterwards, and the rest
+is as for Theorem~\ref{thm:b1}. The formula $F^{\mathcal A}$ for a parameter $N$ is the formula $F$ of
+Section~\ref{sec:method} with the initial row $\Aq\Lq\cdots$, in the form of Step~2 of the proof of
+Theorem~\ref{thm:b1}: the cells $(t,1)$, $t\ge1$, are the constant $\Gq$; the clauses are (F1)--(F4), the unit
+clauses of \eqref{eq:B1} and \eqref{eq:B3s}, the unit clauses $C_\infty(t,i)\ne\Gq$ for the half-line cells
+with $i\ge2$, and the redundant clauses (R1) and (R2) for the lines $n\le N$. By Lemma~\ref{lem:classA} with
+$N'=N+2$ and the proof of Lemma~\ref{lem:Fsound}, a rule of $\mathcal A$ that synchronizes all lengths
+$2,\dots,N+2$ satisfies $F^{\mathcal A}$. The tree is that of Step~3 with the root $\emptyset$ and without a
+choice of names: its first cell is $(1,2)$, with the neighbourhood $(\Aq,\Lq,\Lq)$ and the two children
+$\Aq$ and $\Bq$, and the four working states have four different roles (quiescent, initial, stable, and the
+fourth), so no two names can be exchanged.
+
+\begin{proposition}\label{prop:classA13}
+Some rule of $\mathcal A$ synchronizes all lengths $2,\dots,13$.
+\end{proposition}
+
+\begin{proof}
+The rule is the file \texttt{rules/stable\_firing\_initA\_2-13.txt}. Its table satisfies \eqref{eq:B1}, and
+exactly the neighbourhoods $(\Gq,\Gq,\Gq)$, $(\ast,\Gq,\Gq)$, $(\Gq,\Gq,\ast)$ have the image $\Fq$. Direct
+simulation from the rows $\Aq\Lq^{n-1}$ shows that it synchronizes the lengths $2,\dots,13$ and no other
+length up to $120$.
+\end{proof}
+
+The rule was found by the search: the solver reported a node with ten transitions at which
+$F^{\mathcal A}$ with $N=12$ is satisfiable, and at this node the formula $\MT_5(2..13)$ for the initial row
+$\Aq\Lq\cdots$ with the clauses of the class has a model, whereas for $2,\dots,14$ it has none (solver answer).
+In this rule $\delta(\Aq,\Lq,\Lq)=\Aq$ and $\delta(\Aq,\Lq,\ast)=\Gq$: the front is constantly $\Aq$, and the
+last cell of every line becomes a barrier at the time $n-1$ at which the front reaches it.
+
+An upper bound for $\mathcal A$ is not established. Random descents estimate the tree at $4\cdot10^5$ to
+$5\cdot10^5$ nodes for each of $N=12,13,14$, about six times the tree of Theorem~\ref{thm:b1}. If the tree for
+$N=12$ is closed except for nodes $\sigma$ at which $F^{\mathcal A}$ is satisfiable, and the formula
+$\MT_5(2..14)$ with the clauses of the class is unsatisfiable at each $\sigma$, then no rule of $\mathcal A$
+synchronizes all lengths $2,\dots,14$, since such a rule satisfies $F^{\mathcal A}$ for $N=12$; with
+Proposition~\ref{prop:classA13} the largest $N$ of the class would then be exactly $13$. This computation is
+running; nothing is claimed from it yet.
 
 \section{The weak reading}\label{sec:weak}
 
