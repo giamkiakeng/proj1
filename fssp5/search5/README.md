@@ -24,6 +24,8 @@ checker verified, and the completeness of every case split was checked by a prog
 | No five-state rule is a local image of Mazoyer's six-state solution for windows up to radius 2, or radius 1 with one step of memory | certified | Section 4 |
 | Consequences of a stable general: firing from three generals only, walls, gap bounds; the same in the weak reading | proved by hand | Lemmas 6.1 to 6.3, 6.5, 6.6 |
 | The bound $(k-1)^{2s}\ell$ of the left-border lemma is attained for $s=1$ and is not attained for odd $k$ and $s\ge2$ | solver answer with simulated rules; proved by hand | Observation 8.1, Proposition 8.2 |
+| **A five-state rule that synchronizes all lines $2,\dots,19$** (the SAT solvers had reached $2,\dots,14$); it fires from generals only and begins like a 2/3 division | found by random sampling; checked by two simulators | Section 10 |
+| The numbers of five-state rules for the lines $2,\dots,n$: about $10^{24}$ at $n=7$ without restriction, falling by a factor 10 to 100 per line afterwards | estimates by sequential importance sampling, calibrated on exact counts | Section 10 |
 | Four states: no rule synchronizes all lines $3,\dots,9$ or all lines $4,\dots,9$ (42 and 399 rules reach the length 8), but 36 rules synchronize $5,\dots,9$ and none $5,\dots,10$; the numbers of four-state rules of every length range and class; no four-state rule with a stable general synchronizes both 6 and 7 | exhaustive enumeration without a solver | Section 5 |
 | Sizes of the search trees of other classes, among them the open problem itself ($3\cdot10^{18}$ nodes for the lines up to 15) | estimates by random descents | Section 9 |
 
@@ -63,6 +65,7 @@ in Propositions 7.3 (12 or 13) and 7.4, (B2) alone, (B3) alone, and the problem 
 | `enum_rules.py` | all rules of a class for the lines $2,\dots,N$ up to unused transitions (strict formula; feasible for four states) |
 | `fsdfs.c` | exhaustive backtracking search without a SAT solver (`gcc -O2 -o fsdfs fsdfs.c -lm`): simulates the lines $n_0,\dots,N$ in this order and branches on every transition when it is first needed; counts the rules for $n_0,\dots,n$ up to unused transitions for every $n\le N$; class options `-b1s -b1w -b3s -b3w -b4 -set -neq`, lemma-based pruning for a fixed $N$ (`-front -chain -prefire -wall -gap`), `-knuth R SEED` for a size estimate by random descents. Complete for four states in seconds; an independent check of the encoders (Section 5) |
 | `fsdfs2.c` | `fsdfs.c` with conflict-directed backjumping: every cell carries the set of transitions on which it depends, a failure returns the set that causes it, and a branching whose transition is not in that set is left at once. The number of rules for $n_0,\dots,N$ is that of `fsdfs.c` (compared for four states, all $N\le9$, and for the five-state cases of Section 5); 3 to 5 times fewer nodes. Options `-cell`, `-cellany` for conditions on half-line cells |
+| `fscount.c` | estimates of the numbers $c_n$ of rules for the lines $n_0,\dots,n$ by sequential importance sampling with resampling (a pool of rules per level, random completions of the next line; `-exh L B`: complete expansion of the pool from the level $L$ on); the rules that survive in the pools are rules for $n_0,\dots,n$ (`-dump`). `count_scan.py` simulates the dumped rules, `family_max.py` enumerates all completions of the core of a dumped rule (Section 10) |
 | `near2.py` | is there a rule for $2,\dots,N$ that differs from a given rule in at most $D$ of the transitions that it uses (strict formula, no class; the unused entries are free)? |
 | `enum_satnode.py` | enumerates the models of $F_{14}$ at the satisfiable node of the stable-general tree, up to unused table entries, and writes the formula whose refutation certifies that there are no others |
 | `check_rule_formula.py`, `check_weak_lemmas.py`, `check_wwalls_enc.py` | tests: a rule of a class that synchronizes $2,\dots,N+2$ must satisfy the formula of `gcert.py` at $N$; the statements of Lemmas 6.5, 6.6 and 6.2' on the diagrams of given rules |
@@ -1206,3 +1209,61 @@ with the time fixed to $2n-2$ the encoder reproduces $N_4=8$ (four states: $2,\d
 $2,\dots,9$ unsatisfiable in 37 s); four states with any firing time in $[2n-2,3n+2]$: a rule for $2,\dots,6$
 (firing times 3, 5, 11, 14, 10, so nothing regular), and $2,\dots,8$ not decided in 120 s. The free firing
 time makes the formulas much harder, and no five-state run was made.
+
+## 10. Sampling: how many rules are there, and a rule for the lines 2..19
+
+**The estimator.** Let $c_n$ be the number of rules that synchronize all lines $2,\dots,n$, counted up to the
+transitions that these lines do not use (the numbers of `fsdfs.c`, Section 5). `fscount.c` estimates all $c_n$
+at once. It keeps, for each $n$, a pool of rules for $2,\dots,n$ with weights whose sum is an unbiased estimate
+of $c_n$. For the next level it makes $M$ trials: a trial takes a rule of the pool uniformly at random, simulates
+the line $n+1$ and gives every transition that is not yet defined a uniformly random admissible value; if the
+line is synchronized, the extended rule enters the next pool with the weight (weight of the parent) $\times$
+(size of the pool) $\times$ (product of the numbers of admissible values) $/M$. This is sequential importance
+sampling with resampling; the estimates of different levels are dependent, and in the tail, where few rules of
+a pool survive, they are too small rather than too large (below). Calibration on the exact counts:
+
+| lines $2,\dots,n$ | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| four states, exact | 7 | 664 | 96,169 | 828,670 | 64,299 | 536 | 27 | 0 | | | |
+| estimate ($M=2\cdot10^6$, 10 runs) | 7.0 | 664 | $9.7\cdot10^4$ | $1.0\cdot10^6$ | $1.5\cdot10^5$ | 257 | 45 | 0 | | | |
+| five states, the part of Section 5, exact | 1 | 1 | 58 | 18,131 | $7.9\cdot10^6$ | $2.7\cdot10^8$ | $1.7\cdot10^8$ | $7.4\cdot10^6$ | 96,868 | 896 | 4 |
+| estimate ($M=3\cdot10^6$, 6 runs) | 1.0 | 1.0 | 58 | $1.8\cdot10^4$ | $7.8\cdot10^6$ | $2.3\cdot10^8$ | $1.4\cdot10^8$ | $4.3\cdot10^6$ | 5800 | 450 | 0 |
+
+So the estimates are good up to the maximum of $c_n$ and one or two levels beyond, and fall short by a factor up
+to 20 in the tail.
+
+**How many five-state rules are there?** Estimates with $M=3\cdot10^6$ (6 runs; 40 runs for the last column):
+
+| $n$ | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| no restriction | 8 | $1.8\cdot10^4$ | $2.5\cdot10^9$ | $5\cdot10^{15}$ | $7\cdot10^{20}$ | $2\cdot10^{24}$ | $1\cdot10^{21}$ | $2\cdot10^{20}$ | $2\cdot10^{17}$ | $6\cdot10^{13}$ | | |
+| stable general (Theorem 6.4) | 1 | 10 | 3022 | $3.8\cdot10^6$ | $4.8\cdot10^9$ | $3\cdot10^{11}$ | $1.2\cdot10^{11}$ | $1.6\cdot10^{10}$ | $1.7\cdot10^8$ | $2.5\cdot10^6$ | | |
+| firing from `GGG`, `*GG`, `GG*` only | 1 | 49 | $9.4\cdot10^4$ | $2.8\cdot10^9$ | $2\cdot10^{15}$ | $6\cdot10^{17}$ | $2\cdot10^{18}$ | $3\cdot10^{18}$ | $2\cdot10^{17}$ | $1\cdot10^{16}$ | $4\cdot10^{14}$ | $3\cdot10^{13}$ |
+
+(The exact values 10, 3031 and 4,094,650 of the second row and 49 and 93,550 of the third are those of
+Section 5.) The number of rules rises to $10^{24}$ at $n=7$ and then falls by a factor 10 to 100 for every
+further line. This explains both observations of the earlier sections: an enumeration is hopeless, and the
+solvers find rules for short ranges easily. It also says that the SAT record $2,\dots,14$ is not where
+five-state rules end: if the decline continues at this rate, rules for $2,\dots,15$ and beyond exist in large
+numbers, and a solver that proves things is the wrong tool to find them. The pools of the sampler are the
+right one.
+
+**A rule for the lines 2..19.** The rules that survive in a pool of the level $n$ synchronize $2,\dots,n$. In
+the class that fires from `GGG`, `*GG`, `GG*` only (`fscount 5 40 3000000 R SEED -b3s -dump FILE 18`), every one
+of 120 runs has rules for $2,\dots,12$, 105 runs reach 13, 74 reach 14, 33 reach 15, 13 reach 16, four reach 17
+and one reaches 18; an earlier run of six had reached 14, 16, 16, 17 and 18. The best rule so far is
+`rules/five_state_2-19.txt`: 69 transitions, and it **synchronizes every line of length $2,\dots,19$** and
+fails on 20 and 21 (checked by `simlib.py` and by the simulator of `count_scan.py`, which share no code with
+the sampler). Its family ends there: with the 52 transitions that it uses in the lines $2,\dots,10$ fixed, the
+enumeration of all completions (`fsdfs 5 40 -b3s -set ... -max`, $10^9$ nodes) reaches the line 19 and no
+further. Each run finds another family. All of them finish in the same way: two or three steps before the end
+the line is in a uniform state (`A` or `B` in all cells but the first or the last), then in `G`, then it fires.
+The rule for $2,\dots,19$ builds blocks `AB.` from the left, three cells every six steps, and the echo of the
+right end meets their boundary at two thirds of the line: this is the first step of Mazoyer's division, found
+by a sampler that knows nothing about it. Its general is not stable (ten of the entries $\delta(x,G,y)$ that
+(B1) fixes are not `G`).
+
+Status: the rules are checked by simulation; the counts are estimates; nothing here is a proof. Whether the
+families can be continued beyond 19 is being explored with complete expansion of the pools at the deep levels
+(`-exh`).
+
