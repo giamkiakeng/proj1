@@ -243,10 +243,10 @@ last column recalls what is known for five states.
 | class | four states: largest $N$ with a rule for $2,\dots,N$ | five states |
 |---|---|---|
 | no class | 8 (the value $N_4=8$ of the paper) | at least 14 |
-| (B3) strong; (B3) weak; first cell `G` from time 1 on | 8; 8; 8 | at least 11; 12; 12 |
+| (B3) strong; (B3) weak; first cell `G` from time 1 on | 8; 8; 8 | at least 14 (the rules of Theorem 6.4 are in these classes) |
 | (B4) | 7 | at least 12 with (B3) |
 | (B2) for the identity, with or without the borders | 6 | at least 11 |
-| (B1) weak, with or without (B3) | 6 | at least 13 |
+| (B1) weak, with or without (B3) | 6 | at least 14 (the same rules) |
 | (B1) weak and (B2) for the identity without borders | 5 | 12 or 13 (Proposition 7.3) |
 | (B1) strong | 4 | 14 or 15 (Theorem 6.4) |
 
