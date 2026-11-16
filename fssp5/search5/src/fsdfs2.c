@@ -43,9 +43,17 @@ static time_t t_start, t_last; static int report_s = 60;
 static const char *NAMES = "LGABCD";
 static const long MG[] = {0, 3, 12, 39, 120, 363, 1092, 3279};
 #define IDX(x, y, z) (((x) * (W + 1) + (y)) * (W + 1) + (z))
-typedef struct { unsigned long long w[4]; } bs;                 /* a set of transitions */
+#ifndef NW
+#define NW 4                                                    /* 64*NW bits per set; -DNW=2 is enough for K <= 5 */
+#endif
+typedef struct { unsigned long long w[NW]; } bs;                /* a set of transitions */
+#if NW == 2
+static const bs BS0 = {{0, 0}}, BSALL = {{~0ULL, ~0ULL}};
+static inline bs bor(bs a, bs b) { a.w[0] |= b.w[0]; a.w[1] |= b.w[1]; return a; }
+#else
 static const bs BS0 = {{0, 0, 0, 0}}, BSALL = {{~0ULL, ~0ULL, ~0ULL, ~0ULL}};
 static inline bs bor(bs a, bs b) { a.w[0] |= b.w[0]; a.w[1] |= b.w[1]; a.w[2] |= b.w[2]; a.w[3] |= b.w[3]; return a; }
+#endif
 static inline bs bset(bs a, int e) { a.w[e >> 6] |= 1ULL << (e & 63); return a; }
 static inline bs bclr(bs a, int e) { a.w[e >> 6] &= ~(1ULL << (e & 63)); return a; }
 static inline int bhas(bs a, int e) { return (int)(a.w[e >> 6] >> (e & 63) & 1); }
@@ -233,7 +241,7 @@ static void cell_list(const char *s, int any) {
 int main(int argc, char **argv) {
     if (argc < 3) { fprintf(stderr, "usage: fsdfs2 K N [options]\n"); return 2; }
     K = atoi(argv[1]); N = atoi(argv[2]); W = K - 1;
-    if (K < 3 || K > 6 || N < 2 || N > MAXN) { fprintf(stderr, "bad K or N (K <= 6: the sets of transitions have 256 bits)\n"); return 2; }
+    if (K < 3 || K > 6 || N < 2 || N > MAXN || K * K * K > 64 * NW) { fprintf(stderr, "bad K or N (the sets of transitions have %d bits: K <= %d)\n", 64 * NW, NW == 2 ? 5 : 6); return 2; }
     const char *setl = NULL, *neql = NULL, *celll = NULL, *anyl = NULL;
     for (int a = 3; a < argc; a++) {
         if (!strcmp(argv[a], "-b1s")) opt_b1s = 1; else if (!strcmp(argv[a], "-b1w")) opt_b1w = 1;
