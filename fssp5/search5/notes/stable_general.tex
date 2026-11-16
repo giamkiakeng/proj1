@@ -20,8 +20,8 @@
 Lemmas~\ref{lem:fire}--\ref{lem:gap}, Corollary~\ref{cor:front}, Lemmas~\ref{lem:Fsound} and~\ref{lem:split},
 Lemmas~\ref{lem:iwall} and~\ref{lem:gapweak}, Corollary~\ref{cor:gapclauses} and Lemma~\ref{lem:levels} are
 proved here. Proposition~\ref{prop:lbparity} is proved here as well.
-Theorem~\ref{thm:b1} and Propositions~\ref{prop:b1b2}, \ref{prop:yunes} and~\ref{prop:b1b2nb} are
-computer-assisted; every formula in their proofs has a proof certificate that an independent checker verified.
+Theorem~\ref{thm:b1} and Propositions~\ref{prop:b1b2}, \ref{prop:yunes}, \ref{prop:b1b2nb}
+and~\ref{prop:otherstate} are computer-assisted; every formula in their proofs has a proof certificate that an independent checker verified.
 Corollary~\ref{cor:fifteen} follows from the proof of Theorem~\ref{thm:b1}, and Proposition~\ref{prop:three}
 is computer-assisted with a verified certificate. Lemma~\ref{lem:front} is proved here. The end of
 Section~\ref{sec:search} describes a computation that is not finished; nothing is claimed from it yet.
@@ -775,6 +775,95 @@ classes of the involutions that move $\Gq$, at the levels $3$, $7$ and $6$ of Ta
 strict formulas give the exact values. (3) Without
 \eqref{eq:B1w} the image condition without borders does not make the tree small: for the identity with
 \eqref{eq:B3w} and \eqref{eq:B4} random descents suggest some $10^9$ nodes at the level $13$.
+
+\paragraph{A stable state that is not the initial state.} Yun\`es admits a state other than the state of the
+general in Balzer's conditions. To cover this reading, let the first cell start in the state $\Aq$ and let
+$\Gq$ be another working state, which need not occur in the initial configuration. In this paragraph only, the
+lines are $C_n(0,\cdot)=\Aq\Lq^{n-1}$ and the half-line is $C_\infty(0,\cdot)=\Aq\Lq\Lq\cdots$; the conditions
+are \eqref{eq:B1w} for the state $\Gq$ and \eqref{eq:B2o} for an involution $I$ of
+$\{\Lq,\Gq,\Aq,\Bq\}$. The four working states now have four different roles (quiescent, initial, stable, and
+the fourth state $\Bq$), so no two names can be exchanged and the ten involutions give ten classes.
+
+The lemmas of Section~\ref{sec:method} carry over. The light-cone lemma, the agreement lemma and the
+return-chain lemma of the manuscript use of the initial configuration only that the cells $i\ge2$ are
+quiescent; they hold verbatim. The front cells satisfy $g_0=\Aq$ and $g_{t+1}=\delta(g_t,\Lq,\Lq)$, and the
+pigeonhole argument in the proof of Lemma~\ref{lem:front} applies to $g_0,\dots,g_3\in W\setminus\{\Lq\}$
+without change. The formula $F^{(N)}$ is that of Section~\ref{sec:method} with the initial row
+$\Aq\Lq\cdots$ and without clauses (F5) other than those of \eqref{eq:B1w} and \eqref{eq:B2o}, and the tree is
+that of Section~\ref{sec:method} with the exclusion (a) only: (b) does not apply, because the class has no
+wall lemma, and (c) is dropped, because the name $\Aq$ is fixed by the initial configuration. The proofs of
+Lemmas~\ref{lem:split} and~\ref{lem:levels} then go through without the choice of names, for each of the ten
+classes separately.
+
+\begin{proposition}[computer-assisted, certified]\label{prop:otherstate}
+For an involution $I$ of $\{\Lq,\Gq,\Aq,\Bq\}$ let $N^{\Aq}_I$ be the largest $N$ such that some five-state
+rule synchronizes all lines $\Aq\Lq^{n-1}$ of lengths $n=2,\dots,N$ in minimal time and satisfies
+\eqref{eq:B1w} for $\Gq$ and \eqref{eq:B2o} for $I$. Then
+\[
+N^{\Aq}_I\ \begin{cases}
+=10&\text{for }(\Aq\,\Bq),\ (\Lq\,\Aq),\ (\Lq\,\Bq),\\
+=6&\text{for }(\Gq\,\Aq),\ (\Gq\,\Bq),\ (\Lq\,\Aq)(\Gq\,\Bq),\ (\Lq\,\Bq)(\Gq\,\Aq),\\
+=2&\text{for }(\Lq\,\Gq),\ (\Lq\,\Gq)(\Aq\,\Bq),
+\end{cases}
+\]
+and $N^{\Aq}_I\ge11$ for the identity, for which the value has not been determined.
+\end{proposition}
+
+\begin{proof}
+For $(\Aq\,\Bq)$, $(\Lq\,\Aq)$ and $(\Lq\,\Bq)$ the program \texttt{gchain.py} was run with the initial
+state $\Aq$ and a time limit of $4$~s per node; Table~\ref{tab:otherstate} lists the levels at which a node
+was closed. All three searches end at the level $11$, and \texttt{gcover.py} reports that the root is covered
+in the tree of level $11$ by the nodes closed at the levels up to $11$ ($821$, $443$ and $431$ nodes). By
+Lemma~\ref{lem:levels} in the form just described, no rule of these classes synchronizes all lengths
+$2,\dots,12$. A rule of the class that synchronizes all lengths $2,\dots,11$ satisfies $F^{(N')}$ for
+$N'\le10$, so in the tree of level $10$ its half-line passes through a node closed at a level up to $10$,
+which is impossible, or through a node at which $F^{(10)}$ is satisfiable. There are one, two and one such
+nodes. For each of these four nodes $\gamma$ the formula $\MT_5(2..11)$ for the initial row $\Aq\Lq\cdots$,
+with the clauses of the class and the unit clauses of $\gamma$, has an LRAT refutation, and
+\texttt{gcover.py} reports that the nodes closed at the levels up to $10$ together with these nodes cover the
+root of the tree of level $10$ ($815$, $441$ and $431$ nodes). Hence $N^{\Aq}_I\le10$. A node at which
+$F^{(10)}$ is satisfiable carries a model, which contains the table of a rule of the class that synchronizes
+all lengths $2,\dots,10$; hence $N^{\Aq}_I=10$.
+
+For the six involutions that move $\Gq$ the formula $\MT_5(2..N)$ for the initial row $\Aq\Lq\cdots$ with the
+clauses of the class and nothing else decides: it has an LRAT refutation for $N=3$ if $I$ is $(\Lq\,\Gq)$ or
+$(\Lq\,\Gq)(\Aq\,\Bq)$ and for $N=7$ if $I$ is one of the other four, and it is satisfiable for $N=2$ and
+for $N=6$, respectively; the rules that the solver returns synchronize the lengths $2$ and $2,\dots,6$
+(direct simulation). Every refutation in this proof was verified by \texttt{lrat-check} and by
+\texttt{cake\_lpr}. For the identity, the search has $111$ nodes at which $F^{(10)}$ is satisfiable; the
+level $11$ has not been finished ($1033$ nodes closed, $355$ split and three with a model so far). At each of
+these three nodes the formula $\MT_5(2..11)$ for the initial row $\Aq\Lq\cdots$ with the clauses of the class
+has a model, and the three tables satisfy \eqref{eq:B1w} for $\Gq$ and \eqref{eq:B2o} for the identity and
+synchronize all lengths $2,\dots,11$ (conditions checked on the tables, lengths by direct simulation); this is
+the lower bound $11$.
+\end{proof}
+
+\begin{table}[ht]
+\centering\small
+\caption{The search of Proposition~\ref{prop:otherstate} for the three involutions that fix $\Gq$ and are not
+the identity; columns as in Table~\ref{tab:b1b2nb}. At the levels that are not listed the root is
+satisfiable.}\label{tab:otherstate}
+\begin{tabular}{lrrrrrrrr}
+\toprule
+$I$ & level & variables & clauses & closed & split & sat. & time & proofs\\
+\midrule
+$(\Aq\,\Bq)$ & 9 & 1280 & 89\,308 & 414 & 160 & 23 & 625 s & 2.53 GB\\
+$(\Aq\,\Bq)$ & 10 & 1536 & 121\,369 & 400 & 134 & 1 & 669 s & 2.78 GB\\
+$(\Aq\,\Bq)$ & 11 & 1840 & 160\,062 & 7 & 2 & 0 & 14 s & 0.06 GB\\
+$(\Lq\,\Aq)$ & 9 & 1280 & 89\,308 & 121 & 45 & 10 & 201 s & 0.86 GB\\
+$(\Lq\,\Aq)$ & 10 & 1536 & 121\,369 & 318 & 114 & 2 & 465 s & 2.11 GB\\
+$(\Lq\,\Aq)$ & 11 & 1840 & 160\,062 & 4 & 1 & 0 & 9 s & 0.04 GB\\
+$(\Lq\,\Bq)$ & 10 & 1536 & 121\,369 & 430 & 156 & 1 & 688 s & 2.96 GB\\
+$(\Lq\,\Bq)$ & 11 & 1840 & 160\,062 & 1 & 0 & 0 & 1 s & 0.01 GB\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent\textbf{Remark.} For the nine involutions other than the identity the values of
+Propositions~\ref{prop:b1b2nb} and~\ref{prop:otherstate} coincide: for the largest $N$ it makes no difference
+whether the stable state is the initial state of the first cell or another state. No reason for this
+coincidence is known to us; the two classes are different sets of rules, and the numbers of nodes of the two
+searches differ (Tables~\ref{tab:b1b2nb} and~\ref{tab:otherstate}).
 
 \section{A remark on the left-border lemma}\label{sec:leftborder}
 

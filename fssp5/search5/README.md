@@ -52,6 +52,7 @@ in Propositions 7.3 (12 or 13) and 7.4, (B2) alone, (B3) alone, and the problem 
 | `gcert.py` | the tree search of `gsat.py` with a certificate for every closed node: a new CaDiCaL process per node with a time limit and an LRAT proof, checked by `lrat-check` and, if `CAKELPR` names its binary, by the verified checker `cake_lpr`; a node that is not refuted in time is split. Resumable; `--recheck` rebuilds every cube formula, compares the SHA-256 digests and verifies the proofs again |
 | `gcover.py` | checks without a solver that the certified cubes of `gcert.py` are a complete case split; shares no code with `gcert.py` |
 | `nodecert.py` | certified refutation of single nodes under another formula of `gcert.py`, for example the strict formula of the lines $2,\dots,N$ at the nodes that are satisfiable at the level $N-1$ (this decides the exact maximum of a class, Proposition 7.3) |
+| `node_model.py` | a rule at a node: solves a formula of `gcert.py` (for example the strict formula of the lines $2,\dots,N$) with the units of a node, writes the table and checks it without the encoder (simulation from the initial state of `--init`, (B1) weak and (B2) without borders on the table) |
 | `gchain.py` | raises $N$ until the tree of `gcert.py` closes: a node at which the formula for $N$ is satisfiable is recorded, not split, and searched again with the formula for $N+1$ (every model of $F_{N+1}$ is a model of $F_N$, so the closed nodes of all levels together are a case split for the last level) |
 | `weakwalls.py` | redundant clauses of Lemmas 6.5 and 6.6 (weak reading); `gsat.py --wwalls`, `gcert.py --wwalls` |
 | `mstrict.py` | gap clauses of Lemma 6.3 that are sound for the strict formula of the lines $2,\dots,N$ (`gsat.py --sgap`, `gcert.py --sgap`); `--cellunit` and `--cellclause` of the two programs add a unit clause or one clause on cells of the half-line |
@@ -840,7 +841,7 @@ $N$ such that some five-state rule of this class synchronizes all lines $2,\dots
 
 | $I$ | $(A\,B)$, $(L\,A)$, $(L\,B)$ | $(G\,A)$, $(G\,B)$, $(L\,A)(G\,B)$, $(L\,B)(G\,A)$ | $(L\,G)$, $(L\,G)(A\,B)$ | identity |
 |---|---|---|---|---|
-| $N^\ast_I$ | 10 | 6 | 2 | at least 10; not decided |
+| $N^\ast_I$ | 10 | 6 | 2 | at least 11; not decided |
 
 *Proof.* As for Proposition 7.3, with `gchain.py ... --init A`. In this class the four working states are
 distinguished (quiescent, initial, stable, the fourth), so no names are exchanged and the ten involutions are
@@ -853,7 +854,12 @@ carries a rule for $2,\dots,10$. For the six involutions that move $G$ the stric
 unsatisfiable for $N=3$ and satisfiable for $N=2$ for $(L\,G)$ and $(L\,G)(A\,B)$, unsatisfiable for $N=7$ and
 satisfiable for $N=6$ for the other four (`runs/b1b2A/strict_roots.txt`). Every refutation has an LRAT proof
 verified by `lrat-check` and `cake_lpr`. For the identity the level 10 has 4597 closed and 111 satisfiable
-nodes; the level 11 is not finished. $\square$
+nodes; the level 11 is not finished (1033 closed, 355 split and three satisfiable nodes so far). At each of the
+three satisfiable nodes of the level 11 the strict formula of the lines $2,\dots,11$ has a model
+(`node_model.py 5 11 ... --b1 --b2 id --b2nb --strict --init A`), and the three tables satisfy (B1) weak for $G$
+and (B2) without borders and synchronize the lines $A\,L\cdots L$ of lengths $2,\dots,11$ (the checks of
+`node_model.py`, which do not use the encoder); one of them is `rules/stableA_b1w_b2nb_id_2-11.txt`, which
+synchronizes exactly $2,\dots,11$ among $2,\dots,60$. $\square$
 
 | $I$ | level | variables, clauses | SHA-256 of the clause lines | nodes closed | split | satisfiable | CaDiCaL time on closed nodes | proofs |
 |---|---|---|---|---|---|---|---|---|
