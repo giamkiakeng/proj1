@@ -425,8 +425,8 @@ the refutation of that node. $\square$
 
 Second checks. (1) `recheck_ct.py` rebuilds a cube formula, compares its digest with the recorded one, runs
 CaDiCaL again and has `lrat-check` and the verified checker `cake_lpr` check the new proof. This was done for
-the 36 top nodes and the 4 nodes of the fourth row (all accepted, same proof digests), and for a random sample
-of the 44,476 nodes of the subtrees (Section 9). (2) The first pass of the search (`germsat.py`, incremental
+the 36 top nodes and the 4 nodes of the fourth row (all accepted, same proof digests); the same check of a
+random sample of 600 of the 44,476 nodes of the subtrees is running (Section 9). (2) The first pass of the search (`germsat.py`, incremental
 solver, no proofs) had closed the subtrees 1 to 167 without a model (169,041 nodes, 13.2 hours of solver time)
 and had found the same single satisfiable node in the subtree 309. (3) With the formula $F_{15}$ of
 `certtree.py 15 ... --pump 15` (4100 variables, 396,586 clauses), which uses the lines up to 17, $\gamma^\ast$
