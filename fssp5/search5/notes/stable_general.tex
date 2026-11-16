@@ -18,10 +18,10 @@
 
 \noindent\textbf{Status of the statements.}
 Lemmas~\ref{lem:fire}--\ref{lem:gap}, Corollary~\ref{cor:front}, Lemmas~\ref{lem:Fsound} and~\ref{lem:split},
-Lemmas~\ref{lem:iwall} and~\ref{lem:gapweak} and Corollary~\ref{cor:gapclauses} are proved here.
-Proposition~\ref{prop:lbparity} is proved here as well.
-Propositions~\ref{prop:b1b2} and~\ref{prop:yunes} are computer-assisted; every formula in their proofs has a
-proof certificate that an independent checker verified. Section~\ref{sec:search} describes a computation that
+Lemmas~\ref{lem:iwall} and~\ref{lem:gapweak}, Corollary~\ref{cor:gapclauses} and Lemma~\ref{lem:levels} are
+proved here. Proposition~\ref{prop:lbparity} is proved here as well.
+Propositions~\ref{prop:b1b2}, \ref{prop:yunes} and~\ref{prop:b1b2nb} are computer-assisted; every formula in
+their proofs has a proof certificate that an independent checker verified. Section~\ref{sec:search} describes a computation that
 is not finished; nothing is claimed from it yet.
 
 \section{Setting}
@@ -475,6 +475,120 @@ rule in which another state $g$ is stable in the sense of \eqref{eq:B1w}, fires 
 use the initial configuration. (3) Without \eqref{eq:B4} and \eqref{eq:B2o} the class of \eqref{eq:B1w} and
 \eqref{eq:B3w} has not been decided; random descents in its search tree for the lengths $2,\dots,14$ suggest
 some $10^7$ nodes, against $3.7\cdot10^3$ nodes for the identity above.
+
+\section{A weak stable general and the image condition without borders}\label{sec:b1b2nb}
+
+Proposition~\ref{prop:yunes} uses four conditions. Two of them suffice: \eqref{eq:B1w} and \eqref{eq:B2o}.
+Nothing is assumed about the neighbourhoods that give $\Fq$, about $\delta(\Gq,v,\Gq)$, or about the
+neighbourhoods with a border. In this class there is no wall lemma (Lemma~\ref{lem:wallweak} needs
+$\delta(\Gq,\Gq,\Gq)=\Fq$), and the involution may move $\Gq$.
+
+The search uses several values of $N$. For a class without a wall lemma, whose clauses (F5) do not depend
+on $N$, write $F^{(N)}$ for the formula of Section~\ref{sec:method} with the parameter $N$, and call the tree
+of that section, with the excluded values (a) and (c), the tree of \emph{level} $N$. The half-line cells of
+the level $N'$ are an initial segment, in the order $\prec$, of those of every level $N\ge N'$. Hence, for a
+partial rule $\gamma$, the cell $c(\gamma)$ and the neighbourhood $e(\gamma)$ are the same at both levels
+whenever $c(\gamma)$ exists at the level $N'$, and the children of $\gamma$ at the level $N$ are among its
+children at the level $N'$, because (a) excludes $\Lq$ for more front cells at the higher level.
+
+\begin{lemma}[case split over several levels]\label{lem:levels}
+Let the class be invariant under exchanging the names $\Aq$ and $\Bq$ and have no wall lemma, and let
+$N\ge3$. Let $\mathcal U$ be a finite set of pairs $(\gamma,N_\gamma)$ of a partial rule $\gamma$ and an integer
+$3\le N_\gamma\le N$ such that, in the tree of level $N$, the root is covered by the set of all $\gamma$. If
+$F^{(N_\gamma)}\wedge\gamma$ is unsatisfiable for every pair $(\gamma,N_\gamma)\in\mathcal U$, then no rule of the
+class synchronizes all lengths $2,\dots,N+2$.
+\end{lemma}
+\begin{proof}
+Let $\delta$ be such a rule, with the names $\Aq$ and $\Bq$ chosen as in the proof of Lemma~\ref{lem:split}.
+By Lemma~\ref{lem:Fsound}, $\delta$ with its diagrams satisfies $F^{(N)}$, and the induction in the proof of
+Lemma~\ref{lem:split}, carried out in the tree of level $N$, yields a pair $(\gamma,N_\gamma)\in\mathcal U$ with
+$\gamma\subseteq\delta$. The rule $\delta$ synchronizes all lengths $2,\dots,N_\gamma+2$, so by
+Lemma~\ref{lem:Fsound} with $N_\gamma$ in place of $N$ it satisfies $F^{(N_\gamma)}$; it also satisfies the unit
+clauses of $\gamma$. This contradicts the unsatisfiability of $F^{(N_\gamma)}\wedge\gamma$.
+\end{proof}
+
+The program \texttt{gchain.py} produces such a set. It starts with the root at a low level. At the level $N$
+it walks the tree of level $N$ below each of its start nodes: a node $\gamma$ for which CaDiCaL refutes
+$F^{(N)}\wedge\gamma$ within the time limit, with a verified LRAT proof, is put into $\mathcal U$ as
+$(\gamma,N)$; a node for which the solver finds a model becomes a start node of the level $N+1$ and is not
+split; in the remaining case the children are treated. The search ends at the first level that has no
+start node left, and \texttt{gcover.py} then checks, in the tree of that level, that the root is covered. A
+model of $F^{(N)}\wedge\gamma$ contains the table of a rule of the class that synchronizes all lengths
+$2,\dots,N$.
+
+\begin{proposition}[computer-assisted, certified]\label{prop:b1b2nb}
+Let $I$ be an involution of $\{\Lq,\Gq,\Aq,\Bq\}$. No five-state rule that satisfies \eqref{eq:B1w} and
+\eqref{eq:B2o} for $I$ synchronizes all lengths $2,\dots,N_I+2$, where
+\[
+N_I=\begin{cases}
+13&\text{for the identity},\\
+11&\text{for }(\Aq\,\Bq),\ (\Lq\,\Aq),\ (\Lq\,\Bq),\\
+7&\text{for }(\Gq\,\Aq),\ (\Gq\,\Bq),\\
+6&\text{for }(\Lq\,\Aq)(\Gq\,\Bq),\ (\Lq\,\Bq)(\Gq\,\Aq),\\
+3&\text{for }(\Lq\,\Gq),\ (\Lq\,\Gq)(\Aq\,\Bq).
+\end{cases}
+\]
+In particular, no five-state rule that satisfies \eqref{eq:B1w} and \eqref{eq:B2o} for some involution
+synchronizes all lengths $2,\dots,15$.
+\end{proposition}
+
+\begin{proof}
+Exchanging the names $\Aq$ and $\Bq$ maps the class for $I$ onto the class for
+$(\Aq\,\Bq)\,I\,(\Aq\,\Bq)$. The classes for the identity, $(\Aq\,\Bq)$, $(\Lq\,\Gq)$ and
+$(\Lq\,\Gq)(\Aq\,\Bq)$ are invariant, and the exchange maps the classes for $(\Lq\,\Aq)$, $(\Gq\,\Aq)$ and
+$(\Lq\,\Aq)(\Gq\,\Bq)$ onto those for $(\Lq\,\Bq)$, $(\Gq\,\Bq)$ and $(\Lq\,\Bq)(\Gq\,\Aq)$. For each of the ten
+involutions \texttt{gchain.py} was run, from the level $3$ on (for the identity at the level $13$ only), with
+a time limit of $4$~s per node. Table~\ref{tab:b1b2nb} lists, for every level at which a node was closed, the
+formula and the numbers of nodes; $N'_I$ is the last level of the search for $I$. Every closed node has an
+LRAT refutation that \texttt{lrat-check} and \texttt{cake\_lpr} verified, and for every $I$
+\texttt{gcover.py} reports that the root is covered in the tree of level $N'_I$ by the nodes closed at the
+levels up to $N'_I$. Lemma~\ref{lem:levels} applies to each invariant class with $N=N'_I$. For a pair of
+classes that the exchange maps onto each other, a rule of one of them is, after the choice of names in the
+proof of Lemma~\ref{lem:split}, a rule of one of the two classes whose half-line is a path of the
+corresponding tree; so the argument of Lemma~\ref{lem:levels} applies with $N$ the larger of the two last
+levels, in the tree of that class at its own last level $N'\le N$, because the rule synchronizes all lengths
+$2,\dots,N'+2$. This gives $N_I=\max(N'_I,N'_{I'})$ for the pair $I$, $I'$.
+\end{proof}
+
+\begin{table}[ht]
+\centering\small
+\caption{The search of Proposition~\ref{prop:b1b2nb}. One row for every level at which a node was closed; at
+the lower levels the root is satisfiable. ``Sat.'' counts the nodes with a model, which are searched again
+at the next level; the time is the CaDiCaL time on the closed nodes, and the last column is the total size
+of their LRAT proofs.}\label{tab:b1b2nb}
+\begin{tabular}{lrrrrrrrr}
+\toprule
+$I$ & level & variables & clauses & closed & split & sat. & time & proofs\\
+\midrule
+identity & 13 & 2608 & 259\,620 & 12\,296 & 4213 & 0 & 20\,727 s & 102.3 GB\\
+$(\Aq\,\Bq)$ & 10 & 1536 & 121\,369 & 677 & 258 & 1 & 1090 s & 4.62 GB\\
+$(\Aq\,\Bq)$ & 11 & 1840 & 160\,062 & 4 & 1 & 0 & 8 s & 0.03 GB\\
+$(\Lq\,\Aq)$ & 9 & 1280 & 89\,308 & 115 & 50 & 12 & 193 s & 0.79 GB\\
+$(\Lq\,\Aq)$ & 10 & 1536 & 121\,369 & 190 & 67 & 0 & 290 s & 1.25 GB\\
+$(\Lq\,\Bq)$ & 9 & 1280 & 89\,308 & 32 & 15 & 7 & 58 s & 0.25 GB\\
+$(\Lq\,\Bq)$ & 10 & 1536 & 121\,369 & 218 & 81 & 2 & 382 s & 1.66 GB\\
+$(\Lq\,\Bq)$ & 11 & 1840 & 160\,062 & 26 & 10 & 0 & 39 s & 0.18 GB\\
+$(\Gq\,\Aq)$ & 7 & 896 & 42\,750 & 1 & 0 & 0 & 0.2 s & 2.1 MB\\
+$(\Gq\,\Bq)$ & 7 & 896 & 42\,750 & 1 & 0 & 0 & 0.3 s & 2.0 MB\\
+$(\Lq\,\Aq)(\Gq\,\Bq)$ & 6 & 760 & 27\,111 & 1 & 0 & 0 & 0.2 s & 1.5 MB\\
+$(\Lq\,\Bq)(\Gq\,\Aq)$ & 6 & 760 & 27\,111 & 1 & 0 & 0 & 0.1 s & 1.4 MB\\
+$(\Lq\,\Gq)$ & 3 & 528 & 3566 & 1 & 0 & 0 & $<0.1$ s & 4.8 kB\\
+$(\Lq\,\Gq)(\Aq\,\Bq)$ & 3 & 528 & 3590 & 1 & 0 & 0 & $<0.1$ s & 4.8 kB\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent\textbf{Remarks.} (1) Proposition~\ref{prop:b1b2nb} contains Proposition~\ref{prop:yunes} and, with
+the lengths up to $15$ in place of $12$, the weak case of Proposition~\ref{prop:b1b2}. In Proposition~6.6 of
+the manuscript the conditions (B3) and (B4) and the border part of the image condition can therefore be
+dropped, and (B1) can be read weakly. (2) The satisfiable nodes give lower bounds. Two rules found by the
+solver, one with \eqref{eq:B1w} and \eqref{eq:B2o} for $(\Aq\,\Bq)$ and one for $(\Lq\,\Bq)$, synchronize
+exactly the lengths $2,\dots,10$ among $2,\dots,60$ (conditions checked on the tables, lengths by direct
+simulation). The second one has $\delta(\Gq,\Gq,\Gq)\ne\Fq$, so \eqref{eq:B3w} does not follow from
+\eqref{eq:B1w} and \eqref{eq:B2o}. For the identity the rule \texttt{balzer\_noborder12} gives the lengths
+$2,\dots,12$, so the largest $N$ with a rule of the class for $2,\dots,N$ is $12$, $13$ or $14$. (3) Without
+\eqref{eq:B1w} the image condition without borders does not make the tree small: for the identity with
+\eqref{eq:B3w} and \eqref{eq:B4} random descents suggest some $10^9$ nodes at the level $13$.
 
 \section{A remark on the left-border lemma}\label{sec:leftborder}
 
