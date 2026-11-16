@@ -56,6 +56,7 @@ with a stable state other than the initial state (running), (B2) alone, (B3) alo
 | `mstrict.py` | gap clauses of Lemma 6.3 that are sound for the strict formula of the lines $2,\dots,N$ (`gsat.py --sgap`, `gcert.py --sgap`); `--cellunit` and `--cellclause` of the two programs add a unit clause or one clause on cells of the half-line |
 | `minit.py` | the lines start from `X L ... L` for another working state `X` (`gcert.py --init X`) |
 | `check_balzer.py` | which of (B1) to (B4), in their weak and strong readings and for a given involution, hold on the table of a rule; then simulation |
+| `ladder.py`, `freeset.py` | rules with (B3) in which at most $R$ of the entries that (B1) fixes are not `G`, or in which chosen entries are free (strict formula); the corresponding `--set` list for `gsat.py` and `gcert.py` |
 | `near2.py` | is there a rule for $2,\dots,N$ that differs from a given rule in at most $D$ of the transitions that it uses (strict formula, no class; the unused entries are free)? |
 | `enum_satnode.py` | enumerates the models of $F_{14}$ at the satisfiable node of the stable-general tree, up to unused table entries, and writes the formula whose refutation certifies that there are no others |
 | `check_rule_formula.py`, `check_weak_lemmas.py`, `check_wwalls_enc.py` | tests: a rule of a class that synchronizes $2,\dots,N+2$ must satisfy the formula of `gcert.py` at $N$; the statements of Lemmas 6.5, 6.6 and 6.2' on the diagrams of given rules |
@@ -234,6 +235,31 @@ Neighbourhoods of the five rules of Proposition 6.3 (`near.py`, plain formula, h
 The strict class of Section 2 has a rule for 2..11 (`rules/strict_2-11.txt`, incremental, 15 min); it fires
 early on the line 16, and so do all rules found so far in these classes on some line shortly after $N$: with
 $N\le 12$ the structure does not yet force a rule that generalizes.
+
+**Four states for comparison (16 November; solver answers on strict formulas, each in less than a second).**
+For four states every class is decided at once, and the exact maxima show which conditions cost length. The
+last column recalls what is known for five states.
+
+| class | four states: largest $N$ with a rule for $2,\dots,N$ | five states |
+|---|---|---|
+| no class | 8 (the value $N_4=8$ of the paper) | at least 14 |
+| (B3) strong; (B3) weak; first cell `G` from time 1 on | 8; 8; 8 | at least 11; 12; 12 |
+| (B4) | 7 | at least 12 with (B3) |
+| (B2) for the identity, with or without the borders | 6 | at least 11 |
+| (B1) weak, with or without (B3) | 6 | at least 13 |
+| (B1) weak and (B2) for the identity without borders | 5 | 12 or 13 (Proposition 7.3) |
+| (B1) strong | 4 | 14 or 15 (Theorem 6.4) |
+
+So with four states a stable general costs half of the length, and firing from generals or a static first
+cell costs nothing. `ladder.py K N R` asks for rules with (B3) in which at most $R$ of the entries
+$\delta(x,G,y)$ that (B1) fixes differ from $G$ (12 entries for four states, 21 for five). For four states the
+largest $N$ is 4 for $R=0$, 6 for $R=1,2,3$, 7 for $R=4$ and 8 for $R\ge5$. With chosen exceptions
+(`--free`): a general that may change when its left neighbour is quiescent ($\delta(L,G,y)$ free) gives 5, the
+same on the right ($\delta(x,G,L)$ free) gives 5, both together give 8, and so do the five entries
+$\delta(L,G,y)$ and $\delta(A,G,L)$; the border entries alone (the weak reading) give 6. In Mazoyer's six-state
+solution the general also changes only next to a quiescent cell, apart from two entries: it leaves `G` in the
+neighbourhoods $(x,G,L)$ and in $(C,G,\ast)$, $(C,G,G)$. For five states the class $R=0$ already reaches 14;
+the classes with a few exceptions are being searched for a rule beyond 14 (Section 9).
 
 ## 6. Stable generals
 
