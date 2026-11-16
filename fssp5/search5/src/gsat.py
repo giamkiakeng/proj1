@@ -50,11 +50,15 @@ ap.add_argument('--set', default='', help='class condition: transitions xyz=d, c
 ap.add_argument('--neq', default='', help='class condition: delta(x,y,z) != d for xyz=d, comma-separated (unit clauses of F)')
 ap.add_argument('--cellunit', default='', help='unit clauses on half-line cells: T,I=X;T,I=X (the cell (T, I) is in state X)')
 ap.add_argument('--cellclause', default='', help='one clause on half-line cells: T,I=X;T,I=X (at least one of the cells (T, I) is in state X)')
+ap.add_argument('--init', default='G', help='initial state of the first cell (default G); the class conditions speak about G')
 ap.add_argument('--sgap', action='store_true', help='with --strict --b1s --noghws --gstatic: gap clauses of Lemma 6.3 that are sound for the lines 2..N alone (mstrict.py)')
 a = ap.parse_args()
 k, N = a.k, a.N
 cp = a.copy or (2, 2, 3)
-M = Model(k, N, a=cp[0], s0=cp[1], mmin=cp[2], copy=bool(a.copy), wake=a.wake, margin=a.margin, period=a.period, ctheta=a.ctheta, sym=False, b1=a.b1, b1s=a.b1s, b3=a.b3, b3w=a.b3w, b4=a.b4, b2=a.b2, nogh=a.nogh, wimp=a.wimp,
+import minit
+INIT = NAMES.index(a.init)
+assert INIT == 1 or not a.nogh or (a.b1s and (a.b3 or a.b3w)), '--nogh with another initial state: only with --b1s and --b3 (the line 2 forces the first cell to G at time 1)'
+M = minit.model_class(INIT)(k, N, a=cp[0], s0=cp[1], mmin=cp[2], copy=bool(a.copy), wake=a.wake, margin=a.margin, period=a.period, ctheta=a.ctheta, sym=False, b1=a.b1, b1s=a.b1s, b3=a.b3, b3w=a.b3w, b4=a.b4, b2=a.b2, nogh=a.nogh, wimp=a.wimp,
           wgap=a.wgap, strict=a.strict, early=tuple(a.early) if a.early else None,
           extra=[int(x) for x in a.extra.split(',') if x], pump=a.pump, front1=a.front1, gstatic=a.gstatic, noghw=a.noghw, b2nb=a.b2nb)
 if a.wwalls:
@@ -110,7 +114,7 @@ def cellv(t, i):
     if i > t + 1:
         return 0
     if t == 0:
-        return 1
+        return INIT
     if i == 1 and a.nogh:
         return 1
     return val[(t, i)]
@@ -260,7 +264,7 @@ def knuth_probe(rng):
         weight *= len(openc)
         tabk[e] = v; assum.append(E.T[e][v]); maxaux = max(maxaux, v); depth += 1
 
-root_assum, root_names, mx = [], [], 1
+root_assum, root_names, mx = [], [], max(1, INIT)
 for spec in [x for x in a.prefix.split(',') if x]:
     lcr, d = spec.split('=')
     e = (code[lcr[0]], code[lcr[1]], code[lcr[2]])
