@@ -22,7 +22,8 @@ Lemmas~\ref{lem:iwall} and~\ref{lem:gapweak}, Corollary~\ref{cor:gapclauses} and
 proved here. Proposition~\ref{prop:lbparity} is proved here as well.
 Theorem~\ref{thm:b1} and Propositions~\ref{prop:b1b2}, \ref{prop:yunes} and~\ref{prop:b1b2nb} are
 computer-assisted; every formula in their proofs has a proof certificate that an independent checker verified.
-Corollary~\ref{cor:fifteen} follows from the proof of Theorem~\ref{thm:b1}. The end of
+Corollary~\ref{cor:fifteen} follows from the proof of Theorem~\ref{thm:b1}, and Proposition~\ref{prop:three}
+is computer-assisted with a verified certificate. The end of
 Section~\ref{sec:search} describes a computation that is not finished; nothing is claimed from it yet.
 
 \section{Setting}
@@ -424,6 +425,32 @@ $f_{14}=\delta(f_{13},\Lq,\Lq)\in\{f_3,f_4\}\subseteq\{\Aq,\Bq\}$. This is the c
 $\Lq$ nor $\Gq$. Finally $C_\infty(25,2)\ne\Gq$: otherwise $C_\infty(26,1)=\delta(\ast,\Gq,\Gq)=\Fq$, and this
 is a cell of the line of length $15$ at time $26<28$.
 \end{proof}
+
+\begin{proposition}[computer-assisted, certified]\label{prop:three}
+Up to the transitions that are used neither in the lines of lengths $2,\dots,14$ nor in the half-line up to
+the anti-diagonal $27$, the formula $F_{14}$ has exactly three models with
+$\delta(\Gq,\Lq,\Lq)=\Aq$. They agree on $75$ transitions and have
+\[
+\bigl(\delta(\Aq,\Aq,\Aq),\,\delta(\Gq,\Aq,\Aq)\bigr)=(\Lq,\Bq),\ (\Aq,\Aq),\ (\Aq,\Lq).
+\]
+None of them, however its remaining transitions are chosen, synchronizes the length $15$.
+\end{proposition}
+
+\begin{proof}
+A model of $F_{14}$ with $\delta(\Gq,\Lq,\Lq)=\Aq$ determines a half-line up to the anti-diagonal $27$ that is a
+path of the tree of Step~3, by the unit clauses of $F_{14}$; so it contains a node of
+$\mathcal U_{14}\cup\{\gamma^\ast\}$, and by (i) this node is $\gamma^\ast$. The models of
+$F_{14}\wedge\gamma^\ast$ were enumerated with an incremental solver: after each model, the clause that excludes
+the conjunction of the transitions used by the model (in the lines $n\le14$ and in the half-line up to the
+anti-diagonal $27$) is added; two models that agree on these transitions have the same diagrams there. After
+three models the formula is unsatisfiable: for $F_{14}\wedge\gamma^\ast$ with the three clauses ($3465$
+variables, $324\,767$ clauses) CaDiCaL gives an LRAT proof that \texttt{lrat-check} and \texttt{cake\_lpr}
+verified. The last statement is (ii).
+\end{proof}
+
+The three rules use $78$, $81$ and $80$ transitions in the lines of lengths $2,\dots,14$. With the remaining
+transitions as the solver set them, each synchronizes exactly the lengths $2,\dots,14$ among $2,\dots,120$, and
+on the line of length $15$ each has a cell in state $\Fq$ at time $26$ (direct simulation).
 
 Whether such a rule exists is being decided by the same method, applied to the formula $S_{15}$ with the
 clause $\bigvee_{i=3}^{13}[C_\infty(27-i,i)=\Gq]$, the unit clauses of Lemma~\ref{lem:wall} for $N=15$ and the

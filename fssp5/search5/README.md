@@ -436,7 +436,7 @@ lines $2,\dots,17$.
 
 **The three rules of the node $\gamma^\ast$ (certified).** Up to the table entries that are used neither in the
 lines $2,\dots,14$ nor in the half-line up to the anti-diagonal 27, the formula $F_{14}$ has exactly three
-models: `rules/stable_generals_2-14.txt`, `rules/stable_generals_2-14_b.txt` and
+models with $\delta(G,L,L)=A$ (the other models are their images under the exchange of $A$ and $B$): `rules/stable_generals_2-14.txt`, `rules/stable_generals_2-14_b.txt` and
 `rules/stable_generals_2-14_c.txt`. `enum_satnode.py` enumerates the models of $F_{14}$ with the units of
 $\gamma^\ast$: after each model the conjunction of the transitions that it uses is excluded by a clause; after
 three models the formula is unsatisfiable, and for $F_{14}$ with the 11 units and the three clauses (3465
