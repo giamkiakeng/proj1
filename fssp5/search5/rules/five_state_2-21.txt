@@ -6,6 +6,8 @@
 # (BG* gives B instead of A, LLG gives G instead of A).  It synchronizes the line 21 as well.
 # Checked by two independent simulators (simlib.py and the simulator of lns.py).  Only the 75 transitions that the
 # lines 2..21 use are listed; with these 75 fixed, no choice of the others synchronizes the line 22 (solver answer).
+# Its half-line is periodic at the left border (cells 2..t/3+2 carry the pattern AB.): by the left-border lemma of the
+# paper no rule with the 20 neighbourhoods of this half-line synchronizes the line 1540 (README, Observation 11.1).
 k 5
 * G A L
 * G G F

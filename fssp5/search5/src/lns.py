@@ -31,6 +31,8 @@ ap.add_argument('--core', type=int, default=0)
 ap.add_argument('--budget', type=int, default=200000)
 ap.add_argument('--out', default='')
 ap.add_argument('--nmin', type=int, default=2)
+ap.add_argument('--germ', type=int, default=0, help='U = the neighbourhoods of the half-line of RULE on the cells with t + i <= GERM (instead of the transitions of the lines 2..C)')
+ap.add_argument('--all', type=int, default=0, help='after the first model: enumerate up to this many further models for the same D (two models differ in a transition that the lines nmin..N use), report their tops, keep the best one')
 ap.add_argument('--phase', action='store_true', help='prefer the values of RULE on U when the solver decides a table variable (forced phases)')
 ap.add_argument('--phasecells', action='store_true', help='with --phase: also prefer the states of the diagrams of RULE for the cells of the lines and of the half-line')
 for f in ('b1', 'b1s', 'b3', 'b3w', 'b4'):
@@ -73,9 +75,9 @@ def run(tab, n, used=None):
     return False
 
 
-def top_of(tab, nmin=2):
+def top_of(tab, nmin=2, nmax=150):
     n = nmin
-    while run(tab, n):
+    while n <= nmax and run(tab, n):
         n += 1
     return n - 1
 
@@ -86,8 +88,22 @@ ref.setdefault(('L', 'L', 'L'), 'L'); ref.setdefault(('L', 'L', '*'), 'L')
 top = top_of(ref, a.nmin)
 core = a.core or top
 U = set()
-for n in range(a.nmin, core + 1):
-    assert run(ref, n, U), 'the rule does not synchronize the line %d' % n
+if a.germ:
+    L0 = a.germ + 2
+    row = ['G'] + ['L'] * (L0 - 1)
+    for t in range(0, a.germ):
+        new = []
+        for i in range(1, a.germ - t):                 # cell (t+1, i), t + 1 + i <= GERM
+            e = (row[i - 2] if i > 1 else '*', row[i - 1], row[i])
+            assert e in ref, 'the half-line of the rule is not determined up to the anti-diagonal %d (neighbourhood %s)' % (a.germ, ''.join(e))
+            U.add(e); new.append(ref[e])
+        row = new + ['L'] * (L0 - len(new))
+        if a.germ - t - 1 < 1:
+            break
+    U.discard(('L', 'L', 'L'))
+else:
+    for n in range(a.nmin, core + 1):
+        assert run(ref, n, U), 'the rule does not synchronize the line %d' % n
 N = a.N
 t0 = time.time()
 M = Model(k, N, copy=False, sym=False, strict=True, nmin=a.nmin, b1=a.b1, b1s=a.b1s, b3=a.b3, b3w=a.b3w, b4=a.b4)
@@ -122,8 +138,8 @@ if a.phase:
             if st in code and st != 'F':
                 ph += [x[j] if j == code[st] else -x[j] for j in range(k - 1)]
     S.set_phases(ph)
-print('# rule %s: synchronizes 2..%d; U = %d transitions (lines %d..%d); target: lines %d..%d; k = %d; %d variables, %d + %d clauses; built in %.0f s'
-      % (a.rule, top, len(U), a.nmin, core, a.nmin, N, k, tot.top_id, len(E.cl), len(tot.cnf.clauses), time.time() - t0), flush=True)
+print('# rule %s: synchronizes 2..%d; U = %d transitions (%s %d..%d); target: lines %d..%d; k = %d; %d variables, %d + %d clauses; built in %.0f s'
+      % (a.rule, top, len(U), 'half-line, anti-diagonals' if a.germ else 'lines', 2 if a.germ else a.nmin, a.germ if a.germ else core, a.nmin, N, k, tot.top_id, len(E.cl), len(tot.cnf.clauses), time.time() - t0), flush=True)
 found = None
 for D in dists:
     if D >= len(dl):
@@ -136,17 +152,36 @@ for D in dists:
     ans = 'SAT' if r is True else 'UNSAT' if r is False else 'BUDGET'
     print('D <= %d: %s  (%.0f s)' % (D, ans, time.time() - t1), flush=True)
     if r is True:
-        model = set(x for x in S.get_model() if x > 0)
-        tab = {}
-        for e, vs in E.T.items():
-            d = [j for j in range(k) if vs[j] in model]
-            assert len(d) == 1
-            tab[(name[e[0]], name[e[1]], name[e[2]])] = name[d[0]]
-        good = [n for n in range(2, 61) if run(tab, n)]
-        diff = sorted(''.join(e) + ':' + ref[e] + '>' + tab[e] for e in U if tab[e] != ref[e])
-        ntop = top_of(tab, a.nmin)
-        print('   simulated: synchronizes %s; distance %d on U: %s' % (good, len(diff), ' '.join(diff)), flush=True)
-        assert ntop >= N, 'the decoded table fails on a line <= N'
+        best, nmod, tops = None, 0, {}
+        while True:
+            model = set(x for x in S.get_model() if x > 0)
+            tab = {}
+            for e, vs in E.T.items():
+                d = [j for j in range(k) if vs[j] in model]
+                assert len(d) == 1
+                tab[(name[e[0]], name[e[1]], name[e[2]])] = name[d[0]]
+            diff = sorted(''.join(e) + ':' + ref[e] + '>' + tab[e] for e in U if tab[e] != ref[e])
+            ntop = top_of(tab, a.nmin)
+            assert ntop >= N, 'the decoded table fails on a line <= N'
+            usedN = set()
+            for n in range(a.nmin, N + 1):
+                run(tab, n, usedN)
+            nmod += 1; tops[ntop] = tops.get(ntop, 0) + 1
+            if nmod == 1 or a.all:
+                print('   model %d: synchronizes %d..%d and %s; distance %d on U: %s' % (nmod, a.nmin, ntop, [n for n in range(ntop + 1, 61) if run(tab, n)], len(diff), ' '.join(diff)), flush=True)
+            if best is None or ntop > best[0]:
+                best = (ntop, dict(tab))
+            if nmod > a.all:
+                break
+            S.add_clause([-E.T[(code[e[0]], code[e[1]], code[e[2]])][code[tab[e]]] for e in usedN])
+            S.conf_budget(a.budget)
+            r2 = S.solve_limited(assumptions=assum)
+            if r2 is not True:
+                print('   enumeration ends: %s after %d models' % ('no further model' if r2 is False else 'BUDGET', nmod), flush=True)
+                break
+        if a.all:
+            print('   tops of the %d models: %s' % (nmod, dict(sorted(tops.items()))), flush=True)
+        ntop, tab = best
         used = set()
         for n in range(a.nmin, ntop + 1):
             run(tab, n, used)

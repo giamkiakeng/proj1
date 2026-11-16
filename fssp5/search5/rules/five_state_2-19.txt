@@ -2,6 +2,8 @@
 # it fires from GGG, *GG, GG* only.  Found on 16 November by random sampling (fscount.c, class -b3s, seed 1);
 # checked by two independent simulators.  Only the 69 transitions that the lines 2..19 use are listed; no choice of
 # the others synchronizes the line 20.
+# Its half-line is periodic at the left border (cells 2..t/3+2 carry the pattern AB.): by the left-border lemma of the
+# paper no rule with the 20 neighbourhoods of this half-line synchronizes the line 1540 (README, Observation 11.1).
 k 5
 * G A L
 * G G F

@@ -24,7 +24,7 @@ checker verified, and the completeness of every case split was checked by a prog
 | No five-state rule is a local image of Mazoyer's six-state solution for windows up to radius 2, or radius 1 with one step of memory | certified | Section 4 |
 | Consequences of a stable general: firing from three generals only, walls, gap bounds; the same in the weak reading | proved by hand | Lemmas 6.1 to 6.3, 6.5, 6.6 |
 | The bound $(k-1)^{2s}\ell$ of the left-border lemma is attained for $s=1$ and is not attained for odd $k$ and $s\ge2$ | solver answer with simulated rules; proved by hand | Observation 8.1, Proposition 8.2 |
-| **A five-state rule that synchronizes all lines $2,\dots,21$** (the tree searches with a SAT solver had reached $2,\dots,14$); it fires from generals only and begins like a 2/3 division | a rule for $2,\dots,19$ found by random sampling, then a neighbourhood search with a SAT solver around it; checked by two simulators | Section 10 |
+| **A five-state rule that synchronizes all lines $2,\dots,21$** (the tree searches with a SAT solver had reached $2,\dots,14$); it fires from generals only. Its half-line is periodic at the left border, so the left-border lemma of the paper applies: no rule with this half-line synchronizes the line of length 1540, and none is a solution | a rule for $2,\dots,19$ found by random sampling, then a neighbourhood search with a SAT solver around it; checked by two simulators | Section 10 |
 | The numbers of five-state rules for the lines $2,\dots,n$: about $10^{24}$ at $n=7$ without restriction, falling by a factor 10 to 100 per line afterwards | estimates by sequential importance sampling, calibrated on exact counts | Section 10 |
 | Four states: no rule synchronizes all lines $3,\dots,9$ or all lines $4,\dots,9$ (42 and 399 rules reach the length 8), but 36 rules synchronize $5,\dots,9$ and none $5,\dots,10$; the numbers of four-state rules of every length range and class; no four-state rule with a stable general synchronizes both 6 and 7 | exhaustive enumeration without a solver | Section 5 |
 | Sizes of the search trees of other classes, among them the open problem itself ($3\cdot10^{18}$ nodes for the lines up to 15) | estimates by random descents | Section 9 |
@@ -67,6 +67,8 @@ in Propositions 7.3 (12 or 13) and 7.4, (B2) alone, (B3) alone, and the problem 
 | `fsdfs2.c` | `fsdfs.c` with conflict-directed backjumping: every cell carries the set of transitions on which it depends, a failure returns the set that causes it, and a branching whose transition is not in that set is left at once. The number of rules for $n_0,\dots,N$ is that of `fsdfs.c` (compared for four states, all $N\le9$, and for the five-state cases of Section 5); 3 to 5 times fewer nodes. Options `-cell`, `-cellany` for conditions on half-line cells |
 | `fscount.c` | estimates of the numbers $c_n$ of rules for the lines $n_0,\dots,n$ by sequential importance sampling with resampling (a pool of rules per level, random completions of the next line; `-exh L B P`: complete expansion of a pool of at most $P$ rules from the level $L$ on, at most $B$ nodes per rule; `-ufin`: only rules whose lines are in one auxiliary state in the cells $2,\dots,n-1$ at time $2n-4$; `-DMAXK=5` at compile time saves memory); the rules that survive in the pools are rules for $n_0,\dots,n$ (`-dump`). `count_scan.py` simulates the dumped rules, `family_max.py` enumerates all completions of the core of a dumped rule (Section 10) |
 | `lns.py`, `climb.py` | neighbourhood search around a rule with a SAT solver: a rule for the lines $2,\dots,N$ that differs from the given rule in at most $D$ of the transitions that it uses on the lines $2,\dots,C$, all other transitions free (the formula of `mcopy.py` for the lines alone, a totalizer for the distance, one incremental solver for $D=D_1,D_2,\dots$); `climb.py` repeats this for the targets top+1 with all $C$ (Section 10) |
+| `lns2.py`, `farm.py` | the same neighbourhood, searched by a complete case split over the changed transitions (leaves as assumptions of one incremental solver; nearly exhaustive in minutes where `lns.py` runs out of budget); `farm.py` runs these searches best-first over a pool of rules (Section 11) |
+| `germstat.py`, `leftbar.py` | the half-line of a rule: the anti-diagonal up to which the listed transitions determine it, its germ, and a wedge at the left border on which it is periodic; `leftbar.py` finds the least length to which the left-border lemma of the paper (Lemma 4.1) applies (Section 11) |
 | `near2.py` | is there a rule for $2,\dots,N$ that differs from a given rule in at most $D$ of the transitions that it uses (strict formula, no class; the unused entries are free)? |
 | `enum_satnode.py` | enumerates the models of $F_{14}$ at the satisfiable node of the stable-general tree, up to unused table entries, and writes the formula whose refutation certifies that there are no others |
 | `check_rule_formula.py`, `check_weak_lemmas.py`, `check_wwalls_enc.py` | tests: a rule of a class that synchronizes $2,\dots,N+2$ must satisfy the formula of `gcert.py` at $N$; the statements of Lemmas 6.5, 6.6 and 6.2' on the diagrams of given rules |
@@ -1259,9 +1261,10 @@ the sampler). Its family ends there: with the 52 transitions that it uses in the
 enumeration of all completions (`fsdfs 5 40 -b3s -set ... -max`, $10^9$ nodes) reaches the line 19 and no
 further. Each run finds another family. All of them finish in the same way: two or three steps before the end
 the line is in a uniform state (`A` or `B` in all cells but the first or the last), then in `G`, then it fires.
-The rule for $2,\dots,19$ builds blocks `AB.` from the left, three cells every six steps, and the echo of the
-right end meets their boundary at two thirds of the line: this is the first step of Mazoyer's division, found
-by a sampler that knows nothing about it. Its general is not stable (ten of the entries $\delta(x,G,y)$ that
+The rule for $2,\dots,19$ builds blocks `AB.` from the left, one block of three cells every nine steps, and the
+echo of the right end meets their boundary near the middle of the line: a signal of speed $1/3$ and the first
+step of the halving of Waksman's and Balzer's solutions, found by a sampler that knows nothing about it. (An
+earlier version of this paragraph said six steps and two thirds; that was a misreading of the diagram.) Its general is not stable (ten of the entries $\delta(x,G,y)$ that
 (B1) fixes are not `G`).
 
 **Variants of the sampler, and other numbers of states.** Two changes were tried and neither moves the
@@ -1299,7 +1302,7 @@ The model for $C=9$, $D=2$ is `rules/five_state_2-21.txt` (75 transitions). It c
 lines $2,\dots,9$ (`BG*` gives `B` instead of `A`, `LLG` gives `G` instead of `A`; a third one, `LG*`, is no longer used) and ten of the 19 other
 transitions of the old rule, and it **synchronizes every line of length $2,\dots,21$** (checked by `simlib.py`
 and by the simulator of `lns.py`; the formula asked for $2,\dots,20$ only). The command of its header
-reproduces it in about a minute. Its diagrams keep the blocks `AB.` and the meeting at two thirds; for
+reproduces it in about a minute. Its diagrams keep the blocks `AB.` and the meeting near the middle; for
 $10\le n\le21$ the row at time $2n-6$ has generals exactly at the cells $5,9,13,\dots$ below $n$, the row at
 $2n-4$ is uniform, the row at $2n-3$ consists of generals.
 
@@ -1307,9 +1310,120 @@ For the target 22 around the new rule (`climb.py`, budget $4\cdot10^5$ conflicts
 are negative: unsatisfiable for $D\le4$ with $C=16,\dots,21$, for $D\le3$ with $C=14,15$, for $D\le2$ with
 $C=12,13$, for $D\le1$ with $C=9,10,11$ and for $D=0$ with $C=8$; the next $D$ is not decided in each case, and
 neither is $D=0$ for $C=6,7$. In particular no choice of the transitions that the lines $2,\dots,21$ do not use
-synchronizes the line 22. Larger budgets are running.
+synchronizes the line 22. With four times the budget there was still no model for $C\ge8$. Section 11
+continues with a complete case split of these neighbourhoods.
 
 Status: the rules are checked by simulation; the counts are estimates; the unsatisfiability statements of this
-section are solver answers without proofs. Nothing here is a proof, and nothing suggests that these rules are
-restrictions of a solution: they are rules for an initial segment of lengths.
+section are solver answers without proofs. Nothing here is a proof. These rules are rules for an initial segment
+of lengths, and Section 11 shows that they are not restrictions of a solution.
+
+## 11. The half-lines of the rules for long ranges
+
+The half-line $C_\infty$ of a rule is the diagram of the line that is infinite to the right; the line of length
+$n$ agrees with it on the cells with $t+i\le2n-2$ (agreement lemma of the paper). The set of the neighbourhoods
+that the half-line uses is the *germ* of the rule (Section 6.4 of the paper). Two results of the paper speak
+about the half-line of a solution alone: it is not periodic in time and in space on a wedge $\{(t,i):s\le
+i\le\alpha t\}$ at the left border (Theorem 4.2), and, in finite form, if the two anti-diagonals $t+i=2n-2$ and
+$t+i=2n-3$ are $\ell$-periodic from the cell $s$ to the cell $Y$ with $Y-s>(k-1)^{2s}\ell$, then the line $n$ is
+not synchronized (Lemma 4.1). `germstat.py` computes the half-line of a rule as far as the listed transitions
+determine it and looks for such a wedge; `leftbar.py` looks for the least $n$ to which the lemma applies.
+
+**The rules for 2..19 and 2..21 have a periodic half-line.** Both rules have the same half-line. It uses 20
+neighbourhoods besides `LLL`,
+
+    *GA>L *GL>G *LA>G ABA>B ABL>B ALA>B ALB>L ALL>B BAB>L BAL>A
+    BLA>L BLB>L BLL>A GAB>A GAL>A GLL>A LAB>A LAL>A LBA>B LBL>A
+
+and no other on the cells with $t+i\le3100$. The first cell alternates between `G` and `L`; the cells
+$2\le i\le t/3+2$ carry the constant pattern `AB.` of period 3. So the half-line is periodic on a wedge, and:
+
+> **Observation 11.1.** No five-state rule that contains these 20 transitions synchronizes the line of length
+> 1540 in minimal time. In particular the rules for $2,\dots,19$ and $2,\dots,21$ are not restrictions of a
+> minimal-time solution.
+
+Proof: Lemma 4.1 with $k=5$, $s=2$, $\ell=3$, $n=1540$ and $Y=771$. A rule with these transitions has this
+half-line on $t+i\le3078$; the word $y\mapsto C_\infty(3078-y,y)$ is `ABL` repeated on $2\le y\le771$, the word
+$y\mapsto C_\infty(3077-y,y)$ is `ABL` repeated on $2\le y\le770$, and $Y-s=769>768=4^4\cdot3$. (`leftbar.py
+rules/five_state_2-21.txt 3100 2 6`; the two words were checked again with the simulator `simlib.py`, for both
+rule files. 1540 is the least $n$ for $s=2$, $\ell=3$; the lemma does not apply with $s=1$.) The bound is far
+from the truth: the searches below find no rule with this half-line for $2,\dots,22$.
+
+**All sampled rules.** The dumps of the sampler hold 5010 rules (not all distinct) for $2,\dots,n$ with $14\le n\le19$. For 1812
+of them the listed transitions determine the half-line on $t+i\le400$. They have seven distinct germs, and each
+of the seven is periodic with period $p$ in time and $q$ in space on the wedge $s\le i\le t/4$, as far as
+simulated ($t+i\le400$). The sampler can be restricted to the family of a germ (`fscount ... -set` with the
+transitions of the germ); the last column is the result of four runs with $M=3\cdot10^6$ (34 runs for the first
+germ, 14 of them with $M=6\cdot10^6$).
+
+| germ | neighbourhoods | $(s,p,q)$ | rules in the dumps | longest range in the dumps | longest ranges, sampler restricted to the germ |
+|---|---|---|---|---|---|
+| 0 (the record rules) | 20 | (2, 1, 3) | 1000 | $2,\dots,19$ | $2,\dots,21$ in 20 runs, $2,\dots,19$ in 14 runs |
+| 1 | 39 | (8, 2, 4) | 4 | $2,\dots,18$ | $2,\dots,18$ in all runs |
+| 2 | 40 | (3, 2, 7) | 6 | $2,\dots,18$ | $2,\dots,18$ in all runs |
+| 3 | 35 | (8, 2, 4) | 200 | $2,\dots,18$ | $2,\dots,18$ in all runs |
+| 4 | 34 | (5, 4, 8) | 2 | $2,\dots,17$ | $2,\dots,17$ in all runs |
+| 5 | 22 | (2, 2, 6) | 599 | $2,\dots,16$ | $2,\dots,18$ in three runs, $2,\dots,16$ in one |
+| 6 | 26 | (2, 2, 6) | 1 | $2,\dots,15$ | up to 16, 15, 15 and 14 in the four runs |
+
+(The germs are listed in `runs/sampling/closed_germs.txt`; `germstat.py` recomputes the classification from a
+dump.) For the other 3198 rules the lines $2,\dots,n$ do not determine the half-line beyond the anti-diagonal $2n+c$ with
+$c\le5$: the half-line keeps meeting new neighbourhoods. So the rules that the sampler finds are of two kinds:
+rules with a simple, periodic half-line, which reach the longest ranges and which the left-border barrier
+excludes as solutions (for germ 0 by Observation 11.1, for the others under the assumption that the observed
+periodicity continues), and rules whose half-line is not yet determined. No run produced a rule with a
+determined half-line that is not periodic. Inside the family of germ 0, sampling alone reaches $2,\dots,21$ in
+most runs (14 distinct rules for $2,\dots,21$ in the first six runs, `runs/sampling/germ0_rules_2-21.txt`; they
+differ from the rule of Section 10 in 19 to 28 transitions), and never $2,\dots,22$: no run ends with rules for
+$2,\dots,20$ only, and none has a rule for 22.
+
+**Half-lines that are not periodic.** The paper has five-state rules for $2,\dots,14$ whose half-lines are not
+periodic on the simulated range, and which Lemma 4.1 does not exclude there (Section 6.3 of the paper). Their
+germs are small: 16 neighbourhoods for $\delta_{14}$ (above the first three cells it is a pattern over `L`, `B`
+that looks chaotic), 15 for $\delta_{14}^{\mathrm c}$. The sampler restricted to these germs gets less far than
+the SAT search that found the rules: with the germ of $\delta_{14}^{\mathrm c}$ and firing from generals only, of
+eight runs four end with rules for $2,\dots,12$, three for $2,\dots,13$ and one for $2,\dots,14$; with the germ
+of $\delta_{14}$ and no restriction, two end with $2,\dots,10$, five with $2,\dots,11$ and one with
+$2,\dots,12$. Long ranges are easy with a periodic half-line, which cannot belong to a solution, and hard with
+the non-periodic half-lines that we know.
+
+**A complete case split of a neighbourhood** (`lns2.py`). The neighbourhood of Section 10 (at most $D$ changes
+among the transitions $U_C$ of the lines $2,\dots,C$) can be searched without leaving the choice of the changes
+to the solver. The lines $2,\dots,C$ are simulated in this order; the first undefined transition of $U_C$ gets
+its old value or, while the number of changes stays at most $D$, another value; a line that fails ends the
+branch, and a line that needs a transition outside $U_C$ is left to the solver. Every leaf is a partial
+assignment of $U_C$; one incremental solver gets the leaves as assumptions, together with the bound $D$ on the
+total number of changes. The leaves are a complete case split of the neighbourhood. Most leaves are refuted
+without a conflict, so that neighbourhoods which the first method did not decide are nearly exhausted in
+minutes:
+
+| centre, target | $C$, $D$ | leaves | unsatisfiable | satisfiable | not decided (conflict budget) |
+|---|---|---|---|---|---|
+| rule for $2,\dots,19$, target 20 | 9, 2 | 3570 | 3562 | 1 (the rule for $2,\dots,21$) | 7 (50,000) |
+| rule for $2,\dots,19$, target 22 | 9, 2 | 3570 | 3562 | 0 | 8 (50,000) |
+| rule for $2,\dots,21$, target 22 | 9, 2 | 4003 | 3988 | 0 | 15 (50,000) |
+| | 12, 2 | 3703 | 3703 | 0 | 0 |
+| | 12, 3 | 71,339 | 71,338 | 0 | 1 (50,000) |
+| | 9, 3 | 73,699 | 73,447 | 0 | 252 (3000) |
+| | 10, 3 | 83,630 | 83,480 | 0 | 150 (3000) |
+| | 11, 3 | 85,055 | 84,907 | 0 | 148 (3000) |
+
+The same split with $C=12$, $D\le3$ around each of the 14 other rules for $2,\dots,21$ of germ 0 has no
+satisfiable leaf either (between 4 and 68 leaves not decided with 3000 conflicts each; `farm.py` runs such
+searches best-first over a pool of rules). The leaves that are not decided are those in which a change makes a
+short line leave the old transitions early; they are families of their own.
+
+**Calibration: can these tools find a solution that exists?** Mazoyer's six-state solution uses 117 transitions
+on the lines $3,\dots,80$, of which 97 occur on the lines $3,\dots,12$ and 15 more on the lines $13,\dots,20$.
+With the 97 transitions fixed (`lns.py mazoyer6.txt 20 --k 6 --nmin 3 --core 12 --dist 0`), the solver needs
+672 s to find a table for the lines $3,\dots,20$, and the table that it finds is not Mazoyer's: it agrees with
+it on 10 of the 15 new transitions and synchronizes no line beyond 20. The enumeration without a solver
+(`fsdfs 6 40 -nmin 3 -nosym -set ... -max`) finds a rule for $3,\dots,16$ after $1.3\cdot10^6$ nodes and is
+still at the line 16 after $1.1\cdot10^{10}$ nodes. So even with four fifths of a solution given, neither tool
+recovers the rest from the lines up to 20: the family contains too many rules for an initial segment. That
+these tools do not extend a five-state rule therefore says nothing about the existence of a five-state
+solution, in either direction.
+
+Status of this section: Observation 11.1 is a proof (Lemma 4.1 of the paper plus a finite simulation that two
+programs agree on). The periodicity of the germs 1 to 6 is an observation on $t+i\le400$. The entries of the
+tables are solver answers or sampling results.
 
