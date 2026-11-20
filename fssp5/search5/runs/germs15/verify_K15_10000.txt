@@ -1,0 +1,9 @@
+1 REFUTED n=2563 s=2 L=5 Y=1283: confirmed
+2 REFUTED n=2563 s=2 L=5 Y=1283: confirmed
+3 REFUTED n=2563 s=2 L=5 Y=1283: confirmed
+4 REFUTED n=2563 s=2 L=5 Y=1283: confirmed
+5 REFUTED n=2564 s=2 L=5 Y=1283: confirmed
+6 REFUTED n=2564 s=2 L=5 Y=1283: confirmed
+8 REFUTED n=2565 s=2 L=5 Y=1284: confirmed
+9 REFUTED n=2307 s=2 L=6 Y=1539: confirmed
+SUMMARY confirmed 8, not confirmed 0

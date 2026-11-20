@@ -69,6 +69,7 @@ in Propositions 7.3 (12 or 13) and 7.4, (B2) alone, (B3) alone, and the problem 
 | `lns.py`, `climb.py` | neighbourhood search around a rule with a SAT solver: a rule for the lines $2,\dots,N$ that differs from the given rule in at most $D$ of the transitions that it uses on the lines $2,\dots,C$, all other transitions free (the formula of `mcopy.py` for the lines alone, a totalizer for the distance, one incremental solver for $D=D_1,D_2,\dots$); `climb.py` repeats this for the targets top+1 with all $C$ (Section 10) |
 | `lns2.py`, `farm.py` | the same neighbourhood, searched by a complete case split over the changed transitions (leaves as assumptions of one incremental solver; nearly exhaustive in minutes where `lns.py` runs out of budget); `farm.py` runs these searches best-first over a pool of rules (Section 11) |
 | `germstat.py`, `leftbar.py` | the half-line of a rule: the anti-diagonal up to which the listed transitions determine it, its germ, and a wedge at the left border on which it is periodic; `leftbar.py` finds the least length to which the left-border lemma of the paper (Lemma 4.1) applies (Section 11) |
+| `verify_ext.py`, `trisplit.py` | `verify_ext.py`: an independent check (numpy) of every refutation that `germext` of the paper's supplement reports, by Lemma 4.1 or by a pumping pair; `trisplit.py`: tree search for a germ whose half-line is fixed (the formulas of `gfix.py` of the supplement), splitting on the free transitions in the order in which the lines need them, with one incremental solver and a conflict budget per node, and a random-probe estimate of the tree size (Section 12) |
 | `near2.py` | is there a rule for $2,\dots,N$ that differs from a given rule in at most $D$ of the transitions that it uses (strict formula, no class; the unused entries are free)? |
 | `enum_satnode.py` | enumerates the models of $F_{14}$ at the satisfiable node of the stable-general tree, up to unused table entries, and writes the formula whose refutation certifies that there are no others |
 | `check_rule_formula.py`, `check_weak_lemmas.py`, `check_wwalls_enc.py` | tests: a rule of a class that synchronizes $2,\dots,N+2$ must satisfy the formula of `gcert.py` at $N$; the statements of Lemmas 6.5, 6.6 and 6.2' on the diagrams of given rules |
@@ -1426,4 +1427,52 @@ solution, in either direction.
 Status of this section: Observation 11.1 is a proof (Lemma 4.1 of the paper plus a finite simulation that two
 programs agree on). The periodicity of the germs 1 to 6 is an observation on $t+i\le400$. The entries of the
 tables are solver answers or sampling results.
+
+## 12. Half-lines of complexity 15 and 16 (beyond Proposition 6.4 of the paper)
+
+Proposition 6.4 of the paper: every five-state minimal-time solution $\delta$ uses at least 15 neighbourhoods besides
+`LLL` on the cells of its half-line with $t+i\le78$ ($c_{78}(\delta)\ge15$). The same pipeline was run for the germs
+with at most 15 and at most 16 neighbourhoods, with the programs of the supplement (`germdfs`, `germinc.py`, `germext`)
+and the same parameters ($M=78$, pumping pairs up to 40). The data are in `runs/germs15/`.
+
+| step | complexity $\le15$ | complexity $\le16$ |
+|---|---|---|
+| germs (`germdfs 5 78 K 40`; $K=14$ gives the paper's 244) | 1635 | 9787 |
+| refuted by the lines $2,\dots,10$ (`germinc.py ... 10 78`) | 1500 | 8824 |
+| refuted by Lemma 4.1 or a pumping pair, half-line extended to $t+i\le3300$ (`germext 5 3300 3 12`) | 123 + 2 | 832 + 16 |
+| refuted by Lemma 4.1, extension to $t+i\le10000$ (`germext 5 10000 3 24 800`) | 8 | 81 |
+| remaining | **2** | 33 closed, 1 open |
+
+The refutations by Lemma 4.1 use $s\le2$, periods $\ell\le6$ and lengths up to $n=2565$; the two pumping failures are
+the pairs $(45,77)$ and $(77,109)$. Every one of these 135 claims for complexity $\le15$ was checked again by
+`verify_ext.py`, which simulates the half-line from the germ alone and shares no code with `germext`
+(`verify_K15_*.txt`; it rejects altered claims). The two remaining germs are exactly the germs of
+$\delta_{14}^{\mathrm c}$ and $\delta_{14}^{\mathrm d}$ (`K15_rem2.txt`), the two rules of the paper with
+$c_{78}=15$ that synchronize $2,\dots,14$. Hence:
+
+> **Observation 12.1.** If $\delta$ is a five-state minimal-time solution with $c_{78}(\delta)=15$, then on the
+> cells of its half-line with $t+i\le78$ it has the germ of $\delta_{14}^{\mathrm c}$ or the germ of
+> $\delta_{14}^{\mathrm d}$.
+
+Status: solver answers (the 1500 refutations by the lines $2,\dots,10$; the paper certified the same kind of statement
+for 230 germs with one LRAT proof, `germcert.py`, which can be done here as well) plus exact finite simulations
+checked by two programs.
+
+**The two remaining germs.** Both germs determine the half-line on every cell that was simulated ($t+i\le10000$), and
+both half-lines look chaotic: triangles of random sizes, over $\{\mathsf L,\mathsf A,\mathsf G\}$ and
+$\{\mathsf L,\mathsf A,\mathsf B\}$, with no periodic stretch for Lemma 4.1 ($s\le3$, $\ell\le24$) and no pumping
+failure for $n<n'\le800$. So only the lines can exclude them. With the half-line fixed, the formula for the lines
+$2,\dots,15$ (`gfix.py GERM 5 full:2-15`) has 2,635 variables and 79 free transitions. It is not decided by Kissat in
+10 minutes for either germ, nor by Kissat in 30 minutes with the right-end cones, the first 11 rows and the first 3
+chains of the lines $16,\dots,60$ added (50,887 variables), nor by Kissat and CaDiCaL in 50 minutes on the larger
+encoding of `germcert.py`. A tree search is running (`trisplit.py GERM 15 --budget 5000`): after one hour about
+11,000 nodes for each germ, 80% of them closed by the solver; a random-probe estimate puts the tree at $10^4$ to
+$10^7$ nodes (mean $9\cdot10^5$, depth about 24), so the outcome may take days. If both trees close, every
+five-state minimal-time solution has $c_{78}\ge16$.
+
+**Complexity 16.** Besides $\delta_{14}^{\mathrm c}$ and $\delta_{14}^{\mathrm d}$, the 34 remaining germs are the
+germs of $\delta_{14}$ and $\delta_{14}^{\mathrm b}$, 29 other germs with 16 neighbourhoods whose half-lines are
+determined up to $t+i=10000$, and one germ whose half-line leaves the germ at $t+i=94$. The lines $2,\dots,12$ refute 6
+of the 34 (27 satisfiable, 1 not decided with $10^6$ conflicts); the lines $2,\dots,13$ refute 1 of the next 28
+(14 satisfiable, 13 not decided). Complexity 16 is therefore a long way off with these methods.
 
