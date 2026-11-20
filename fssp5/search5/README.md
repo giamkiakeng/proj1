@@ -1470,8 +1470,8 @@ encoding of `germcert.py`. A tree search is running (`trisplit.py GERM 15 --budg
 $10^7$ nodes (mean $9\cdot10^5$, depth about 24), so the outcome may take days. If both trees close, every
 five-state minimal-time solution has $c_{78}\ge16$.
 
-**Complexity 16.** Besides $\delta_{14}^{\mathrm c}$ and $\delta_{14}^{\mathrm d}$, the 34 remaining germs are the
-germs of $\delta_{14}$ and $\delta_{14}^{\mathrm b}$, 29 other germs with 16 neighbourhoods whose half-lines are
+**Complexity 16.** The 34 remaining germs are those of $\delta_{14}^{\mathrm c}$ and $\delta_{14}^{\mathrm d}$,
+those of $\delta_{14}$ and $\delta_{14}^{\mathrm b}$, 29 other germs with 16 neighbourhoods whose half-lines are
 determined up to $t+i=10000$, and one germ whose half-line leaves the germ at $t+i=94$. The lines $2,\dots,12$ refute 6
 of the 34 (27 satisfiable, 1 not decided with $10^6$ conflicts); the lines $2,\dots,13$ refute 1 of the next 28
 (14 satisfiable, 13 not decided). Complexity 16 is therefore a long way off with these methods.
