@@ -12,6 +12,7 @@ restart the lines of FILE are reused:
     deterministic, so a proper subset of a closed cube that is a node of the tree is an ancestor of that cube);
   * every other node is solved.
 A truncated last line of FILE (a crash while writing) is cut off before anything is appended.
+--extra FILE2 (repeatable): further closed nodes ('U cube' lines, for example of helper.py); FILE2 is only read.
 Since UNSAT under a cube does not depend on the budget, and a stronger formula keeps every UNSAT cube UNSAT, a restart
 may use another budget or further specs.
 
@@ -37,6 +38,7 @@ ap.add_argument('--order', default='up')
 ap.add_argument('--cubes', required=True)
 ap.add_argument('--workers', type=int, default=2)
 ap.add_argument('--report', type=int, default=120, help='seconds between progress lines')
+ap.add_argument('--extra', action='append', default=[], help='further files whose U lines are closed nodes (read only)')
 a = ap.parse_args()
 
 germ = gfix.parse_germ(a.germfile)
@@ -82,10 +84,22 @@ def split_var(fixed):
     return 'ok'
 
 
-def worker(conn):
+def worker(conn, others):
+    # close the master's ends of the pipes inherited by fork, so that the death of the master ends recv() with EOFError;
+    # and leave if the master is gone (re-parented)
+    for c in others:
+        c.close()
+    master = os.getppid()
     S = Solver(name='cadical195', bootstrap_with=E.cls)
     while True:
-        msg = conn.recv()
+        if not conn.poll(10):
+            if os.getppid() != master:
+                break
+            continue
+        try:
+            msg = conn.recv()
+        except EOFError:
+            break
         if msg is None:
             break
         key, assum, nobudget = msg
@@ -115,6 +129,11 @@ if os.path.exists(a.cubes):
             U.add(key)
         elif tag == 'S':
             SPL.add(key)
+for fn in a.extra:
+    if os.path.exists(fn):
+        for ln in open(fn):
+            if ln.startswith('U ') and ln.endswith('\n'):
+                U.add(ln[2:].rstrip('\n'))
 ULIST = sorted(U)
 INDEX = {}
 for j, k in enumerate(ULIST):
@@ -150,7 +169,7 @@ ctx = mp.get_context('fork')
 conns, procs = [], []
 for w in range(W):
     p_conn, c_conn = ctx.Pipe()
-    p = ctx.Process(target=worker, args=(c_conn,), daemon=True)
+    p = ctx.Process(target=worker, args=(c_conn, conns + [p_conn]), daemon=True)
     p.start()
     conns.append(p_conn); procs.append(p)
 stacks = [[] for _ in range(W)]
