@@ -1,0 +1,21 @@
+Certificate for the germs of complexity <= 15 refuted by the lines 2..10 (README, Section 12)
+=============================================================================================
+
+The same construction as results/germs/CERTIFICATES.txt of the paper's supplement (Proposition 6.4): the
+completion test of germinc.py for the lengths 2..10 (half-line to anti-diagonal 78, pumping pairs to 39, no
+symmetry breaking), one formula with a selector variable per germ (src/germcert.py of the supplement).  The formula
+is unsatisfiable iff every germ of the list is refuted.
+
+1500 germs (the UNSATISFIABLE lines of K15_n10.log.gz) = K15_refuted10.txt.gz; together with the 135 germs of
+K15_surv10.txt they are exactly the 1635 germs of germs_K15.txt.gz.
+  zcat K15_refuted10.txt.gz > K15_refuted10.txt
+  python3 ../../../paper/supplementary/src/germcert.py K15_refuted10.txt 10 k15_n10
+  K15_refuted10.txt sha256 40336a6d41803283b714ac313ac76d4c0561aa437f24db1c7d86f10da60188c5
+  k15_n10.cnf       sha256 c4a04668ae93e183de89816c62149f4c37cc086afb11e4ad34b5599bf169b5f2  (15.7 MB)
+  k15_n10.lrat      sha256 feedcde00d3541154e3fef55d61689e82bfcac9fcc191b0f0e7fb6e936460ec1  (139 MB, not stored)
+  CaDiCaL 3.0.1: s UNSATISFIABLE in 24.0 s; lrat-check (drat-trim): VERIFIED in 2.1 s;
+  cake_lpr (verified checker, CakeML): s VERIFIED UNSAT in 8 s.
+
+The LRAT file is regenerated deterministically by the command above (CaDiCaL 3.0.1).  The 135 survivors are handled
+by germext and verify_ext.py (K15_ext3300.txt, K15_rem10_ext10000.txt, verify_K15_*.txt), except the germs of
+delta14c and delta14d (K15_rem2.txt).
