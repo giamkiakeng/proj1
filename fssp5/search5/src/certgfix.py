@@ -19,8 +19,9 @@ rebuilt as F plus unit clauses.
    needed neighbourhood that is not fixed).
 2. Every target not yet VERIFIED in OUTFILE is certified: CaDiCaL refutes F plus the units of the cube with an LRAT
    proof (time limit --tlim), lrat-check checks the proof against exactly that formula, and the line
-       V cube | CaDiCaL seconds | proof bytes | proof SHA-256 | VERIFIED
-   is appended to OUTFILE (the proof is deleted).  If CaDiCaL does not finish in time, the line 'X cube' is appended
+       V cube | CaDiCaL seconds | proof bytes | proof SHA-256 | checkers | VERIFIED
+   is appended to OUTFILE (the proof is deleted).  If the environment variable CAKELPR names the binary of the
+   verified checker cake_lpr, every proof is checked by it as well (checkers: lrat-check+cake_lpr).  If CaDiCaL does not finish in time, the line 'X cube' is appended
    and the five children of the cube (by the split rule) are certified instead.
 3. Verdict, from OUTFILE alone: starting at the root, a node is covered if its cube is VERIFIED, or if it has a
    proper superset among the VERIFIED cubes and its five children by the split rule are covered.  Each split is on a
@@ -48,6 +49,7 @@ ap.add_argument('--verdict-only', action='store_true')
 a = ap.parse_args()
 CAD = os.environ.get('CADICAL', 'cadical')
 LC = os.environ.get('LRATCHECK', 'lrat-check')
+CAKE = os.environ.get('CAKELPR', '')          # if set: every proof is also checked by the verified checker cake_lpr
 VALUES = ['L', 'G', 'A', 'B', 'F']
 
 germ = gfix.parse_germ(a.germfile)
@@ -200,9 +202,14 @@ def certify(key):
     if st and st[0] == 's UNSATISFIABLE':
         q = subprocess.run([LC, cnf, prf], capture_output=True, text=True)
         ok = any(x.strip() in ('c VERIFIED', 's VERIFIED') for x in q.stdout.splitlines())
+        checkers = 'lrat-check'
+        if ok and CAKE:
+            q = subprocess.run([CAKE, cnf, prf], capture_output=True, text=True)
+            ok = 's VERIFIED UNSAT' in q.stdout
+            checkers = 'lrat-check+cake_lpr'
         size = os.path.getsize(prf)
         h = hashlib.sha256(open(prf, 'rb').read()).hexdigest()
-        res = 'V %s | %.2f | %d | %s | %s' % (key, sec, size, h, 'VERIFIED' if ok else 'NOT VERIFIED')
+        res = 'V %s | %.2f | %d | %s | %s | %s' % (key, sec, size, h, checkers, 'VERIFIED' if ok else 'NOT VERIFIED')
     elif st and st[0] == 's SATISFIABLE':
         res = 'SAT %s' % key
     else:
